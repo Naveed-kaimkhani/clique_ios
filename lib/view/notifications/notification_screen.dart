@@ -35,13 +35,14 @@ class _NotificationScreenState extends State<NotificationScreen> {
       color: Colors.black,
       child: SafeArea(
         child: Scaffold(
+          appBar:     CustomAppBar(title: "Notification", isNotification: true, icon: Icons.arrow_back_ios),
+        
           backgroundColor: Colors.white,
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Header Row
-              CustomAppBar(title: "Notification", isNotification: true, icon: Icons.arrow_back_ios),
-              SizedBox(height: paddingVertical),
+               SizedBox(height: paddingVertical),
               Expanded(child: CustomTabs()),
         
               // Notification Settings Title

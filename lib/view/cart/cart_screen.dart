@@ -17,12 +17,12 @@ class CartScreen extends StatelessWidget {
       color: Colors.black,
       child: SafeArea(
         child: Scaffold(
+          appBar: CustomAppBar(title: "My Cart", icon: Icons.arrow_back_ios,),
           backgroundColor: Colors.white,
         
           body: Column(
             
             children: [
-            CustomAppBar(title: "My Cart", icon: Icons.arrow_back_ios,),
               Expanded(
                 child: Obx(() {
                   return cartController.cartItems.isEmpty

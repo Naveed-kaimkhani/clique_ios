@@ -1,13 +1,10 @@
-import 'package:clique/components/custom_appbar.dart';
-import 'package:clique/components/gradient_text.dart';
-import 'package:clique/components/group_card.dart';
-import 'package:clique/components/influencer_card.dart';
-import 'package:clique/components/product_card.dart';
-import 'package:clique/constants/app_colors.dart';
-import 'package:clique/constants/app_svg_icons.dart';
+
+import 'package:clique/components/components.dart';
+import 'package:clique/constants/index.dart';
 import 'package:clique/controller/navigation_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 
 class DiscoverScreen extends StatefulWidget {
   
@@ -30,12 +27,12 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
       color: Colors.black,
       child: SafeArea(
         child: Scaffold(
+          appBar: CustomAppBar(title: 'Discover'),
           backgroundColor: Colors.white,
           body: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomAppBar(title: 'Discover',),
                 SizedBox(height: size.height * 0.02),
             
                 _sectionTitle('Influencers',

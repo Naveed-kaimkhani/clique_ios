@@ -58,6 +58,7 @@ class _InfluencersScreenState extends State<InfluencersScreen> with SingleTicker
       color: Colors.black,
       child: SafeArea(
         child: Scaffold(
+          appBar: CustomAppBar(title: 'Influencers'),
           backgroundColor: Colors.white,
           body: _buildNestedScrollView(context),
         ),
@@ -89,7 +90,6 @@ class _InfluencersScreenState extends State<InfluencersScreen> with SingleTicker
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-           CustomAppBar(title: 'Influencers'),
           SizedBox(height: size.height * 0.02),
         ],
       ),

@@ -20,12 +20,12 @@ class InfluencerProfileState extends State<InfluencerProfile> {
          color: Colors.black,
       child: SafeArea(
         child: Scaffold(
+          appBar: CustomAppBar(title: 'Profile', icon: Icons.arrow_back_ios,),
           backgroundColor: Colors.white,
           body: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomAppBar(title: 'Profile', icon: Icons.arrow_back_ios,),
                 SizedBox(height: size.height * 0.02), // Responsive spacing
         ProfileCard(isInfluencer: true,),
           

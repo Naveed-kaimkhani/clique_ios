@@ -38,11 +38,12 @@ class CheckoutScreen extends StatelessWidget {
         color: Colors.black,
       child: SafeArea(
         child: Scaffold(
+          appBar: 
+              CustomAppBar(title: "Checkout ", icon: Icons.arrow_back_ios),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Delivery Address
-              CustomAppBar(title: "Checkout ", icon: Icons.arrow_back_ios),
               Padding(
                 padding: EdgeInsets.only(right: horizontalPadding, left: horizontalPadding, top: verticalPadding),
                 child: Row(

@@ -5,6 +5,7 @@ import 'package:clique/view/cart/checkout_screen.dart';
 import 'package:clique/view/cart/confirm_payment.dart';
 import 'package:clique/view/home/home_screen.dart';
 import 'package:clique/view/testttttt.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 void main() {

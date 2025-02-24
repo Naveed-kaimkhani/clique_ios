@@ -10,19 +10,30 @@ class ShopAllWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    final iconSize = screenSize.width * 0.06;
+    final spacing = screenSize.height * 0.01;
+
     return Row(
       children: [
         Column(
-          
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SvgPicture.asset(AppSvgIcons.shoppingBag),
-            // Icon(Icons.shopping_bag_outlined)
-            LabelText(text: "Shop All"),
+            SvgPicture.asset(
+              AppSvgIcons.shoppingBag,
+              width: iconSize,
+              height: iconSize,
+            ),
+            SizedBox(height: spacing),
+            Text(
+            "Shop All",
+              style: TextStyle(
+                fontSize: screenSize.width * 0.035,
+              ),
+            ),
           ],
-       ),
-     
+        ),
       ],
     );
   }

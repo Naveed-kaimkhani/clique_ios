@@ -8,27 +8,30 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
-  late TabController _tabController;
+
   final List<String> _videoUrls = [
     'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
     'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+    // 'https://www.pexels.com/video/woman-doing-a-jump-rope-exercise-2785536/',
+    // 'https://www.pexels.com/video/road-trip-4434242/',
+    // // 'https://cdn.pixabay.com/video/2023/03/15/154787-808530571_large.mp4'
+    // 'https://pixabay.com/videos/road-sunrise-trees-forest-lights-147898/',
+    
+    // 'https://pixabay.com/videos/road-sunrise-trees-forest-lights-147898/',
   ];
 
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 4, vsync: this);
-  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
 
-      body: TabBarView(
-        controller: _tabController,
-        children: List.generate(4, (index) => VideoScrollScreen(videoUrls: _videoUrls)),
-      ),
+      // body: TabBarView(
+      //   controller: _tabController,
+      //   children: List.generate(4, (index) => VideoScrollScreen(videoUrls: _videoUrls)),
+      // ),
+         body:VideoScrollScreen(videoUrls: _videoUrls),
       // body: Container(),
     );
   }

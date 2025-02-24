@@ -54,7 +54,7 @@ class _VideoScrollScreenState extends State<VideoScrollScreen> with SingleTicker
         if (mounted) {
           setState(() {});
           controller.play();
-          controller.setLooping(false);
+          controller.setLooping(true);
         }
       });
     }
@@ -85,7 +85,7 @@ class _VideoScrollScreenState extends State<VideoScrollScreen> with SingleTicker
         children: [
           _buildMainContent(screenSize),
           _buildShoppingWidget(screenSize),
-          const SizedBox(height: 5),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.05),
           _buildBottomNavBar(),
         ],
       ),
@@ -153,12 +153,12 @@ class VideoView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.black,
-      child: SafeArea(
-        child: Scaffold(
-          appBar: _buildAppBar(context),
-          body: _buildTabBarView(),
-        ),
+      color: Colors.transparent,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        extendBodyBehindAppBar: true,
+        appBar: _buildAppBar(context),
+        body: _buildTabBarView(),
       ),
     );
   }
@@ -166,37 +166,17 @@ class VideoView extends StatelessWidget {
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
-      toolbarHeight: screenHeight * 0.09,
-      flexibleSpace: Container(
-        decoration: BoxDecoration(
-          gradient: AppColors.appGradientColors,
-        ),
-      ),
+      toolbarHeight: 0,
       centerTitle: true,
-      title: _buildAppLogo(),
       backgroundColor: Colors.transparent,
       elevation: 0,
       bottom: _buildTabBar(),
     );
   }
 
-  Widget _buildAppLogo() {
-    return Column(
-      children: [
-      SizedBox(height: screenHeight * 0.012,),
-        SvgPicture.asset(
-      AppImages.appLogo,
-      colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-      height: screenHeight * 0.144,
-      width: screenHeight * 0.144,
-    )
-      ],
-    );
-  }
-
   PreferredSize _buildTabBar() {
     return PreferredSize(
-      preferredSize: const Size.fromHeight(0),
+      preferredSize: Size.fromHeight(screenHeight * 0.06),
       child: TabBar(
         controller: _tabController,
         isScrollable: false,
@@ -204,11 +184,17 @@ class VideoView extends StatelessWidget {
         labelColor: Colors.white,
         unselectedLabelColor: Colors.white,
         labelStyle: TextStyle(fontSize: screenWidth * 0.038),
-        tabs: const [
-          Tab(text: "Pet Food"),
-          Tab(text: "Pull Toys"),
-          Tab(text: "Leashes"),
-          Tab(text: "Collars"),
+        tabs: [
+          Tab(child: Text("Pet Food", style: TextStyle(fontSize: screenWidth * 0.038, fontWeight: FontWeight.bold))),
+          
+          Tab(child: Text("Pull Toys", style: TextStyle(fontSize: screenWidth * 0.038, fontWeight: FontWeight.bold))),
+          
+          Tab(child: Text("Leashes", style: TextStyle(fontSize: screenWidth * 0.038, fontWeight: FontWeight.bold))),
+          
+          Tab(child: Text("Collars", style: TextStyle(fontSize: screenWidth * 0.038, fontWeight: FontWeight.bold))),
+          
+      
+
         ],
       ),
     );
@@ -242,3 +228,4 @@ class VideoView extends StatelessWidget {
     );
   }
 }
+
