@@ -1,13 +1,10 @@
 import 'package:clique/components/shopping_widget.dart';
-import 'package:clique/constants/app_colors.dart';
-import 'package:clique/constants/app_images.dart';
 import 'package:clique/controller/navigation_controller.dart';
 import 'package:clique/view/bottom_navigation_bar.dart';
 import 'package:clique/view/explore/discover_screen.dart';
 import 'package:clique/view/influencers_screen/influencers_screen.dart';
 import 'package:clique/view/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:video_player/video_player.dart';
 import 'package:get/get.dart';
 

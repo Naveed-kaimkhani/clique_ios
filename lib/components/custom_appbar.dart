@@ -15,7 +15,7 @@ class CustomAppBar extends PreferredSize {
     this.icon,
     this.isNotification = false,
   }) : super(
-          preferredSize: const Size.fromHeight(kToolbarHeight * 1.3), // Increased height
+          preferredSize: const Size.fromHeight(kToolbarHeight * 1.2), // Increased height
           child: _CustomAppBarWidget(
             title: title,
             icon: icon,

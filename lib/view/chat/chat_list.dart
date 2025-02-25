@@ -24,39 +24,65 @@ class ChatList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final double horizontalPadding = size.width * 0.03;
+    final double verticalPadding = size.height * 0.01;
+    final double avatarRadius = size.width * 0.06;
+    final double fontSize = size.width * 0.04;
+    final double timeFontSize = size.width * 0.035;
+
     return ListView.builder(
       itemCount: chatList.length,
       itemBuilder: (context, index) {
         return Container(
-  decoration: BoxDecoration(
-    color: Colors.white,  // Background color
-    borderRadius: BorderRadius.circular(10), // Rounded corners
-    boxShadow: [
-      BoxShadow(
-        color: Colors.black.withOpacity(0.1), // Shadow color
-        blurRadius: 8, // Soft blur effect
-        spreadRadius: 2, // Spread of shadow
-        offset: Offset(2, 4), // Position of shadow (X, Y)
-      ),
-    ],
-  ),
-  margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5), // Spacing
-  child: ListTile(
-    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8), // Padding inside tile
-    leading:CircleAvatar(
-  radius: 26, // Adjust the size (default is 20)
-  backgroundImage: AssetImage(chatList[index]['image']),
-),
-
-    title: Text(chatList[index]['name'],style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
-    subtitle: Text(chatList[index]['message'],style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16)),
-    trailing: Text(chatList[index]['time']),
-    onTap: () {
-      Get.toNamed(RouteName.groupChatScreen);
-    },
-  ),
-);
-
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(size.width * 0.025),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: size.width * 0.02,
+                spreadRadius: size.width * 0.005,
+                offset: Offset(size.width * 0.005, size.width * 0.01),
+              ),
+            ],
+          ),
+          margin: EdgeInsets.symmetric(
+            horizontal: horizontalPadding,
+            vertical: verticalPadding,
+          ),
+          child: ListTile(
+            contentPadding: EdgeInsets.symmetric(
+              horizontal: horizontalPadding * 1.3,
+              vertical: verticalPadding * 1.5,
+            ),
+            leading: CircleAvatar(
+              radius: avatarRadius,
+              backgroundImage: AssetImage(chatList[index]['image']),
+            ),
+            title: Text(
+              chatList[index]['name'],
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: fontSize,
+              ),
+            ),
+            subtitle: Text(
+              chatList[index]['message'],
+              style: TextStyle(
+                fontWeight: FontWeight.normal,
+                fontSize: fontSize * 0.9,
+              ),
+            ),
+            trailing: Text(
+              chatList[index]['time'],
+              style: TextStyle(fontSize: timeFontSize),
+            ),
+            onTap: () {
+              Get.toNamed(RouteName.groupChatScreen);
+            },
+          ),
+        );
       },
     );
   }

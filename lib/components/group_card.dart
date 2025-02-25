@@ -28,7 +28,7 @@ class GroupCard extends StatelessWidget {
     final double profileImageSize = size.width * 0.11; // Responsive profile image
     final double avatarStackWidth = size.width * 0.3; // Dynamic avatar stack width
     final double buttonWidth = size.width * 0.25; // Adjust join button width
-    final double buttonHeight = size.height * 0.04; // Adjust join button height
+    final double buttonHeight = size.height * 0.043; // Adjust join button height
 
     return Container(
       width: cardWidth,
@@ -118,7 +118,7 @@ class GroupCard extends StatelessWidget {
                                 "Join Now",
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: size.width * 0.034, // Responsive font size
+                                  fontSize: size.width * 0.030, // Responsive font size
                                 ),
                               ),
                             ),

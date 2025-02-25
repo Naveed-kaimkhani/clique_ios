@@ -31,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       //   controller: _tabController,
       //   children: List.generate(4, (index) => VideoScrollScreen(videoUrls: _videoUrls)),
       // ),
-         body:VideoScrollScreen(videoUrls: _videoUrls),
+         body:VideoScrollScreen(videoUrls: _videoUrls), 
       // body: Container(),
     );
   }

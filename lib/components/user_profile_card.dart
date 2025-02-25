@@ -1,4 +1,3 @@
-
 import 'package:clique/constants/app_svg_icons.dart';
 import 'package:flutter/material.dart';
 
@@ -8,19 +7,21 @@ class UserProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
+    final size = MediaQuery.of(context).size;
+    final screenWidth = size.width;
+    final screenHeight = size.height;
 
     return Container(
-      width: screenWidth * 0.9, // 90% of screen width
-      height: 282,
+      width: screenWidth * 0.9,
+      height: screenHeight * 0.35, // Responsive height based on screen height
       decoration: BoxDecoration(
         color: Colors.grey[50],
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(size.width * 0.05), // Responsive border radius
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
-            blurRadius: 5,
-            spreadRadius: 1,
+            blurRadius: size.width * 0.012, // Responsive blur
+            spreadRadius: size.width * 0.002, // Responsive spread
           ),
         ],
       ),
@@ -31,23 +32,23 @@ class UserProfileCard extends StatelessWidget {
         children: [
           Image.asset(
             AppSvgIcons.profile,
-            height: screenWidth * 0.35, // 45% of screen width
-            width: screenWidth * 0.35,
-              fit: BoxFit.cover, // Ensures it fills the given size
-
+            height: screenHeight * 0.18, // Responsive height
+            width: screenHeight * 0.18, // Keep aspect ratio square
+            fit: BoxFit.cover,
           ),
-          SizedBox(height: 10,),
+          SizedBox(height: screenHeight * 0.015), // Responsive spacing
           Text(
             'Brian Brunner',
             style: TextStyle(
-              fontSize: screenWidth * 0.08, // 8% of screen width
+              fontSize: screenHeight * 0.035, // Responsive font size
               fontWeight: FontWeight.bold,
             ),
           ),
+          SizedBox(height: screenHeight * 0.005), // Responsive spacing
           Text(
             '@brianbrunner',
             style: TextStyle(
-              fontSize: screenWidth * 0.05, // 5% of screen width
+              fontSize: screenHeight * 0.02, // Responsive font size
               color: Colors.grey,
             ),
           ),

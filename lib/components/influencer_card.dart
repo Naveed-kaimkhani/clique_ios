@@ -26,7 +26,7 @@ class InfluencerCard extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final double cardWidth = size.width * 0.35; // Adjust width based on screen size
     final double cardHeight = size.height * 0.26; // Adjust height dynamically
-    final double profileImageSize = size.width * 0.13; // Responsive profile image size
+    final double profileImageSize = size.width * 0.12; // Responsive profile image size
 
     return Container(
       width: cardWidth,
@@ -82,7 +82,7 @@ class InfluencerCard extends StatelessWidget {
                     ),
                     SizedBox(height: cardHeight * 0.04),
                     Container(
-                      height: cardHeight * 0.15,
+                      height: cardHeight * 0.16,
                       width: double.infinity,
                       decoration: BoxDecoration(
                         gradient: AppColors.appGradientColors,
@@ -95,7 +95,7 @@ class InfluencerCard extends StatelessWidget {
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
-                            fontSize: size.width * 0.03,
+                            fontSize: size.width * 0.028,
                           ),
                         ),
                       ),
@@ -106,7 +106,7 @@ class InfluencerCard extends StatelessWidget {
             ],
           ),
           Positioned(
-            top: cardHeight * 0.13, // Responsive position for profile image
+            top: cardHeight * 0.12, // Responsive position for profile image
             left: size.width * 0.02,
             child: GestureDetector(
               onTap: () => Get.toNamed(RouteName.influencerProfile),
