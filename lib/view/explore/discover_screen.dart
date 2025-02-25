@@ -1,5 +1,5 @@
 
-import 'package:clique/components/components.dart';
+import 'package:clique/components/index.dart';
 import 'package:clique/constants/index.dart';
 import 'package:clique/controller/navigation_controller.dart';
 import 'package:flutter/material.dart';

@@ -1,6 +1,5 @@
-import 'package:clique/constants/app_svg_icons.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart'; // Ensure this 
 class NotificationTile extends StatelessWidget {
   final String title;
   final String message;

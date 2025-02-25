@@ -1,10 +1,6 @@
 
-
-import 'package:clique/components/custom_appbar.dart';
-import 'package:clique/components/label_text.dart';
-import 'package:clique/components/noti_tile.dart';
-import 'package:clique/constants/app_colors.dart';
-import 'package:clique/constants/app_images.dart';
+import 'package:clique/components/index.dart';
+import 'package:clique/constants/index.dart';
 import 'package:clique/controller/notification_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -246,3 +242,13 @@ class _CustomTabsState extends State<CustomTabs> with SingleTickerProviderStateM
     super.dispose();
   }
 }
+
+
+
+
+
+
+
+
+
+

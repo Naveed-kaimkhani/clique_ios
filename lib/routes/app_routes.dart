@@ -1,5 +1,4 @@
-import 'package:clique/components/influencer_card.dart';
-import 'package:clique/components/search_screen.dart';
+
 import 'package:clique/routes/routes_name.dart';
 import 'package:clique/view/cart/cart_screen.dart';
 import 'package:clique/view/cart/checkout_screen.dart';

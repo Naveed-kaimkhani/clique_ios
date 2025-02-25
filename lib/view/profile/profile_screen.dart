@@ -47,7 +47,7 @@ class ProfileScreenState extends State<ProfileScreen> with SingleTickerProviderS
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         // SizedBox(height: size.height * 0.02), // Responsive spacing
-                        UserProfileCard(isInfluencer: false),
+                        UserProfileCard(isInfluencer: false, ),
                         SizedBox(height: size.height * 0.02),
                         Center(
                           child: CustomButton(

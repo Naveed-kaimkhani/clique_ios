@@ -1,11 +1,11 @@
+
 import 'package:clique/components/clique_tab_card.dart';
-import 'package:clique/components/custom_appbar.dart';
-import 'package:clique/components/influencer_card.dart';
-import 'package:clique/components/product_card.dart';
-import 'package:clique/constants/app_svg_icons.dart';
 import 'package:clique/controller/navigation_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../components/index.dart';
+import '../../constants/index.dart';
 
 class InfluencersScreen extends StatefulWidget {
   final int initialTabIndex;
@@ -21,8 +21,6 @@ class InfluencersScreen extends StatefulWidget {
 
 class _InfluencersScreenState extends State<InfluencersScreen> with SingleTickerProviderStateMixin {
   static const _tabCount = 3;
-  static const _tabAnimationDuration = Duration(milliseconds: 300);
-  static const _tabAnimationCurve = Curves.easeInOut;
 
   late final TabController _tabController;
   late final NavigationController _navigationController;
@@ -74,7 +72,7 @@ class _InfluencersScreenState extends State<InfluencersScreen> with SingleTicker
       ],
       body: TabBarView(
         controller: _tabController,
-        physics: const AlwaysScrollableScrollPhysics(),
+        // physics: const AlwaysScrollableScrollPhysics(),
         children: const [
           InfluencersGridView(),
           GroupGridView(),
@@ -229,3 +227,7 @@ class GroupGridView extends StatelessWidget {
     );
   }
 }
+
+
+
+

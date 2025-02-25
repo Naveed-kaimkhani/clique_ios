@@ -213,16 +213,46 @@ class VideoView extends StatelessWidget {
     );
   }
 
-  Widget _buildVideoItem(int index) {
-    return Stack(
-      children: [
-        SizedBox.expand(
-          child: _controllers[index].value.isInitialized
-            ? VideoPlayer(_controllers[index])
+//   Widget _buildVideoItem(int index) {
+//     return Stack(
+//       children: [
+//         // SizedBox.expand(
+//         //   child: _controllers[index].value.isInitialized
+//         //     ? VideoPlayer(_controllers[index])
+//         //     : const Center(child: CircularProgressIndicator()),
+//         // ),
+//         SizedBox.expand(
+//   child: _controllers[index].value.isInitialized
+//     ? Center(
+//         child: AspectRatio(
+//           aspectRatio: _controllers[index].value.aspectRatio,
+//           child: VideoPlayer(_controllers[index]),
+//         ),
+//       )
+//     : const Center(child: CircularProgressIndicator()),
+// ),
+
+//       ],
+//     );
+//   }
+Widget _buildVideoItem(int index) {
+  return Stack(
+    children: [
+      SizedBox.expand(
+        child: _controllers[index].value.isInitialized
+            ? FittedBox(
+                fit: BoxFit.cover,
+                child: SizedBox(
+                  width: _controllers[index].value.size.width * 1.5,
+                  height: _controllers[index].value.size.height * 1.5,
+                  child: VideoPlayer(_controllers[index]),
+                ),
+              )
             : const Center(child: CircularProgressIndicator()),
-        ),
-      ],
-    );
-  }
+      ),
+    ],
+  );
+}
+
 }
 

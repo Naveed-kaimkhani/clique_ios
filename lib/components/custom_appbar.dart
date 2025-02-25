@@ -2,7 +2,6 @@ import 'package:clique/constants/app_colors.dart';
 import 'package:clique/routes/routes_name.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class CustomAppBar extends PreferredSize {
   final String title;

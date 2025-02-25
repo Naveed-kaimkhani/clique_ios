@@ -106,7 +106,7 @@ class InfluencerCard extends StatelessWidget {
             ],
           ),
           Positioned(
-            top: cardHeight * 0.12, // Responsive position for profile image
+            top: cardHeight * 0.14, // Responsive position for profile image
             left: size.width * 0.02,
             child: GestureDetector(
               onTap: () => Get.toNamed(RouteName.influencerProfile),

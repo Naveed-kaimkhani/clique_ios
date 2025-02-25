@@ -1,10 +1,8 @@
 import 'package:avatar_stack/animated_avatar_stack.dart';
-import 'package:clique/constants/app_colors.dart';
-import 'package:clique/constants/app_svg_icons.dart';
-import 'package:clique/routes/routes_name.dart';
+import 'package:clique/constants/index.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+
 
 class CliqueTabCard extends StatelessWidget {
   final String backgroundImage;

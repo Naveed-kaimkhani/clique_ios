@@ -1,10 +1,9 @@
-import 'package:clique/components/gradient_text.dart';
-import 'package:clique/components/label_text.dart';
-import 'package:clique/constants/app_colors.dart';
-import 'package:clique/constants/app_images.dart';
-import 'package:clique/constants/app_svg_icons.dart';
+
+import 'package:clique/components/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+
+import '../constants/index.dart';
 
 class PostWidget extends StatelessWidget {
   @override

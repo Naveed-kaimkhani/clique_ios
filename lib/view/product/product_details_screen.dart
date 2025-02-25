@@ -1,8 +1,7 @@
 import 'package:clique/components/gradient_text.dart';
-import 'package:clique/constants/app_colors.dart';
+import 'package:clique/constants/index.dart';
 import 'package:clique/controller/fav_controller.dart';
 import 'package:clique/controller/size_selector.dart';
-import 'package:clique/routes/routes_name.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:like_button/like_button.dart';
