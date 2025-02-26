@@ -17,7 +17,11 @@ class DiscoverScreen extends StatefulWidget {
 class _DiscoverScreenState extends State<DiscoverScreen> {
   final PageController controller = PageController(viewportFraction: 0.8, keepPage: true);
   final NavigationController navigationController = Get.find<NavigationController>();
- 
+  
+  final ScrollController _groupScrollController = ScrollController();
+  final ScrollController _productScrollController = ScrollController();
+  final ScrollController _influencerScrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -94,10 +98,15 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
           Text(title, style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold)),
            TextButton(
             onPressed: onViewAll,
-            child: GradientText(
-              "View all",
-              gradient: AppColors.appGradientColors,
-              fontSize:MediaQuery.of(context).size.width* 0.04, // Responsive font size (4% of screen width)
+            child: Row(
+              children: [
+                GradientText(
+                  "View all",
+                  gradient: AppColors.appGradientColors,
+                  fontSize: MediaQuery.of(context).size.width * 0.04,
+                ),
+                // Icon(Icons.arrow_forward, color: Colors.blue, size: MediaQuery.of(context).size.width * 0.05),
+              ],
             ),
           ),
         ],
@@ -108,22 +117,34 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   Widget _buildHorizontalList(Size size) {
     return SizedBox(
       height: size.height * 0.26,
-      child: ListView(
+      child: ListView.builder(
+        controller: _influencerScrollController,
         scrollDirection: Axis.horizontal,
-        children: [
-          InfluencerCard(
+        itemCount: 3, // 2 cards + 1 arrow button
+        itemBuilder: (context, index) {
+          if (index == 2) {
+            return Center(
+              child: GestureDetector(
+                onTap: () => Get.toNamed(RouteName.viewAllInfluencersScreen),
+                child: Container(
+                  margin: EdgeInsets.only(right: size.width * 0.06, left: 16),
+                  decoration: BoxDecoration(
+                    gradient: AppColors.appGradientColors,
+                    shape: BoxShape.circle,
+                  ),
+                  padding: EdgeInsets.all(8),
+                  child: Icon(Icons.arrow_forward, color: Colors.white),
+                ),
+              ),
+            );
+          }
+          return InfluencerCard(
             backgroundImage: AppSvgIcons.cloth,
             profileImage: AppSvgIcons.profile,
-            name: 'Isabella Wilson',
+            name: index == 0 ? 'Isabella Wilson' : 'Amelia Taylor',
             followers: '10.5k Followers',
-          ),
-          InfluencerCard(
-            backgroundImage: AppSvgIcons.cloth,
-            profileImage: AppSvgIcons.profile,
-            name: 'Amelia Taylor',
-            followers: '10.5k Followers',
-          ),
-        ],
+          );
+        },
       ),
     );
   }
@@ -131,30 +152,38 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   Widget _buildProductList(Size size) {
     return SizedBox(
       height: size.height * 0.38,
-      child: ListView(
+      child: ListView.builder(
+        controller: _productScrollController,
         scrollDirection: Axis.horizontal,
-        children: [
-          ProductCard(
+        itemCount: 3, // 2 cards + 1 arrow button
+        itemBuilder: (context, index) {
+          if (index == 2) {
+            return Center(
+              child: GestureDetector(
+                onTap: () => Get.toNamed(RouteName.viewAllProductsScreen),
+                child: Container(
+                  margin: EdgeInsets.only(right: size.width * 0.06, left: 16),
+                  decoration: BoxDecoration(
+                    gradient: AppColors.appGradientColors,
+                    shape: BoxShape.circle,
+                  ),
+                  padding: EdgeInsets.all(8),
+                  child: Icon(Icons.arrow_forward, color: Colors.white),
+                ),
+              ),
+            );
+          }
+          return ProductCard(
             isShowDiscount: true,
-            uid: '1',
-            backgroundImage: 'assets/png/product.png',
-            productName: "Girl's Full Blazers",
+            uid: (index + 1).toString(),
+            backgroundImage: index == 0 ? 'assets/png/product.png' : 'assets/png/product2.png',
+            productName: index == 0 ? "Girl's Full Blazers" : "Girl's Moisturizing Shampoo",
             productDescription: "Crafted from premium, breathable cotton fabric",
             price: 53.23,
             oldPrice: 100.23,
             discount: "10% OFF",
-          ),
-          ProductCard(
-            isShowDiscount: true,
-            uid: '2',
-            backgroundImage: 'assets/png/product2.png',
-            productName: "Girl's Moisturizing Shampoo",
-            productDescription: "Crafted from premium, breathable cotton fabric",
-            price: 53.23,
-            oldPrice: 100.23,
-            discount: "10% OFF",
-          ),
-        ],
+          );
+        },
       ),
     );
   }
@@ -162,22 +191,34 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   Widget _buildGroupHorizontalList(Size size) {
     return SizedBox(
       height: size.height * 0.25,
-      child: ListView(
+      child: ListView.builder(
+        controller: _groupScrollController,
         scrollDirection: Axis.horizontal,
-        children: [
-          GroupCard(
+        itemCount: 3, // 2 cards + 1 arrow button
+        itemBuilder: (context, index) {
+          if (index == 2) {
+            return Center(
+              child: GestureDetector(
+                onTap: () => Get.toNamed(RouteName.viewAllCliquesScreen),
+                child: Container(
+                  margin: EdgeInsets.only(right: size.width * 0.06, left: 16),
+                  decoration: BoxDecoration(
+                    gradient: AppColors.appGradientColors,
+                    shape: BoxShape.circle,
+                  ),
+                  padding: EdgeInsets.all(8),
+                  child: Icon(Icons.arrow_forward, color: Colors.white),
+                ),
+              ),
+            );
+          }
+          return GroupCard(
             backgroundImage: AppSvgIcons.cloth,
             profileImage: AppSvgIcons.profile,
-            name: 'MenswearDog',
-            followers: '1200 members',
-          ),
-          GroupCard(
-            backgroundImage: AppSvgIcons.cloth,
-            profileImage: AppSvgIcons.profile,
-            name: 'Pet Health',
-            followers: '10.5k Followers',
-          ),
-        ],
+            name: index == 0 ? 'MenswearDog' : 'Pet Health',
+            followers: index == 0 ? '1200 members' : '10.5k Followers',
+          );
+        },
       ),
     );
   }
