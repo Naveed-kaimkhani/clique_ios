@@ -53,8 +53,11 @@ class _InfluencersScreenState extends State<InfluencersScreen> with SingleTicker
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.black,
+      decoration: BoxDecoration(
+        gradient: AppColors.appGradientColors,
+      ),
       child: SafeArea(
+        bottom: false,
         child: Scaffold(
           appBar: CustomAppBar(title: 'Influencers'),
           backgroundColor: Colors.white,

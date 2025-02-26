@@ -34,6 +34,7 @@ class InfluencerProfileState extends State<InfluencerProfile>
     return Container(
       color: Colors.black,
       child: SafeArea(
+        bottom: false,
         child: Scaffold(
           appBar: CustomAppBar(
             title: 'Profile',

@@ -52,9 +52,6 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
             SizedBox(width: screenWidth * 0.01), // Responsive spacing
             _buildNavItem(Icons.explore, 1),
             SizedBox(width: screenWidth *0.01),
-
-            _buildNavItem(Icons.group_outlined, 2),
-            SizedBox(width: screenWidth *0.01),
             
             _buildNavItem(Icons.person_outline, 3),
           ],

@@ -24,8 +24,12 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
     final double titleFontSize = size.width * 0.05; // Responsive title size
 
     return Container(
-      color: Colors.black,
+      // color: Colors.black,
+      decoration: BoxDecoration(
+        gradient: AppColors.appGradientColors,
+      ),
       child: SafeArea(
+        bottom: false,
         child: Scaffold(
           appBar: CustomAppBar(title: 'Discover'),
           backgroundColor: Colors.white,
@@ -33,20 +37,23 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: size.height * 0.02),
+                // SizedBox(height: size.height * 0.02),
             
-                _sectionTitle('Influencers',
-                   () => navigationController.changeIndex(2,0), titleFontSize),
-                SizedBox(height: size.height * 0.015),
-                _buildHorizontalList(size),
             
-                SizedBox(height: size.height * 0.033),
                 groupList(size, titleFontSize),
             
                 SizedBox(height: size.height * 0.018),
                 _sectionTitle('Products',  () => navigationController.changeIndex( 2,2), titleFontSize),
                 SizedBox(height: size.height * 0.015),
                 _buildProductList(size),
+                
+                SizedBox(height: size.height * 0.033),
+                  _sectionTitle('Influencers',
+                   () => navigationController.changeIndex(2,0), titleFontSize),
+              
+                  SizedBox(height: size.height * 0.015),
+                  _buildHorizontalList(size),
+            
               ],
             ),
           ),
@@ -74,7 +81,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
 
   Widget _sectionTitle(String title, VoidCallback onViewAll, double fontSize) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.02),
+      padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.04),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

@@ -2,7 +2,6 @@ import 'package:clique/components/shopping_widget.dart';
 import 'package:clique/controller/navigation_controller.dart';
 import 'package:clique/view/bottom_navigation_bar.dart';
 import 'package:clique/view/explore/discover_screen.dart';
-import 'package:clique/view/influencers_screen/influencers_screen.dart';
 import 'package:clique/view/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
@@ -101,11 +100,9 @@ class _VideoScrollScreenState extends State<VideoScrollScreen> with SingleTicker
           screenWidth: screenSize.width,
         ),
         1 => const DiscoverScreen(),
-        2 => InfluencersScreen(
-          initialTabIndex: _navigationController.tabController.value,
-        ),
-        3 =>  ProfileScreen(),
+        2 =>  ProfileScreen(),
         _ => const Center(child: Text('Page not found')),
+  
       };
     });
   }
@@ -213,28 +210,6 @@ class VideoView extends StatelessWidget {
     );
   }
 
-//   Widget _buildVideoItem(int index) {
-//     return Stack(
-//       children: [
-//         // SizedBox.expand(
-//         //   child: _controllers[index].value.isInitialized
-//         //     ? VideoPlayer(_controllers[index])
-//         //     : const Center(child: CircularProgressIndicator()),
-//         // ),
-//         SizedBox.expand(
-//   child: _controllers[index].value.isInitialized
-//     ? Center(
-//         child: AspectRatio(
-//           aspectRatio: _controllers[index].value.aspectRatio,
-//           child: VideoPlayer(_controllers[index]),
-//         ),
-//       )
-//     : const Center(child: CircularProgressIndicator()),
-// ),
-
-//       ],
-//     );
-//   }
 Widget _buildVideoItem(int index) {
   return Stack(
     children: [
