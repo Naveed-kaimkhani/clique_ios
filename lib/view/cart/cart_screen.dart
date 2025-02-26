@@ -14,8 +14,11 @@ class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.black,
+      decoration: BoxDecoration(
+        gradient: AppColors.appGradientColors,
+      ),
       child: SafeArea(
+        bottom: false,
         child: Scaffold(
           appBar: CustomAppBar(title: "My Cart", icon: Icons.arrow_back_ios,),
           backgroundColor: Colors.white,

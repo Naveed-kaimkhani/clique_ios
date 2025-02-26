@@ -2,6 +2,7 @@
 
 
 
+import 'package:clique/constants/index.dart';
 import 'package:flutter/material.dart';
 
 import '../../components/index.dart';
@@ -32,7 +33,9 @@ class InfluencerProfileState extends State<InfluencerProfile>
     final size = MediaQuery.of(context).size;
 
     return Container(
-      color: Colors.black,
+      decoration: BoxDecoration(
+        gradient: AppColors.appGradientColors,
+      ),
       child: SafeArea(
         bottom: false,
         child: Scaffold(

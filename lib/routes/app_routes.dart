@@ -3,6 +3,7 @@ import 'package:clique/routes/routes_name.dart';
 import 'package:clique/view/cart/cart_screen.dart';
 import 'package:clique/view/cart/checkout_screen.dart';
 import 'package:clique/view/chat/chat_screen.dart';
+import 'package:clique/view/discover/view_all_influencer.dart';
 import 'package:clique/view/home/home_screen.dart';
 import 'package:clique/view/notifications/notification_screen.dart';
 import 'package:clique/view/product/product_details_screen.dart';
@@ -14,9 +15,20 @@ import 'package:get/get.dart';
 class AppRoutes {
   static getAppRoutes() => [
     GetPage(
-        name: RouteName.productDetailsScreen,
-        page: () =>  ProductDetailsScreen(),
+        name: RouteName.viewAllInfluencersScreen,
+        page: () =>  ViewAllInfluencersScreen(),
         transition: Transition.cupertino),
+    GetPage(
+        name: RouteName.viewAllProductsScreen,
+        page: () =>  ViewAllProductsScreen(),
+        transition: Transition.cupertino),
+    GetPage(
+        name: RouteName.viewAllCliquesScreen,
+        page: () =>  ViewAllCliquesScreen(),
+        transition: Transition.cupertino),
+    GetPage(
+        name: RouteName.productDetailsScreen,
+        page: () =>  ProductDetailsScreen(),),
             GetPage(
         name: RouteName.notificationScreen,
         page: () =>  NotificationScreen(),

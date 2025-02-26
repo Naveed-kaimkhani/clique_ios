@@ -33,6 +33,13 @@ class GroupCard extends StatelessWidget {
       padding: EdgeInsets.only(left: size.width * 0.03, ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: const Color.fromARGB(31, 184, 177, 177),
+        //     blurRadius: 10,
+        //     spreadRadius: 0.5,
+        //   ),
+        // ],
       ),
       child: Stack(
         clipBehavior: Clip.none,

@@ -1,7 +1,7 @@
 import 'package:clique/components/shopping_widget.dart';
 import 'package:clique/controller/navigation_controller.dart';
 import 'package:clique/view/bottom_navigation_bar.dart';
-import 'package:clique/view/explore/discover_screen.dart';
+import 'package:clique/view/discover/discover_screen.dart';
 import 'package:clique/view/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
@@ -100,9 +100,8 @@ class _VideoScrollScreenState extends State<VideoScrollScreen> with SingleTicker
           screenWidth: screenSize.width,
         ),
         1 => const DiscoverScreen(),
-        2 =>  ProfileScreen(),
+        3 => ProfileScreen(),
         _ => const Center(child: Text('Page not found')),
-  
       };
     });
   }
@@ -179,16 +178,14 @@ class VideoView extends StatelessWidget {
         unselectedLabelColor: Colors.white,
         labelStyle: TextStyle(fontSize: screenWidth * 0.038),
         tabs: [
-          Tab(child: Text("Pet Food", style: TextStyle(fontSize: screenWidth * 0.038, fontWeight: FontWeight.bold))),
+          Tab(child: Text("Pet Food", style: TextStyle(fontSize: screenWidth * 0.037, fontWeight: FontWeight.bold))),
           
-          Tab(child: Text("Pull Toys", style: TextStyle(fontSize: screenWidth * 0.038, fontWeight: FontWeight.bold))),
+          Tab(child: Text("Pull Toys", style: TextStyle(fontSize: screenWidth * 0.036, fontWeight: FontWeight.bold))),
           
-          Tab(child: Text("Leashes", style: TextStyle(fontSize: screenWidth * 0.038, fontWeight: FontWeight.bold))),
+          Tab(child: Text("Leashes", style: TextStyle(fontSize: screenWidth * 0.037, fontWeight: FontWeight.bold))),
           
-          Tab(child: Text("Collars", style: TextStyle(fontSize: screenWidth * 0.038, fontWeight: FontWeight.bold))),
+          Tab(child: Text("Collars", style: TextStyle(fontSize: screenWidth * 0.037, fontWeight: FontWeight.bold))),
           
-      
-
         ],
       ),
     );
@@ -230,4 +227,3 @@ Widget _buildVideoItem(int index) {
 }
 
 }
-

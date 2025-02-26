@@ -3,7 +3,6 @@ import 'package:clique/components/clique_tab_card.dart';
 import 'package:clique/controller/navigation_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../components/index.dart';
 import '../../constants/index.dart';
 
@@ -40,7 +39,7 @@ class _InfluencersScreenState extends State<InfluencersScreen> with SingleTicker
     );
     
     _tabController.addListener(() {
-      _navigationController.tabController.value = _tabController.index;
+      // _navigationController.tabController.value = _tabController.index;
     });
   }
 

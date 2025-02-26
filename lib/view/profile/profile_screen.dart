@@ -1,11 +1,11 @@
 
 
-import 'package:clique/components/custom_appbar.dart';
 import 'package:clique/components/custom_button.dart';
-import 'package:clique/components/profile_product_card.dart';
-import 'package:clique/components/user_profile_card.dart';
+import 'package:clique/components/index.dart';
 import 'package:clique/view/chat/chat_list.dart';
 import 'package:flutter/material.dart';
+
+import '../../constants/index.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -32,9 +32,11 @@ class ProfileScreenState extends State<ProfileScreen> with SingleTickerProviderS
     final size = MediaQuery.of(context).size;
 
     return Container(
-      color: Colors.black,
+      decoration: BoxDecoration(
+        gradient: AppColors.appGradientColors,
+      ),
       child: SafeArea(
-        
+        bottom: false,
         child: Scaffold(
           appBar:   CustomAppBar(title: 'Profile', icon: Icons.arrow_back_ios),
           backgroundColor: Colors.white,

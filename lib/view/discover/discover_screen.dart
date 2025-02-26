@@ -42,14 +42,21 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
             
                 groupList(size, titleFontSize),
             
-                SizedBox(height: size.height * 0.018),
-                _sectionTitle('Products',  () => navigationController.changeIndex( 2,2), titleFontSize),
-                SizedBox(height: size.height * 0.015),
-                _buildProductList(size),
+                // SizedBox(height: size.height * 0.018),
+                Container(
+                  color: Color(0xFFF7F8FA),
+                  child: Column(
+                    children: [
+                      _sectionTitle('Products',  () => Get.toNamed(RouteName.viewAllProductsScreen), titleFontSize),
+                      SizedBox(height: size.height * 0.015),
+                      _buildProductList(size),
+                    ],
+                  ),
+                ),
                 
-                SizedBox(height: size.height * 0.033),
-                  _sectionTitle('Influencers',
-                   () => navigationController.changeIndex(2,0), titleFontSize),
+                SizedBox(height: size.height * 0.02),
+                _sectionTitle('Influencers',
+                   () => Get.toNamed(RouteName.viewAllInfluencersScreen), titleFontSize),
               
                   SizedBox(height: size.height * 0.015),
                   _buildHorizontalList(size),
@@ -66,12 +73,11 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
     return Container(
       height: size.height * 0.38, // Responsive height
       width: double.infinity,
-      color: Color(0xFFF7F8FA),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _sectionTitle('Cliques', () => navigationController.changeIndex(2,1), titleFontSize),
+          _sectionTitle('Cliques', () =>Get.toNamed(RouteName.viewAllCliquesScreen), titleFontSize),
           SizedBox(height: size.height * 0.015),
           _buildGroupHorizontalList(size),
         ],

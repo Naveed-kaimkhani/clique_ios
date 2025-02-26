@@ -35,8 +35,11 @@ class CheckoutScreen extends StatelessWidget {
     final double cartItemSize = screenWidth * 0.2; // 20% of screen width
 
     return Container(
-        color: Colors.black,
+      decoration: BoxDecoration(
+        gradient: AppColors.appGradientColors,
+      ),
       child: SafeArea(
+        bottom: false,
         child: Scaffold(
           appBar: 
               CustomAppBar(title: "Checkout ", icon: Icons.arrow_back_ios),

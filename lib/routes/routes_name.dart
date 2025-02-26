@@ -13,7 +13,9 @@ static const String notificationScreen = '/NotificationScreen';
 static const String searchScreen = '/SearchScreen';
 
 
-
+static const String viewAllInfluencersScreen = '/ViewAllInfluencersScreen';
+static const String viewAllProductsScreen = '/ViewAllProductsScreen';
+static const String viewAllCliquesScreen = '/ViewAllCliquesScreen';
 
 
 }
