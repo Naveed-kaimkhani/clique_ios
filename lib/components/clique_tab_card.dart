@@ -123,7 +123,7 @@ class CliqueTabCard extends StatelessWidget {
                                 "Join Now",
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: size.width * 0.035, // Responsive font size
+                                  fontSize: size.width * 0.036, // Responsive font size
                                 ),
                               ),
                             ),

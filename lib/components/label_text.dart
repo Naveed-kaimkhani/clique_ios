@@ -40,7 +40,6 @@ class LabelText extends StatelessWidget {
         decoration: decoration,
         decorationColor: decorationColor,
         height: height,
-        // fontFamily: "ClashDisplay",
       ),
       overflow: overflow,
       maxLines: maxLine,

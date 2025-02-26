@@ -90,9 +90,9 @@ flutter:
   #         style: italic
   #   - family: Trajan Pro
   fonts:
-    - family: ClashDisplay
+    - family: SofiaPro
       fonts:
-        - asset: assets/fonts/ClashDisplay-Medium.otf
+        - asset: assets/fonts/SofiaProRegularAz.otf
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
   #

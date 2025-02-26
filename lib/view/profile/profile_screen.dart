@@ -38,7 +38,7 @@ class ProfileScreenState extends State<ProfileScreen> with SingleTickerProviderS
       child: SafeArea(
         bottom: false,
         child: Scaffold(
-          appBar:   CustomAppBar(title: 'Profile', icon: Icons.arrow_back_ios),
+          appBar:   CustomAppBar(title: 'Profile',),
           backgroundColor: Colors.white,
           body: SafeArea(
             child: NestedScrollView(

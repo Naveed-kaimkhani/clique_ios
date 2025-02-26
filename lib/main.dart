@@ -20,10 +20,10 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
      debugShowCheckedModeBanner: false,
         theme: ThemeData(
-        fontFamily: 'ClashDisplay',  // Apply font globally
+        fontFamily: 'SofiaPro',  // Apply font globally
         textTheme: TextTheme(
-          bodyMedium: TextStyle(fontFamily: 'ClashDisplay'),
-          bodySmall: TextStyle(fontFamily: 'ClashDisplay'),
+          bodyMedium: TextStyle(fontFamily: 'SofiaPro'),
+          bodySmall: TextStyle(fontFamily: 'SofiaPro'),
         ),
       ),
       home:HomeScreen(),

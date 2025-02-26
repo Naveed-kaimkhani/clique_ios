@@ -122,7 +122,7 @@ class GroupCard extends StatelessWidget {
                                 "Join Now",
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: size.width * 0.030, // Responsive font size
+                                  fontSize: size.width * 0.032, // Responsive font size
                                 ),
                               ),
                             ),
