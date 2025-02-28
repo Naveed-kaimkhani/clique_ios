@@ -1,10 +1,14 @@
 
+import 'package:clique/core/api/api_client.dart';
 import 'package:clique/routes/app_routes.dart';
 import 'package:clique/routes/routes_name.dart';
+import 'package:clique/view/auth/login_screen.dart';
+import 'package:clique/view/auth/signup_screen.dart';
 import 'package:clique/view/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 void main() {
+   Get.put(ApiClient());
   runApp(
 MyApp(),
     // DevicePreview(
@@ -26,9 +30,9 @@ class MyApp extends StatelessWidget {
           bodySmall: TextStyle(fontFamily: 'SofiaPro'),
         ),
       ),
-      home:HomeScreen(),
+      home:LoginScreen(),
       
-      initialRoute: RouteName.homeScreen,
+      // initialRoute: RouteName.homeScreen,
       
       getPages: AppRoutes.getAppRoutes(),
     );
