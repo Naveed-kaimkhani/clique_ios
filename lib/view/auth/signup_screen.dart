@@ -1,11 +1,15 @@
+import 'package:clique/components/auth_button.dart';
 import 'package:clique/components/custom_textfield.dart';
 import 'package:clique/components/index.dart';
 import 'package:clique/constants/app_colors.dart';
 import 'package:clique/core/api/api_response.dart';
 import 'package:clique/data/models/signup_params.dart';
+import 'package:clique/routes/routes_name.dart';
 import 'package:clique/view/auth/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:clique/utils/utils.dart';
 
 import '../../view_model/auth_viewmodel.dart';
 
@@ -22,56 +26,56 @@ final passwordRegex = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$
 
   bool validateFields() {
        if (!isChecked.value) {
-                      Get.snackbar("Terms & Conditions", "Please agree to the terms & conditions");
+                      Utils.showCustomSnackBar("Terms & Conditions", "Please agree to the terms & conditions", ContentType.warning);
                       return false;
                     }
     if (nameController.text.isEmpty) {
-      Get.snackbar("Name is required", "Please enter your name");
+      Utils.showCustomSnackBar("Name is required", "Please enter your name", ContentType.warning);
       return false;
     }
 
     if (emailController.text.isEmpty) {
-      Get.snackbar("Email is required", "Please enter your email");
+      Utils.showCustomSnackBar("Email is required", "Please enter your email", ContentType.warning);
       return false;
     }
 
     if (!emailController.text.endsWith('@gmail.com') && 
         !emailController.text.endsWith('@yahoo.com') && 
         !emailController.text.endsWith('@icloud.com')) {
-      Get.snackbar("Invalid email", "Please enter a valid email address (@gmail.com, @yahoo.com or @icloud.com)");
+      Utils.showCustomSnackBar("Invalid email", "Please enter a valid email address (@gmail.com, @yahoo.com or @icloud.com)", ContentType.warning);
       return false;
     }
 
     if (phoneNumberController.text.isEmpty) {
-      Get.snackbar("Phone number is required", "Please enter your phone number");
+      Utils.showCustomSnackBar("Phone number is required", "Please enter your phone number", ContentType.warning);
       return false;
     }
 
     if (phoneNumberController.text.length != 11) {
-      Get.snackbar("Invalid phone number", "Phone number must be 11 digits long");
+      Utils.showCustomSnackBar("Invalid phone number", "Phone number must be 11 digits long", ContentType.warning);
       return false;
     }
 
     if (passwordController.text.isEmpty) {
-      Get.snackbar("Password is required", "Please enter your password");
+      Utils.showCustomSnackBar("Password is required", "Please enter your password", ContentType.warning);
       return false;
     }
 
     // if (passwordController.text.length < 8) {
-    //   Get.snackbar("Password is too short", "Password must be at least 8 characters long");
+    //   Utils.showCustomSnackBar("Password is too short", "Password must be at least 8 characters long", ContentType.warning);
     //   return false;
     // }
 if (!passwordRegex.hasMatch(passwordController.text)) {
-  Get.snackbar("Invalid Password", "Password must be at least 8 characters long and include at least one letter, one number, and one special character.");
+  Utils.showCustomSnackBar("Invalid Password", "Password must be at least 8 characters long and include at least one letter, one number, and one special character.", ContentType.warning);
   return false;
 }
     if (confirmPasswordController.text.isEmpty) {
-      Get.snackbar("Confirm password is required", "Please confirm your password");
+      Utils.showCustomSnackBar("Confirm password is required", "Please confirm your password", ContentType.warning);
       return false;
     }
 
     if (passwordController.text != confirmPasswordController.text) {
-      Get.snackbar("Passwords don't match", "Password and confirm password must match");
+      Utils.showCustomSnackBar("Passwords don't match", "Password and confirm password must match", ContentType.warning);
       return false;
     }
 
@@ -222,40 +226,26 @@ if (!passwordRegex.hasMatch(passwordController.text)) {
               SizedBox(height: Get.height * 0.02),
               _buildSocialButtons(),
               SizedBox(height: Get.height * 0.02),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    foregroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(
-                      vertical: Get.height * 0.02,
-                    ),
-                  ),
-                  onPressed: () {
-                 
-                    if (validateFields()) {
-                      // SignupParams request = SignupParams(
-                      //   name: nameController.text,
-                      //   email: emailController.text,
-                      //   password: passwordController.text,
-                      //   phone: phoneNumberController.text,
-                      //   confirmPassword: confirmPasswordController.text,
-                      //   role: "user",
-                      // );
-                         SignupParams request = SignupParams(
-                        name:" nameController.text",
-                        email: "nav@gmail.com",
-                        password: "11111111",
-                        phone: "11111111112",
-                        confirmPassword: "11111111112",
-                        role: "user",
-                      );
-                      authViewModel.registerUser(request);
-                    }
-                  },
-                  child: const Text('SignUp'),
-                ),
+              AuthButton(
+                buttonText: 'SignUp',
+                isLoading: authViewModel.isLoading,
+                onPressed: () {
+                  
+                  if (validateFields()) {
+                    authViewModel.isLoading.value = true;
+                    SignupParams request = SignupParams(
+                      name:nameController.text,
+                      email: emailController.text, 
+                      password: passwordController.text,
+                      phone: phoneNumberController.text,
+                      confirmPassword: confirmPasswordController.text,
+                      role: "user",
+                    );
+                    authViewModel.registerUser(request)
+                      .then((_) => authViewModel.isLoading.value = false)
+                      .catchError((_) => authViewModel.isLoading.value = false);
+                  }
+                },
               ),
               SizedBox(height: Get.height * 0.02),
               Row(
@@ -264,27 +254,14 @@ if (!passwordRegex.hasMatch(passwordController.text)) {
                   Text("Already have an account? ",
                       style: TextStyle(color: Colors.black)),
                   GestureDetector(
-                    onTap: () => Get.toNamed("/login"),
+                    onTap:()=>Get.toNamed(RouteName.loginScreen),
                     child: GradientText("Login",
                         gradient: AppColors.appGradientColors, fontSize: 15),
                   ),
                 ],
               ),
               SizedBox(height: Get.height * 0.02),
-              // Obx(() {
-              //   final status = authViewModel.signupResponse.value.status;
-              //   final message = authViewModel.signupResponse.value.message;
-              //   final data = authViewModel.signupResponse.value.data;
-
-              //   if (status == Status.ERROR) {
-              //     return Text("Error: $message",
-              //         style: TextStyle(color: Colors.red));
-              //   } else if (status == Status.COMPLETED) {
-              //     return Text("Success: ${data?.message}",
-              //         style: TextStyle(color: Colors.green));
-              //   }
-              //   return SizedBox.shrink();
-              // }),
+            
             ],
           ),
         ),

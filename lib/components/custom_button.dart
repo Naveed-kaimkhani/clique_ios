@@ -1,4 +1,4 @@
-import 'package:clique/components/index.dart';
+import 'package:clique/components/label_text.dart';
 import 'package:clique/constants/app_fonts.dart';
 import 'package:flutter/material.dart';
 

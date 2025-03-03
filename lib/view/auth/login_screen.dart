@@ -1,10 +1,14 @@
+import 'package:clique/components/auth_button.dart';
 import 'package:clique/components/custom_textfield.dart';
 import 'package:clique/components/gradient_text.dart';
 import 'package:clique/constants/index.dart';
+import 'package:clique/utils/utils.dart';
 import 'package:clique/view_model/auth_viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:clique/components/custom_button.dart';
 
 class LoginScreen extends StatelessWidget {
   final RxBool isChecked = false.obs;
@@ -13,30 +17,53 @@ class LoginScreen extends StatelessWidget {
 
   final AuthViewModel authViewModel = Get.put(AuthViewModel());
 
-final passwordRegex = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$');
+  final passwordRegex = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$');
+RegExp emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.com|icloud\.com|hotmail\.com|live\.com)$');
+
+
+
   bool validateFields() {
     if (emailController.text.isEmpty) {
-      Get.snackbar("Email is required", "Please enter your email");
+     Utils.showCustomSnackBar(
+        'Email Required',
+        'Please enter your email',
+        ContentType.warning
+      );
       return false;
     }
-    if (!emailController.text.endsWith('@gmail.com') || !emailController.text.endsWith('@yahoo.com') || !emailController.text.endsWith('@outlook.com') || !emailController.text.endsWith('@icloud.com') || !emailController.text.endsWith('@hotmail.com') || !emailController.text.endsWith('@live.com') ) {
-      Get.snackbar("Invalid email", "Please enter a valid email address");
-      return false;
-    }
+    // if (!emailController.text.endsWith('@gmail.com') || !emailController.text.endsWith('@yahoo.com') || !emailController.text.endsWith('@outlook.com') || !emailController.text.endsWith('@icloud.com') || !emailController.text.endsWith('@hotmail.com') || !emailController.text.endsWith('@live.com') ) {
+    //    Utils.showCustomSnackBar(
+    //     'Invalid Email',
+    //     'Please enter a valid email address',
+    //     ContentType.failure
+    //   );
+    //   return false;
+    // }
     
- 
+    if (!emailRegex.hasMatch(emailController.text)) {
+  Utils.showCustomSnackBar(
+    'Invalid Email',
+    'Please enter a valid email address',
+    ContentType.failure
+  );
+  return false;
+}
     if (passwordController.text.isEmpty) {
-      Get.snackbar("Password is required", "Please enter your password");
+      Utils.showCustomSnackBar(
+        'Password Required',
+        'Please enter your password',
+        ContentType.warning
+      );
       return false;
     }
     if (!passwordRegex.hasMatch(passwordController.text)) {
-  Get.snackbar("Invalid Password", "Password must be at least 8 characters long and include at least one letter, one number, and one special character.");
-  return false;
-}
-    // if (passwordController.text.length < 8) {
-    //   Get.snackbar("Password is too short", "Password must be at least 8 characters long");
-    //   return false;
-    // }
+       Utils.showCustomSnackBar(
+        'Invalid Password',
+        'Password must be at least 8 characters long and include at least one letter, one number, and one special character.',
+        ContentType.failure
+      );
+      return false;
+    }
     return true;
   }
 
@@ -168,23 +195,17 @@ final passwordRegex = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$
               SizedBox(height: Get.height * 0.02),
               _buildSocialButtons(),
               SizedBox(height: Get.height * 0.03),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    foregroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(
-                      vertical: Get.height * 0.02,
-                    ),
-                  ),
-                  onPressed: () {
-                    if (validateFields()) {
-                      authViewModel.loginUser(emailController.text, passwordController.text);
-                    }
-                  },
-                  child: const Text('Login', style: TextStyle(fontSize: 16)),
-                ),
+              AuthButton(
+                buttonText: 'Login',
+                isLoading: authViewModel.isLoading,
+                onPressed: () {
+                  if (validateFields()) {
+                    authViewModel.isLoading.value = true;
+                    authViewModel.loginUser(emailController.text, passwordController.text)
+                      .then((_) => authViewModel.isLoading.value = false)
+                      .catchError((_) => authViewModel.isLoading.value = false);
+                  }
+                },
               ),
               SizedBox(height: Get.height * 0.03),
               Row(
@@ -193,7 +214,7 @@ final passwordRegex = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$
                   Text("Already have an account? ",
                       style: TextStyle(color: Colors.black)),
                   GestureDetector(
-                    onTap: () => Get.toNamed("/login"),
+                    onTap: () => Get.toNamed(RouteName.signupScreen),
                     child: GradientText("Sign Up",
                         gradient: AppColors.appGradientColors, fontSize: 15),
                   ),
@@ -206,51 +227,3 @@ final passwordRegex = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$
     );
   }
 }
-
-// class CustomTextField extends StatelessWidget {
-//   final String labelText;
-//   final bool isPassword;
-//   final TextEditingController controller;
-
-//   const CustomTextField({
-//     Key? key,
-//     required this.labelText,
-//     required this.controller,
-//     this.isPassword = false,
-//   }) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Stack(
-//       children: [
-//         Container(
-//           decoration: BoxDecoration(
-//             borderRadius: BorderRadius.circular(16),
-//             gradient: AppColors.appGradientColors.withOpacity(0.3),
-//           ),
-//           padding: EdgeInsets.all(2),
-//           child: Container(
-//             decoration: BoxDecoration(
-//               color: Colors.white,
-//               borderRadius: BorderRadius.circular(16),
-//             ),
-//             child: TextField(
-//               controller: controller,
-//               obscureText: isPassword,
-//               decoration: InputDecoration(
-//                 labelText: labelText,
-//                 labelStyle: TextStyle(color: Colors.black),
-//                 border: InputBorder.none,
-//                 contentPadding: EdgeInsets.symmetric(
-//                   horizontal: Get.width * 0.04,
-//                   vertical: Get.height * 0.015,
-//                 ),
-//                 suffixIcon: isPassword ? Icon(Icons.visibility_off) : null,
-//               ),
-//             ),
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }

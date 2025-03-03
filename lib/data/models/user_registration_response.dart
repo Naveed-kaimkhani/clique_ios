@@ -20,9 +20,12 @@ class UserRegistrationResponse {
     return UserRegistrationResponse(
       user: UserModel.fromJson(json['user']),
       cometChatUser: CometChatUser.fromJson(json['cometChatUser']),
-      token: json['token'],
-      message: json['message'],
-      data: json['data'] != null ? UserModel.fromJson(json['data']) : null,
+      // token: json['token'],
+      token: "token",
+      // message: json['message'],
+      message: "message",
+      // data: json['data'] != null ? UserModel.fromJson(json['data']) : null,
+      data: UserModel.fromJson(json['data']),
     );
   }
 

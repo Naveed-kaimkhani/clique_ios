@@ -1,18 +1,50 @@
 import 'dart:typed_data';
 
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 import 'package:path_provider/path_provider.dart' as path_provider;
 class Utils {
-
+  static String mapErrorMessage(String error) {
+  if (error.contains("The email has already been taken")) {
+    return "This email is already registered. Please use another email or log in.";
+  } else if (error.contains("network")) {
+    return "No internet connection. Please check your connection.";
+  } else if (error.contains("invalid credentials")) {
+    return "Invalid email or password. Please try again.";
+  } else {
+    return "Something went wrong. Please try again later.";
+  }
+}
+ static void showCustomSnackBar(String title, String message, ContentType contentType) {
+    final snackBar = SnackBar(
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      dismissDirection: DismissDirection.up,
+      animation: CurvedAnimation(
+        parent: AnimationController(
+          vsync: Navigator.of(Get.context!),
+          duration: const Duration(milliseconds: 500),
+        )..forward(),
+        curve: Curves.easeInOut,
+      ),
+      content: AwesomeSnackbarContent(
+        title: title,
+        message: message,
+        contentType: contentType,
+      ),
+    );
+    ScaffoldMessenger.of(Get.context!).showSnackBar(snackBar);
+  }
   static Future<Uint8List?> pickImage() async {
     //    ImagePicker picker=ImagePicker();
     ImagePicker picker = ImagePicker();
     XFile? file = await picker.pickImage(source: ImageSource.gallery);
 
-    //print("before redusing size $file");
     if (file != null) {
       XFile compressedImage = await compressImage(file);
       return compressedImage.readAsBytes();
