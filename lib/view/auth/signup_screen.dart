@@ -1,8 +1,9 @@
+import 'package:clique/components/custom_textfield.dart';
 import 'package:clique/components/index.dart';
 import 'package:clique/constants/app_colors.dart';
 import 'package:clique/core/api/api_response.dart';
-import 'package:clique/data/models/user_model.dart';
 import 'package:clique/data/models/signup_params.dart';
+import 'package:clique/view/auth/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -17,6 +18,65 @@ class SignupScreen extends StatelessWidget {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
   final TextEditingController phoneNumberController = TextEditingController();
+final passwordRegex = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$');
+
+  bool validateFields() {
+       if (!isChecked.value) {
+                      Get.snackbar("Terms & Conditions", "Please agree to the terms & conditions");
+                      return false;
+                    }
+    if (nameController.text.isEmpty) {
+      Get.snackbar("Name is required", "Please enter your name");
+      return false;
+    }
+
+    if (emailController.text.isEmpty) {
+      Get.snackbar("Email is required", "Please enter your email");
+      return false;
+    }
+
+    if (!emailController.text.endsWith('@gmail.com') && 
+        !emailController.text.endsWith('@yahoo.com') && 
+        !emailController.text.endsWith('@icloud.com')) {
+      Get.snackbar("Invalid email", "Please enter a valid email address (@gmail.com, @yahoo.com or @icloud.com)");
+      return false;
+    }
+
+    if (phoneNumberController.text.isEmpty) {
+      Get.snackbar("Phone number is required", "Please enter your phone number");
+      return false;
+    }
+
+    if (phoneNumberController.text.length != 11) {
+      Get.snackbar("Invalid phone number", "Phone number must be 11 digits long");
+      return false;
+    }
+
+    if (passwordController.text.isEmpty) {
+      Get.snackbar("Password is required", "Please enter your password");
+      return false;
+    }
+
+    // if (passwordController.text.length < 8) {
+    //   Get.snackbar("Password is too short", "Password must be at least 8 characters long");
+    //   return false;
+    // }
+if (!passwordRegex.hasMatch(passwordController.text)) {
+  Get.snackbar("Invalid Password", "Password must be at least 8 characters long and include at least one letter, one number, and one special character.");
+  return false;
+}
+    if (confirmPasswordController.text.isEmpty) {
+      Get.snackbar("Confirm password is required", "Please confirm your password");
+      return false;
+    }
+
+    if (passwordController.text != confirmPasswordController.text) {
+      Get.snackbar("Passwords don't match", "Password and confirm password must match");
+      return false;
+    }
+
+    return true;
+  }
 
   Widget _buildHeader() {
     return Column(
@@ -40,30 +100,31 @@ class SignupScreen extends StatelessWidget {
     return Column(
       children: [
         CustomTextField(
-          labelText: "Name",
+          hintText: "Name",
           controller: nameController,
         ),
         SizedBox(height: Get.height * 0.02),
         CustomTextField(
-          labelText: "Email",
+          hintText: "Email",
           controller: emailController,
         ),
         SizedBox(height: Get.height * 0.02),
         CustomTextField(
-          labelText: "Phone Number",
+          hintText: "Phone Number",
           controller: phoneNumberController,
         ),
         SizedBox(height: Get.height * 0.02),
         CustomTextField(
-          labelText: "Password",
+          hintText: "Password",
           controller: passwordController,
-          isPassword: true,
+          // isPassword: true,
+        
         ),
         SizedBox(height: Get.height * 0.02),
         CustomTextField(
-          labelText: "Confirm Password",
+          hintText: "Confirm Password",
           controller: confirmPasswordController,
-          isPassword: true,
+          // isPassword: true,
         ),
       ],
     );
@@ -99,7 +160,7 @@ class SignupScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 10),
-            Expanded(
+            Expanded( 
               child: _socialButton(
                 icon: Icon(Icons.apple, color: Colors.black),
                 label: "Apple",
@@ -172,22 +233,26 @@ class SignupScreen extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    if (!isChecked.value) {
-                      Get.snackbar(
-                        'Error',
-                        'Please accept terms and conditions',
-                        snackPosition: SnackPosition.BOTTOM,
+                 
+                    if (validateFields()) {
+                      // SignupParams request = SignupParams(
+                      //   name: nameController.text,
+                      //   email: emailController.text,
+                      //   password: passwordController.text,
+                      //   phone: phoneNumberController.text,
+                      //   confirmPassword: confirmPasswordController.text,
+                      //   role: "user",
+                      // );
+                         SignupParams request = SignupParams(
+                        name:" nameController.text",
+                        email: "nav@gmail.com",
+                        password: "11111111",
+                        phone: "11111111112",
+                        confirmPassword: "11111111112",
+                        role: "user",
                       );
-                      return;
+                      authViewModel.registerUser(request);
                     }
-                    SignupParams request = SignupParams(
-                      name: nameController.text,
-                      email: emailController.text,
-                      password: passwordController.text,
-                      confirmPassword: confirmPasswordController.text,
-                      role: "user",
-                    );
-                    authViewModel.registerUser(request);
                   },
                   child: const Text('SignUp'),
                 ),
@@ -206,70 +271,24 @@ class SignupScreen extends StatelessWidget {
                 ],
               ),
               SizedBox(height: Get.height * 0.02),
-              Obx(() {
-                final status = authViewModel.signupResponse.value.status;
-                final message = authViewModel.signupResponse.value.message;
-                final data = authViewModel.signupResponse.value.data;
+              // Obx(() {
+              //   final status = authViewModel.signupResponse.value.status;
+              //   final message = authViewModel.signupResponse.value.message;
+              //   final data = authViewModel.signupResponse.value.data;
 
-                if (status == Status.ERROR) {
-                  return Text("Error: $message",
-                      style: TextStyle(color: Colors.red));
-                } else if (status == Status.COMPLETED) {
-                  return Text("Success: ${data?.message}",
-                      style: TextStyle(color: Colors.green));
-                }
-                return SizedBox.shrink();
-              }),
+              //   if (status == Status.ERROR) {
+              //     return Text("Error: $message",
+              //         style: TextStyle(color: Colors.red));
+              //   } else if (status == Status.COMPLETED) {
+              //     return Text("Success: ${data?.message}",
+              //         style: TextStyle(color: Colors.green));
+              //   }
+              //   return SizedBox.shrink();
+              // }),
             ],
           ),
         ),
       ),
-    );
-  }
-}
-
-class CustomTextField extends StatelessWidget {
-  final String labelText;
-  final bool isPassword;
-  final TextEditingController controller;
-
-  const CustomTextField({
-    Key? key,
-    required this.labelText,
-    required this.controller,
-    this.isPassword = false,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            gradient: AppColors.appGradientColors.withOpacity(0.3),
-          ),
-          padding: EdgeInsets.all(2),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: TextField(
-              controller: controller,
-              obscureText: isPassword,
-              decoration: InputDecoration(
-                labelText: labelText,
-                labelStyle: TextStyle(color: Colors.black),
-                border: InputBorder.none,
-                contentPadding:
-                    EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                suffixIcon: isPassword ? Icon(Icons.visibility_off) : null,
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

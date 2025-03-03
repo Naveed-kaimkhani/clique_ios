@@ -1,5 +1,7 @@
+import 'package:clique/components/custom_textfield.dart';
 import 'package:clique/components/gradient_text.dart';
 import 'package:clique/constants/index.dart';
+import 'package:clique/view_model/auth_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -9,17 +11,46 @@ class LoginScreen extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
+  final AuthViewModel authViewModel = Get.put(AuthViewModel());
+
+final passwordRegex = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$');
+  bool validateFields() {
+    if (emailController.text.isEmpty) {
+      Get.snackbar("Email is required", "Please enter your email");
+      return false;
+    }
+    if (!emailController.text.endsWith('@gmail.com') || !emailController.text.endsWith('@yahoo.com') || !emailController.text.endsWith('@outlook.com') || !emailController.text.endsWith('@icloud.com') || !emailController.text.endsWith('@hotmail.com') || !emailController.text.endsWith('@live.com') ) {
+      Get.snackbar("Invalid email", "Please enter a valid email address");
+      return false;
+    }
+    
+ 
+    if (passwordController.text.isEmpty) {
+      Get.snackbar("Password is required", "Please enter your password");
+      return false;
+    }
+    if (!passwordRegex.hasMatch(passwordController.text)) {
+  Get.snackbar("Invalid Password", "Password must be at least 8 characters long and include at least one letter, one number, and one special character.");
+  return false;
+}
+    // if (passwordController.text.length < 8) {
+    //   Get.snackbar("Password is too short", "Password must be at least 8 characters long");
+    //   return false;
+    // }
+    return true;
+  }
+
   Widget _buildHeader(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Center(
-          child: SvgPicture.asset(
+          child: Image.asset(
             AppImages.appLogo, 
-            height: MediaQuery.of(context).size.height * 0.25,
+            height: MediaQuery.of(context).size.height * 0.26,
           ),
         ),
-        SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+        // SizedBox(height: MediaQuery.of(context).size.height * 0.02),
         const Text(
           'Welcome Back..!',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -37,13 +68,13 @@ class LoginScreen extends StatelessWidget {
     return Column(
       children: [
         CustomTextField(
-          labelText: 'Email Address',
+          hintText: 'Email Address',
           controller: emailController,
         ),
         SizedBox(height: Get.height * 0.015),
         CustomTextField(
-          labelText: 'Password',
-          isPassword: true,
+          hintText: 'Password',
+          // isPassword: true,
           controller: passwordController,
         ),
       ],
@@ -147,12 +178,16 @@ class LoginScreen extends StatelessWidget {
                       vertical: Get.height * 0.02,
                     ),
                   ),
-                  onPressed: () {},
-                  child: const Text('Login'),
+                  onPressed: () {
+                    if (validateFields()) {
+                      authViewModel.loginUser(emailController.text, passwordController.text);
+                    }
+                  },
+                  child: const Text('Login', style: TextStyle(fontSize: 16)),
                 ),
               ),
               SizedBox(height: Get.height * 0.03),
-            Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text("Already have an account? ",
@@ -172,50 +207,50 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-class CustomTextField extends StatelessWidget {
-  final String labelText;
-  final bool isPassword;
-  final TextEditingController controller;
+// class CustomTextField extends StatelessWidget {
+//   final String labelText;
+//   final bool isPassword;
+//   final TextEditingController controller;
 
-  const CustomTextField({
-    Key? key,
-    required this.labelText,
-    required this.controller,
-    this.isPassword = false,
-  }) : super(key: key);
+//   const CustomTextField({
+//     Key? key,
+//     required this.labelText,
+//     required this.controller,
+//     this.isPassword = false,
+//   }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            gradient: AppColors.appGradientColors.withOpacity(0.3),
-          ),
-          padding: EdgeInsets.all(2),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: TextField(
-              controller: controller,
-              obscureText: isPassword,
-              decoration: InputDecoration(
-                labelText: labelText,
-                labelStyle: TextStyle(color: Colors.black),
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: Get.width * 0.04,
-                  vertical: Get.height * 0.015,
-                ),
-                suffixIcon: isPassword ? Icon(Icons.visibility_off) : null,
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Stack(
+//       children: [
+//         Container(
+//           decoration: BoxDecoration(
+//             borderRadius: BorderRadius.circular(16),
+//             gradient: AppColors.appGradientColors.withOpacity(0.3),
+//           ),
+//           padding: EdgeInsets.all(2),
+//           child: Container(
+//             decoration: BoxDecoration(
+//               color: Colors.white,
+//               borderRadius: BorderRadius.circular(16),
+//             ),
+//             child: TextField(
+//               controller: controller,
+//               obscureText: isPassword,
+//               decoration: InputDecoration(
+//                 labelText: labelText,
+//                 labelStyle: TextStyle(color: Colors.black),
+//                 border: InputBorder.none,
+//                 contentPadding: EdgeInsets.symmetric(
+//                   horizontal: Get.width * 0.04,
+//                   vertical: Get.height * 0.015,
+//                 ),
+//                 suffixIcon: isPassword ? Icon(Icons.visibility_off) : null,
+//               ),
+//             ),
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }

@@ -1,5 +1,7 @@
 
 import 'package:clique/routes/routes_name.dart';
+import 'package:clique/view/auth/login_screen.dart';
+import 'package:clique/view/auth/signup_screen.dart';
 import 'package:clique/view/cart/cart_screen.dart';
 import 'package:clique/view/cart/checkout_screen.dart';
 import 'package:clique/view/chat/chat_screen.dart';
@@ -37,6 +39,15 @@ class AppRoutes {
         name: RouteName.homeScreen,
         page: () =>  HomeScreen(),
         transition: Transition.cupertino),
+  GetPage(
+        name: RouteName.signupScreen,
+        page: () =>  SignupScreen(),
+        transition: Transition.cupertino),
+  GetPage(
+        name: RouteName.loginScreen,
+        page: () =>  LoginScreen(),
+        transition: Transition.cupertino),
+
 
     GetPage(
         name: RouteName.checkoutScreen,
