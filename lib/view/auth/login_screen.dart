@@ -5,11 +5,8 @@ import 'package:clique/constants/index.dart';
 import 'package:clique/utils/utils.dart';
 import 'package:clique/view_model/auth_viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:clique/components/custom_button.dart';
-
 class LoginScreen extends StatelessWidget {
   final RxBool isChecked = false.obs;
   final TextEditingController emailController = TextEditingController();
@@ -56,10 +53,26 @@ RegExp emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.
       );
       return false;
     }
+        if (passwordController.text.isEmpty) {
+      Utils.showCustomSnackBar(
+        'Password Required', 
+        'Please enter your password',
+        ContentType.warning
+      );
+      return false;
+    }
+    if (passwordController.text.length < 8) {
+      Utils.showCustomSnackBar(
+        'Invalid Password',
+        'Password must be at least 8 characters long',
+        ContentType.warning
+      );
+      return false;
+    }
     if (!passwordRegex.hasMatch(passwordController.text)) {
        Utils.showCustomSnackBar(
         'Invalid Password',
-        'Password must be at least 8 characters long and include at least one letter, one number, and one special character.',
+        'Password must include at least one letter, one number, and one special character.',
         ContentType.failure
       );
       return false;
