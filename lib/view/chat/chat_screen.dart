@@ -52,6 +52,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
   Future<void> _fetchMessages() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
+    String? userId = prefs.getString('user_id'); // Get logged in user ID
 
     final String url = "https://dev.moutfits.com/api/v1/cometchat/groups/${widget.guid}/messages";
 
@@ -70,7 +71,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
           return {
             "sender": msg["name"],
             "message": msg["message"],
-            "isMe": msg["uid"] == "app_system" ? false : true,
+            "isMe": msg["sender_uid"] == userId, // Check if message is from logged in user
             "time": "Now",
             "seenBy": [AppSvgIcons.profile],
           };
@@ -229,22 +230,13 @@ class ChatMessageWidget extends StatelessWidget {
             margin: EdgeInsets.symmetric(vertical: 10),
             padding: EdgeInsets.all(screenWidth * 0.03),
             decoration: BoxDecoration(
-              gradient: message['isMe']
-                  ? AppColors.appGradientColors
-                  : LinearGradient(colors: [const Color.fromARGB(255, 240, 240, 240), const Color.fromARGB(255, 235, 235, 235)]),
+              gradient: message['isMe'] ? AppColors.appGradientColors : null,
+              color: message['isMe'] ? null : Colors.grey[300],
               borderRadius: BorderRadius.circular(15),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (!message['isMe'])
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 5),
-                    child: Text(
-                      message['sender'],
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
                 Text(
                   message['message'],
                   style: TextStyle(color: message['isMe'] ? Colors.white : Colors.black),
