@@ -28,15 +28,7 @@ RegExp emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.
       );
       return false;
     }
-    // if (!emailController.text.endsWith('@gmail.com') || !emailController.text.endsWith('@yahoo.com') || !emailController.text.endsWith('@outlook.com') || !emailController.text.endsWith('@icloud.com') || !emailController.text.endsWith('@hotmail.com') || !emailController.text.endsWith('@live.com') ) {
-    //    Utils.showCustomSnackBar(
-    //     'Invalid Email',
-    //     'Please enter a valid email address',
-    //     ContentType.failure
-    //   );
-    //   return false;
-    // }
-    
+ 
     if (!emailRegex.hasMatch(emailController.text)) {
   Utils.showCustomSnackBar(
     'Invalid Email',
@@ -212,12 +204,16 @@ RegExp emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.
                 buttonText: 'Login',
                 isLoading: authViewModel.isLoading,
                 onPressed: () {
-                  if (validateFields()) {
-                    authViewModel.isLoading.value = true;
-                    authViewModel.loginUser(emailController.text, passwordController.text)
+                      authViewModel.loginUser("nakk@gmail.com", "nav44108@Kk")
                       .then((_) => authViewModel.isLoading.value = false)
                       .catchError((_) => authViewModel.isLoading.value = false);
-                  }
+
+                  // if (validateFields()) {
+                  //   authViewModel.isLoading.value = true;
+                  //   authViewModel.loginUser(emailController.text, passwordController.text)
+                  //     .then((_) => authViewModel.isLoading.value = false)
+                  //     .catchError((_) => authViewModel.isLoading.value = false);
+                  // }
                 },
               ),
               SizedBox(height: Get.height * 0.03),

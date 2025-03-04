@@ -15,8 +15,11 @@ class Utils {
     return "No internet connection. Please check your connection.";
   } else if (error.contains("invalid credentials")) {
     return "Invalid email or password. Please try again.";
-  } else {
-    return "Something went wrong. Please try again later.";
+  } if (error.contains("The phone has already been taken")) {
+    return "This phone is already registered. Please use another phone or log in.";
+  }else {
+    return error;
+    // return "Something went wrong. Please try again later.";
   }
 }
  static void showCustomSnackBar(String title, String message, ContentType contentType) {

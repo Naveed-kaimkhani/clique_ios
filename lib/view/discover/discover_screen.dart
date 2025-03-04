@@ -2,6 +2,8 @@
 import 'package:clique/components/index.dart';
 import 'package:clique/constants/index.dart';
 import 'package:clique/controller/navigation_controller.dart';
+import 'package:clique/controller/user_controller.dart';
+import 'package:clique/data/models/group_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -22,6 +24,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   final ScrollController _productScrollController = ScrollController();
   final ScrollController _influencerScrollController = ScrollController();
 
+  final UserController userController = Get.find<UserController>();
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -188,38 +191,93 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
     );
   }
 
+
+  // Widget _buildGroupHorizontalList(Size size) {
+  //   return SizedBox(
+  //     height: size.height * 0.25,
+  //     child: ListView.builder(
+  //       controller: _groupScrollController,
+  //       scrollDirection: Axis.horizontal,
+  //       itemCount: 3, // 2 cards + 1 arrow button
+  //       itemBuilder: (context, index) {
+  //         if (index == 2) {
+  //           return Center(
+  //             child: GestureDetector(
+  //               onTap: () => Get.toNamed(RouteName.viewAllCliquesScreen),
+  //               child: Container(
+  //                 margin: EdgeInsets.only(right: size.width * 0.06, left: 16),
+  //                 decoration: BoxDecoration(
+  //                   gradient: AppColors.appGradientColors,
+  //                   shape: BoxShape.circle,
+  //                 ),
+  //                 padding: EdgeInsets.all(8),
+  //                 child: Icon(Icons.arrow_forward, color: Colors.white),
+  //               ),
+  //             ),
+  //           );
+  //         }
+  //         return GroupCard(
+  //           backgroundImage: AppSvgIcons.cloth,
+  //           profileImage: AppSvgIcons.profile,
+  //           name: index == 0 ? 'MenswearDog' : 'Pet Health',
+  //           followers: index == 0 ? '1200 members' : '10.5k Followers',
+  //         );
+  //       },
+  //     ),
+  //   );
+  // }
   Widget _buildGroupHorizontalList(Size size) {
-    return SizedBox(
-      height: size.height * 0.25,
-      child: ListView.builder(
-        controller: _groupScrollController,
-        scrollDirection: Axis.horizontal,
-        itemCount: 3, // 2 cards + 1 arrow button
-        itemBuilder: (context, index) {
-          if (index == 2) {
-            return Center(
-              child: GestureDetector(
-                onTap: () => Get.toNamed(RouteName.viewAllCliquesScreen),
-                child: Container(
-                  margin: EdgeInsets.only(right: size.width * 0.06, left: 16),
-                  decoration: BoxDecoration(
-                    gradient: AppColors.appGradientColors,
-                    shape: BoxShape.circle,
+  return FutureBuilder<List<Group>>(
+    future: fetchGroups(),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return Center(child: CircularProgressIndicator());
+      } else if (snapshot.hasError) {
+        return Center(child: Text('Error: ${snapshot.error}'));
+      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+        return Center(child: Text('No groups available'));
+      }
+      
+      final groups = snapshot.data!;
+      return SizedBox(
+        height: size.height * 0.25,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: groups.length + 1, // Groups + View All Button
+          itemBuilder: (context, index) {
+            if (index == groups.length) {
+              return Center(
+                child: GestureDetector(
+                  onTap: () => Get.toNamed(RouteName.viewAllCliquesScreen),
+                  child: Container(
+                    margin: EdgeInsets.only(right: size.width * 0.06, left: 16),
+                    decoration: BoxDecoration(
+                      gradient: AppColors.appGradientColors,
+                      shape: BoxShape.circle,
+                    ),
+                    padding: EdgeInsets.all(8),
+                    child: Icon(Icons.arrow_forward, color: Colors.white),
                   ),
-                  padding: EdgeInsets.all(8),
-                  child: Icon(Icons.arrow_forward, color: Colors.white),
                 ),
-              ),
+              );
+            }
+            
+            final group = groups[index];
+            return GroupCard(
+              backgroundImage:  AppSvgIcons.cloth,
+              profileImage: group.icon ,
+              name: group.name,
+              followers: '${group.membersCount} members',
+              guid: group.guid,
+              uid: userController.uid.value,
+              groupName: group.name,
+              memberCount: group.membersCount,
             );
-          }
-          return GroupCard(
-            backgroundImage: AppSvgIcons.cloth,
-            profileImage: AppSvgIcons.profile,
-            name: index == 0 ? 'MenswearDog' : 'Pet Health',
-            followers: index == 0 ? '1200 members' : '10.5k Followers',
-          );
-        },
-      ),
-    );
-  }
+          },
+        ),
+      );
+    },
+  );
+}
+
 }

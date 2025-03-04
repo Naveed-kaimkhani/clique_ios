@@ -52,7 +52,7 @@ class InfluencerProfileState extends State<InfluencerProfile>
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(height: size.height * 0.02),
-                      UserProfileCard(isInfluencer: true),
+                      UserProfileCard(isInfluencer: true, username: "Brian Brunner"),
                       SizedBox(height: size.height * 0.02),
                     ],
                   ),

@@ -1,19 +1,30 @@
+import 'dart:convert';
+
 import 'package:avatar_stack/animated_avatar_stack.dart';
-import 'package:clique/constants/app_svg_icons.dart';
 import 'package:clique/routes/routes_name.dart';
+import 'package:clique/view/chat/chat_screen.dart';
 import 'package:flutter/material.dart';
+
+import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 class GroupCard extends StatelessWidget {
   final String backgroundImage;
-  final String profileImage;
+  final String? profileImage;
   final String name;
   final String followers;
-
-  const GroupCard({
+  final String guid;
+  final int uid;
+  final String groupName;
+  final int memberCount;
+  const GroupCard({       
     required this.backgroundImage,
-    required this.profileImage,
+    this.profileImage,
     required this.name,
     required this.followers,
+    required this.guid,
+    required this.uid,
+    required this.groupName,
+    required this.memberCount,
     super.key,
   });
 
@@ -116,7 +127,7 @@ class GroupCard extends StatelessWidget {
                           child: Center(
                             child: TextButton(
                               onPressed: () {
-                            Get.toNamed(RouteName.groupChatScreen);
+                                joinGroup(guid, uid, context, groupName, memberCount);
                               },
                               child: Text(
                                 "Join Now",
@@ -138,14 +149,67 @@ class GroupCard extends StatelessWidget {
           Positioned(
             top: cardHeight * 0.16,
             left: size.width * 0.03,
-            child: Image.asset(
-              AppSvgIcons.profile,
+            child: Container(
               height: profileImageSize,
               width: profileImageSize,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: profileImage != null 
+                  ? DecorationImage(
+                      image: NetworkImage(profileImage!),
+                      fit: BoxFit.cover,
+                    )
+                  : null,
+                color: profileImage == null ? Colors.grey[300] : null,
+              ),
+              child: profileImage == null 
+                ? Icon(Icons.person, size: profileImageSize * 0.6, color: Colors.grey[600])
+                : null,
             ),
           ),
         ],
       ),
     );
+  }
+}
+
+void joinGroup(String guid, int uid, BuildContext context, String groupName, int memberCount) async {
+ 
+  print("guid");
+  print(guid);
+  print("uid");
+  print(uid);
+  const String url = "https://dev.moutfits.com/api/v1/cometchat/groups/join";
+  const String authToken = "63|9dM3rfqqIBCkelTcgGCgoMTNQn5MRJde3glXauj956689575";
+
+  final Map<String, dynamic> body = {
+    "guid": guid,
+    "uid": uid.toString(),
+    "scope": "participant"
+  };
+
+  try {
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $authToken",
+      },
+      body: jsonEncode(body),
+    );
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      // Successfully joined the group
+      // Get.toNamed(RouteName.groupChatScreen);
+       Navigator.push(context, MaterialPageRoute(builder: (context) => GroupChatScreen(guid: guid , groupName: groupName, memberCount: memberCount,)));
+    
+    } else {
+      print(response.body); 
+      // Failed to join
+      Get.snackbar("Error", "Failed to join group: ${response.body}");
+    }
+  } catch (e) {
+    print(e);
+    Get.snackbar("Error", "Something went wrong: $e");
   }
 }

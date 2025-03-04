@@ -2,10 +2,8 @@ import 'package:clique/components/auth_button.dart';
 import 'package:clique/components/custom_textfield.dart';
 import 'package:clique/components/index.dart';
 import 'package:clique/constants/app_colors.dart';
-import 'package:clique/core/api/api_response.dart';
 import 'package:clique/data/models/signup_params.dart';
 import 'package:clique/routes/routes_name.dart';
-import 'package:clique/view/auth/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
@@ -14,88 +12,119 @@ import 'package:clique/utils/utils.dart';
 import '../../view_model/auth_viewmodel.dart';
 
 class SignupScreen extends StatelessWidget {
-  final AuthViewModel authViewModel = Get.put(AuthViewModel());
-  final RxBool isChecked = false.obs;
+  // Controllers
+  final AuthViewModel _authViewModel = Get.put(AuthViewModel());
+  final RxBool _isChecked = false.obs;
 
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
-  final TextEditingController phoneNumberController = TextEditingController();
-final passwordRegex = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$');
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
 
-  bool validateFields() {
-       if (!isChecked.value) {
-                      Utils.showCustomSnackBar("Terms & Conditions", "Please agree to the terms & conditions", ContentType.warning);
-                      return false;
-                    }
-    if (nameController.text.isEmpty) {
-      Utils.showCustomSnackBar("Name is required", "Please enter your name", ContentType.warning);
-      return false;
-    }
-
-    if (emailController.text.isEmpty) {
-      Utils.showCustomSnackBar("Email is required", "Please enter your email", ContentType.warning);
-      return false;
-    }
-
-    if (!emailController.text.endsWith('@gmail.com') && 
-        !emailController.text.endsWith('@yahoo.com') && 
-        !emailController.text.endsWith('@icloud.com')) {
-      Utils.showCustomSnackBar("Invalid email", "Please enter a valid email address (@gmail.com, @yahoo.com or @icloud.com)", ContentType.warning);
-      return false;
-    }
-
-    if (phoneNumberController.text.isEmpty) {
-      Utils.showCustomSnackBar("Phone number is required", "Please enter your phone number", ContentType.warning);
-      return false;
-    }
-
-    if (phoneNumberController.text.length != 11) {
-      Utils.showCustomSnackBar("Invalid phone number", "Phone number must be 11 digits long", ContentType.warning);
-      return false;
-    }
-
-    if (passwordController.text.isEmpty) {
-      Utils.showCustomSnackBar("Password is required", "Please enter your password", ContentType.warning);
-      return false;
-    }
-
-    // if (passwordController.text.length < 8) {
-    //   Utils.showCustomSnackBar("Password is too short", "Password must be at least 8 characters long", ContentType.warning);
-    //   return false;
-    // }
-if (!passwordRegex.hasMatch(passwordController.text)) {
-  Utils.showCustomSnackBar("Invalid Password", "Password must be at least 8 characters long and include at least one letter, one number, and one special character.", ContentType.warning);
-  return false;
+  // Constants
+  static const List<String> _validEmailDomains = ['@gmail.com', '@yahoo.com', '@icloud.com'];
+  static const int _requiredPhoneLength = 11;
+  static const int _minPasswordLength = 8;
+  
+  final _passwordRegex = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$');
+@override
+void dispose() {
+  _nameController.dispose();
+  _emailController.dispose();
+  _passwordController.dispose();
+  _confirmPasswordController.dispose();
+  _phoneNumberController.dispose();
 }
-    if (confirmPasswordController.text.isEmpty) {
-      Utils.showCustomSnackBar("Confirm password is required", "Please confirm your password", ContentType.warning);
+  bool _validateFields() {
+    if (!_isChecked.value) {
+      _showValidationError("Terms & Conditions", "Please agree to the terms & conditions");
       return false;
     }
 
-    if (passwordController.text != confirmPasswordController.text) {
-      Utils.showCustomSnackBar("Passwords don't match", "Password and confirm password must match", ContentType.warning);
+    if (_nameController.text.isEmpty) {
+      _showValidationError("Name is required", "Please enter your name");
+      return false;
+    }
+
+    if (_emailController.text.isEmpty) {
+      _showValidationError("Email is required", "Please enter your email");
+      return false;
+    }
+
+    if (!_isValidEmail(_emailController.text)) {
+      _showValidationError("Invalid email", 
+        "Please enter a valid email address (@gmail.com, @yahoo.com or @icloud.com)");
+      return false;
+    }
+
+    if (_phoneNumberController.text.isEmpty) {
+      _showValidationError("Phone number is required", "Please enter your phone number");
+      return false;
+    }
+
+    if (_phoneNumberController.text.length != _requiredPhoneLength) {
+      _showValidationError("Invalid phone number", "Phone number must be 11 digits long");
+      return false;
+    }
+
+    if (!_validatePassword()) return false;
+
+    return true;
+  }
+
+  bool _validatePassword() {
+    if (_passwordController.text.isEmpty) {
+      _showValidationError("Password is required", "Please enter your password");
+      return false;
+    }
+
+    if (_passwordController.text.length < _minPasswordLength) {
+      _showValidationError("Password is too short", 
+        "Password must be at least 8 characters long");
+      return false;
+    }
+
+    if (_confirmPasswordController.text.isEmpty) {
+      _showValidationError("Confirm password is required", "Please confirm your password");
+      return false;
+    }
+
+    if (!_passwordRegex.hasMatch(_passwordController.text)) {
+      _showValidationError("Invalid Password", 
+        "Password must include at least one letter, one number, and one special character.");
+      return false;
+    }
+
+    if (_passwordController.text != _confirmPasswordController.text) {
+      _showValidationError("Passwords don't match", 
+        "Password and confirm password must match");
       return false;
     }
 
     return true;
   }
 
+  void _showValidationError(String title, String message) {
+    Utils.showCustomSnackBar(title, message, ContentType.warning);
+  }
+
+  bool _isValidEmail(String email) {
+    return _validEmailDomains.any((domain) => email.endsWith(domain));
+  }
+
   Widget _buildHeader() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        GradientText(
-          "Create Account",
-          gradient: AppColors.appGradientColors,
+        LabelText(
+          text: "Create Account",
           fontSize: Get.width * 0.07,
         ),
-        GradientText(
-          "Enter your personal details to create an account.",
-          gradient: AppColors.appGradientColors,
+        LabelText(
+          text: "Enter your personal details to create an account.",
           fontSize: Get.width * 0.04,
-        ),
+        )
       ],
     );
   }
@@ -105,30 +134,29 @@ if (!passwordRegex.hasMatch(passwordController.text)) {
       children: [
         CustomTextField(
           hintText: "Name",
-          controller: nameController,
+          controller: _nameController,
         ),
         SizedBox(height: Get.height * 0.02),
         CustomTextField(
           hintText: "Email",
-          controller: emailController,
+          controller: _emailController,
         ),
         SizedBox(height: Get.height * 0.02),
         CustomTextField(
           hintText: "Phone Number",
-          controller: phoneNumberController,
+          controller: _phoneNumberController,
         ),
         SizedBox(height: Get.height * 0.02),
         CustomTextField(
           hintText: "Password",
-          controller: passwordController,
-          // isPassword: true,
-        
+          controller: _passwordController,
+          obscureText: true,
         ),
         SizedBox(height: Get.height * 0.02),
         CustomTextField(
           hintText: "Confirm Password",
-          controller: confirmPasswordController,
-          // isPassword: true,
+          controller: _confirmPasswordController,
+          obscureText: true,
         ),
       ],
     );
@@ -137,43 +165,55 @@ if (!passwordRegex.hasMatch(passwordController.text)) {
   Widget _buildSocialButtons() {
     return Column(
       children: [
-        Row(
-          children: [
-            Obx(() => Checkbox(
-              activeColor: AppColors.black,
-              value: isChecked.value,
-              onChanged: (value) => isChecked.value = value ?? false,
-            )),
-            const Text('I agree with the terms & conditions')
-          ],
-        ),
+        _buildTermsAndConditions(),
         const SizedBox(height: 10),
-        Center(
+        const Center(
           child: Text('Or', style: TextStyle(color: Colors.grey)),
         ),
         const SizedBox(height: 10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: _socialButton(
-                icon: Image.asset("assets/png/google.png", width: Get.width * 0.04, height: Get.width * 0.04),
-                label: "Google",
-                borderColor: Colors.red,
-                onPressed: () {},
-              ),
+        _buildSocialLoginButtons(),
+      ],
+    );
+  }
+
+  Widget _buildTermsAndConditions() {
+    return Row(
+      children: [
+        Obx(() => Checkbox(
+          activeColor: AppColors.black,
+          value: _isChecked.value,
+          onChanged: (value) => _isChecked.value = value ?? false,
+        )),
+        const Text('I agree with the terms & conditions')
+      ],
+    );
+  }
+
+  Widget _buildSocialLoginButtons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Expanded(
+          child: _socialButton(
+            icon: Image.asset(
+              "assets/png/google.png",
+              width: Get.width * 0.04,
+              height: Get.width * 0.04
             ),
-            const SizedBox(width: 10),
-            Expanded( 
-              child: _socialButton(
-                icon: Icon(Icons.apple, color: Colors.black),
-                label: "Apple",
-                borderColor: Colors.black,
-                textColor: Colors.black,
-                onPressed: () {},
-              ),
-            ),
-          ],
+            label: "Google",
+            borderColor: Colors.red,
+            onPressed: () {},
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: _socialButton(
+            icon: const Icon(Icons.apple, color: Colors.black),
+            label: "Apple",
+            borderColor: Colors.black,
+            textColor: Colors.black,
+            onPressed: () {},
+          ),
         ),
       ],
     );
@@ -198,12 +238,50 @@ if (!passwordRegex.hasMatch(passwordController.text)) {
           icon,
           const SizedBox(width: 10),
           label == "Google"
-              ? GradientText(label,
-                  gradient: AppColors.appGradientColors, fontSize: 14)
+              ? GradientText(
+                  label,
+                  gradient: AppColors.appGradientColors,
+                  fontSize: 14
+                )
               : Text(label, style: TextStyle(color: textColor)),
         ],
       ),
     );
+  }
+
+  void _handleSignup() {
+
+      //   final SignupParams request = SignupParams(
+      //   name:" _nameController.text",
+      //   email: "fsdsfdsfsssfsfsdfsf11@gmail.com",
+      //   password: "nav41458@Kk",
+      //   phone: "001115543233",
+      //   confirmPassword: "nav41458@Kk",
+      //   role: "user",
+      // );
+      
+      // _authViewModel.registerUser(request, _nameController.text)
+      //   .then((_) => _authViewModel.isLoading.value = false)
+      //   .catchError((_) => _authViewModel.isLoading.value = false);
+    
+    
+    
+    if (_validateFields()) {
+      _authViewModel.isLoading.value = true;
+      
+      final SignupParams request = SignupParams(
+        name: _nameController.text,
+        email: _emailController.text,
+        password: _passwordController.text,
+        phone: _phoneNumberController.text,
+        confirmPassword: _confirmPasswordController.text,
+        role: "user",
+      );
+        
+      _authViewModel.registerUser(request, _nameController.text)
+        .then((_) => _authViewModel.isLoading.value = false)
+        .catchError((_) => _authViewModel.isLoading.value = false);
+    }
   }
 
   @override
@@ -228,44 +306,36 @@ if (!passwordRegex.hasMatch(passwordController.text)) {
               SizedBox(height: Get.height * 0.02),
               AuthButton(
                 buttonText: 'SignUp',
-                isLoading: authViewModel.isLoading,
-                onPressed: () {
-                  
-                  if (validateFields()) {
-                    authViewModel.isLoading.value = true;
-                    SignupParams request = SignupParams(
-                      name:nameController.text,
-                      email: emailController.text, 
-                      password: passwordController.text,
-                      phone: phoneNumberController.text,
-                      confirmPassword: confirmPasswordController.text,
-                      role: "user",
-                    );
-                    authViewModel.registerUser(request)
-                      .then((_) => authViewModel.isLoading.value = false)
-                      .catchError((_) => authViewModel.isLoading.value = false);
-                  }
-                },
+                isLoading: _authViewModel.isLoading,
+                onPressed: _handleSignup,
               ),
               SizedBox(height: Get.height * 0.02),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("Already have an account? ",
-                      style: TextStyle(color: Colors.black)),
-                  GestureDetector(
-                    onTap:()=>Get.toNamed(RouteName.loginScreen),
-                    child: GradientText("Login",
-                        gradient: AppColors.appGradientColors, fontSize: 15),
-                  ),
-                ],
-              ),
+              _buildLoginLink(),
               SizedBox(height: Get.height * 0.02),
-            
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildLoginLink() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text(
+          "Already have an account? ",
+          style: TextStyle(color: Colors.black)
+        ),
+        GestureDetector(
+          onTap: () => Get.toNamed(RouteName.loginScreen),
+          child: GradientText(
+            "Login",
+            gradient: AppColors.appGradientColors,
+            fontSize: 15
+          ),
+        ),
+      ],
     );
   }
 }

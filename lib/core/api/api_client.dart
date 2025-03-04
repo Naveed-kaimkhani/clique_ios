@@ -1,6 +1,7 @@
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../api/api_endpoints.dart';
 
@@ -27,7 +28,18 @@ class ApiClient extends GetxService {
     return _handleResponse(response);
   }
 
-  dynamic _handleResponse(http.Response response) {
+  dynamic _handleResponse(http.Response response) async {
+       if(response.statusCode == 200){
+        final Map<String, dynamic> responseData = jsonDecode(response.body);
+        final String token = responseData["token"];
+        final String userName = responseData["user"]["name"];
+        final int userId = responseData["user"]["id"];
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('token', token);
+        await prefs.setString('userName', userName);
+        await prefs.setInt('uid', userId);
+        
+      }
     switch (response.statusCode) {
       case 200:
       case 201:

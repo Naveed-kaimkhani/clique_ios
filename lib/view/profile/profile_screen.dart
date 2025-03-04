@@ -2,9 +2,10 @@
 
 import 'package:clique/components/custom_button.dart';
 import 'package:clique/components/index.dart';
+import 'package:clique/controller/user_controller.dart';
 import 'package:clique/view/chat/chat_list.dart';
 import 'package:flutter/material.dart';
-
+import 'package:get/get.dart';
 import '../../constants/index.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -14,6 +15,7 @@ class ProfileScreen extends StatefulWidget {
 
 class ProfileScreenState extends State<ProfileScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  final UserController userController = Get.find<UserController>();
 
   @override
   void initState() {
@@ -49,7 +51,10 @@ class ProfileScreenState extends State<ProfileScreen> with SingleTickerProviderS
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         // SizedBox(height: size.height * 0.02), // Responsive spacing
-                        UserProfileCard(isInfluencer: false, ),
+                        Obx(() => UserProfileCard(
+                          isInfluencer: false,
+                          username: userController.userName.value,
+                        )),
                         SizedBox(height: size.height * 0.02),
                         Center(
                           child: CustomButton(
@@ -91,7 +96,7 @@ class ProfileScreenState extends State<ProfileScreen> with SingleTickerProviderS
                       ProfileProductCard(
                         uid: '1',
                         backgroundImage: 'assets/png/product.png',
-                        productName: "Girl’s Full Blazers",
+                        productName: "Girl's Full Blazers",
                         productDescription: "Crafted from premium, breathable cotton fabric",
                         price: 53.23,
                         oldPrice: 100.23,
@@ -100,7 +105,7 @@ class ProfileScreenState extends State<ProfileScreen> with SingleTickerProviderS
                       ProfileProductCard(
                         uid: '2',
                         backgroundImage: 'assets/png/product2.png',
-                        productName: "Girl’s Full Blazers",
+                        productName: "Girl's Full Blazers",
                         productDescription: "Crafted from premium, breathable cotton fabric",
                         price: 53.23,
                         oldPrice: 100.23,

@@ -61,10 +61,10 @@ class AppRoutes {
         name: RouteName.cartScreen,
         page: () =>  CartScreen(),
         transition: Transition.cupertino),
-          GetPage(
-        name: RouteName.groupChatScreen,
-        page: () =>  GroupChatScreen(),
-        transition: Transition.cupertino),
+        //   GetPage(
+        // name: RouteName.groupChatScreen,
+        // page: () =>  GroupChatScreen(),
+        // transition: Transition.cupertino),
         //      GetPage(
         // name: RouteName.searchScreen,
         // page: () =>  SearchScreen(),

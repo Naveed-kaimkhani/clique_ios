@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 class UserProfileCard extends StatelessWidget {
   final bool isInfluencer;
-  const UserProfileCard({super.key, required this.isInfluencer});
-
+  final String username;
+  const UserProfileCard({super.key, required this.isInfluencer, required this.username});
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -38,7 +38,7 @@ class UserProfileCard extends StatelessWidget {
           ),
           SizedBox(height: screenHeight * 0.015), // Responsive spacing
           Text(
-            'Brian Brunner',
+            username,
             style: TextStyle(
               fontSize: screenHeight * 0.035, // Responsive font size
               fontWeight: FontWeight.bold,

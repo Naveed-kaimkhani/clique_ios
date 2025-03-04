@@ -37,6 +37,7 @@ class LabelText extends StatelessWidget {
         color: textColor,
         fontWeight: weight,
         fontSize: fontSize,
+        fontFamily: 'SofiaPro',
         decoration: decoration,
         decorationColor: decorationColor,
         height: height,

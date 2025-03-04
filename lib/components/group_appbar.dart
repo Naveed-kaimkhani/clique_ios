@@ -7,8 +7,8 @@ import 'package:get/get.dart';
 
 class GroupAppBar extends StatelessWidget {
   final String title;
-
-  const GroupAppBar({super.key, required this.title});
+  final int memberCount;
+  const GroupAppBar({super.key, required this.title, required this.memberCount});
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +69,7 @@ class GroupAppBar extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '134 Members',
+                      memberCount.toString(),
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: size.width * 0.04, // 4% of screen width

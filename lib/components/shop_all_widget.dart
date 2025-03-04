@@ -1,4 +1,4 @@
-import 'package:clique/components/label_text.dart';
+
 import 'package:clique/constants/app_svg_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -14,9 +14,7 @@ class ShopAllWidget extends StatelessWidget {
     final iconSize = screenSize.width * 0.06;
     final spacing = screenSize.height * 0.01;
 
-    return Row(
-      children: [
-        Column(
+    return    Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -26,15 +24,15 @@ class ShopAllWidget extends StatelessWidget {
               height: iconSize,
             ),
             SizedBox(height: spacing),
-            Text(
+         Center(
+          child:    Text(
             "Shop All",
               style: TextStyle(
                 fontSize: screenSize.width * 0.035,
               ),
             ),
+         )
           ],
-        ),
-      ],
-    );
+        );
   }
 }
