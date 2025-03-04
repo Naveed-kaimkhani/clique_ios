@@ -50,7 +50,7 @@ class _VideoScrollScreenState extends State<VideoScrollScreen> with SingleTicker
         if (mounted) {
           setState(() {});
           controller.play();
-          controller.setLooping(true);
+          controller.setLooping(false);
         }
       });
     }
