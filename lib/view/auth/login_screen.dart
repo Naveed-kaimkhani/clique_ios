@@ -208,12 +208,7 @@ RegExp emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.
                       .then((_) => authViewModel.isLoading.value = false)
                       .catchError((_) => authViewModel.isLoading.value = false);
 
-                  // if (validateFields()) {
-                  //   authViewModel.isLoading.value = true;
-                  //   authViewModel.loginUser(emailController.text, passwordController.text)
-                  //     .then((_) => authViewModel.isLoading.value = false)
-                  //     .catchError((_) => authViewModel.isLoading.value = false);
-                  // }
+                  
                 },
               ),
               SizedBox(height: Get.height * 0.03),

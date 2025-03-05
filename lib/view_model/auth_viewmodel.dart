@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/data/models/signup_params.dart';
@@ -7,7 +6,6 @@ import 'package:clique/data/repositories/auth_respository.dart';
 import 'package:clique/routes/routes_name.dart';
 import 'package:clique/utils/utils.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../core/api/api_response.dart';
 
 class AuthViewModel extends GetxController {

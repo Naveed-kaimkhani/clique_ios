@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:avatar_stack/animated_avatar_stack.dart';
+import 'package:clique/data/repositories/group_repository.dart';
 import 'package:clique/routes/routes_name.dart';
 import 'package:clique/view/chat/chat_screen.dart';
 import 'package:flutter/material.dart';
@@ -127,7 +128,7 @@ class GroupCard extends StatelessWidget {
                           child: Center(
                             child: TextButton(
                               onPressed: () {
-                                joinGroup(guid, uid, context, groupName, memberCount);
+                                GroupRepository().joinGroup(guid, uid);
                               },
                               child: Text(
                                 "Join Now",
@@ -170,46 +171,5 @@ class GroupCard extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-void joinGroup(String guid, int uid, BuildContext context, String groupName, int memberCount) async {
- 
-  print("guid");
-  print(guid);
-  print("uid");
-  print(uid);
-  const String url = "https://dev.moutfits.com/api/v1/cometchat/groups/join";
-  const String authToken = "63|9dM3rfqqIBCkelTcgGCgoMTNQn5MRJde3glXauj956689575";
-
-  final Map<String, dynamic> body = {
-    "guid": guid,
-    "uid": uid.toString(),
-    "scope": "participant"
-  };
-
-  try {
-    final response = await http.post(
-      Uri.parse(url),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $authToken",
-      },
-      body: jsonEncode(body),
-    );
-    print(response.statusCode);
-    if (response.statusCode == 200) {
-      // Successfully joined the group
-      // Get.toNamed(RouteName.groupChatScreen);
-       Navigator.push(context, MaterialPageRoute(builder: (context) => GroupChatScreen(guid: guid , groupName: groupName, memberCount: memberCount,)));
-    
-    } else {
-      print(response.body); 
-      // Failed to join
-      Get.snackbar("Error", "Failed to join group: ${response.body}");
-    }
-  } catch (e) {
-    print(e);
-    Get.snackbar("Error", "Something went wrong: $e");
   }
 }

@@ -4,6 +4,7 @@ import 'package:clique/constants/index.dart';
 import 'package:clique/controller/navigation_controller.dart';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/data/models/group_model.dart';
+import 'package:clique/data/repositories/group_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -24,7 +25,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   final ScrollController _productScrollController = ScrollController();
   final ScrollController _influencerScrollController = ScrollController();
 
-  final UserController userController = Get.find<UserController>();
+  final UserController userController = Get.put(UserController());
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -228,7 +229,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   // }
   Widget _buildGroupHorizontalList(Size size) {
   return FutureBuilder<List<Group>>(
-    future: fetchGroups(),
+    future: GroupRepository().fetchGroups(),
     builder: (context, snapshot) {
       if (snapshot.connectionState == ConnectionState.waiting) {
         return Center(child: CircularProgressIndicator());
