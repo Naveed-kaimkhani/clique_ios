@@ -37,7 +37,8 @@ class UserController extends GetxController {
     print("Loading stored session:");
     print("storedUserName: $storedUserName");
     print("storedToken: $storedToken");
-
+  userName.value = storedUserName; // Set the observable value directly
+      token.value = storedToken;
     if (storedUserName != null && storedToken != null) {
       userName.value = storedUserName; // Set the observable value directly
       token.value = storedToken; // Set the observable value directly

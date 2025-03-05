@@ -1,13 +1,9 @@
-import 'dart:convert';
+
 
 import 'package:avatar_stack/animated_avatar_stack.dart';
 import 'package:clique/data/repositories/group_repository.dart';
-import 'package:clique/routes/routes_name.dart';
-import 'package:clique/view/chat/chat_screen.dart';
 import 'package:flutter/material.dart';
 
-import 'package:http/http.dart' as http;
-import 'package:get/get.dart';
 class GroupCard extends StatelessWidget {
   final String backgroundImage;
   final String? profileImage;
