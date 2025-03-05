@@ -15,24 +15,24 @@ import '../../core/api/api_endpoints.dart';
 class GroupRepository {
   final ApiClient apiClient = Get.find<ApiClient>();
 
-  /// **Join Group API Call**
-  Future<bool> joinGroup(String guid, int uid) async {
-    try {
       final UserController userController = Get.find<UserController>();
+  /// **Join Group API Call**
+  Future<bool> joinGroup(String guid, int uid ) async {
+    try {
       log("join group");
       log(userController.token.value);
       log(userController.uid.value.toString());
-      if (userController.token.value.isEmpty || userController.token.value == null) {
-        throw Exception("User token not found. Please log in again.");
-      }
+      // if (guid.isEmpty || userController.token.value == null) {
+      //   throw Exception("User token not found. Please log in again.");
+      // }
 
       final Map<String, dynamic> body = {
         "guid": guid,
-        "uid": uid.toString(),
+        "uid": userController.uid.value.toString(),
         "scope": "participant"
       };
 
-      final response = await apiClient.post(
+      final response = await apiClient.joinGroupApi(
         ApiEndpoints.joinGroup,
         headers: {
           "Content-Type": "application/json",
@@ -40,12 +40,9 @@ class GroupRepository {
         },
         body: body,
       );
-
-      if (response != null && response['status'] == "success") {
-        return true;
-      } else {
-        throw Exception(response?['message'] ?? "Failed to join group.");
-      }
+      
+      return true; // Return true on successful join
+          
     } catch (e) {
       print("Error in joinGroup: $e");
       Utils.showCustomSnackBar("Failed to join group",

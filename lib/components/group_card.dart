@@ -2,6 +2,7 @@
 
 import 'package:avatar_stack/animated_avatar_stack.dart';
 import 'package:clique/data/repositories/group_repository.dart';
+import 'package:clique/view/chat/chat_screen.dart';
 import 'package:flutter/material.dart';
 
 class GroupCard extends StatelessWidget {
@@ -123,8 +124,10 @@ class GroupCard extends StatelessWidget {
                           ),
                           child: Center(
                             child: TextButton(
-                              onPressed: () {
-                                GroupRepository().joinGroup(guid, uid);
+                              onPressed: ()async {
+                              bool isAdded= await GroupRepository().joinGroup(guid, uid);
+                              isAdded   ? Navigator.push(context, MaterialPageRoute(builder: (context) => GroupChatScreen(guid: guid , groupName: groupName, memberCount: memberCount,))):null;
+    
                               },
                               child: Text(
                                 "Join Now",

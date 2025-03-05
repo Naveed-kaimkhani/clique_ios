@@ -1,12 +1,22 @@
 import 'dart:developer';
 
 import 'package:clique/controller/user_controller.dart';
+import 'package:clique/utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../api/api_endpoints.dart';
-
+import 'package:clique/components/auth_button.dart';
+import 'package:clique/components/custom_textfield.dart';
+import 'package:clique/components/gradient_text.dart';
+import 'package:clique/constants/index.dart';
+import 'package:clique/utils/utils.dart';
+import 'package:clique/view_model/auth_viewmodel.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 class ApiClient extends GetxService {
   final String baseUrl = ApiEndpoints.baseUrl;
 
@@ -50,6 +60,14 @@ Future<dynamic> getGroup(String endpoint, {Map<String, String>? headers}) async 
         headers: headers, body: jsonEncode(body));
     return _handleResponse(response);
   }
+    Future<dynamic> joinGroupApi(String endpoint,
+      {Map<String, String>? headers, dynamic body}) async {
+    final response = await http.post(Uri.parse(endpoint),
+        headers: headers, body: jsonEncode(body));
+        log(response.body);
+        log(response.statusCode.toString());
+    return _handleResponse(response);
+  }
   Future<dynamic> put(String endpoint,
       {Map<String, String>? headers, dynamic body}) async {
     final response = await http.put(Uri.parse('$baseUrl$endpoint'),
@@ -78,9 +96,13 @@ Future<dynamic> getGroup(String endpoint, {Map<String, String>? headers}) async 
       case 422:
       case 404:
       case 500:
-        throw Exception('Error: ${response.body},');
+      
+        Utils.showCustomSnackBar("Error", "${response.body}",ContentType.failure );
+        // throw Exception('Error: ${response.body},');
       default:
-        throw Exception('Unexpected error occurred');
+      
+        Utils.showCustomSnackBar("Error", "${response.body}",ContentType.failure );
+        // throw Exception('Unexpected error occurred');
     }
   }
 }

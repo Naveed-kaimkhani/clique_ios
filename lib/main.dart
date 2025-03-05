@@ -3,6 +3,7 @@ import 'package:clique/controller/user_controller.dart';
 import 'package:clique/core/api/api_client.dart';
 import 'package:clique/routes/app_routes.dart';
 import 'package:clique/view/auth/login_screen.dart';
+import 'package:clique/view/chat/lotie.dart';
 import 'package:clique/view/splash/splash_screen.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
           bodySmall: TextStyle(fontFamily: 'SofiaPro'),
         ),
       ),
-      home:LoginScreen(),
+      home:SplashScreen(),
       
       // initialRoute: RouteName.homeScreen,
       
