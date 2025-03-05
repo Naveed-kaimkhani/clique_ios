@@ -8,6 +8,7 @@ import 'package:clique/data/models/user_registration_response.dart';
 import 'package:clique/utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:developer';
 
 import '../../core/api/api_client.dart';
 import '../../core/api/api_endpoints.dart';
@@ -38,12 +39,19 @@ class AuthRepository {
   Future<void> loginUser(Map<String, String> credentials) async {
 
     try {
-      final response = await apiClient.post(
+      final response = await apiClient.loginUser(
         ApiEndpoints.login,
         body: credentials,
         headers: {"Content-Type": "application/json"},
       );
-   
+       final String token = response["token"];
+      final String userName = response["user"]["name"];
+      final int userId = response["user"]["id"];
+      print("in login userrrrrrrrrrrrrr");
+      log("in user lgin");
+      print(token);
+      print(userId);
+      print(userName);
       // return UserRegistrationResponse.fromJson(response);
     } catch (e) {
       print(e);

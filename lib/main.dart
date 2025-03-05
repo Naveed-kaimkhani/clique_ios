@@ -11,11 +11,11 @@ void main() {
    Get.put(ApiClient());
    Get.put(UserController());
   runApp(
-// MyApp(),
-    DevicePreview(
-      enabled: true, // Enable DevicePreview for testing
-      builder: (context) =>  MyApp()
-    ),
+MyApp(),
+    // DevicePreview(
+    //   enabled: true, // Enable DevicePreview for testing
+    //   builder: (context) =>  MyApp()
+    // ),
   );
 }
  

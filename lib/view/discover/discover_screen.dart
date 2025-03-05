@@ -24,8 +24,8 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   final ScrollController _groupScrollController = ScrollController();
   final ScrollController _productScrollController = ScrollController();
   final ScrollController _influencerScrollController = ScrollController();
+final UserController userController = Get.find<UserController>();
 
-  final UserController userController = Get.put(UserController());
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -193,40 +193,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   }
 
 
-  // Widget _buildGroupHorizontalList(Size size) {
-  //   return SizedBox(
-  //     height: size.height * 0.25,
-  //     child: ListView.builder(
-  //       controller: _groupScrollController,
-  //       scrollDirection: Axis.horizontal,
-  //       itemCount: 3, // 2 cards + 1 arrow button
-  //       itemBuilder: (context, index) {
-  //         if (index == 2) {
-  //           return Center(
-  //             child: GestureDetector(
-  //               onTap: () => Get.toNamed(RouteName.viewAllCliquesScreen),
-  //               child: Container(
-  //                 margin: EdgeInsets.only(right: size.width * 0.06, left: 16),
-  //                 decoration: BoxDecoration(
-  //                   gradient: AppColors.appGradientColors,
-  //                   shape: BoxShape.circle,
-  //                 ),
-  //                 padding: EdgeInsets.all(8),
-  //                 child: Icon(Icons.arrow_forward, color: Colors.white),
-  //               ),
-  //             ),
-  //           );
-  //         }
-  //         return GroupCard(
-  //           backgroundImage: AppSvgIcons.cloth,
-  //           profileImage: AppSvgIcons.profile,
-  //           name: index == 0 ? 'MenswearDog' : 'Pet Health',
-  //           followers: index == 0 ? '1200 members' : '10.5k Followers',
-  //         );
-  //       },
-  //     ),
-  //   );
-  // }
+ 
   Widget _buildGroupHorizontalList(Size size) {
   return FutureBuilder<List<Group>>(
     future: GroupRepository().fetchGroups(),
@@ -270,7 +237,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
               name: group.name,
               followers: '${group.membersCount} members',
               guid: group.guid,
-              uid: userController.uid.value,
+              uid:userController.uid.value,
               groupName: group.name,
               memberCount: group.membersCount,
             );

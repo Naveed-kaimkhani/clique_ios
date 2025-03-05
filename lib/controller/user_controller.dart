@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:clique/data/models/user_registration_response.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,39 +10,41 @@ class UserController extends GetxController {
   var token = ''.obs;
   var userName = ''.obs;
   var uid = 0.obs;
+
   @override
   void onInit() async {
     super.onInit();
     prefs = await SharedPreferences.getInstance();
+    loadUserSession(); // Load session on init
   }
 
   void saveUserSession(
       UserRegistrationResponse response, String userName) async {
-    print("yahn issue arha hy");
-    // user.value = response.user;
+    print("Saving user session");
     token.value = response.token!;
-    // await prefs.setString('user', response.user!.toJson());
+    this.userName.value = userName; // Set the observable value directly
     await prefs.setString('token', response.token!);
     await prefs.setString('userName', userName);
-    // await prefs.setString('uid', uid);
-    loadUserSession();
-    print("session stored");
+    print("Session stored successfully");
   }
 
   void loadUserSession() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final storedUserName = prefs.getString('userName');
     final storedToken = prefs.getString('token');
-
     uid.value = prefs.getInt('uid') ?? 0;
 
-    print("fsdfsdfsdfdsfffffffffffff\n");
+    print("Loading stored session:");
     print("storedUserName: $storedUserName");
     print("storedToken: $storedToken");
-    if (storedUserName != null && storedToken != null) {
-      userName.value = storedUserName;
-      token.value = storedToken;
 
+    if (storedUserName != null && storedToken != null) {
+      userName.value = storedUserName; // Set the observable value directly
+      token.value = storedToken; // Set the observable value directly
+      log("Session loaded successfully");
+      log("Username: ${userName.value}");
+      log("Token: ${token.value}");
+      log("UID: ${uid.value}");
     }
   }
 
@@ -48,5 +52,23 @@ class UserController extends GetxController {
     await prefs.clear();
     user.value = null;
     token.value = '';
+    userName.value = '';
+    uid.value = 0;
+  }
+
+  // Direct access methods for user data from SharedPreferences
+  static Future<String> getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('token') ?? '';
+  }
+
+  static Future<String> getUserName() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('userName') ?? '';
+  }
+
+  static Future<int> getUid() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt('uid') ?? 0;
   }
 }

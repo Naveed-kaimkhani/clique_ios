@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:developer';
+
+
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:clique/controller/user_controller.dart';
 
@@ -15,7 +19,10 @@ class GroupRepository {
   Future<bool> joinGroup(String guid, int uid) async {
     try {
       final UserController userController = Get.find<UserController>();
-      if (userController.token.isEmpty || userController.token == null) {
+      log("join group");
+      log(userController.token.value);
+      log(userController.uid.value.toString());
+      if (userController.token.value.isEmpty || userController.token.value == null) {
         throw Exception("User token not found. Please log in again.");
       }
 
@@ -29,7 +36,7 @@ class GroupRepository {
         ApiEndpoints.joinGroup,
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer ${userController.token}",
+          "Authorization": "Bearer ${userController.token.value}",
         },
         body: body,
       );
@@ -68,11 +75,13 @@ class GroupRepository {
         },
       );
 
-      if (response == null || !response.containsKey('data')) {
-        throw Exception("Invalid response from server");
-      }
+   
 
-      return (response['data'] as List)
+      // if (response == null || !response.containsKey('data')) {
+      //   throw Exception("Invalid response from server");
+      // }
+      final decodedResponse = jsonDecode(response.body);
+      return (decodedResponse['data'] as List)
           .map((group) => Group.fromJson(group))
           .toList();
     } catch (e) {
