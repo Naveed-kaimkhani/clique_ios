@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:clique/controller/user_controller.dart';
 import 'package:clique/data/models/signup_params.dart';
 import 'package:clique/data/models/user_registration_response.dart';
 import 'package:clique/utils/utils.dart';
@@ -19,18 +20,16 @@ class AuthRepository {
   Future<UserRegistrationResponse> registerUser(SignupParams request) async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final response = await apiClient.post(
+      final response = await apiClient.signUpApi(
         ApiEndpoints.register,
         body: request.toJson(),
         headers: {"Content-Type": "application/json"},
       );
-      await prefs.setString('uid', response["user"]["id"]);
-      print(UserRegistrationResponse.fromJson(response));
+      // await prefs.setString('uid', response["user"]["id"]);
+ 
       return UserRegistrationResponse.fromJson(response);
 
     } catch (e) {
-      print("error in registerUser");
-      print(e);
       Utils.showCustomSnackBar("Signup Failed", Utils.mapErrorMessage(e.toString()), ContentType.failure);
       throw Exception("Signup Failed: $e");
     }
@@ -44,14 +43,7 @@ class AuthRepository {
         body: credentials,
         headers: {"Content-Type": "application/json"},
       );
-       final String token = response["token"];
-      final String userName = response["user"]["name"];
-      final int userId = response["user"]["id"];
-      print("in login userrrrrrrrrrrrrr");
-      log("in user lgin");
-      print(token);
-      print(userId);
-      print(userName);
+   
       // return UserRegistrationResponse.fromJson(response);
     } catch (e) {
       print(e);

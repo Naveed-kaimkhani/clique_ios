@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 
 import 'package:clique/components/index.dart';
@@ -30,8 +29,6 @@ final UserController userController = Get.find<UserController>();
 
   @override
   Widget build(BuildContext context) {
-    log(userController.uid.toString());
-    log(userController.token.value);
     final size = MediaQuery.of(context).size;
     final double titleFontSize = size.width * 0.05; // Responsive title size
 

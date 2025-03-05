@@ -1,14 +1,14 @@
 
 
 
-import 'package:clique/constants/app_svg_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class GroupAppBar extends StatelessWidget {
   final String title;
   final int memberCount;
-  const GroupAppBar({super.key, required this.title, required this.memberCount});
+  final String? profile;
+  const GroupAppBar({super.key, required this.title, required this.memberCount , this.profile});
 
   @override
   Widget build(BuildContext context) {
@@ -48,10 +48,22 @@ class GroupAppBar extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
            crossAxisAlignment: CrossAxisAlignment.center  ,
             children: [
-              Image.asset(
-                AppSvgIcons.profile,
+              Container(
                 height: size.height * 0.055, // 6% of screen height
                 width: size.height * 0.055, // 6% of screen height
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: profile != null 
+                    ? DecorationImage(
+                        image: NetworkImage(profile!),
+                        fit: BoxFit.cover,
+                      )
+                    : null,
+                  color: profile == null ? Colors.grey[300] : null,
+                ),
+                child: profile == null 
+                  ? Icon(Icons.person, size: size.height * 0.033, color: Colors.grey[600])
+                  : null,
               ),
               SizedBox(width: size.width * 0.02), // 2% of screen width
               Padding(

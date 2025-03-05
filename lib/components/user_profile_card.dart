@@ -45,13 +45,13 @@ class UserProfileCard extends StatelessWidget {
             ),
           ),
           SizedBox(height: screenHeight * 0.005), // Responsive spacing
-          Text(
-            '@brianbrunner',
-            style: TextStyle(
-              fontSize: screenHeight * 0.02, // Responsive font size
-              color: Colors.grey,
-            ),
-          ),
+          // Text(
+          //   '@brianbrunner',
+          //   style: TextStyle(
+          //     fontSize: screenHeight * 0.02, // Responsive font size
+          //     color: Colors.grey,
+          //   ),
+          // ),
         ],
       ),
     );

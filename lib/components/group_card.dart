@@ -126,7 +126,7 @@ class GroupCard extends StatelessWidget {
                             child: TextButton(
                               onPressed: ()async {
                               bool isAdded= await GroupRepository().joinGroup(guid, uid);
-                              isAdded   ? Navigator.push(context, MaterialPageRoute(builder: (context) => GroupChatScreen(guid: guid , groupName: groupName, memberCount: memberCount,))):null;
+                              isAdded   ? Navigator.push(context, MaterialPageRoute(builder: (context) => GroupChatScreen(profileImage: profileImage , guid: guid , groupName: groupName, memberCount: memberCount,))):null;
     
                               },
                               child: Text(

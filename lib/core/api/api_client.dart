@@ -7,15 +7,6 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../api/api_endpoints.dart';
-import 'package:clique/components/auth_button.dart';
-import 'package:clique/components/custom_textfield.dart';
-import 'package:clique/components/gradient_text.dart';
-import 'package:clique/constants/index.dart';
-import 'package:clique/utils/utils.dart';
-import 'package:clique/view_model/auth_viewmodel.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 class ApiClient extends GetxService {
   final String baseUrl = ApiEndpoints.baseUrl;
@@ -40,10 +31,6 @@ Future<dynamic> getGroup(String endpoint, {Map<String, String>? headers}) async 
       final String token = responseData["token"];
       final String userName = responseData["user"]["name"];
       final int userId = responseData["user"]["id"];
-      // print("token: $token");
-      // print("userName: $userName");
-      // print("uid: $userId");
-      // print(responseData["user"]["id"]);
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('token', token);
       await prefs.setString('userName', userName);
@@ -54,10 +41,31 @@ Future<dynamic> getGroup(String endpoint, {Map<String, String>? headers}) async 
     }
     return _handleResponse(response);
   }
+
   Future<dynamic> post(String endpoint,
       {Map<String, String>? headers, dynamic body}) async {
     final response = await http.post(Uri.parse(endpoint),
         headers: headers, body: jsonEncode(body));
+ 
+    return _handleResponse(response);
+  }
+    Future<dynamic> signUpApi(String endpoint,
+      {Map<String, String>? headers, dynamic body}) async {
+    final response = await http.post(Uri.parse(endpoint),
+        headers: headers, body: jsonEncode(body));
+                 if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = jsonDecode(response.body);
+      final String token = responseData["token"];
+      final String userName = responseData["user"]["name"];
+      final int userId = responseData["user"]["id"];
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('token', token);
+      await prefs.setString('userName', userName);
+      await prefs.setInt('uid', userId);
+      // loadUserSession();
+      UserController().loadUserSession();
+      // return responseData;
+    }
     return _handleResponse(response);
   }
     Future<dynamic> joinGroupApi(String endpoint,
