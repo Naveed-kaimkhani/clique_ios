@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:clique/constants/app_images.dart';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/view/auth/login_screen.dart';
@@ -23,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
     userController.loadUserSession();
     print(userController.token.value);
     if (userController.token.value.isNotEmpty) {
-      print("usernameeeeee");
+      log("usernameeeeee");
       print(userController.userName.value);
       Get.offAll(() => HomeScreen()); // Navigate to Home if logged in
     } else {

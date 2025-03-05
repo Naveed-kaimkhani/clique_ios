@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 void main() {
    Get.put(ApiClient());
-   Get.put(UserController());
+  //  Get.put(UserController());
   runApp(
 MyApp(),
     // DevicePreview(
