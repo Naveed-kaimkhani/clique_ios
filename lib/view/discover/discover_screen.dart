@@ -231,7 +231,7 @@ final UserController userController = Get.find<UserController>();
               );
             }
             
-            final group = groups[0];
+            final group = groups[index];
             return GroupCard(
               backgroundImage:  AppSvgIcons.cloth,
               profileImage: group.icon ,
