@@ -212,7 +212,7 @@ final UserController userController = Get.find<UserController>();
         height: size.height * 0.25,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: groups.length + 1, // Groups + View All Button
+          itemCount: 1, // Groups + View All Button
           itemBuilder: (context, index) {
             if (index == groups.length) {
               return Center(
@@ -231,7 +231,7 @@ final UserController userController = Get.find<UserController>();
               );
             }
             
-            final group = groups[index];
+            final group = groups[0];
             return GroupCard(
               backgroundImage:  AppSvgIcons.cloth,
               profileImage: group.icon ,

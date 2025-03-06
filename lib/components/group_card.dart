@@ -1,11 +1,17 @@
 
 
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:avatar_stack/animated_avatar_stack.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:clique/data/repositories/group_repository.dart';
+import 'package:clique/utils/utils.dart';
 import 'package:clique/view/chat/chat_screen.dart';
 import 'package:flutter/material.dart';
 
-class GroupCard extends StatelessWidget {
+import 'package:http/http.dart' as http;
+class GroupCard extends StatefulWidget {
   final String backgroundImage;
   final String? profileImage;
   final String name;
@@ -14,13 +20,13 @@ class GroupCard extends StatelessWidget {
   final int uid;
   final String groupName;
   final int memberCount;
-  final List<String> groupMemberProfiles;
+  // final List<String> groupMemberProfiles;
   const GroupCard({       
     required this.backgroundImage,
     this.profileImage,
     required this.name,
     required this.followers,
-    required this.groupMemberProfiles,
+    // required this.groupMemberProfiles,
     required this.guid,
     required this.uid,
     required this.groupName,
@@ -28,6 +34,45 @@ class GroupCard extends StatelessWidget {
     super.key,
   });
 
+  @override
+  State<GroupCard> createState() => _GroupCardState();
+}
+
+class _GroupCardState extends State<GroupCard> {
+Future<List<String>> fetchGroupMembers() async {
+  log(widget.guid.toString());
+  try {
+    final response = await http.get(
+      Uri.parse('https://dev.moutfits.com/api/v1/cometchat/groups/${widget.guid}/members'),
+      headers: {
+        'Authorization': 'Bearer 98|zlwz9G1eiaU5QC6mgPifFgxsbfzSsLTHfYIzFXkCaf73e111',
+      },
+    );
+    log(response.statusCode.toString());
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      List<String> fetchedImages = (data['data'] as List)
+          .map<String>((member) => member['link'] )
+          .toList();
+          log(fetchedImages.length.toString());
+          log(fetchedImages[0]);
+      return fetchedImages;
+    } else {
+      throw Exception("Failed to load members");
+    }
+  } catch (e) {
+    log("Error: $e");
+    throw Exception("Error fetching members");
+  }
+}
+
+
+  @override
+void initState() {
+  super.initState();
+ 
+}
+  List<String> memberImages = [];
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -61,7 +106,7 @@ class GroupCard extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
                 child: Image.asset(
-                  backgroundImage,
+                  widget.backgroundImage,
                   height: cardHeight * 0.3, // Responsive background image height
                   width: double.infinity,
                   fit: BoxFit.cover,
@@ -82,7 +127,7 @@ class GroupCard extends StatelessWidget {
                   children: [
                     SizedBox(height: size.height * 0.015),
                     Text(
-                      name,
+                      widget.name,
                       style: TextStyle(
                         fontSize: size.width * 0.045, // Responsive font size
                         fontWeight: FontWeight.bold,
@@ -96,7 +141,7 @@ class GroupCard extends StatelessWidget {
                         Icon(Icons.group, size: size.width * 0.04, color: Colors.grey),
                         SizedBox(width: size.width * 0.01),
                         Text(
-                          followers,
+                          widget.followers,
                           style: TextStyle(fontSize: size.width * 0.035, color: Colors.grey),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -107,16 +152,45 @@ class GroupCard extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        SizedBox(
-                          width: avatarStackWidth,
-                          child: AnimatedAvatarStack(
-                            height: size.height * 0.03, // Responsive avatar stack height
-                            avatars: [
-                              for (var n = 0; n < 10; n++)
-                                NetworkImage('https://i.pravatar.cc/150?img=$n'),
-                            ],
-                          ),
-                        ),
+                        // SizedBox(
+                        //   width: avatarStackWidth,
+                        //   child: AnimatedAvatarStack(
+                        //     height: size.height * 0.03, // Responsive avatar stack height
+                        //     avatars: [
+                        //       for (var n = 0; n < 10; n++)
+                        //         NetworkImage('https://i.pravatar.cc/150?img=$n'),
+                        //     ],
+                        //   ),
+                        // ),
+  SizedBox(
+  width: avatarStackWidth,
+  child: FutureBuilder<List<String>>(
+    future: fetchGroupMembers(), // Fetch group members
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return SizedBox(
+          height: size.height * 0.03,
+          child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
+        );
+      } else if (snapshot.hasError) {
+        return Text("Error loading images", style: TextStyle(color: Colors.red));
+      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+        return Text("No members", style: TextStyle(color: Colors.grey));
+      }
+
+      List<String> memberImages = snapshot.data!;
+      return AnimatedAvatarStack(
+        height: size.height * 0.03, // Responsive avatar stack height
+        avatars: memberImages
+            .take(10) // Limit to 10 members
+            .map((imageUrl) => NetworkImage("https://tinyurl.com/448x62fj"))
+            .toList(),
+      );
+    },
+  ),
+),
+
+
                         Container(
                           width: buttonWidth,
                           height: buttonHeight,
@@ -127,8 +201,8 @@ class GroupCard extends StatelessWidget {
                           child: Center(
                             child: TextButton(
                               onPressed: ()async {
-                              bool isAdded= await GroupRepository().joinGroup(guid, uid);
-                              isAdded   ? Navigator.push(context, MaterialPageRoute(builder: (context) => GroupChatScreen(profileImage: profileImage , guid: guid , groupName: groupName, memberCount: memberCount,))):null;
+                              bool isAdded= await GroupRepository().joinGroup(widget.guid, widget.uid);
+                              isAdded   ? Navigator.push(context, MaterialPageRoute(builder: (context) => GroupChatScreen(profileImage: widget.profileImage , guid: widget.guid , groupName: widget.groupName, memberCount: widget.memberCount,))):null;
     
                               },
                               child: Text(
@@ -156,15 +230,15 @@ class GroupCard extends StatelessWidget {
               width: profileImageSize,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                image: profileImage != null 
+                image: widget.profileImage != null 
                   ? DecorationImage(
-                      image: NetworkImage(profileImage!),
+                      image: NetworkImage(widget.profileImage!),
                       fit: BoxFit.cover,
                     )
                   : null,
-                color: profileImage == null ? Colors.grey[300] : null,
+                color: widget.profileImage == null ? Colors.grey[300] : null,
               ),
-              child: profileImage == null 
+              child: widget.profileImage == null 
                 ? Icon(Icons.person, size: profileImageSize * 0.6, color: Colors.grey[600])
                 : null,
             ),
