@@ -58,6 +58,7 @@ Future<List<String>> fetchGroupMembers() async {
           log(fetchedImages[0]);
       return fetchedImages;
     } else {
+      log("failed");
       throw Exception("Failed to load members");
     }
   } catch (e) {
@@ -152,43 +153,46 @@ void initState() {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        // SizedBox(
-                        //   width: avatarStackWidth,
-                        //   child: AnimatedAvatarStack(
-                        //     height: size.height * 0.03, // Responsive avatar stack height
-                        //     avatars: [
-                        //       for (var n = 0; n < 10; n++)
-                        //         NetworkImage('https://i.pravatar.cc/150?img=$n'),
-                        //     ],
-                        //   ),
-                        // ),
-  SizedBox(
-  width: avatarStackWidth,
-  child: FutureBuilder<List<String>>(
-    future: fetchGroupMembers(), // Fetch group members
-    builder: (context, snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return SizedBox(
-          height: size.height * 0.03,
-          child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
-        );
-      } else if (snapshot.hasError) {
-        return Text("Error loading images", style: TextStyle(color: Colors.red));
-      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-        return Text("No members", style: TextStyle(color: Colors.grey));
-      }
+                        SizedBox(
+                          width: avatarStackWidth,
+                          child: AnimatedAvatarStack(
+                            height: size.height * 0.03, // Responsive avatar stack height
+                            avatars: [
+                              
+                                NetworkImage("https://tinyurl.com/448x62fj"),
+                              // for (var n = 0; n < 10; n++)
+                              //   NetworkImage("https://tinyurl.com/448x62fj"),
+                            ],
+                          ),
+                        ),
+//   SizedBox(
+//   width: avatarStackWidth,
+//   child: FutureBuilder<List<String>>(
+//     future: fetchGroupMembers(), // Fetch group members
+//     builder: (context, snapshot) {
+//       if (snapshot.connectionState == ConnectionState.waiting) {
+//         return SizedBox(
+//           height: size.height * 0.03,
+//           child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
+//         );
+//       } else if (snapshot.hasError) {
+//         return Text("Error loading images", style: TextStyle(color: Colors.red));
+//       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+//         return Text("No members", style: TextStyle(color: Colors.grey));
+//       }
 
-      List<String> memberImages = snapshot.data!;
-      return AnimatedAvatarStack(
-        height: size.height * 0.03, // Responsive avatar stack height
-        avatars: memberImages
-            .take(10) // Limit to 10 members
-            .map((imageUrl) => NetworkImage("https://tinyurl.com/448x62fj"))
-            .toList(),
-      );
-    },
-  ),
-),
+//       List<String> memberImages = snapshot.data!;
+//       return AnimatedAvatarStack(
+//         height: size.height * 0.03, // Responsive avatar stack height
+//         avatars: memberImages
+//             .take(10) // Limit to 10 members
+//             .map((imageUrl) => NetworkImage("https://tinyurl.com/448x62fj"))
+//             .toList(),
+//       );
+      
+//     },
+//   ),
+// ),
 
 
                         Container(
