@@ -19,9 +19,6 @@ class GroupRepository {
   /// **Join Group API Call**
   Future<bool> joinGroup(String guid, int uid ) async {
     try {
-      log("join group");
-      log(userController.token.value);
-      log(userController.uid.value.toString());
       // if (guid.isEmpty || userController.token.value == null) {
       //   throw Exception("User token not found. Please log in again.");
       // }
@@ -44,7 +41,6 @@ class GroupRepository {
       return true; // Return true on successful join
           
     } catch (e) {
-      print("Error in joinGroup: $e");
       Utils.showCustomSnackBar("Failed to join group",
           Utils.mapErrorMessage(e.toString()), ContentType.failure);
       throw Exception("Failed to join group: $e");
@@ -55,10 +51,6 @@ class GroupRepository {
   Future<List<Group>> fetchGroups() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      // final token = prefs.getString('userToken') ?? '';
-
-      // final UserController userController = Get.find<UserController>();
-      // print("userController.token: ${userController.token}");
       String token = prefs.getString('token') ?? '';
       if (token.isEmpty) {
         throw Exception("User token not found. Please log in again.");
@@ -82,7 +74,6 @@ class GroupRepository {
           .map((group) => Group.fromJson(group))
           .toList();
     } catch (e) {
-      print("Error in fetchGroups: $e");
       // Utils.showCustomSnackBar("Failed to load groups", Utils.mapErrorMessage(e.toString()), ContentType.failure);
       throw Exception("Failed to load groups: $e");
     }

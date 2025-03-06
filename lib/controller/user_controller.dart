@@ -20,12 +20,13 @@ class UserController extends GetxController {
 
   void saveUserSession(
       UserRegistrationResponse response, String userName) async {
-    print("Saving user session");
+  log(response.token!);
     token.value = response.token!;
+    log(userName);
     this.userName.value = userName; // Set the observable value directly
     await prefs.setString('token', response.token!);
     await prefs.setString('userName', userName);
-    print("Session stored successfully");
+    log("session stored");
   }
 
   void loadUserSession() async {
@@ -34,17 +35,10 @@ class UserController extends GetxController {
     final storedToken = prefs.getString('token');
     uid.value = prefs.getInt('uid') ?? 0;
 
-    print("Loading stored session:");
-    print("storedUserName: $storedUserName");
-    print("storedToken: $storedToken");
   
     if (storedUserName != null && storedToken != null) {
       userName.value = storedUserName; // Set the observable value directly
       token.value = storedToken; // Set the observable value directly
-      log("Session loaded successfully");
-      log("Username: ${userName.value}");
-      log("Token: ${token.value}");
-      log("UID: ${uid.value}");
       userName.value = storedUserName; // Set the observable value directly
       token.value = storedToken;
     }

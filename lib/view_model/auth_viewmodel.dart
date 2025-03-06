@@ -1,4 +1,6 @@
 
+import 'dart:developer';
+
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/data/models/signup_params.dart';
 import 'package:clique/data/models/user_registration_response.dart';
@@ -16,10 +18,12 @@ class AuthViewModel extends GetxController {
   Future<void> registerUser(SignupParams request, String userName) async {
     try {
       signupResponse.value = ApiResponse.loading();
-      UserRegistrationResponse response = await _authRepo.registerUser(request);
-      signupResponse.value = ApiResponse.completed(response);
-      Get.find<UserController>().saveUserSession(response, userName, );
-      Get.offAllNamed(RouteName.homeScreen);
+      void response = await _authRepo.registerUser(request);
+      
+              // signupResponse.value = ApiResponse.completed(response);
+      // Get.find<UserController>().saveUserSession(response, userName, );
+  log("session stored succcsss");
+      Get.offAllNamed(RouteName.loginScreen);
     } catch (e) {
       signupResponse.value = ApiResponse.error(Utils.mapErrorMessage(e.toString()));
     }
@@ -37,7 +41,6 @@ class AuthViewModel extends GetxController {
     Get.toNamed(RouteName.homeScreen);
 
     } catch (e) {
-      print(e);
       loginResponse.value = ApiResponse.error(Utils.mapErrorMessage(e.toString()));
     }
   }

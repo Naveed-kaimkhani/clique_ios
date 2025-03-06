@@ -17,17 +17,18 @@ import '../../core/api/api_endpoints.dart';
 class AuthRepository {
   final ApiClient apiClient = Get.find<ApiClient>();
 
-  Future<UserRegistrationResponse> registerUser(SignupParams request) async {
+  Future<void> registerUser(SignupParams request) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
+      // final prefs = await SharedPreferences.getInstance();
       final response = await apiClient.signUpApi(
         ApiEndpoints.register,
         body: request.toJson(),
         headers: {"Content-Type": "application/json"},
       );
+      log(response);
       // await prefs.setString('uid', response["user"]["id"]);
  
-      return UserRegistrationResponse.fromJson(response);
+      // return UserRegistrationResponse.fromJson(response);
 
     } catch (e) {
       Utils.showCustomSnackBar("Signup Failed", Utils.mapErrorMessage(e.toString()), ContentType.failure);
@@ -46,7 +47,6 @@ class AuthRepository {
    
       // return UserRegistrationResponse.fromJson(response);
     } catch (e) {
-      print(e);
       Utils.showCustomSnackBar("Login Failed", Utils.mapErrorMessage(e.toString()), ContentType.failure);
       throw Exception("Login Failed: $e");
     }

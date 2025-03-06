@@ -1,10 +1,5 @@
-
-
-
-
 import 'package:clique/constants/index.dart';
 import 'package:flutter/material.dart';
-
 import '../../components/index.dart';
 
 class InfluencerProfile extends StatefulWidget {

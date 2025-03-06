@@ -83,10 +83,8 @@ final UserController userController = Get.find<UserController>();
 
         _messageController.add(messages);
       } else {
-        print("Failed to load messages: ${response.body}");
       }
     } catch (e) {
-      print("Error fetching messages: $e");
     }
   }
 
@@ -138,7 +136,6 @@ final UserController userController = Get.find<UserController>();
     );
   }
   Future<void> _sendMessage() async {
-    print("Sending message");
     // final TextEditingController _textController = TextEditingController();  
     if (_textController.text.isEmpty) return;
 
@@ -162,12 +159,9 @@ final UserController userController = Get.find<UserController>();
     );
 
     if (response.statusCode == 200) {
-      // Get.snackbar("Success", "Message sent successfully!");
-      print("Message sent successfully!");
       _textController.clear();
     } else {
       Get.snackbar("Error", "Failed to send message: ${response.body}");
-      print("Failed to send message: ${response.body}");
     }
 
     // setState(() => _isUploading = false);

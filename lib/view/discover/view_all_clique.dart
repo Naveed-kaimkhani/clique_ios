@@ -1,7 +1,6 @@
 import 'package:clique/components/clique_tab_card.dart';
 import 'package:clique/components/index.dart';
 import 'package:flutter/material.dart';
-
 import '../../constants/index.dart';
 
 class ViewAllCliqueScreen extends StatelessWidget {

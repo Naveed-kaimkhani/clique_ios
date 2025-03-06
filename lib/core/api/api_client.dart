@@ -17,15 +17,15 @@ class ApiClient extends GetxService {
   }
 Future<dynamic> getGroup(String endpoint, {Map<String, String>? headers}) async {
     final response = await http.get(Uri.parse(endpoint), headers: headers);
-    // return _handleResponse(response);
-   log(response.statusCode.toString());
-   log("$response['data']");
+
     return response;
   }
   Future<dynamic> loginUser(String endpoint,
       {Map<String, String>? headers, dynamic body}) async {
     final response = await http.post(Uri.parse(endpoint),
         headers: headers, body: jsonEncode(body));
+        log("Statuss codeeeee");
+        log(response.statusCode.toString());
       if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = jsonDecode(response.body);
       final String token = responseData["token"];
@@ -53,27 +53,27 @@ Future<dynamic> getGroup(String endpoint, {Map<String, String>? headers}) async 
       {Map<String, String>? headers, dynamic body}) async {
     final response = await http.post(Uri.parse(endpoint),
         headers: headers, body: jsonEncode(body));
-                 if (response.statusCode == 200) {
-      final Map<String, dynamic> responseData = jsonDecode(response.body);
-      final String token = responseData["token"];
-      final String userName = responseData["user"]["name"];
-      final int userId = responseData["user"]["id"];
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('token', token);
-      await prefs.setString('userName', userName);
-      await prefs.setInt('uid', userId);
-      // loadUserSession();
-      UserController().loadUserSession();
+        log(response.statusCode.toString());
+                 if (response.statusCode == 201) {
+      // final Map<String, dynamic> responseData = jsonDecode(response.body);
+      // final String token = responseData["token"];
+      // final String userName = responseData["user"]["name"];
+      // final int userId = responseData["user"]["id"];
+      // final prefs = await SharedPreferences.getInstance();
+      // await prefs.setString('token', token);
+      // await prefs.setString('userName', userName);
+      // await prefs.setInt('uid', userId);
+      // // loadUserSession();
+      // UserController().loadUserSession();
       // return responseData;
     }
-    return _handleResponse(response);
+    log(response.body);
+    // return _handleResponse(response);
   }
     Future<dynamic> joinGroupApi(String endpoint,
       {Map<String, String>? headers, dynamic body}) async {
     final response = await http.post(Uri.parse(endpoint),
         headers: headers, body: jsonEncode(body));
-        log(response.body);
-        log(response.statusCode.toString());
     return _handleResponse(response);
   }
   Future<dynamic> put(String endpoint,

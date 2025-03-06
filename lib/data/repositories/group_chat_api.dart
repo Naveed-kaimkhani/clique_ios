@@ -19,8 +19,7 @@ class GroupChatRepository {
 
   Map<String, String>? _getAuthHeaders() {
     final token = _prefs.getString('token');
-    log("token");
-    log(token.toString());
+
     if (token == null) return null;
 
     return {
@@ -38,29 +37,24 @@ class GroupChatRepository {
       await _initPrefs();
       final headers = _getAuthHeaders();
       final userId = _getUserId();
-      log(headers.toString());
-      log(userId.toString());
       if (headers == null || userId == null) {
         throw Exception('Authentication failed - missing token or user ID');
       }
 
       final url = Uri.parse("${_apiClient.baseUrl}/cometchat/groups/$guid/messages");
       final response = await http.get(url, headers: headers);
-      log("response body");
-      log(response.body);
+ 
       if (response.statusCode != 200) {
-        log(response.body);
         throw Exception('Failed to load messages: ${response.statusCode} - ${response.body}');
       }
 
       final List<dynamic> responseData = jsonDecode(response.body);
-      log(responseData.toString());
+
       return _parseMessages(responseData, userId);
 
     } catch (e) {
       Utils.showCustomSnackBar("Error",e.toString(),ContentType.failure);
-      // print('Error in fetchMessages: $e');
-      log('Error in fetchMessages: $e');
+   
       return null;
     }
   }
@@ -104,7 +98,6 @@ class GroupChatRepository {
       return true;
 
     } catch (e) {
-      print('Error in sendMessage: $e');
       return false;
     }
   }
