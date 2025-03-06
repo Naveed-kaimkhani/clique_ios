@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:clique/controller/user_controller.dart';
+import 'package:clique/routes/routes_name.dart';
 import 'package:clique/utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -49,26 +50,15 @@ Future<dynamic> getGroup(String endpoint, {Map<String, String>? headers}) async 
  
     return _handleResponse(response);
   }
-    Future<dynamic> signUpApi(String endpoint,
+    Future<void> signUpApi(String endpoint,
       {Map<String, String>? headers, dynamic body}) async {
     final response = await http.post(Uri.parse(endpoint),
         headers: headers, body: jsonEncode(body));
         log(response.statusCode.toString());
-                 if (response.statusCode == 201) {
-      // final Map<String, dynamic> responseData = jsonDecode(response.body);
-      // final String token = responseData["token"];
-      // final String userName = responseData["user"]["name"];
-      // final int userId = responseData["user"]["id"];
-      // final prefs = await SharedPreferences.getInstance();
-      // await prefs.setString('token', token);
-      // await prefs.setString('userName', userName);
-      // await prefs.setInt('uid', userId);
-      // // loadUserSession();
-      // UserController().loadUserSession();
-      // return responseData;
+                 if (response.statusCode == 201 || response.statusCode==200) {
+                        Get.offAllNamed(RouteName.loginScreen);
     }
-    log(response.body);
-    // return _handleResponse(response);
+    return _handleResponse(response);
   }
     Future<dynamic> joinGroupApi(String endpoint,
       {Map<String, String>? headers, dynamic body}) async {
@@ -105,11 +95,11 @@ Future<dynamic> getGroup(String endpoint, {Map<String, String>? headers}) async 
       case 404:
       case 500:
       
-        Utils.showCustomSnackBar("Error", "${response.body}",ContentType.failure );
+        Utils.showCustomSnackBar("Error", Utils.mapErrorMessage(response.body),ContentType.failure );
         // throw Exception('Error: ${response.body},');
       default:
       
-        Utils.showCustomSnackBar("Error", "${response.body}",ContentType.failure );
+        Utils.showCustomSnackBar("Error", Utils.mapErrorMessage(response.body),ContentType.failure );
         // throw Exception('Unexpected error occurred');
     }
   }

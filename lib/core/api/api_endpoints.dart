@@ -5,4 +5,7 @@ class ApiEndpoints {
   static const String joinGroup = "$baseUrl/cometchat/groups/join";
   static const String getGroups = "$baseUrl/cometchat/groups";
   static const String sendMessage = "$baseUrl/cometchat/groups/send-message";
+ static const String getGroupMembers = "$baseUrl/cometchat/groups";
+
+//  static const String getGroupMembers = "$baseUrl/cometchat/groups/g2/members";
 }

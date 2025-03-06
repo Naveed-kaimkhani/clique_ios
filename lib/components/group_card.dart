@@ -14,11 +14,13 @@ class GroupCard extends StatelessWidget {
   final int uid;
   final String groupName;
   final int memberCount;
+  final List<String> groupMemberProfiles;
   const GroupCard({       
     required this.backgroundImage,
     this.profileImage,
     required this.name,
     required this.followers,
+    required this.groupMemberProfiles,
     required this.guid,
     required this.uid,
     required this.groupName,

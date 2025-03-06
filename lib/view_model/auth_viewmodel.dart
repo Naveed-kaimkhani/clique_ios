@@ -18,12 +18,11 @@ class AuthViewModel extends GetxController {
   Future<void> registerUser(SignupParams request, String userName) async {
     try {
       signupResponse.value = ApiResponse.loading();
-      void response = await _authRepo.registerUser(request);
+     await _authRepo.registerUser(request);
       
               // signupResponse.value = ApiResponse.completed(response);
       // Get.find<UserController>().saveUserSession(response, userName, );
-  log("session stored succcsss");
-      Get.offAllNamed(RouteName.loginScreen);
+
     } catch (e) {
       signupResponse.value = ApiResponse.error(Utils.mapErrorMessage(e.toString()));
     }
@@ -34,8 +33,10 @@ class AuthViewModel extends GetxController {
     try {
       loginResponse.value = ApiResponse.loading();
       final response = await _authRepo.loginUser({
-        'email': email,
-        'password': password
+        //    email: "a22d1@gmail.com",
+        // password: "nav41458@Kk",
+        'email': "a22d1@gmail.com",
+        'password':"nav41458@Kk"
       });
         // final SharedPreferences prefs = await SharedPreferences.getInstance();
     Get.toNamed(RouteName.homeScreen);

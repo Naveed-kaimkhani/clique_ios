@@ -22,7 +22,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   final PageController controller = PageController(viewportFraction: 0.8, keepPage: true);
   final NavigationController navigationController = Get.find<NavigationController>();
   
-  final ScrollController _groupScrollController = ScrollController();
+  // final ScrollController _groupScrollController = ScrollController();
   final ScrollController _productScrollController = ScrollController();
   final ScrollController _influencerScrollController = ScrollController();
 final UserController userController = Get.find<UserController>();

@@ -256,10 +256,10 @@ void dispose() {
   void _handleSignup() {
           log("klsdjfsdflksdkjfsdf");
         final SignupParams request = SignupParams(
-        name:" _nameController.text",
-        email: "adadasd1@gmail.com",
+        name:"_nameController.text",
+        email: "a22d1@gmail.com",
         password: "nav41458@Kk",
-        phone: "34223",
+        phone: "3428228823",
         confirmPassword: "nav41458@Kk",
         role: "user",
       );
