@@ -4,10 +4,8 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:avatar_stack/animated_avatar_stack.dart';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:clique/controller/user_controller.dart';
 import 'package:clique/data/repositories/group_repository.dart';
-import 'package:clique/utils/utils.dart';
+
 import 'package:clique/view/chat/chat_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -58,8 +56,7 @@ Future<List<String>> fetchGroupMembers() async {
       List<String> fetchedImages = (data['data'] as List)
           .map<String>((member) => member['link'] )
           .toList();
-          log(fetchedImages.length.toString());
-          log(fetchedImages[0]);
+    
       return fetchedImages;
     } else {
       log("failed");

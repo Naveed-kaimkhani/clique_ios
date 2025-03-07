@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:clique/components/index.dart';
 import 'package:clique/constants/index.dart';
 import 'package:clique/controller/navigation_controller.dart';
@@ -232,6 +231,7 @@ final UserController userController = Get.find<UserController>();
             }
             
             final group = groups[index];
+            log(group.guid);
             return GroupCard(
               backgroundImage:  AppSvgIcons.cloth,
               profileImage: group.icon ,
