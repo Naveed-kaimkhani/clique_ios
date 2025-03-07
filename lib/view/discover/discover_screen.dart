@@ -7,6 +7,7 @@ import 'package:clique/data/models/group_model.dart';
 import 'package:clique/data/repositories/group_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 
 
 class DiscoverScreen extends StatefulWidget {
@@ -194,24 +195,156 @@ final UserController userController = Get.find<UserController>();
 
 
  
-  Widget _buildGroupHorizontalList(Size size) {
+//   Widget _buildGroupHorizontalList(Size size) {
+//   return FutureBuilder<List<Group>>(
+//     future: GroupRepository().fetchGroups(),
+//     builder: (context, snapshot) {
+//       if (snapshot.connectionState == ConnectionState.waiting) {
+//         return Center(child: CircularProgressIndicator());
+//       } else if (snapshot.hasError) {
+//         return Center(child: Text('Error: ${snapshot.error}'));
+//       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+//         return Center(child: Text('No groups available'));
+//       }
+      
+//       final groups = snapshot.data!;
+//       return SizedBox(
+//         height: size.height * 0.25,
+//         child: ListView.builder(
+//           scrollDirection: Axis.horizontal,
+//           itemCount: groups.length+1, // Groups + View All Button
+//           itemBuilder: (context, index) {
+//             if (index == groups.length) {
+//               return Center(
+//                 child: GestureDetector(
+//                   onTap: () => Get.toNamed(RouteName.viewAllCliquesScreen),
+//                   child: Container(
+//                     margin: EdgeInsets.only(right: size.width * 0.06, left: 16),
+//                     decoration: BoxDecoration(
+//                       gradient: AppColors.appGradientColors,
+//                       shape: BoxShape.circle,
+//                     ),
+//                     padding: EdgeInsets.all(8),
+//                     child: Icon(Icons.arrow_forward, color: Colors.white),
+//                   ),
+//                 ),
+//               );
+//             }
+            
+//             final group = groups[index];
+//             log(group.guid);
+//             return GroupCard(
+//               backgroundImage:  AppSvgIcons.cloth,
+//               profileImage: group.icon ,
+//               name: group.name,
+//               followers: '${group.membersCount} members',
+//               guid: group.guid,
+//               authToken: userController.token.value,
+//               uid:userController.uid.value,
+//               groupName: group.name,
+//               memberCount: group.membersCount,
+//             );
+//           },
+//         ),
+//       );
+//     },
+//   );
+// }
+Widget _buildGroupHorizontalList(Size size) {
   return FutureBuilder<List<Group>>(
     future: GroupRepository().fetchGroups(),
     builder: (context, snapshot) {
       if (snapshot.connectionState == ConnectionState.waiting) {
-        return Center(child: CircularProgressIndicator());
+        // Show shimmer effect while loading
+        return SizedBox(
+          height: size.height * 0.20,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 5, // Number of shimmer placeholders
+            itemBuilder: (context, index) {
+              return Shimmer.fromColors(
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!,
+                child: Container(
+                  width: size.width * 0.75,
+                  margin: EdgeInsets.only(right: 16, left: index == 0 ? 16 : 0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Shimmer for background image
+                      Container(
+                        height: size.height * 0.1,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(15),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Shimmer for group name
+                            Container(
+                              width: size.width * 0.4,
+                              height: 16,
+                              color: Colors.white,
+                            ),
+                            SizedBox(height: 8),
+                            // Shimmer for followers
+                            Container(
+                              width: size.width * 0.3,
+                              height: 12,
+                              color: Colors.white,
+                            ),
+                            SizedBox(height: 16),
+                            // Shimmer for avatars and button
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  width: size.width * 0.3,
+                                  height: 24,
+                                  color: Colors.white,
+                                ),
+                                Container(
+                                  width: size.width * 0.2,
+                                  height: 32,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        );
       } else if (snapshot.hasError) {
         return Center(child: Text('Error: ${snapshot.error}'));
       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
         return Center(child: Text('No groups available'));
       }
-      
+
       final groups = snapshot.data!;
       return SizedBox(
         height: size.height * 0.25,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: groups.length+1, // Groups + View All Button
+          itemCount: groups.length + 1, // Groups + View All Button
           itemBuilder: (context, index) {
             if (index == groups.length) {
               return Center(
@@ -229,17 +362,17 @@ final UserController userController = Get.find<UserController>();
                 ),
               );
             }
-            
+
             final group = groups[index];
             log(group.guid);
             return GroupCard(
-              backgroundImage:  AppSvgIcons.cloth,
-              profileImage: group.icon ,
+              backgroundImage: AppSvgIcons.cloth,
+              profileImage: group.icon,
               name: group.name,
               followers: '${group.membersCount} members',
               guid: group.guid,
               authToken: userController.token.value,
-              uid:userController.uid.value,
+              uid: userController.uid.value,
               groupName: group.name,
               memberCount: group.membersCount,
             );
@@ -249,5 +382,4 @@ final UserController userController = Get.find<UserController>();
     },
   );
 }
-
 }
