@@ -5,6 +5,7 @@ import 'dart:developer';
 
 import 'package:avatar_stack/animated_avatar_stack.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:clique/controller/user_controller.dart';
 import 'package:clique/data/repositories/group_repository.dart';
 import 'package:clique/utils/utils.dart';
 import 'package:clique/view/chat/chat_screen.dart';
@@ -19,12 +20,15 @@ class GroupCard extends StatefulWidget {
   final String guid;
   final int uid;
   final String groupName;
+  
+  final String authToken;
   final int memberCount;
   // final List<String> groupMemberProfiles;
   const GroupCard({       
     required this.backgroundImage,
     this.profileImage,
     required this.name,
+    required this.authToken,
     required this.followers,
     // required this.groupMemberProfiles,
     required this.guid,
@@ -45,7 +49,7 @@ Future<List<String>> fetchGroupMembers() async {
     final response = await http.get(
       Uri.parse('https://dev.moutfits.com/api/v1/cometchat/groups/${widget.guid}/members'),
       headers: {
-        'Authorization': 'Bearer 98|zlwz9G1eiaU5QC6mgPifFgxsbfzSsLTHfYIzFXkCaf73e111',
+        'Authorization': 'Bearer ${widget.authToken}',
       },
     );
     log(response.statusCode.toString());
@@ -158,8 +162,9 @@ void initState() {
                           child: AnimatedAvatarStack(
                             height: size.height * 0.03, // Responsive avatar stack height
                             avatars: [
-                              
-                                NetworkImage("https://tinyurl.com/448x62fj"),
+                                 for (var n = 1; n < widget.memberCount +1; n++)
+                                NetworkImage('https://i.pravatar.cc/150?img=$n'),
+                                // NetworkImage("https://tinyurl.com/448x62fj"),
                               // for (var n = 0; n < 10; n++)
                               //   NetworkImage("https://tinyurl.com/448x62fj"),
                             ],

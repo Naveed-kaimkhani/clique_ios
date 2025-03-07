@@ -254,38 +254,25 @@ void dispose() {
   }
 
   void _handleSignup() {
-          log("klsdjfsdflksdkjfsdf");
-        final SignupParams request = SignupParams(
-        name:"_nameController.text",
-        email: "a22d1@gmail.com",
-        password: "nav41458@Kk",
-        phone: "3428228823",
-        confirmPassword: "nav41458@Kk",
+
+    
+    
+    if (_validateFields()) {
+      _authViewModel.isLoading.value = true;
+      
+      final SignupParams request = SignupParams(
+        name: _nameController.text,
+        email: _emailController.text,
+        password: _passwordController.text,
+        phone: _phoneNumberController.text,
+        confirmPassword: _confirmPasswordController.text,
         role: "user",
       );
-      
+        
       _authViewModel.registerUser(request, _nameController.text)
         .then((_) => _authViewModel.isLoading.value = false)
         .catchError((_) => _authViewModel.isLoading.value = false);
-    
-    
-    
-    // if (_validateFields()) {
-    //   _authViewModel.isLoading.value = true;
-      
-    //   final SignupParams request = SignupParams(
-    //     name: _nameController.text,
-    //     email: _emailController.text,
-    //     password: _passwordController.text,
-    //     phone: _phoneNumberController.text,
-    //     confirmPassword: _confirmPasswordController.text,
-    //     role: "user",
-    //   );
-        
-    //   _authViewModel.registerUser(request, _nameController.text)
-    //     .then((_) => _authViewModel.isLoading.value = false)
-    //     .catchError((_) => _authViewModel.isLoading.value = false);
-    // }
+    }
   }
 
   @override

@@ -212,7 +212,7 @@ final UserController userController = Get.find<UserController>();
         height: size.height * 0.25,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: 1, // Groups + View All Button
+          itemCount: groups.length+1, // Groups + View All Button
           itemBuilder: (context, index) {
             if (index == groups.length) {
               return Center(
@@ -238,6 +238,7 @@ final UserController userController = Get.find<UserController>();
               name: group.name,
               followers: '${group.membersCount} members',
               guid: group.guid,
+              authToken: userController.token.value,
               uid:userController.uid.value,
               groupName: group.name,
               memberCount: group.membersCount,

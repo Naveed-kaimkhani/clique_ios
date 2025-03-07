@@ -33,10 +33,9 @@ class AuthViewModel extends GetxController {
     try {
       loginResponse.value = ApiResponse.loading();
       final response = await _authRepo.loginUser({
-        //    email: "a22d1@gmail.com",
-        // password: "nav41458@Kk",
-        'email': "a22d1@gmail.com",
-        'password':"nav41458@Kk"
+           email: email,
+        password: password,
+
       });
         // final SharedPreferences prefs = await SharedPreferences.getInstance();
     Get.toNamed(RouteName.homeScreen);
