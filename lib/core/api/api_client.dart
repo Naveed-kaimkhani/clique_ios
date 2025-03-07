@@ -11,16 +11,38 @@ import '../api/api_endpoints.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 class ApiClient extends GetxService {
   final String baseUrl = ApiEndpoints.baseUrl;
-
-  Future<dynamic> get(String endpoint, {Map<String, String>? headers}) async {
-    final response = await http.get(Uri.parse(endpoint), headers: headers);
-    return _handleResponse(response);
+  static Future<http.Response> post({
+    required String url,
+    Map<String, String>? headers,
+    Object? body,
+  }) async {
+    return await http.post(Uri.parse(url), headers: headers, body: body);
   }
 Future<dynamic> getGroup(String endpoint, {Map<String, String>? headers}) async {
     final response = await http.get(Uri.parse(endpoint), headers: headers);
 
     return response;
   }
+
+  Future<dynamic> get(String endpoint, {Map<String, String>? headers}) async {
+    final response = await http.get(Uri.parse(endpoint), headers: headers);
+    return _handleResponse(response);
+  }
+  static Future<http.Response> getMessages({
+    required String url,
+    Map<String, String>? headers,
+  }) async {
+    return await http.get(Uri.parse(url), headers: headers);
+  }
+
+
+  static Future<http.Response> fetchMessages({
+    required String url,
+    Map<String, String>? headers,
+  }) async {
+    return await http.get(Uri.parse(url), headers: headers);
+  }
+
   Future<dynamic> loginUser(String endpoint,
       {Map<String, String>? headers, dynamic body}) async {
     final response = await http.post(Uri.parse(endpoint),
@@ -43,13 +65,13 @@ Future<dynamic> getGroup(String endpoint, {Map<String, String>? headers}) async 
     return _handleResponse(response);
   }
 
-  Future<dynamic> post(String endpoint,
-      {Map<String, String>? headers, dynamic body}) async {
-    final response = await http.post(Uri.parse(endpoint),
-        headers: headers, body: jsonEncode(body));
+  // Future<dynamic> post(String endpoint,
+  //     {Map<String, String>? headers, dynamic body}) async {
+  //   final response = await http.post(Uri.parse(endpoint),
+  //       headers: headers, body: jsonEncode(body));
  
-    return _handleResponse(response);
-  }
+  //   return _handleResponse(response);
+  // }
     Future<void> signUpApi(String endpoint,
       {Map<String, String>? headers, dynamic body}) async {
     final response = await http.post(Uri.parse(endpoint),
