@@ -350,7 +350,6 @@
 // }
 
 
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
@@ -393,6 +392,7 @@ final UserController userController = Get.find<UserController>();
   Timer? _timer;
   // bool _isUploading = false;
 final ScrollController _scrollController = ScrollController();
+bool _isFirstLoad = true;
 
     final TextEditingController _textController = TextEditingController();
   @override
@@ -440,12 +440,15 @@ final ScrollController _scrollController = ScrollController();
 
         _messageController.add(messages);
 
-        // Scroll to bottom after messages load
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (_scrollController.hasClients) {
-            _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-          }
-        });
+        // Only scroll to bottom on first load
+        if (_isFirstLoad) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (_scrollController.hasClients) {
+              _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+              _isFirstLoad = false;
+            }
+          });
+        }
 
       } else {
       }
@@ -514,10 +517,40 @@ final ScrollController _scrollController = ScrollController();
       ),
     );
   }
-  Future<void> _sendMessage() async {
-    // final TextEditingController _textController = TextEditingController();  
-    if (_textController.text.isEmpty) return;
+  // Future<void> _sendMessage( String message) async {
+  //   // final TextEditingController _textController = TextEditingController();  
+  //   if (message.isEmpty) return;
 
+  //   // setState(() => _isUploading = true);
+
+  //   final url = Uri.parse("https://dev.moutfits.com/api/v1/cometchat/groups/send-message");
+  //   // final String token = "63|9dM3rfqqIBCkelTcgGCgoMTNQn5MRJde3glXauj956689575"; // Store and retrieve from SharedPreferences or GetStorage
+  //       final String token =userController.token.value; // Store and retrieve from SharedPreferences or GetStorage
+
+  //   final response = await http.post(
+  //     url,
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       "Authorization": "Bearer $token",
+  //     },
+  //     body: jsonEncode({
+  //       "group_id": widget.guid,
+  //       "sender_uid":userController.uid.value.toString(), // Retrieve the logged-in user's ID dynamically
+  //       "message": _textController.text,
+  //     }),
+  //   );
+    
+  //   if (response.statusCode == 200) {
+  //     _textController.clear();
+  //   } else {
+  //     Get.snackbar("Error", "Failed to send message: ${response.body}");
+  //   }
+  // }
+    Future<void> _sendMessage( String message) async {
+    // final TextEditingController _textController = TextEditingController();  
+     
+    if (message.isEmpty) return;
+ _textController.clear();
     // setState(() => _isUploading = true);
 
     final url = Uri.parse("https://dev.moutfits.com/api/v1/cometchat/groups/send-message");
@@ -533,36 +566,14 @@ final ScrollController _scrollController = ScrollController();
       body: jsonEncode({
         "group_id": widget.guid,
         "sender_uid":userController.uid.value.toString(), // Retrieve the logged-in user's ID dynamically
-        "message": _textController.text,
+        "message": message,
       }),
     );
     
     if (response.statusCode == 200) {
-
-      _textController.clear();
-    
-      // Scroll to bottom after sending message
-      if (_scrollController.hasClients) {
-        _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
-          duration: Duration(milliseconds: 300),
-          curve: Curves.easeOut,
-        );
-      }
-
+      // _textController.clear();
     } else {
       Get.snackbar("Error", "Failed to send message: ${response.body}");
-    }
-
-    // setState(() => _isUploading = false);
-  }
-  void _scrollToBottom() {
-    if (_scrollController.hasClients) {
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        duration: Duration(milliseconds: 300),
-        curve: Curves.easeOut,
-      );
     }
   }
 
@@ -603,7 +614,9 @@ final ScrollController _scrollController = ScrollController();
             ),
           ),
           SizedBox(width: screenWidth * 0.03),
-          SendButton(onSend: _sendMessage)
+          SendButton(onSend: (){
+            _sendMessage(_textController.text);
+          })
         ],
       ),
     );
@@ -706,4 +719,3 @@ class ChatMessageWidget extends StatelessWidget {
     );
   }
 }
-
