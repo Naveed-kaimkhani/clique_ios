@@ -11,6 +11,7 @@ class ChatList extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final double horizontalPadding = size.width * 0.03;
     final double verticalPadding = size.height * 0.01;
+    final double profileImageSize = size.width * 0.11;
     final double avatarRadius = size.width * 0.06;
     final double fontSize = size.width * 0.04;
     final double timeFontSize = size.width * 0.035;
@@ -29,14 +30,12 @@ class ChatList extends StatelessWidget {
         group.owner == _viewModel.userController.uid.value
       ).toList();
 
-      if (userGroups.isEmpty) {
-        return Center(child: Text('You haven\'t joined any groups yet'));
-      }
+    
 
       return ListView.builder(
-        itemCount: userGroups.length,
+        itemCount: _viewModel.groups.length,
         itemBuilder: (context, index) {
-          final group = userGroups[index];
+          final group = _viewModel.groups[index];
           return Container(
             decoration: BoxDecoration(
               color: Colors.white,
@@ -59,7 +58,24 @@ class ChatList extends StatelessWidget {
                 horizontal: horizontalPadding * 1.3,
                 vertical: verticalPadding * 1.5,
               ),
-              leading: Icon(Icons.person),
+              // leading: Icon(Icons.person),
+              leading:  Container(
+                  height: profileImageSize,
+                  width: profileImageSize,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: group.icon != null
+                        ? DecorationImage(
+                            image: NetworkImage(group.icon!),
+                            fit: BoxFit.cover,
+                          )
+                        : null,
+                    color:  group.icon == null ? Colors.grey[300] : null,
+                  ),
+                  child: group.icon == null
+                      ? Icon(Icons.person, size: profileImageSize * 0.6, color: Colors.grey[600])
+                      : null,
+                ),
               title: Text(
                 group.name,
                 style: TextStyle(

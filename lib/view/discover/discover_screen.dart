@@ -1,6 +1,6 @@
-
 import 'package:clique/components/index.dart';
 import 'package:clique/constants/index.dart';
+import 'package:clique/view_model/group_card_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
@@ -186,16 +186,30 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
           itemCount: _viewModel.groups.length + 1,
           itemBuilder: (context, index) => index == _viewModel.groups.length
             ? _buildViewAllButton(size, RouteName.viewAllCliquesScreen)
-            : GroupCard(
-                backgroundImage: AppSvgIcons.cloth,
-                profileImage: _viewModel.groups[index].icon,
-                name: _viewModel.groups[index].name,
-                followers: '${_viewModel.groups[index].membersCount} members',
-                guid: _viewModel.groups[index].guid,
-                authToken: _viewModel.userController.token.value,
-                uid: _viewModel.userController.uid.value,
-                groupName: _viewModel.groups[index].name,
-                memberCount: _viewModel.groups[index].membersCount,
+            : 
+            // GroupCard(
+            //     viewModel: GroupCardViewModel(
+            //       backgroundImage: AppSvgIcons.cloth,
+            //       profileImage: _viewModel.groups[index].icon,
+            //       name: _viewModel.groups[index].name,
+            //       followers: '${_viewModel.groups[index].membersCount} members',
+            //       guid: _viewModel.groups[index].guid,
+            //       authToken: _viewModel.userController.token.value,
+            //       uid: _viewModel.userController.uid.value.toString(),
+            //       groupName: _viewModel.groups[index].name,
+            //       memberCount: _viewModel.groups[index].membersCount,
+            //     ),
+            //   ),
+            GroupCard(
+                   backgroundImage: AppSvgIcons.cloth,
+                  profileImage: _viewModel.groups[index].icon,
+                  name: _viewModel.groups[index].name,
+                  followers: '${_viewModel.groups[index].membersCount} members',
+                  guid: _viewModel.groups[index].guid,
+                  authToken: _viewModel.userController.token.value,
+                  uid: _viewModel.userController.uid.value,
+                  groupName: _viewModel.groups[index].name,
+                  memberCount: _viewModel.groups[index].membersCount,
               ),
         ),
       );
