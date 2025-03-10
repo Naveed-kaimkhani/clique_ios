@@ -259,7 +259,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                 final messages = snapshot.data!;
                 return ListView.builder(
                   controller: _scrollController,
-                  reverse: true, // Set to true to show latest messages at the bottom
+                  reverse: false, // Set to true to show latest messages at the bottom
                   padding: EdgeInsets.all(16),
                   itemCount: messages.length + 1, // +1 for the loading indicator
                   itemBuilder: (context, index) {

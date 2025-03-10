@@ -5,6 +5,7 @@ import 'package:clique/data/repositories/group_repository.dart';
 import 'package:clique/view/chat/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shimmer/shimmer.dart';
 class GroupCard extends StatefulWidget {
   final String backgroundImage;
   final String? profileImage;
@@ -81,7 +82,90 @@ class _GroupCardState extends State<GroupCard> {
     return FutureBuilder<Map<String, dynamic>>(
       future: fetchGroupMembers(),
       builder: (context, snapshot) {
-        final isMember = snapshot.hasData ? snapshot.data!['isMember'] : false;
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // Show loading indicator for the entire card
+          return SizedBox(
+        
+          height: size.height * 0.20,
+  child: Shimmer.fromColors(
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!,
+                child: Container(
+                  width: size.width * 0.75,
+                  margin: EdgeInsets.only(right: 16, ),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Shimmer for background image
+                      Container(
+                        height: size.height * 0.1,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(15),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Shimmer for group name
+                            Container(
+                              width: size.width * 0.4,
+                              height: 16,
+                              color: Colors.white,
+                            ),
+                            SizedBox(height: 8),
+                            // Shimmer for followers
+                            Container(
+                              width: size.width * 0.3,
+                              height: 12,
+                              color: Colors.white,
+                            ),
+                            SizedBox(height: 16),
+                            // Shimmer for avatars and button
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  width: size.width * 0.3,
+                                  height: 24,
+                                  color: Colors.white,
+                                ),
+                                Container(
+                                  width: size.width * 0.2,
+                                  height: 32,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+          );
+        } else if (snapshot.hasError) {
+          // Show error message for the entire card
+          return Center(child: Text("Error loading group members"));
+        } else if (!snapshot.hasData) {
+          // Show no data message for the entire card
+          return Center(child: Text("No data available"));
+        }
+
+        final fetchedImages = snapshot.data!['fetchedImages'] as List<String>;
+        final isMember = snapshot.data!['isMember'] as bool;
 
         return Container(
           width: cardWidth,
@@ -112,8 +196,7 @@ class _GroupCardState extends State<GroupCard> {
                     ),
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.vertical(bottom: Radius.circular(15)),
-                    ),
+                      borderRadius: BorderRadius.vertical(bottom: Radius.circular(15)),),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -145,35 +228,18 @@ class _GroupCardState extends State<GroupCard> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            // FutureBuilder for AnimatedAvatarStack
-                            FutureBuilder<List<String>>(
-                              future: fetchGroupMembers().then((data) => data['fetchedImages']), // Extract fetchedImages
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState == ConnectionState.waiting) {
-                                  // Show loading indicator for avatars
-                                  return SizedBox(
-                                    width: avatarStackWidth,
-                                    height: size.height * 0.03,
-                                    child: Center(child: CircularProgressIndicator()),
-                                  );
-                                } else if (snapshot.hasError) {
-                                  // Show error message for avatars
-                                  return SizedBox(
-                                    width: avatarStackWidth,
-                                    height: size.height * 0.03,
-                                    child: Center(child: Text("Error loading avatars")),
-                                  );
-                                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                                  // Show placeholder for avatars
-                                  return SizedBox(
-                                    width: avatarStackWidth,
-                                    height: size.height * 0.03,
-                                    child: Center(child: Text("No avatars")),
-                                  );
-                                }
-
-                                final fetchedImages = snapshot.data!;
-                                return  SizedBox(
+                            // Display avatars
+                            // SizedBox(
+                            //   width: avatarStackWidth,
+                            //   child: AnimatedAvatarStack(
+                            //     height: size.height * 0.03, // Responsive avatar stack height
+                            //     avatars: fetchedImages
+                            //         .take(10) // Limit to 10 members
+                            //         .map((imageUrl) => NetworkImage(imageUrl))
+                            //         .toList(),
+                            //   ),
+                            // ),
+                                  SizedBox(
                           width: avatarStackWidth,
                           child: AnimatedAvatarStack(
                             height: size.height * 0.03, // Responsive avatar stack height
@@ -185,15 +251,13 @@ class _GroupCardState extends State<GroupCard> {
                               //   NetworkImage("https://tinyurl.com/448x62fj"),
                             ],
                           ),
-                        );
-                              },
-                            ),
+                        ),
                             Container(
-                              width: buttonWidth,
-                              height: buttonHeight,
-                              decoration: BoxDecoration(
-                                color: isMember ? Colors.green : Colors.black,
-                                borderRadius: BorderRadius.circular(30),
+                                   width: buttonWidth,
+                          height: buttonHeight,
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(30),
                               ),
                               child: Center(
                                 child: TextButton(
@@ -216,7 +280,7 @@ class _GroupCardState extends State<GroupCard> {
                                       bool isAdded = await GroupRepository().joinGroup(widget.guid, widget.uid);
                                       if (isAdded) {
                                         // Refresh the UI or show a success message
-                                       Navigator.push(
+                                        Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => GroupChatScreen(
