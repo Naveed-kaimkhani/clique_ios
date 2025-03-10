@@ -1,10 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
-
-
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:clique/controller/user_controller.dart';
-
 import 'package:clique/data/models/group_model.dart';
 import 'package:clique/utils/utils.dart';
 import 'package:get/get.dart';
@@ -52,6 +49,8 @@ class GroupRepository {
     try {
       final prefs = await SharedPreferences.getInstance();
       String token = prefs.getString('token') ?? '';
+      // String token = userController.token.value;
+      log(userController.token.value);
       if (token.isEmpty) {
         throw Exception("User token not found. Please log in again.");
       }

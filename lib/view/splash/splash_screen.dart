@@ -2,6 +2,7 @@ import 'package:clique/constants/app_images.dart';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/view/auth/login_screen.dart';
 import 'package:clique/view/home/home_screen.dart';
+import 'package:clique/view_model/discover_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,6 +14,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   final UserController userController = Get.put(UserController());
 
+  final DiscoverViewModel _viewModel = Get.put(DiscoverViewModel());
   @override
   void initState() {
     super.initState();

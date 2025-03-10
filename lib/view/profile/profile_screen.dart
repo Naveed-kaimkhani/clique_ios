@@ -1,6 +1,3 @@
-
-
-import 'package:clique/components/custom_button.dart';
 import 'package:clique/components/index.dart';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/view/chat/chat_list.dart';

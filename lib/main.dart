@@ -1,10 +1,12 @@
 import 'package:clique/core/api/api_client.dart';
+import 'package:clique/data/repositories/group_repository.dart';
 import 'package:clique/routes/app_routes.dart';
 import 'package:clique/view/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 void main() {
    Get.put(ApiClient());
+   Get.lazyPut(()=>GroupRepository());
   //  Get.put(UserController());
   runApp(
 MyApp(),

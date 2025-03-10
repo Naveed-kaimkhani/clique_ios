@@ -14,7 +14,7 @@ class DiscoverScreen extends StatefulWidget {
 }
 
 class _DiscoverScreenState extends State<DiscoverScreen> {
-  final DiscoverViewModel _viewModel = Get.put(DiscoverViewModel());
+  final DiscoverViewModel _viewModel = Get.find<DiscoverViewModel>();
   final PageController controller = PageController(viewportFraction: 0.8, keepPage: true);
   final ScrollController _productScrollController = ScrollController();
   final ScrollController _influencerScrollController = ScrollController();
