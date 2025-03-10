@@ -41,7 +41,39 @@ class GroupCard extends StatefulWidget {
 }
 
 class _GroupCardState extends State<GroupCard> {
-Future<List<String>> fetchGroupMembers() async {
+  // Future<Map<String, dynamic>> fetchGroupMembers() async {
+  //   log(widget.guid.toString());
+  //   try {
+  //     final response = await http.get(
+  //       Uri.parse('https://dev.moutfits.com/api/v1/cometchat/groups/${widget.guid}/members'),
+  //       headers: {
+  //         'Authorization': 'Bearer ${widget.authToken}',
+  //       },
+  //     );
+  //     log(response.statusCode.toString());
+  //     if (response.statusCode == 200) {
+  //       final data = json.decode(response.body);
+  //       List<String> fetchedImages = (data['data'] as List)
+  //           .map<String>((member) => member['link'])
+  //           .toList();
+
+  //       // Check if the current user's uid is in the members list
+  //       final isMember = (data['data'] as List).any((member) => member['uid'] == widget.uid.toString());
+
+  //       return {
+  //         'fetchedImages': fetchedImages,
+  //         'isMember': isMember,
+  //       };
+  //     } else {
+  //       log("failed");
+  //       throw Exception("Failed to load members");
+  //     }
+  //   } catch (e) {
+  //     log("Error: $e");
+  //     throw Exception("Error fetching members");
+  //   }
+  // }
+  Future<Map<String, dynamic>> fetchGroupMembers() async {
   log(widget.guid.toString());
   try {
     final response = await http.get(
@@ -54,10 +86,16 @@ Future<List<String>> fetchGroupMembers() async {
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       List<String> fetchedImages = (data['data'] as List)
-          .map<String>((member) => member['link'] )
+          .map<String>((member) => member['link'] ?? 'https://default-image-url.com') // Handle null values
           .toList();
-    
-      return fetchedImages;
+
+      // Check if the current user's uid is in the members list
+      final isMember = (data['data'] as List).any((member) => member['uid'] == widget.uid.toString());
+
+      return {
+        'fetchedImages': fetchedImages,
+        'isMember': isMember,
+      };
     } else {
       log("failed");
       throw Exception("Failed to load members");
@@ -68,13 +106,6 @@ Future<List<String>> fetchGroupMembers() async {
   }
 }
 
-
-  @override
-void initState() {
-  super.initState();
- 
-}
-  List<String> memberImages = [];
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -85,19 +116,50 @@ void initState() {
     final double buttonWidth = size.width * 0.25; // Adjust join button width
     final double buttonHeight = size.height * 0.043; // Adjust join button height
 
+    return FutureBuilder<Map<String, dynamic>>(
+  future: fetchGroupMembers(),
+  builder: (context, snapshot) {
+    if (snapshot.connectionState == ConnectionState.waiting) {
+      return Container(
+        width: cardWidth,
+        height: cardHeight,
+        padding: EdgeInsets.only(left: size.width * 0.03),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Center(child: CircularProgressIndicator()),
+      );
+    } else if (snapshot.hasError) {
+      return Container(
+        width: cardWidth,
+        height: cardHeight,
+        padding: EdgeInsets.only(left: size.width * 0.03),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Center(child: Text("Error loading group members")),
+      );
+    } else if (!snapshot.hasData) {
+      return Container(
+        width: cardWidth,
+        height: cardHeight,
+        padding: EdgeInsets.only(left: size.width * 0.03),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Center(child: Text("No data available")),
+      );
+    }
+
+    final fetchedImages = snapshot.data!['fetchedImages'] as List<String>;
+    final isMember = snapshot.data!['isMember'] as bool;
+
     return Container(
       width: cardWidth,
       height: cardHeight,
-      padding: EdgeInsets.only(left: size.width * 0.03, ),
+      padding: EdgeInsets.only(left: size.width * 0.03),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        // boxShadow: [
-        //   BoxShadow(
-        //     color: const Color.fromARGB(31, 184, 177, 177),
-        //     blurRadius: 10,
-        //     spreadRadius: 0.5,
-        //   ),
-        // ],
       ),
       child: Stack(
         clipBehavior: Clip.none,
@@ -154,65 +216,52 @@ void initState() {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        SizedBox(
-                          width: avatarStackWidth,
-                          child: AnimatedAvatarStack(
-                            height: size.height * 0.03, // Responsive avatar stack height
-                            avatars: [
-                                 for (var n = 1; n < widget.memberCount +1; n++)
-                                NetworkImage('https://i.pravatar.cc/150?img=$n'),
-                                // NetworkImage("https://tinyurl.com/448x62fj"),
-                              // for (var n = 0; n < 10; n++)
-                              //   NetworkImage("https://tinyurl.com/448x62fj"),
-                            ],
-                          ),
-                        ),
-//   SizedBox(
-//   width: avatarStackWidth,
-//   child: FutureBuilder<List<String>>(
-//     future: fetchGroupMembers(), // Fetch group members
-//     builder: (context, snapshot) {
-//       if (snapshot.connectionState == ConnectionState.waiting) {
-//         return SizedBox(
-//           height: size.height * 0.03,
-//           child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
-//         );
-//       } else if (snapshot.hasError) {
-//         return Text("Error loading images", style: TextStyle(color: Colors.red));
-//       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-//         return Text("No members", style: TextStyle(color: Colors.grey));
-//       }
-
-//       List<String> memberImages = snapshot.data!;
-//       return AnimatedAvatarStack(
-//         height: size.height * 0.03, // Responsive avatar stack height
-//         avatars: memberImages
-//             .take(10) // Limit to 10 members
-//             .map((imageUrl) => NetworkImage("https://tinyurl.com/448x62fj"))
-//             .toList(),
-//       );
-      
-//     },
-//   ),
-// ),
-
-
+                        // SizedBox(
+                        //   width: avatarStackWidth,
+                        //   child: AnimatedAvatarStack(
+                        //     height: size.height * 0.03, // Responsive avatar stack height
+                        //     avatars: fetchedImages
+                        //         .take(10) // Limit to 10 members
+                        //         .map((imageUrl) => NetworkImage(imageUrl))
+                        //         .toList(),
+                        //   ),
+                        // ),
                         Container(
                           width: buttonWidth,
                           height: buttonHeight,
                           decoration: BoxDecoration(
-                            color: Colors.black,
+                            color: isMember ? Colors.green : Colors.black,
                             borderRadius: BorderRadius.circular(30),
                           ),
                           child: Center(
                             child: TextButton(
-                              onPressed: ()async {
-                              bool isAdded= await GroupRepository().joinGroup(widget.guid, widget.uid);
-                              isAdded   ? Navigator.push(context, MaterialPageRoute(builder: (context) => GroupChatScreen(profileImage: widget.profileImage , guid: widget.guid , groupName: widget.groupName, memberCount: widget.memberCount,))):null;
-    
+                              onPressed: () async {
+                                if (isMember) {
+                                  // Navigate to chat screen
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => GroupChatScreen(
+                                        profileImage: widget.profileImage,
+                                        guid: widget.guid,
+                                        groupName: widget.groupName,
+                                        memberCount: widget.memberCount,
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  // Join the group
+                                  bool isAdded = await GroupRepository().joinGroup(widget.guid, widget.uid);
+                                  if (isAdded) {
+                                    // Refresh the UI or show a success message
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text("Successfully joined the group")),
+                                    );
+                                  }
+                                }
                               },
                               child: Text(
-                                "Join Now",
+                                isMember ? "Message" : "Join Now",
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: size.width * 0.032, // Responsive font size
@@ -236,21 +285,23 @@ void initState() {
               width: profileImageSize,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                image: widget.profileImage != null 
-                  ? DecorationImage(
-                      image: NetworkImage(widget.profileImage!),
-                      fit: BoxFit.cover,
-                    )
-                  : null,
+                image: widget.profileImage != null
+                    ? DecorationImage(
+                        image: NetworkImage(widget.profileImage!),
+                        fit: BoxFit.cover,
+                      )
+                    : null,
                 color: widget.profileImage == null ? Colors.grey[300] : null,
               ),
-              child: widget.profileImage == null 
-                ? Icon(Icons.person, size: profileImageSize * 0.6, color: Colors.grey[600])
-                : null,
+              child: widget.profileImage == null
+                  ? Icon(Icons.person, size: profileImageSize * 0.6, color: Colors.grey[600])
+                  : null,
             ),
           ),
         ],
       ),
     );
+  },
+);
   }
 }
