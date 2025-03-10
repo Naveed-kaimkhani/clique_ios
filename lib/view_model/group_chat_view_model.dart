@@ -1,7 +1,5 @@
-// view_models/group_chat_view_model.dart
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'package:clique/core/api/api_client.dart';
 import 'package:clique/core/api/api_endpoints.dart';
 import 'package:flutter/material.dart';
