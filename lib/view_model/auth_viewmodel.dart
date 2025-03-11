@@ -29,16 +29,17 @@ class AuthViewModel extends GetxController {
   }
 
   Future<void> loginUser(String email, String password) async {
- 
+        log(email);
+        log(password);
     try {
       loginResponse.value = ApiResponse.loading();
       final response = await _authRepo.loginUser({
-           email: email,
-        password: password,
+           "email": email,
+        "password": password,
 
       });
         // final SharedPreferences prefs = await SharedPreferences.getInstance();
-    Get.toNamed(RouteName.homeScreen);
+    
 
     } catch (e) {
       loginResponse.value = ApiResponse.error(Utils.mapErrorMessage(e.toString()));

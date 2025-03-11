@@ -1,6 +1,7 @@
 
 
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -55,7 +56,7 @@ class GroupAppBar extends StatelessWidget {
                   shape: BoxShape.circle,
                   image: profile != null 
                     ? DecorationImage(
-                        image: NetworkImage(profile!),
+                        image: CachedNetworkImageProvider(profile!),
                         fit: BoxFit.cover,
                       )
                     : null,

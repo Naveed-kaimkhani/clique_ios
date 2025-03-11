@@ -6,6 +6,7 @@ import 'dart:developer';
 import 'package:avatar_stack/animated_avatar_stack.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clique/data/repositories/group_repository.dart';
+import 'package:clique/utils/utils.dart';
 import 'package:clique/view/chat/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -88,10 +89,11 @@ class _GroupCardState extends State<GroupCard> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           // Show loading indicator for the entire card
-          return SizedBox(
-        
-          height: size.height * 0.20,
-  child: Shimmer.fromColors(
+          return Container(
+            
+            height: size.height * 0.10,
+            padding: EdgeInsets.only(left: size.width * 0.03),
+            child: Shimmer.fromColors(
                 baseColor: Colors.grey[300]!,
                 highlightColor: Colors.grey[100]!,
                 child: Container(
@@ -284,7 +286,8 @@ class _GroupCardState extends State<GroupCard> {
                                       bool isAdded = await GroupRepository().joinGroup(widget.guid, widget.uid);
                                       if (isAdded) {
                                         // Refresh the UI or show a success message
-                                        Navigator.push(
+                                         await Utils.saveJoinedGroup(widget.guid);
+                                            Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => GroupChatScreen(

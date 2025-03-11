@@ -187,19 +187,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
           itemBuilder: (context, index) => index == _viewModel.groups.length
             ? _buildViewAllButton(size, RouteName.viewAllCliquesScreen)
             : 
-            // GroupCard(
-            //     viewModel: GroupCardViewModel(
-            //       backgroundImage: AppSvgIcons.cloth,
-            //       profileImage: _viewModel.groups[index].icon,
-            //       name: _viewModel.groups[index].name,
-            //       followers: '${_viewModel.groups[index].membersCount} members',
-            //       guid: _viewModel.groups[index].guid,
-            //       authToken: _viewModel.userController.token.value,
-            //       uid: _viewModel.userController.uid.value.toString(),
-            //       groupName: _viewModel.groups[index].name,
-            //       memberCount: _viewModel.groups[index].membersCount,
-            //     ),
-            //   ),
+       
             GroupCard(
                    backgroundImage: AppSvgIcons.cloth,
                   profileImage: _viewModel.groups[index].icon,

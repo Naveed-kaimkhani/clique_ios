@@ -29,7 +29,7 @@ class UserController extends GetxController {
     log("session stored");
   }
 
-  void loadUserSession() async {
+  Future<void> loadUserSession() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final storedUserName = prefs.getString('userName');
     final storedToken = prefs.getString('token');

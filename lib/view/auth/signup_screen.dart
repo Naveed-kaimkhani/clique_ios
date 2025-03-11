@@ -255,24 +255,35 @@ void dispose() {
 
   void _handleSignup() {
 
-    
-    
-    if (_validateFields()) {
-      _authViewModel.isLoading.value = true;
-      
-      final SignupParams request = SignupParams(
-        name: _nameController.text,
-        email: _emailController.text,
-        password: _passwordController.text,
-        phone: _phoneNumberController.text,
-        confirmPassword: _confirmPasswordController.text,
+        final SignupParams request = SignupParams(
+        name: "naveed kk",
+        email: "kkhun@gmail.com",
+        password: "nav44108@Kk",
+        phone: "0310344355527",
+        confirmPassword:  "nav44108@Kk",
         role: "user",
       );
         
       _authViewModel.registerUser(request, _nameController.text)
         .then((_) => _authViewModel.isLoading.value = false)
         .catchError((_) => _authViewModel.isLoading.value = false);
-    }
+    
+    // if (_validateFields()) {
+    //   _authViewModel.isLoading.value = true;
+      
+    //   final SignupParams request = SignupParams(
+    //     name: _nameController.text,
+    //     email: _emailController.text,
+    //     password: _passwordController.text,
+    //     phone: _phoneNumberController.text,
+    //     confirmPassword: _confirmPasswordController.text,
+    //     role: "user",
+    //   );
+        
+    //   _authViewModel.registerUser(request, _nameController.text)
+    //     .then((_) => _authViewModel.isLoading.value = false)
+    //     .catchError((_) => _authViewModel.isLoading.value = false);
+    // }
   }
 
   @override

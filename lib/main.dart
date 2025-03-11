@@ -1,6 +1,8 @@
 import 'package:clique/core/api/api_client.dart';
 import 'package:clique/data/repositories/group_repository.dart';
 import 'package:clique/routes/app_routes.dart';
+import 'package:clique/view/auth/login_screen.dart';
+import 'package:clique/view/auth/signup_screen.dart';
 import 'package:clique/view/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -29,7 +31,7 @@ class MyApp extends StatelessWidget {
           bodySmall: TextStyle(fontFamily: 'SofiaPro'),
         ),
       ),
-      home:SplashScreen(),
+      home:LoginScreen(),
       
       // initialRoute: RouteName.homeScreen,
       

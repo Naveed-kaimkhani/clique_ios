@@ -1,4 +1,6 @@
 
+import 'dart:developer';
+
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:clique/data/models/signup_params.dart';
 import 'package:clique/utils/utils.dart';
@@ -25,7 +27,8 @@ class AuthRepository {
   }
 
   Future<void> loginUser(Map<String, String> credentials) async {
-
+    log("in loginuser");
+    log(credentials.toString());
     try {
       final response = await apiClient.loginUser(
         ApiEndpoints.login,

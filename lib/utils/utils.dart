@@ -7,10 +7,13 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 import 'package:path_provider/path_provider.dart' as path_provider;
+import 'package:shared_preferences/shared_preferences.dart';
 class Utils {
   static String mapErrorMessage(String error) {
   if (error.contains("The email has already been taken")) {
     return "This email is already registered. Please use another email or log in.";
+  } if (error.contains("The provided credentials are incorrect")) {
+    return "Invalid email or password. Please try again";
   } else if (error.contains("network")) {
     return "No internet connection. Please check your connection.";
   } else if (error.contains("invalid credentials")) {
@@ -22,6 +25,20 @@ class Utils {
     // return "Something went wrong. Please try again later.";
   }
 }
+
+static Future<void> saveJoinedGroup(String guid) async {
+  final prefs = await SharedPreferences.getInstance();
+  List<String> joinedGroups = prefs.getStringList('joined_groups') ?? [];
+  if (!joinedGroups.contains(guid)) {
+    joinedGroups.add(guid);
+    await prefs.setStringList('joined_groups', joinedGroups);
+  }
+}
+static Future<List<String>> getJoinedGroups() async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getStringList('joined_groups') ?? [];
+}
+
  static void showCustomSnackBar(String title, String message, ContentType contentType) {
     final snackBar = SnackBar(
       elevation: 0,

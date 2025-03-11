@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/routes/routes_name.dart';
 import 'package:clique/utils/utils.dart';
+import 'package:clique/view_model/discover_viewmodel.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -47,8 +48,13 @@ Future<dynamic> getGroup(String endpoint, {Map<String, String>? headers}) async 
       {Map<String, String>? headers, dynamic body}) async {
     final response = await http.post(Uri.parse(endpoint),
         headers: headers, body: jsonEncode(body));
+//          headers: headers, body: jsonEncode({
+//   "email": "kkhun@gmail.com",
+//   "password": "nav44108@Kk"
+// }));
         log("Statuss codeeeee");
         log(response.statusCode.toString());
+        log(response.body);
       if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = jsonDecode(response.body);
       final String token = responseData["token"];
@@ -59,7 +65,13 @@ Future<dynamic> getGroup(String endpoint, {Map<String, String>? headers}) async 
       await prefs.setString('userName', userName);
       await prefs.setInt('uid', userId);
       // loadUserSession();
-      UserController().loadUserSession();
+    await  UserController().loadUserSession();
+      final UserController userController = Get.put(UserController());
+
+  final DiscoverViewModel _viewModel = Get.put(DiscoverViewModel());
+    Get.toNamed(RouteName.homeScreen);
+//       Get.put(UserController());
+//  Get.put(DiscoverViewModel());
       return responseData;
     }
     return _handleResponse(response);
@@ -79,6 +91,7 @@ Future<dynamic> getGroup(String endpoint, {Map<String, String>? headers}) async 
         log(response.statusCode.toString());
                  if (response.statusCode == 201 || response.statusCode==200) {
                         Get.offAllNamed(RouteName.loginScreen);
+                        // log("signup success");
     }
     return _handleResponse(response);
   }

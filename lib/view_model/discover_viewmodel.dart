@@ -9,6 +9,7 @@ class DiscoverViewModel extends GetxController {
   final RxList<Group> groups = <Group>[].obs;
   final RxBool isLoading = false.obs;
   final RxString error = ''.obs;
+  var userJoinedGroups = <String>[].obs; // List of groups user has joined
 
   @override
   void onInit() {
