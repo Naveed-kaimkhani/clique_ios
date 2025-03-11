@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
           bodySmall: TextStyle(fontFamily: 'SofiaPro'),
         ),
       ),
-      home:LoginScreen(),
+      home:SplashScreen(),
       
       // initialRoute: RouteName.homeScreen,
       

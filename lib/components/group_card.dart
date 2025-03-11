@@ -41,38 +41,6 @@ class GroupCard extends StatefulWidget {
 }
 
 class _GroupCardState extends State<GroupCard> {
-  Future<Map<String, dynamic>> fetchGroupMembers() async {
-    log(widget.guid.toString());
-    try {
-      final response = await http.get(
-        Uri.parse('https://dev.moutfits.com/api/v1/cometchat/groups/${widget.guid}/members'),
-        headers: {
-          'Authorization': 'Bearer ${widget.authToken}',
-        },
-      );
-      log(response.statusCode.toString());
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        List<String> fetchedImages = (data['data'] as List)
-            .map<String>((member) => member['link'] ?? 'https://default-image-url.com') // Handle null values
-            .toList();
-
-        // Check if the current user's uid is in the members list
-        final isMember = (data['data'] as List).any((member) => member['uid'] == widget.uid.toString());
-
-        return {
-          'fetchedImages': fetchedImages,
-          'isMember': isMember,
-        };
-      } else {
-        log("failed");
-        throw Exception("Failed to load members");
-      }
-    } catch (e) {
-      log("Error: $e");
-      throw Exception("Error fetching members");
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,13 +53,13 @@ class _GroupCardState extends State<GroupCard> {
     final double buttonHeight = size.height * 0.043; // Adjust join button height
 
     return FutureBuilder<Map<String, dynamic>>(
-      future: fetchGroupMembers(),
+      future:GroupRepository.fetchGroupMembers(widget.authToken,widget.guid,widget.uid ),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           // Show loading indicator for the entire card
           return Container(
             
-            height: size.height * 0.10,
+            height: size.height * 0.6,
             padding: EdgeInsets.only(left: size.width * 0.03),
             child: Shimmer.fromColors(
                 baseColor: Colors.grey[300]!,

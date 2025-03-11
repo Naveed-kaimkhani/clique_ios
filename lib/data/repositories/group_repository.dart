@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/api/api_client.dart';
 import '../../core/api/api_endpoints.dart';
 
+import 'package:http/http.dart' as http;
 class GroupRepository {
   final ApiClient apiClient = Get.find<ApiClient>();
 
@@ -41,6 +42,38 @@ class GroupRepository {
       Utils.showCustomSnackBar("Failed to join group",
           Utils.mapErrorMessage(e.toString()), ContentType.failure);
       throw Exception("Failed to join group: $e");
+    }
+  }
+static  Future<Map<String, dynamic>> fetchGroupMembers(String authToken, String guid, int uid) async {
+    // log(widget.guid.toString());
+    try {
+      final response = await http.get(
+        Uri.parse('https://dev.moutfits.com/api/v1/cometchat/groups/$guid/members'),
+        headers: {
+          'Authorization': 'Bearer $authToken',
+        },
+      );
+      log(response.statusCode.toString());
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        List<String> fetchedImages = (data['data'] as List)
+            .map<String>((member) => member['link'] ?? 'https://default-image-url.com') // Handle null values
+            .toList();
+
+        // Check if the current user's uid is in the members list
+        final isMember = (data['data'] as List).any((member) => member['uid'] == uid.toString());
+
+        return {
+          'fetchedImages': fetchedImages,
+          'isMember': isMember,
+        };
+      } else {
+        log("failed");
+        throw Exception("Failed to load members");
+      }
+    } catch (e) {
+      log("Error: $e");
+      throw Exception("Error fetching members");
     }
   }
 
