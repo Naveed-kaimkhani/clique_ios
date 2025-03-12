@@ -77,7 +77,7 @@ class _InfluencersScreenState extends State<InfluencersScreen> with SingleTicker
         // physics: const AlwaysScrollableScrollPhysics(),
         children: const [
           InfluencersGridView(),
-          GroupGridView(),
+          // GroupGridView(),
           ProductGridView(),
         ],
       ),
@@ -208,27 +208,27 @@ class ProductGridView extends StatelessWidget {
   }
 }
 
-class GroupGridView extends StatelessWidget {
-  const GroupGridView({super.key});
+// class GroupGridView extends StatelessWidget {
+//   const GroupGridView({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 300),
-      child: ListView.builder(
-        key: const ValueKey('groups_list'),
-        padding: const EdgeInsets.all(10),
-        itemCount: 12,
-        itemBuilder: (_, index) =>  CliqueTabCard(
-          backgroundImage: AppSvgIcons.cloth,
-          profileImage: AppSvgIcons.profile,
-          name: 'MenswearDog',
-          followers: '1200 members',
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return AnimatedSwitcher(
+//       duration: const Duration(milliseconds: 300),
+//       child: ListView.builder(
+//         key: const ValueKey('groups_list'),
+//         padding: const EdgeInsets.all(10),
+//         itemCount: 12,
+//         itemBuilder: (_, index) =>  CliqueTabCard(
+//           backgroundImage: AppSvgIcons.cloth,
+//           profileImage: AppSvgIcons.profile,
+//           name: 'MenswearDog',
+//           followers: '1200 members',
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 
 
