@@ -1,6 +1,5 @@
 import 'package:clique/components/index.dart';
 import 'package:clique/constants/index.dart';
-import 'package:clique/view_model/group_card_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';

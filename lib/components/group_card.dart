@@ -1,15 +1,11 @@
 
-
-
-import 'dart:convert';
-import 'dart:developer';
 import 'package:avatar_stack/animated_avatar_stack.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clique/constants/app_colors.dart';
 import 'package:clique/data/repositories/group_repository.dart';
 import 'package:clique/utils/utils.dart';
 import 'package:clique/view/chat/chat_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:shimmer/shimmer.dart';
 class GroupCard extends StatefulWidget {
   final String backgroundImage;
@@ -140,7 +136,7 @@ class _GroupCardState extends State<GroupCard> {
 
         final fetchedImages = snapshot.data!['fetchedImages'] as List<String>;
         final isMember = snapshot.data!['isMember'] as bool;
-
+      isMember? Utils.saveJoinedGroup(widget.guid):null;
         return Container(
           width: cardWidth,
           height: cardHeight,
@@ -230,7 +226,8 @@ class _GroupCardState extends State<GroupCard> {
                                    width: buttonWidth,
                           height: buttonHeight,
                           decoration: BoxDecoration(
-                            color: Colors.black,
+                            // color:isMember?AppColors.appColor: Colors.black,
+                            gradient: isMember?AppColors.appGradientColors:AppColors.backGradientColors,
                             borderRadius: BorderRadius.circular(30),
                               ),
                               child: Center(
@@ -272,7 +269,7 @@ class _GroupCardState extends State<GroupCard> {
                                   child: Text(
                                     isMember ? "Message" : "Join Now",
                                     style: TextStyle(
-                                      color: Colors.white,
+                                      color:Colors.white,
                                       fontSize: size.width * 0.032, // Responsive font size
                                     ),
                                   ),

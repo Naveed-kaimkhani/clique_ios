@@ -9,12 +9,19 @@ class AppColors {
               Color(0xFFF50E50), // Reddish Pink
             ],
   );
-
+  static LinearGradient backGradientColors = LinearGradient(
+            begin: Alignment.centerLeft, // 270 degrees
+            end: Alignment.centerRight,
+            colors: [
+             Colors.black, // Orange
+            Colors.black, // Reddish Pink
+            ],
+  );
               // Light Blue
                // Golden Yellow
   static const appColor =  Color(0xFFF94643);
   
-    static const LinearGradient backgroundGradient = LinearGradient(
+    static const LinearGradient blackgroundGradient = LinearGradient(
     colors: [
       Color(0xFFF4F7FB), // #F4F7FB (100% opacity)
       Color(0xD8F4F7FB), // rgba(244, 247, 251, 0.845192) (~85% opacity)

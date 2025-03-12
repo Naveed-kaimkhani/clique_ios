@@ -3,7 +3,9 @@ import 'dart:developer';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/routes/routes_name.dart';
 import 'package:clique/utils/utils.dart';
+import 'package:clique/view/home/home_screen.dart';
 import 'package:clique/view_model/discover_viewmodel.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -48,13 +50,7 @@ Future<dynamic> getGroup(String endpoint, {Map<String, String>? headers}) async 
       {Map<String, String>? headers, dynamic body}) async {
     final response = await http.post(Uri.parse(endpoint),
         headers: headers, body: jsonEncode(body));
-//          headers: headers, body: jsonEncode({
-//   "email": "kkhun@gmail.com",
-//   "password": "nav44108@Kk"
-// }));
-        log("Statuss codeeeee");
-        log(response.statusCode.toString());
-        log(response.body);
+
       if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = jsonDecode(response.body);
       final String token = responseData["token"];
@@ -67,9 +63,11 @@ Future<dynamic> getGroup(String endpoint, {Map<String, String>? headers}) async 
       // loadUserSession();
     await  UserController().loadUserSession();
       final UserController userController = Get.put(UserController());
-
+    log(userController.token.value);
   final DiscoverViewModel _viewModel = Get.put(DiscoverViewModel());
-    Get.toNamed(RouteName.homeScreen);
+    Get.toNamed(RouteName.homeScreen,);
+  // Get.to(()=> HomeScreen(), transition: Transition.zoom);
+      
 //       Get.put(UserController());
 //  Get.put(DiscoverViewModel());
       return responseData;

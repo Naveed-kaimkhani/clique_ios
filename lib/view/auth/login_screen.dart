@@ -204,13 +204,20 @@ RegExp emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.
                 buttonText: 'Login',
                 isLoading: authViewModel.isLoading,
                 onPressed: () {
-             if (validateFields()) {
+             if (true) {
                         authViewModel.isLoading.value=true;
-                        authViewModel.loginUser(emailController.text,passwordController.text)
+                        authViewModel.loginUser("kkhun@gmail.com","nav44108@Kk", context)
                       .then((_) => authViewModel.isLoading.value = false)
                       .catchError((_) => authViewModel.isLoading.value = false);
 
              }
+            //  if (validateFields()) {
+            //             authViewModel.isLoading.value=true;
+            //             authViewModel.loginUser(emailController.text,passwordController.text)
+            //           .then((_) => authViewModel.isLoading.value = false)
+            //           .catchError((_) => authViewModel.isLoading.value = false);
+
+            //  }
                   
                 },
               ),

@@ -63,7 +63,7 @@ class _CustomAppBarWidget extends StatelessWidget {
                   size: iconSize,
                 ),
                 onPressed: () {
-                  // icon != null ? Get.back() : Get.toNamed(RouteName.searchScreen);
+                  icon != null ? Get.back() : Get.toNamed(RouteName.searchScreen);
                 },
               ),
               Text(

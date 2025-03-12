@@ -4,6 +4,7 @@ import 'package:clique/view/auth/login_screen.dart';
 import 'package:clique/view/auth/signup_screen.dart';
 import 'package:clique/view/cart/cart_screen.dart';
 import 'package:clique/view/cart/checkout_screen.dart';
+import 'package:clique/view/discover/view_all_clique.dart';
 import 'package:clique/view/discover/view_all_influencer.dart';
 import 'package:clique/view/home/home_screen.dart';
 import 'package:clique/view/notifications/notification_screen.dart';
@@ -28,13 +29,9 @@ class AppRoutes {
         name: RouteName.splashScreen,
         page: () =>  SplashScreen(),
         transition: Transition.cupertino),
-        //     GetPage(
-        // name: RouteName.groupChatScreen,
-        // page: () =>  GroupChatScreen(),
-        // transition: Transition.cupertino),
     GetPage(
         name: RouteName.viewAllCliquesScreen,
-        page: () =>  ViewAllCliquesScreen(),
+        page: () =>  ViewAllCliqueScreen(),
         transition: Transition.cupertino),
     GetPage(
         name: RouteName.productDetailsScreen,
@@ -46,7 +43,11 @@ class AppRoutes {
   GetPage(
         name: RouteName.homeScreen,
         page: () =>  HomeScreen(),
-        transition: Transition.cupertino),
+        transition: Transition.zoom),
+        //   GetPage(
+        // name: RouteName.viewAllCliquesScreen,
+        // page: () =>  ViewAllCliquesScreen(),
+        // transition: Transition.zoom),
   GetPage(
         name: RouteName.signupScreen,
         page: () =>  SignupScreen(),
@@ -55,8 +56,6 @@ class AppRoutes {
         name: RouteName.loginScreen,
         page: () =>  LoginScreen(),
         transition: Transition.cupertino),
-
-
     GetPage(
         name: RouteName.checkoutScreen,
         page: () =>  CheckoutScreen(),

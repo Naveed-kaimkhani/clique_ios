@@ -16,7 +16,7 @@ static const String searchScreen = '/SearchScreen';
 
 static const String viewAllInfluencersScreen = '/ViewAllInfluencersScreen';
 static const String viewAllProductsScreen = '/ViewAllProductsScreen';
-static const String viewAllCliquesScreen = '/';
+static const String viewAllCliquesScreen = '/ViewAllCliqueScreen';
 
 static const String signupScreen = '/SignupScreen';
 static const String loginScreen = '/LoginScreen';

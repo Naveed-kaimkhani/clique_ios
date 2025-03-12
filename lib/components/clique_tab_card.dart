@@ -9,7 +9,7 @@ class CliqueTabCard extends StatelessWidget {
   final String profileImage;
   final String name;
   final String followers;
-
+  
   const CliqueTabCard({
     required this.backgroundImage,
     required this.profileImage,
@@ -139,11 +139,23 @@ class CliqueTabCard extends StatelessWidget {
           Positioned(
             top: cardHeight * 0.22,
             left: size.width * 0.03,
-            child: Image.asset(
-              AppSvgIcons.profile,
-              height: profileImageSize,
-              width: profileImageSize,
-            ),
+            child: Container(
+                  height: profileImageSize,
+                  width: profileImageSize,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: profileImage.isNotEmpty
+                        ? DecorationImage(
+                            image: NetworkImage(profileImage),
+                            fit: BoxFit.cover,
+                          )
+                        : null,
+                    color: profileImage.isEmpty ? Colors.grey[300] : null,
+                  ),
+                  child:profileImage.isEmpty
+                      ? Icon(Icons.person, size: profileImageSize * 0.6, color: Colors.grey[600])
+                      : null,
+                ),
           ),
         ],
       ),

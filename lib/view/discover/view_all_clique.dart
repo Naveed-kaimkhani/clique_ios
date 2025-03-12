@@ -1,13 +1,17 @@
 import 'package:clique/components/clique_tab_card.dart';
 import 'package:clique/components/index.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../constants/index.dart';
+import '../../view_model/discover_viewmodel.dart';
 
 class ViewAllCliqueScreen extends StatelessWidget {
   const ViewAllCliqueScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final DiscoverViewModel _viewModel = Get.find<DiscoverViewModel>();
+
     return Container(
       decoration: BoxDecoration(
         gradient: AppColors.appGradientColors,
@@ -19,20 +23,22 @@ class ViewAllCliqueScreen extends StatelessWidget {
           backgroundColor: Colors.white,
           body: AnimatedSwitcher(
             duration: const Duration(milliseconds: 300),
-            child: ListView.builder(
+            child: Obx(() => ListView.builder(
               key: const ValueKey('groups_list'),
               padding: const EdgeInsets.all(10),
-              itemCount: 12,
+              itemCount: _viewModel.groups.length,
               itemBuilder: (_, index) => CliqueTabCard(
                 backgroundImage: AppSvgIcons.cloth,
-                profileImage: AppSvgIcons.profile,
-                name: 'MenswearDog',
-                followers: '1200 members',
+                profileImage: _viewModel.groups[index].icon??"",
+                name: _viewModel.groups[index].name,
+                followers: '${_viewModel.groups[index].membersCount} members',
               ),
-            ),
+            )),
           ),
         ),
       ),
     );
   }
 }
+
+
