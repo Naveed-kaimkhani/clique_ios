@@ -4,6 +4,8 @@ import 'package:clique/routes/app_routes.dart';
 import 'package:clique/view/auth/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+
 void main() {
    Get.put(ApiClient());
    Get.lazyPut(()=>GroupRepository());
@@ -30,13 +32,8 @@ class MyApp extends StatelessWidget {
         ),
       ),
       home:SignupScreen(),
-      
       // initialRoute: RouteName.homeScreen,
-      
       getPages: AppRoutes.getAppRoutes(),
     );
   }
 }
-
-
-
