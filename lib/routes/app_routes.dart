@@ -6,6 +6,7 @@ import 'package:clique/view/cart/cart_screen.dart';
 import 'package:clique/view/cart/checkout_screen.dart';
 import 'package:clique/view/discover/view_all_clique.dart';
 import 'package:clique/view/discover/view_all_influencer.dart';
+import 'package:clique/view/discover/view_all_products.dart';
 import 'package:clique/view/home/home_screen.dart';
 import 'package:clique/view/notifications/notification_screen.dart';
 import 'package:clique/view/product/product_details_screen.dart';

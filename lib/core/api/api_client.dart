@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:clique/controller/user_controller.dart';
+import 'package:clique/data/models/influencer_model.dart';
 import 'package:clique/routes/routes_name.dart';
 import 'package:clique/utils/utils.dart';
 import 'package:clique/view/home/home_screen.dart';
@@ -38,6 +39,35 @@ Future<dynamic> getGroup(String endpoint, {Map<String, String>? headers}) async 
     return await http.get(Uri.parse(url), headers: headers);
   }
 
+//  Future<http.Response> getInfluencersApi({
+//   required String url,
+//   Map<String, String>? params, // Add params instead of headers
+//    Map<String, String>? headers,
+// }) async {
+//   // Create a URI with query parameters
+//   Uri uri = Uri.parse(url,headers: headers).replace(queryParameters: params);
+
+//   // Make the GET request
+//   return await http.get(uri);
+// }
+Future<http.Response> getInfluencersApi({
+  required String url,
+  Map<String, String>? params,
+  String? authToken, // Make authToken nullable
+}) async {
+  Uri uri = Uri.parse(url).replace(queryParameters: params);
+
+  Map<String, String> headers = {
+    "Content-Type": "application/json", // Always include this header
+  };
+
+  // Add auth token to headers if provided
+  if (authToken != null) {
+    headers["Authorization"] = "Bearer $authToken";
+  }
+
+  return await http.get(uri, headers: headers);
+}
 
   static Future<http.Response> fetchMessages({
     required String url,

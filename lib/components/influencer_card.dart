@@ -1,11 +1,8 @@
 import 'package:clique/constants/app_colors.dart';
 import 'package:clique/constants/app_svg_icons.dart';
 import 'package:clique/routes/routes_name.dart';
-import 'package:clique/view/profile/influencer_profile.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class InfluencerCard extends StatelessWidget {
   final String backgroundImage;
@@ -64,6 +61,8 @@ class InfluencerCard extends StatelessWidget {
                   borderRadius: BorderRadius.vertical(bottom: Radius.circular(15)),
                 ),
                 child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     SizedBox(height: cardHeight * 0.02),
@@ -82,7 +81,7 @@ class InfluencerCard extends StatelessWidget {
                     ),
                     SizedBox(height: cardHeight * 0.04),
                     Container(
-                      height: cardHeight * 0.16,
+                      height: cardHeight * 0.14,
                       width: double.infinity,
                       decoration: BoxDecoration(
                         gradient: AppColors.appGradientColors,

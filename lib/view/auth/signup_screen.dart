@@ -496,6 +496,8 @@ class SignupScreen extends StatelessWidget {
           controller: _confirmPasswordController,
           obscureText: true,
         ),
+
+        
       ],
     );
   }

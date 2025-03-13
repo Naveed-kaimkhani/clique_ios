@@ -1,5 +1,6 @@
 import 'package:clique/components/index.dart';
 import 'package:clique/constants/index.dart';
+import 'package:clique/view_model/influencer_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
@@ -14,10 +15,13 @@ class DiscoverScreen extends StatefulWidget {
 
 class _DiscoverScreenState extends State<DiscoverScreen> {
   final DiscoverViewModel _viewModel = Get.find<DiscoverViewModel>();
+  
+  // final InfluencerViewmodel _influencersViewModel = Get.find<InfluencerViewmodel>();
   final PageController controller = PageController(viewportFraction: 0.8, keepPage: true);
   final ScrollController _productScrollController = ScrollController();
   final ScrollController _influencerScrollController = ScrollController();
 
+  final InfluencerViewmodel _influencerViewModel = Get.put((InfluencerViewmodel()));
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -105,24 +109,62 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
     );
   }
 
+  // Widget _buildInfluencerList(Size size) {
+  //   return SizedBox(
+  //     height: size.height * 0.26,
+  //     child: ListView.builder(
+  //       controller: _influencerScrollController,
+  //       scrollDirection: Axis.horizontal,
+  //       itemCount: 3,
+  //       itemBuilder: (context, index) => index == 2 
+  //         ? _buildViewAllButton(size, RouteName.viewAllInfluencersScreen)
+  //         : InfluencerCard(
+  //             backgroundImage: AppSvgIcons.cloth,
+  //             profileImage: AppSvgIcons.profile,
+  //             name: index == 0 ? 'Isabella Wilson' : 'Amelia Taylor',
+  //             followers: '10.5k Followers',
+  //           ),
+  //     ),
+  //   );
+  // }
   Widget _buildInfluencerList(Size size) {
+  return Obx(() {
+    if (_influencerViewModel.isLoading.value) {
+      // return _buildInfluencerShimmer(size); // Show shimmer effect while loading
+      return CircularProgressIndicator();
+    }
+
+    if (_influencerViewModel.error.value.isNotEmpty) {
+      return Center(child: Text(_viewModel.error.value)); // Show error message if any
+    }
+
+    if (_influencerViewModel.influencers.isEmpty) {
+      return Center(child: Text('No influencers available')); // Show message if no influencers
+    }
+
     return SizedBox(
       height: size.height * 0.26,
       child: ListView.builder(
         controller: _influencerScrollController,
         scrollDirection: Axis.horizontal,
-        itemCount: 3,
-        itemBuilder: (context, index) => index == 2 
-          ? _buildViewAllButton(size, RouteName.viewAllInfluencersScreen)
-          : InfluencerCard(
-              backgroundImage: AppSvgIcons.cloth,
-              profileImage: AppSvgIcons.profile,
-              name: index == 0 ? 'Isabella Wilson' : 'Amelia Taylor',
-              followers: '10.5k Followers',
-            ),
+        itemCount: _influencerViewModel.influencers.length + 1, // +1 for the "View All" button
+        itemBuilder: (context, index) {
+          if (index == _influencerViewModel.influencers.length) {
+            return _buildViewAllButton(size, RouteName.viewAllInfluencersScreen); // "View All" button
+          }
+
+          var influencer = _influencerViewModel.influencers[index];
+          return InfluencerCard(
+            backgroundImage: AppSvgIcons.cloth, // Replace with actual image from influencer data if available
+            profileImage: AppSvgIcons.profile, // Replace with actual profile image from influencer data if available
+            name: influencer.name,
+            followers: '${influencer.followersCount} Followers', // Replace with actual followers count
+          );
+        },
       ),
     );
-  }
+  });
+}
 
   Widget _buildProductList(Size size) {
     return SizedBox(
