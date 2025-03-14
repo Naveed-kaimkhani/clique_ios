@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:clique/components/index.dart';
 import 'package:clique/constants/index.dart';
 import 'package:clique/view_model/influencer_viewmodel.dart';
@@ -154,7 +156,10 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
           }
 
           var influencer = _influencerViewModel.influencers[index];
+          log(influencer.isFollowing.toString());
           return InfluencerCard(
+            isFollowing: influencer.isFollowing,
+            id: influencer.id,
             backgroundImage: AppSvgIcons.cloth, // Replace with actual image from influencer data if available
             profileImage: AppSvgIcons.profile, // Replace with actual profile image from influencer data if available
             name: influencer.name,

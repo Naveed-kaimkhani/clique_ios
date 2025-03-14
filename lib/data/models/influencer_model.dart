@@ -11,6 +11,7 @@ class InfluencerModel {
   final int followersCount;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final bool isFollowing;
 
   InfluencerModel({
     required this.id,
@@ -25,6 +26,7 @@ class InfluencerModel {
     required this.followersCount,
     required this.createdAt,
     required this.updatedAt,
+    required this.isFollowing,
   });
 
   // Factory method to create an InfluencerModel from JSON
@@ -44,6 +46,7 @@ class InfluencerModel {
       followersCount: json['followers_count'],
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
+      isFollowing: json['is_following'] ?? false,
     );
   }
 
@@ -62,6 +65,7 @@ class InfluencerModel {
       'followers_count': followersCount,
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
+      'is_following': isFollowing,
     };
   }
 }

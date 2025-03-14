@@ -1,12 +1,10 @@
 import 'dart:developer';
 
 import 'package:clique/controller/user_controller.dart';
-import 'package:clique/data/models/influencer_model.dart';
 import 'package:clique/routes/routes_name.dart';
 import 'package:clique/utils/utils.dart';
-import 'package:clique/view/home/home_screen.dart';
 import 'package:clique/view_model/discover_viewmodel.dart';
-import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,13 +13,50 @@ import '../api/api_endpoints.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 class ApiClient extends GetxService {
   final String baseUrl = ApiEndpoints.baseUrl;
-  static Future<http.Response> post({
+   Future<http.Response> post({
     required String url,
     Map<String, String>? headers,
     Object? body,
   }) async {
-    return await http.post(Uri.parse(url), headers: headers, body: body);
+    return await http.post(Uri.parse(url),headers: headers, body: body);
   }
+
+//    Future<http.Response> verifyOtp({
+//     required String url,
+//     // Map<String, String>? headers,
+//     Object? body,
+//   }) async {
+//     return await http.post(Uri.parse('https://dev.moutfits.com/api/v1/otp/verify'),
+//      body: jsonEncode({
+//   "phone": "3103443527",
+//   "otp": "123456"
+//  }),
+// );
+//   }
+
+   Future<http.Response> verifyOtp({
+    required String url,
+    Map<String, String>? headers,
+    Object? body,
+  }) async {
+    return await http.post(Uri.parse('https://dev.moutfits.com/api/v1/otp/verify'),
+     body: body,
+     headers: headers,
+);
+  }
+
+   Future<http.Response> sendOtp({
+    required String url,
+    Map<String, String>? headers,
+    Object? body,
+  }) async {
+    log(url);
+    return await http.post(Uri.parse("https://dev.moutfits.com/api/v1/otp/send"),
+     body: body,
+     headers: headers,
+);
+  }
+
 Future<dynamic> getGroup(String endpoint, {Map<String, String>? headers}) async {
     final response = await http.get(Uri.parse(endpoint), headers: headers);
 
@@ -123,6 +158,8 @@ Future<http.Response> getInfluencersApi({
     }
     return _handleResponse(response);
   }
+
+
     Future<dynamic> joinGroupApi(String endpoint,
       {Map<String, String>? headers, dynamic body}) async {
     final response = await http.post(Uri.parse(endpoint),

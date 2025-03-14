@@ -23,6 +23,7 @@ class GroupChatViewModel extends GetxController {
       StreamController<List<MessageModel>>.broadcast();
   Stream<List<MessageModel>> get messagesStream => _messageController.stream;
 
+  final ApiClient apiClient = Get.find<ApiClient>();
   Timer? _timer;
   bool _isLoading = false;
   bool hasMoreMessages = true;
@@ -100,7 +101,7 @@ class GroupChatViewModel extends GetxController {
 
   DateTime startTime = DateTime.now();
     try {
-      final response = await ApiClient.post(
+      final response = await apiClient.post(
         url: ApiEndpoints.sendMessage,
         headers: {
           "Content-Type": "application/json",

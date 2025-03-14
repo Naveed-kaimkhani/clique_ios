@@ -58,6 +58,8 @@ class ViewAllInfluencersScreen extends StatelessWidget {
           itemBuilder: (_, index) {
             InfluencerModel influencer = influencerViewModel.influencers[index];
             return InfluencerCard(
+              isFollowing: influencer.isFollowing,
+            id: influencer.id,
               backgroundImage: influencer.coverPhoto ?? AppSvgIcons.cloth, // Use cover photo if available
               profileImage: influencer.profilePhoto ?? AppSvgIcons.profile, // Use profile photo if available
               name: influencer.name,

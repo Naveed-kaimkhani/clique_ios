@@ -2,6 +2,7 @@
 import 'package:clique/routes/routes_name.dart';
 import 'package:clique/view/auth/login_screen.dart';
 import 'package:clique/view/auth/signup_screen.dart';
+import 'package:clique/view/auth/verify_otp.dart';
 import 'package:clique/view/cart/cart_screen.dart';
 import 'package:clique/view/cart/checkout_screen.dart';
 import 'package:clique/view/discover/view_all_clique.dart';
@@ -25,6 +26,10 @@ class AppRoutes {
     GetPage(
         name: RouteName.viewAllProductsScreen,
         page: () =>  ViewAllProductsScreen(),
+        transition: Transition.cupertino),
+            GetPage(
+        name: RouteName.oTPScreen,
+        page: () =>  OTPScreen(),
         transition: Transition.cupertino),
             GetPage(
         name: RouteName.splashScreen,
