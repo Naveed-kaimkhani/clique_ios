@@ -79,21 +79,55 @@ static  Future<Map<String, dynamic>> fetchGroupMembers(String authToken, String 
   }
 
   /// **Fetch Groups from API**
+  // Future<List<Group>> fetchGroups() async {
+  //   try {
+  //     final prefs = await SharedPreferences.getInstance();
+  //     String token = prefs.getString('token') ?? '';
+  //     // // String token = userController.token.value;
+  //     // log(userController.token.value);
+  //     if (token.isEmpty) {
+  //       throw Exception("User token not found. Please log in again.");
+  //     }
+  // log("fetching groupss");
+  // log(userController.token.value);
+  //     final response = await apiClient.getGroup(
+  //       ApiEndpoints.getGroups,
+  //       headers: {
+  //         'Authorization': 'Bearer $token',
+  //         'Content-Type': 'application/json',
+  //       },
+  //     );
+
+   
+
+  //     // if (response == null || !response.containsKey('data')) {
+  //     //   throw Exception("Invalid response from server");
+  //     // }
+  //     final decodedResponse = jsonDecode(response.body);
+  //     return (decodedResponse['data'] as List)
+  //         .map((group) => Group.fromJson(group))
+  //         .toList();
+  //   } catch (e) {
+  //     // Utils.showCustomSnackBar("Failed to load groups", Utils.mapErrorMessage(e.toString()), ContentType.failure);
+  //     throw Exception("Failed to load groups: $e");
+  //   }
+  // }
+
+
+    /// **Fetch Groups from API**
   Future<List<Group>> fetchGroups() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      String token = prefs.getString('token') ?? '';
-      // // String token = userController.token.value;
-      // log(userController.token.value);
-      if (token.isEmpty) {
-        throw Exception("User token not found. Please log in again.");
-      }
-  log("fetching groupss");
-  log(userController.token.value);
+    final storedToken = prefs.getString('token');
+      // if (token.isEmpty) {
+      //   throw Exception("User token not found. Please log in again.");
+      // }
+        log("fetching groupss in fetchGroup function");
+        log("token value is${userController.token.value}");
       final response = await apiClient.getGroup(
         ApiEndpoints.getGroups,
         headers: {
-          'Authorization': 'Bearer $token',
+          'Authorization': 'Bearer $storedToken',
           'Content-Type': 'application/json',
         },
       );

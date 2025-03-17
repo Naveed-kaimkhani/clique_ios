@@ -38,7 +38,7 @@ class UserController extends GetxController {
     final storedToken = prefs.getString('token');
         final storedRole = prefs.getString('role')??'';
     uid.value = prefs.getInt('uid') ?? 0;
-
+      
     log(uid.value.toString());
     if (storedUserName != null && storedToken != null) {
       userName.value = storedUserName; // Set the observable value directly

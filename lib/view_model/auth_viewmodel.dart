@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:clique/data/models/signup_params.dart';
 import 'package:clique/data/models/user_registration_response.dart';
 import 'package:clique/data/repositories/auth_respository.dart';
+import 'package:clique/routes/routes_name.dart';
 import 'package:clique/utils/utils.dart';
 import 'package:get/get.dart';
 import '../core/api/api_response.dart';
@@ -35,6 +36,7 @@ class AuthViewModel extends GetxController {
         "password": password,
 
       });
+        Get.toNamed(RouteName.homeScreen,);
     } catch (e) {
       loginResponse.value = ApiResponse.error(Utils.mapErrorMessage(e.toString()));
     }

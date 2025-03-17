@@ -139,7 +139,7 @@ Future<http.Response> getInfluencersApi({
   //     log("user token");
   //   log(userController.token.value);
   // final DiscoverViewModel _viewModel = Get.put(DiscoverViewModel());
-    Get.toNamed(RouteName.homeScreen,);
+
   // Get.to(()=> HomeScreen(), transition: Transition.zoom);
       
 //       Get.put(UserController());
