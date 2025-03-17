@@ -5,6 +5,8 @@ import 'package:clique/data/repositories/group_repository.dart';
 
 class DiscoverViewModel extends GetxController {
   final userController = Get.find<UserController>();
+  
+//  final userController =    Get.put(UserController());
   final groupRepository = Get.find<GroupRepository>();
   final RxList<Group> groups = <Group>[].obs;
   final RxBool isLoading = false.obs;

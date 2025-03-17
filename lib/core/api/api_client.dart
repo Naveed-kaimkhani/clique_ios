@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/routes/routes_name.dart';
 import 'package:clique/utils/utils.dart';
-import 'package:clique/view_model/discover_viewmodel.dart';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -12,6 +11,8 @@ import 'dart:convert';
 import '../api/api_endpoints.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 class ApiClient extends GetxService {
+  
+  final UserController userController = Get.put(UserController());
   final String baseUrl = ApiEndpoints.baseUrl;
    Future<http.Response> post({
     required String url,
@@ -59,7 +60,8 @@ class ApiClient extends GetxService {
 
 Future<dynamic> getGroup(String endpoint, {Map<String, String>? headers}) async {
     final response = await http.get(Uri.parse(endpoint), headers: headers);
-
+      log("groupss resposne");
+    log(response.body);
     return response;
   }
 
@@ -128,10 +130,15 @@ Future<http.Response> getInfluencersApi({
       await prefs.setString('userName', userName);
       await prefs.setString('role', role);
       await prefs.setInt('uid', userId);
-    await  UserController().loadUserSession();
-      final UserController userController = Get.put(UserController());
-    log(userController.token.value);
-  final DiscoverViewModel _viewModel = Get.put(DiscoverViewModel());
+      log(token);
+      log("message");
+      log(userId.toString());
+    // await  UserController().loadUserSession();
+      await  userController.loadUserSession();
+  //     final UserController userController = Get.put(UserController());
+  //     log("user token");
+  //   log(userController.token.value);
+  // final DiscoverViewModel _viewModel = Get.put(DiscoverViewModel());
     Get.toNamed(RouteName.homeScreen,);
   // Get.to(()=> HomeScreen(), transition: Transition.zoom);
       

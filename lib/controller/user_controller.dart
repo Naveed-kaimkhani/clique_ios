@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:clique/data/models/user_registration_response.dart';
+import 'package:clique/view_model/discover_viewmodel.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -46,6 +47,9 @@ class UserController extends GetxController {
       token.value = storedToken;
       role.value=storedRole;
     }
+  log("i am in controller");
+  log(token.value);
+    
   }
 
   void logout() async {

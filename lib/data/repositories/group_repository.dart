@@ -83,12 +83,13 @@ static  Future<Map<String, dynamic>> fetchGroupMembers(String authToken, String 
     try {
       final prefs = await SharedPreferences.getInstance();
       String token = prefs.getString('token') ?? '';
-      // String token = userController.token.value;
-      log(userController.token.value);
+      // // String token = userController.token.value;
+      // log(userController.token.value);
       if (token.isEmpty) {
         throw Exception("User token not found. Please log in again.");
       }
-
+  log("fetching groupss");
+  log(userController.token.value);
       final response = await apiClient.getGroup(
         ApiEndpoints.getGroups,
         headers: {

@@ -1,6 +1,12 @@
 
+import 'dart:developer';
+
+import 'package:clique/controller/user_controller.dart';
 import 'package:clique/view/home/video_scroll_screen.dart';
+import 'package:clique/view_model/discover_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -15,7 +21,17 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     'https://assets.mixkit.co/active_storage/video_items/100608/1730160112/100608-video-720.mp4',
 
   ];
-
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    
+     Get.put(UserController());
+    //   log("user token");
+    // log(userController.token.value);
+ Get.put(DiscoverViewModel());
+  log("controllers initialized");
+  }
 
 
   @override
