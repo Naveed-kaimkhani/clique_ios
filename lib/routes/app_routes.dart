@@ -13,6 +13,7 @@ import 'package:clique/view/notifications/notification_screen.dart';
 import 'package:clique/view/product/product_details_screen.dart';
 import 'package:clique/view/profile/influencer_profile.dart';
 import 'package:clique/view/splash/splash_screen.dart';
+import 'package:clique/view/upload_product_screens/upload_product.dart';
 import 'package:get/get.dart';
 
 
@@ -22,6 +23,10 @@ class AppRoutes {
     GetPage(
         name: RouteName.viewAllInfluencersScreen,
         page: () =>  ViewAllInfluencersScreen(),
+        transition: Transition.cupertino),
+          GetPage(
+        name: RouteName.uploadVideo,
+        page: () =>  UploadVideo(),
         transition: Transition.cupertino),
     GetPage(
         name: RouteName.viewAllProductsScreen,

@@ -7,7 +7,7 @@ class CustomAppBar extends PreferredSize {
   final String title;
   final IconData? icon;
   final bool isNotification;
-
+  
   CustomAppBar({
     super.key,
     required this.title,
@@ -76,7 +76,16 @@ class _CustomAppBarWidget extends StatelessWidget {
                 ),
               ),
               isNotification 
-                ? SizedBox(width: screenWidth * 0.1)
+                ? IconButton(
+                    icon: Icon(
+                      Icons.upload_outlined,
+                      color: Colors.white,
+                      size: iconSize,
+                    ),
+                    onPressed: () {
+                      Get.toNamed(RouteName.uploadVideo);
+                    },
+                  )
                 : IconButton(
                     icon: Icon(
                       Icons.notifications_outlined,

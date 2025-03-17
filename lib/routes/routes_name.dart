@@ -8,6 +8,8 @@ static const String groupChatScreen = '/GroupChatScreen';
 static const String homeScreen = '/HomeScreen';
 
 static const String oTPScreen = '/OTPScreen';
+
+static const String uploadVideo = '/UploadVideo';
 // static const String groupChatScreen = '/GroupChatScreen';
 static const String influencerProfile = '/InfluencerProfile';
 

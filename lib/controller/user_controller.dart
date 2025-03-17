@@ -8,6 +8,8 @@ class UserController extends GetxController {
   late SharedPreferences prefs;
   Rxn<User> user = Rxn<User>();
   var token = ''.obs;
+  
+  var role = ''.obs;
   var userName = ''.obs;
   var uid = 0.obs;
 
@@ -33,6 +35,7 @@ class UserController extends GetxController {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final storedUserName = prefs.getString('userName');
     final storedToken = prefs.getString('token');
+        final storedRole = prefs.getString('role')??'';
     uid.value = prefs.getInt('uid') ?? 0;
 
     log(uid.value.toString());
@@ -41,6 +44,7 @@ class UserController extends GetxController {
       token.value = storedToken; // Set the observable value directly
       userName.value = storedUserName; // Set the observable value directly
       token.value = storedToken;
+      role.value=storedRole;
     }
   }
 

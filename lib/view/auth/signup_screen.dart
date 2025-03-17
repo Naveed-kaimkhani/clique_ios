@@ -77,10 +77,10 @@ class SignupScreen extends StatelessWidget {
       _showValidationError("Password is required", "Please enter your password");
       return false;
     }
-     if (_passwordController.text.length != 10) {
-      _showValidationError("Invalid password length", "Password must be exactly 10 digits");
-      return false;
-    }
+    //  if (_passwordController.text.length != 10) {
+    //   _showValidationError("Invalid password length", "Password must be exactly 10 digits");
+    //   return false;
+    // }
     if (_passwordController.text.length < _minPasswordLength) {
       _showValidationError("Password is too short", 
         "Password must be at least 8 characters long");
@@ -336,7 +336,7 @@ class SignupScreen extends StatelessWidget {
         role: _selectedRole.value,
       );
 
-      Get.toNamed(RouteName.oTPScreen, arguments: request);
+      // Get.toNamed(RouteName.oTPScreen, arguments: request);
       _authViewModel.registerUser(request, _nameController.text)
         .then((_) => _authViewModel.isLoading.value = false)
         .catchError((_) => _authViewModel.isLoading.value = false);

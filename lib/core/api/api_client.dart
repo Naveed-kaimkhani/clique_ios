@@ -121,11 +121,13 @@ Future<http.Response> getInfluencersApi({
       final String token = responseData["token"];
       final String userName = responseData["user"]["name"];
       final int userId = responseData["user"]["id"];
+      
+      final String role = responseData["user"]["role"];
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('token', token);
       await prefs.setString('userName', userName);
+      await prefs.setString('role', role);
       await prefs.setInt('uid', userId);
-      // loadUserSession();
     await  UserController().loadUserSession();
       final UserController userController = Get.put(UserController());
     log(userController.token.value);

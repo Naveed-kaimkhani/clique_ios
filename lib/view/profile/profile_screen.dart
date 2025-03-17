@@ -29,7 +29,7 @@ class ProfileScreenState extends State<ProfileScreen> with SingleTickerProviderS
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
+  String isUser= userController.role.value;
     return Container(
       decoration: BoxDecoration(
         gradient: AppColors.appGradientColors,
@@ -37,7 +37,7 @@ class ProfileScreenState extends State<ProfileScreen> with SingleTickerProviderS
       child: SafeArea(
         bottom: false,
         child: Scaffold(
-          appBar:   CustomAppBar(title: 'Profile',),
+          appBar:   CustomAppBar(title: 'Profile',isNotification: isUser=="influencer",),
           backgroundColor: Colors.white,
           body: SafeArea(
             child: NestedScrollView(
