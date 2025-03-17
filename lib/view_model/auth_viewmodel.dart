@@ -25,7 +25,7 @@ class AuthViewModel extends GetxController {
     }
   }
 
-  Future<void> loginUser(String email, String password, context) async {
+  Future<void> loginUser(String email, String password,) async {
         log(email);
         log(password);
     try {

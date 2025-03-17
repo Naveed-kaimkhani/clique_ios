@@ -312,37 +312,37 @@ class SignupScreen extends StatelessWidget {
 
   void _handleSignup() async{
     
+      // final SignupParams request = SignupParams(
+      //   name: "naveed kk",
+      //   email: "kn@gmail.com",
+      //   password: "nav44108@Kk",
+      //   phone: "3103443527",
+      //   confirmPassword: "nav44108",
+      //   role: "influencer",
+      // );
+      //    int statusCode=await  otpViewModel.sendOTP(request.phone,);
+      //         if (statusCode==200) {
+      //           // Utils.showCustomSnackBar("Success", message, contentType)
+      // Get.toNamed(RouteName.oTPScreen, arguments: request);
+      //         }
+    if (_validateFields()) {
+      _authViewModel.isLoading.value = true;
       final SignupParams request = SignupParams(
-        name: "naveed kk",
-        email: "kn@gmail.com",
-        password: "nav44108@Kk",
-        phone: "3103443527",
-        confirmPassword: "nav44108",
-        role: "influencer",
+        name: _nameController.text,
+        email: _emailController.text,
+        password: _passwordController.text,
+        phone: _phoneNumberController.text,
+        confirmPassword: _confirmPasswordController.text,
+        role: _selectedRole.value,
       );
-         int statusCode=await  otpViewModel.sendOTP(request.phone,);
-              if (statusCode==200) {
-                // Utils.showCustomSnackBar("Success", message, contentType)
+
       Get.toNamed(RouteName.oTPScreen, arguments: request);
-              }
-    // if (_validateFields()) {
-    //   _authViewModel.isLoading.value = true;
-    //   final SignupParams request = SignupParams(
-    //     name: _nameController.text,
-    //     email: _emailController.text,
-    //     password: _passwordController.text,
-    //     phone: _phoneNumberController.text,
-    //     confirmPassword: _confirmPasswordController.text,
-    //     role: _selectedRole.value,
-    //   );
-
-    //   Get.toNamed(RouteName.oTPScreen, arguments: request);
-    //   // _authViewModel.registerUser(request, _nameController.text)
-    //   //   .then((_) => _authViewModel.isLoading.value = false)
-    //   //   .catchError((_) => _authViewModel.isLoading.value = false);
+      _authViewModel.registerUser(request, _nameController.text)
+        .then((_) => _authViewModel.isLoading.value = false)
+        .catchError((_) => _authViewModel.isLoading.value = false);
 
 
-    // }
+    }
   }
 
   @override
