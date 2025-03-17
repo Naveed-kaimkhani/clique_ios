@@ -53,7 +53,7 @@ class GroupChatViewModel extends GetxController {
 
     try {
       final response = await ApiClient.getMessages(
-        url: "https://dev.moutfits.com/api/v1/cometchat/groups/$groupId/messages?page=$_currentPage&limit=$_messagesPerPage",
+        url: "https://dev.moutfits.com/api/v1/cometchat/groups/$groupId/messages",
         headers: {"Authorization": "Bearer $token"},
       );
 
