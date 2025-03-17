@@ -124,7 +124,6 @@
 // // // views/group_chat_screen.dart
 
 
-
 import 'package:clique/components/chat_input.dart';
 import 'package:clique/components/chat_message.dart';
 import 'package:clique/components/group_appbar.dart';
@@ -154,6 +153,7 @@ class GroupChatScreen extends StatefulWidget {
 
 class _GroupChatScreenState extends State<GroupChatScreen> {
   late GroupChatViewModel viewModel;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -168,8 +168,19 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
     ));
   }
 
+  void _scrollToBottom() {
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    }
+  }
+
   @override
   void dispose() {
+    _scrollController.dispose();
     Get.delete<GroupChatViewModel>();
     super.dispose();
   }
@@ -199,7 +210,11 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                 }
 
                 final messages = snapshot.data!;
+                // Scroll to bottom after building the list
+                WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+                
                 return ListView.builder(
+                  controller: _scrollController,
                   padding: EdgeInsets.all(16),
                   reverse: false, // Show latest messages at bottom
                   itemCount: messages.length,
@@ -213,6 +228,8 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
           ChatInputWidget(
             onSend: (message) {
               viewModel.sendMessage(message);
+              // Scroll to bottom when sending new message
+              _scrollToBottom();
             },
           ),
         ],
