@@ -14,6 +14,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   final UserController userController = Get.put(UserController());
   
+    // discoverViewModel = Get.put(DiscoverViewModel());
 
   final DiscoverViewModel _viewModel = Get.put(DiscoverViewModel());
   

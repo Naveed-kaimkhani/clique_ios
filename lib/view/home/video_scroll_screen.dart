@@ -227,3 +227,138 @@ Widget _buildVideoItem(int index) {
 }
 
 }
+
+
+
+// import 'package:clique/data/models/pop_stream_model.dart';
+// import 'package:flutter/material.dart';
+// import 'package:video_player/video_player.dart';
+
+// class VideoScrollScreen extends StatefulWidget {
+//   final List<PopstreamModel> popstreams;
+
+//   const VideoScrollScreen({super.key, required this.popstreams});
+
+//   @override
+//   State<VideoScrollScreen> createState() => _VideoScrollScreenState();
+// }
+
+// class _VideoScrollScreenState extends State<VideoScrollScreen> {
+//   late final PageController _pageController;
+//   final List<VideoPlayerController?> _controllers = [];
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     _pageController = PageController();
+//     _initializeControllers();
+//   }
+
+//   void _initializeControllers() {
+//     _controllers.clear();
+//     for (var popstream in widget.popstreams) {
+//       _controllers.add(null); // Placeholder for lazy initialization
+//     }
+//   }
+
+//   VideoPlayerController _getController(int index) {
+//     if (_controllers[index] == null) {
+//       _controllers[index] = VideoPlayerController.network(widget.popstreams[index].videoUrl)
+//         ..initialize().then((_) {
+//           setState(() {}); // Rebuild when the video is ready
+//           _controllers[index]!.play();
+//           _controllers[index]!.setLooping(true);
+//         });
+//     }
+//     return _controllers[index]!;
+//   }
+
+//   @override
+//   void dispose() {
+//     _pageController.dispose();
+//     for (var controller in _controllers) {
+//       controller?.dispose();
+//     }
+//     super.dispose();
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: PageView.builder(
+//         controller: _pageController,
+//         scrollDirection: Axis.vertical,
+//         itemCount: widget.popstreams.length,
+//         itemBuilder: (context, index) {
+//           final popstream = widget.popstreams[index];
+//           final controller = _getController(index); // Lazy initialization
+
+//           return Stack(
+//             children: [
+//               // Video Player
+//               Positioned.fill(
+//                 child: controller.value.isInitialized
+//                     ? FittedBox(
+//                         fit: BoxFit.cover,
+//                         child: SizedBox(
+//                           width: controller.value.size.width,
+//                           height: controller.value.size.height,
+//                           child: VideoPlayer(controller),
+//                         ),
+//                       )
+//                     : const Center(child: CircularProgressIndicator()),
+//               ),
+
+//               // Overlay Information
+//               Positioned(
+//                 bottom: 60,
+//                 left: 20,
+//                 right: 20,
+//                 child: Column(
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   children: [
+//                     // Video Name
+//                     Text(
+//                       popstream.name,
+//                       style: TextStyle(
+//                         fontSize: 18,
+//                         color: Colors.white,
+//                         fontWeight: FontWeight.bold,
+//                       ),
+//                     ),
+//                     const SizedBox(height: 8),
+
+//                     // Hashtags
+//                     Wrap(
+//                       spacing: 8,
+//                       children: popstream.hashtags.map((tag) {
+//                         return Text(
+//                           "#$tag",
+//                           style: TextStyle(color: Colors.white70),
+//                         );
+//                       }).toList(),
+//                     ),
+//                     const SizedBox(height: 10),
+
+//                     // Event Cover Image (Optional)
+//                     popstream.eventCover.isNotEmpty
+//                         ? ClipRRect(
+//                             borderRadius: BorderRadius.circular(10),
+//                             child: Image.network(
+//                               popstream.eventCover,
+//                               height: 80,
+//                               width: 80,
+//                               fit: BoxFit.cover,
+//                             ),
+//                           )
+//                         : SizedBox.shrink(),
+//                   ],
+//                 ),
+//               ),
+//             ],
+//           );
+//         },
+//       ),
+//     );
+//   }
+// }

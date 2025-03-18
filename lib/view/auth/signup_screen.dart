@@ -37,8 +37,8 @@ class SignupScreen extends StatelessWidget {
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
-    _passwordController.dispose();
-    _confirmPasswordController.dispose();
+    // _passwordController.dispose();
+    // _confirmPasswordController.dispose();
     _phoneNumberController.dispose();
   }
 
