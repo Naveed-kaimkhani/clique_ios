@@ -125,11 +125,19 @@ Future<http.Response> getInfluencersApi({
       final int userId = responseData["user"]["id"];
       
       final String role = responseData["user"]["role"];
+          final String? profileImage = responseData["user"]["profile_photo_url"];          
+          final String? coverPhotoUrl = responseData["user"]["cover_photo_url"];       
+          final String email = responseData["user"]["email"];
+     final String phone = responseData["user"]["phone"];
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('token', token);
       await prefs.setString('userName', userName);
       await prefs.setString('role', role);
       await prefs.setInt('uid', userId);
+      await prefs.setString('profile_photo_url', profileImage ?? '');
+      await prefs.setString('cover_photo_url', coverPhotoUrl ?? '');
+      await prefs.setString('email', email);
+       await prefs.setString('phone', phone);
       log(token);
       log("message");
       log(userId.toString());

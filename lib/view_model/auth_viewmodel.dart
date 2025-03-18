@@ -36,7 +36,6 @@ class AuthViewModel extends GetxController {
         "password": password,
 
       });
-        Get.toNamed(RouteName.homeScreen,);
     } catch (e) {
       loginResponse.value = ApiResponse.error(Utils.mapErrorMessage(e.toString()));
     }

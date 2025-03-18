@@ -1,10 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clique/constants/app_svg_icons.dart';
 import 'package:flutter/material.dart';
 
 class UserProfileCard extends StatelessWidget {
   final bool isInfluencer;
   final String username;
-  const UserProfileCard({super.key, required this.isInfluencer, required this.username});
+  
+  final String profileImage;
+  const UserProfileCard({super.key, required this.isInfluencer, required this.username,required this.profileImage,});
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -30,12 +33,24 @@ class UserProfileCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(
-            AppSvgIcons.profile,
-            height: screenHeight * 0.18, // Responsive height
-            width: screenHeight * 0.18, // Keep aspect ratio square
-            fit: BoxFit.cover,
-          ),
+          // Image.asset(
+          //   AppSvgIcons.profile,
+          //   height: screenHeight * 0.18, // Responsive height
+          //   width: screenHeight * 0.18, // Keep aspect ratio square
+          //   fit: BoxFit.cover,
+          // ),
+          profileImage.isEmpty
+                            ? Icon(Icons.person, size:MediaQuery.of(context).size.width * 0.3 ,)
+                            : ClipOval(
+                child: CachedNetworkImage(
+                  imageUrl: profileImage,
+                  width: MediaQuery.of(context).size.width * 0.3, // 30% of screen width
+                  height: MediaQuery.of(context).size.width * 0.3, // Set the height
+                  fit: BoxFit.cover, // Ensure the image covers the circular area
+                  placeholder: (context, url) => CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                ),
+              ),
           SizedBox(height: screenHeight * 0.015), // Responsive spacing
           Text(
             username,

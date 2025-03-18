@@ -206,7 +206,7 @@ RegExp emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.
                 onPressed: () {
              if (true) {
                         authViewModel.isLoading.value=true;
-                        authViewModel.loginUser("kkhun@gmail.com","nav44108@Kk", )
+                        authViewModel.loginUser("kkhun@gmail.com","password", )
                       .then((_) => authViewModel.isLoading.value = false)
                       .catchError((_) => authViewModel.isLoading.value = false);
 

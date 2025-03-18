@@ -115,19 +115,21 @@ static  Future<Map<String, dynamic>> fetchGroupMembers(String authToken, String 
 
 
     /// **Fetch Groups from API**
-  Future<List<Group>> fetchGroups() async {
+  Future<List<Group>> fetchGroups(String token) async {
     try {
       final prefs = await SharedPreferences.getInstance();
     final storedToken = prefs.getString('token');
       // if (token.isEmpty) {
       //   throw Exception("User token not found. Please log in again.");
       // }
+      
+          // 'Authorization': 'Bearer ${userController.token.value}',
         log("fetching groupss in fetchGroup function");
         log("token value is${userController.token.value}");
       final response = await apiClient.getGroup(
         ApiEndpoints.getGroups,
         headers: {
-          'Authorization': 'Bearer $storedToken',
+          'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
       );

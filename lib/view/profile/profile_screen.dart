@@ -1,6 +1,7 @@
 import 'package:clique/components/index.dart';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/view/chat/chat_list.dart';
+import 'package:clique/view/profile/update_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../constants/index.dart';
@@ -47,8 +48,10 @@ class ProfileScreenState extends State<ProfileScreen> with SingleTickerProviderS
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                       
                         // SizedBox(height: size.height * 0.02), // Responsive spacing
                         Obx(() => UserProfileCard(
+                          profileImage: userController.profilePhoto.value,
                           isInfluencer: false,
                           username: userController.userName.value,
                         )),
@@ -56,7 +59,10 @@ class ProfileScreenState extends State<ProfileScreen> with SingleTickerProviderS
                         Center(
                           child: CustomButton(
                             text: 'Edit Profile',
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateProfileScreen()));
+
+                            },
                           ),
                         ),
                       ],

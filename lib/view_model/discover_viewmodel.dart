@@ -22,7 +22,7 @@ class DiscoverViewModel extends GetxController {
   Future<void> fetchGroups() async {
     isLoading.value = true;
     try {
-      final fetchedGroups = await groupRepository.fetchGroups();
+      final fetchedGroups = await groupRepository.fetchGroups(userController.token.value);
       groups.value = fetchedGroups;
       isLoading.value = false;
     } catch (e) {

@@ -18,5 +18,6 @@ class ApiEndpoints {
  static String groupMessages(String groupId) =>
       "$baseUrl/cometchat/groups/$groupId/messages";
 
+ static final String updateApi = "https://dev.moutfits.com/api/v1/user/update?_method=PUT";
 //  static const String getGroupMembers = "$baseUrl/cometchat/groups/g2/members";
 }

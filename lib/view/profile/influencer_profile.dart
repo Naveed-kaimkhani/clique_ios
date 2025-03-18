@@ -1,5 +1,8 @@
 import 'package:clique/constants/index.dart';
+import 'package:clique/controller/user_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import '../../components/index.dart';
 
 class InfluencerProfile extends StatefulWidget {
@@ -11,6 +14,7 @@ class InfluencerProfileState extends State<InfluencerProfile>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
+  final UserController userController = Get.find<UserController>();
   @override
   void initState() {
     super.initState();
@@ -47,7 +51,9 @@ class InfluencerProfileState extends State<InfluencerProfile>
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(height: size.height * 0.02),
-                      UserProfileCard(isInfluencer: true, username: "Brian Brunner"),
+                      UserProfileCard(
+                        profileImage:userController.profilePhoto.value ,
+                        isInfluencer: true, username: "Brian Brunner"),
                       SizedBox(height: size.height * 0.02),
                     ],
                   ),

@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:clique/controller/user_controller.dart';
 import 'package:clique/data/models/signup_params.dart';
 import 'package:clique/models/otp_model.dart';
+import 'package:clique/routes/routes_name.dart';
 import 'package:clique/utils/utils.dart';
 import 'package:get/get.dart';
 import '../../core/api/api_client.dart';
@@ -76,8 +78,11 @@ class AuthRepository {
         headers: {"Content-Type": "application/json"},
       );
    
+  // final UserController userController = Get.put(UserController());
+        Get.toNamed(RouteName.homeScreen,);
       // return UserRegistrationResponse.fromJson(response);
     } catch (e) {
+      log(e.toString());
       Utils.showCustomSnackBar("Login Failed", Utils.mapErrorMessage(e.toString()), ContentType.failure);
       throw Exception("Login Failed: $e");
     }

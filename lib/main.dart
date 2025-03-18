@@ -12,11 +12,15 @@ import 'package:get/get.dart';
 
 void main() {
    Get.put(ApiClient());
-   Get.lazyPut(()=>GroupRepository());
+   Get.put(AuthRepository());
+   Get.put(GroupRepository());
+    Get.put(InfluencerRepository());
+
+  //  Get.lazyPut(()=>GroupRepository());
    
-   Get.lazyPut(()=>AuthRepository());
+  //  Get.lazyPut(()=>AuthRepository());
    
-   Get.lazyPut(()=>InfluencerRepository());
+  //  Get.lazyPut(()=>InfluencerRepository());
   //  Get.put(UserController());
   runApp(
 MyApp(),
