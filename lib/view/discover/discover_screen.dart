@@ -156,14 +156,15 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
           }
 
           var influencer = _influencerViewModel.influencers[index];
-          
+          log('Influencer: ${influencer.profilePhoto}');
           return InfluencerCard(
             isFollowing: influencer.isFollowing,
             id: influencer.id,
-            
+              influencerModel: influencer,
             // backgroundImage: influencer.backgroundImage,
-            backgroundImage: influencer.coverPhoto??AppSvgIcons.cloth, // Replace with actual image from influencer data if available
-            profileImage:influencer.profilePhoto?? '', // Replace with actual profile image from influencer data if available
+            backgroundImage: AppSvgIcons.cloth, // Replace with actual image from influencer data if available
+            profileImage:influencer.profilePhoto, // Replace with actual profile image from influencer data if available
+            // profileImage: "https://dev.moutfits.com/storage/profile_photos/nWFNIjFPxxXPWnmhDm1ZtCs1tcv5qdpBOCwNny4U.jpg",
             name: influencer.name,
             followers: '${influencer.followersCount} Followers', // Replace with actual followers count
           );

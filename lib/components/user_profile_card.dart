@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clique/constants/app_svg_icons.dart';
+import 'package:clique/constants/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
@@ -7,7 +8,7 @@ class UserProfileCard extends StatelessWidget {
   final bool isInfluencer;
   final String username;
   
-  final String profileImage;
+  final String? profileImage;
   const UserProfileCard({super.key, required this.isInfluencer, required this.username,required this.profileImage,});
   @override
   Widget build(BuildContext context) {
@@ -40,11 +41,18 @@ class UserProfileCard extends StatelessWidget {
           //   width: screenHeight * 0.18, // Keep aspect ratio square
           //   fit: BoxFit.cover,
           // ),
-          profileImage.isEmpty
-                            ? Icon(Icons.person, size:MediaQuery.of(context).size.width * 0.3 ,)
+          profileImage==null
+                            // ? Icon(Icons.person, size:MediaQuery.of(context).size.width * 0.3 ,)
+                                                       ?  Image.asset(
+        AppSvgIcons.profile,
+              width: MediaQuery.of(context).size.width * 0.3, // 30% of screen width
+                  height: MediaQuery.of(context).size.width * 0.3,
+                  fit: BoxFit.cover
+      )
+
                             : ClipOval(
                 child: CachedNetworkImage(
-                  imageUrl: profileImage,
+                  imageUrl: profileImage??'',
                   width: MediaQuery.of(context).size.width * 0.3, // 30% of screen width
                   height: MediaQuery.of(context).size.width * 0.3, // Set the height
                   fit: BoxFit.cover, // Ensure the image covers the circular area

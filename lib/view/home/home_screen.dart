@@ -1,6 +1,3 @@
-
-import 'dart:developer';
-
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/view/home/video_scroll_screen.dart';
 import 'package:clique/view_model/discover_viewmodel.dart';

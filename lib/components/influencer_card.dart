@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clique/constants/app_colors.dart';
 import 'package:clique/constants/app_svg_icons.dart';
+import 'package:clique/data/models/influencer_model.dart';
 import 'package:clique/routes/routes_name.dart';
 import 'package:clique/view_model/follow_controller.dart';
 import 'package:flutter/material.dart';
@@ -12,11 +13,12 @@ import 'package:get/get.dart';
 
 class InfluencerCard extends StatelessWidget {
   final String backgroundImage;
-  final String profileImage;
+  final String? profileImage;
   final String name;
   final String followers;
   final int id;
   final RxBool isFollowing; // ✅ Convert bool to RxBool
+  final InfluencerModel influencerModel;
   final FollowController followController = Get.put(FollowController());
 
   InfluencerCard({
@@ -24,6 +26,7 @@ class InfluencerCard extends StatelessWidget {
     required this.backgroundImage,
     required this.profileImage,
     required this.name,
+    required this.influencerModel,
     required this.followers,
     required bool isFollowing, // ✅ Accept bool
     super.key,
@@ -35,8 +38,8 @@ class InfluencerCard extends StatelessWidget {
     final double cardWidth = size.width * 0.35; // Adjust width based on screen size
     final double cardHeight = size.height * 0.26; // Adjust height dynamically
     final double profileImageSize = size.width * 0.12; // Responsive profile image size
-    log(profileImage);
-    log(profileImage.isEmpty.toString());    
+    // log(profileImage.toString());
+    // log(profileImage.isEmpty.toString());    
     return Container(
       width: cardWidth,
       height: cardHeight,
@@ -131,12 +134,41 @@ class InfluencerCard extends StatelessWidget {
             top: cardHeight * 0.14, // Responsive position for profile image
             left: size.width * 0.02,
             child: GestureDetector(
-              onTap: () => Get.toNamed(RouteName.influencerProfile),
-              child:  profileImage.isEmpty? Image.asset(
-                AppSvgIcons.profile,
-                height: profileImageSize,
-                width: profileImageSize,
-              ):CachedNetworkImage(imageUrl: profileImage, width: profileImageSize, height: profileImageSize, fit: BoxFit.cover, placeholder: (context, url) => CircularProgressIndicator(), errorWidget: (context, url, error) => Icon(Icons.error),),
+              onTap: () => Get.toNamed(RouteName.influencerProfile,arguments: influencerModel),
+              child: profileImage == null 
+    ?  
+    Image.asset(
+        AppSvgIcons.profile,
+        height: profileImageSize,
+        width: profileImageSize,
+      )
+    : ClipOval(
+      child: CachedNetworkImage(
+          imageUrl: "https://dev.moutfits.com/storage/profile_photos/nWFNIjFPxxXPWnmhDm1ZtCs1tcv5qdpBOCwNny4U.jpg" ?? "", // Ensure non-nullable type
+          width: profileImageSize,
+          height: profileImageSize,
+          fit: BoxFit.cover,
+          placeholder: (context, url) => CircularProgressIndicator(),
+          errorWidget: (context, url, error) => Icon(Icons.error),
+        ),
+    ),
+
+//      child:ClipOval(
+//   child: CachedNetworkImage(
+//             width: profileImageSize,
+//         height: profileImageSize,
+//     imageUrl: profileImage ?? 'https://png.pngtree.com/png-vector/20210604/ourmid/pngtree-gray-avatar-placeholder-png-image_3416697.jpg',
+//     placeholder: (context, url) => SizedBox(
+//       width: 50, // Adjust size as needed
+//       height: 50,
+//       child: CircularProgressIndicator(),
+//     ),
+//     errorWidget: (context, url, error) => Icon(Icons.error),
+//     fit: BoxFit.cover,
+//   ),
+// )
+
+
             ),
           ),
         ],
