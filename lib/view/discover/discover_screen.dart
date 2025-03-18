@@ -156,12 +156,14 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
           }
 
           var influencer = _influencerViewModel.influencers[index];
-          log(influencer.isFollowing.toString());
+          
           return InfluencerCard(
             isFollowing: influencer.isFollowing,
             id: influencer.id,
-            backgroundImage: AppSvgIcons.cloth, // Replace with actual image from influencer data if available
-            profileImage: AppSvgIcons.profile, // Replace with actual profile image from influencer data if available
+            
+            // backgroundImage: influencer.backgroundImage,
+            backgroundImage: influencer.coverPhoto??AppSvgIcons.cloth, // Replace with actual image from influencer data if available
+            profileImage:influencer.profilePhoto?? '', // Replace with actual profile image from influencer data if available
             name: influencer.name,
             followers: '${influencer.followersCount} Followers', // Replace with actual followers count
           );
@@ -235,6 +237,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
             : 
        
             GroupCard(
+                  isJoin: _viewModel.groups[index].isJoined,
                    backgroundImage: AppSvgIcons.cloth,
                   profileImage: _viewModel.groups[index].icon,
                   name: _viewModel.groups[index].name,

@@ -282,7 +282,7 @@ class SignupScreen extends StatelessWidget {
         // final String phone = googleUser.
         final String profilePicture = googleUser.photoUrl ?? "";
 
-        log("Google Sign-In Success: $email");
+
 
         // Populate the form fields with Google details
         _nameController.text = name;
@@ -305,7 +305,6 @@ class SignupScreen extends StatelessWidget {
       }
     } catch (e) {
     
-      log("Google Sign-In Error: $e");
       _showValidationError("Google Sign-In Failed", "An error occurred during Google Sign-In.");
     }
   }

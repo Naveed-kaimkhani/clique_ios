@@ -115,8 +115,6 @@ class InfluencerRepository {
     final response = await apiClient.getInfluencersApi( url:url, authToken: userController.token.value , params: {
         "role": "influencer",
       }, );
-  log(response.statusCode.toString());
-  log(response.body);
     if (response.statusCode == 200) {
       List<dynamic> body = jsonDecode(response.body);
       List<InfluencerModel> users = body.map((dynamic item) => InfluencerModel.fromJson(item)).toList();
@@ -136,9 +134,8 @@ class InfluencerRepository {
 
         },
       );
-  log(response.body);
       if (response.statusCode == 200) {
-        log("followedddddd");
+ 
         return true; // Followed successfully
       } else {
         return false; // Failed to follow
@@ -157,9 +154,8 @@ class InfluencerRepository {
 
         },
       );
-  log(response.body);
       if (response.statusCode == 200) {
-        log("followedddddd");
+    
         return true; // Followed successfully
       } else {
         return false; // Failed to follow

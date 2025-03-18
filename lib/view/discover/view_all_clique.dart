@@ -30,6 +30,7 @@ final UserController _userController = Get.find<UserController>();
               padding: const EdgeInsets.all(10),
               itemCount: _viewModel.groups.length,
               itemBuilder: (_, index) => CliqueTabCard(
+                isJoined: _viewModel.groups[index].isJoined,
                 guid: _viewModel.groups[index].guid,
                 uid: _userController.uid.value,
                 authToken: _userController.token.value,

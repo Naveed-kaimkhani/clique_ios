@@ -12,10 +12,13 @@ class Group {
   final String owner;
   final int updatedAt;
   final String? icon;
+  
+  final bool isJoined;
 
   Group({
     required this.guid,
     required this.name,
+    required this.isJoined,
     required this.type,
     required this.membersCount,
     required this.conversationId,
@@ -30,6 +33,7 @@ class Group {
       guid: json['guid'],
       name: json['name'],
       type: json['type'],
+      isJoined: json['is_joined'],
       membersCount: json['membersCount'],
       conversationId: json['conversationId'],
       createdAt: json['createdAt'],

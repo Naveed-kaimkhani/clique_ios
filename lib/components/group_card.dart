@@ -12,6 +12,8 @@ class GroupCard extends StatefulWidget {
   final String? profileImage;
   final String name;
   final String followers;
+  
+  final bool isJoin;
   final String guid;
   final int uid;
   final String groupName;
@@ -20,6 +22,7 @@ class GroupCard extends StatefulWidget {
   // final List<String> groupMemberProfiles;
   const GroupCard({       
     required this.backgroundImage,
+    required this.isJoin,
     this.profileImage,
     required this.name,
     required this.authToken,
@@ -136,7 +139,7 @@ class _GroupCardState extends State<GroupCard> {
 
         final fetchedImages = snapshot.data!['fetchedImages'] as List<String>;
         final isMember = snapshot.data!['isMember'] as bool;
-      isMember? Utils.saveJoinedGroup(widget.guid):null;
+      // isMember? Utils.saveJoinedGroup(widget.guid):null;
         return Container(
           width: cardWidth,
           height: cardHeight,
@@ -227,7 +230,7 @@ class _GroupCardState extends State<GroupCard> {
                           height: buttonHeight,
                           decoration: BoxDecoration(
                             // color:isMember?AppColors.appColor: Colors.black,
-                            gradient: isMember?AppColors.appGradientColors:AppColors.backGradientColors,
+                            gradient: widget.isJoin?AppColors.appGradientColors:AppColors.backGradientColors,
                             borderRadius: BorderRadius.circular(30),
                               ),
                               child: Center(
@@ -248,10 +251,10 @@ class _GroupCardState extends State<GroupCard> {
                                       );
                                     } else {
                                       // Join the group
-                                      bool isAdded = await GroupRepository().joinGroup(widget.guid, widget.uid);
-                                      if (isAdded) {
+                                      // bool isAdded = await GroupRepository().joinGroup(widget.guid, widget.uid);
+                                      if (widget.isJoin) {
                                         // Refresh the UI or show a success message
-                                         await Utils.saveJoinedGroup(widget.guid);
+                                        //  await Utils.saveJoinedGroup(widget.guid);
                                             Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -267,7 +270,7 @@ class _GroupCardState extends State<GroupCard> {
                                     }
                                   },
                                   child: Text(
-                                    isMember ? "Message" : "Join Now",
+                                    widget.isJoin ? "Message" : "Join Now",
                                     style: TextStyle(
                                       color:Colors.white,
                                       fontSize: size.width * 0.032, // Responsive font size

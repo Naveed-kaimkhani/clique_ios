@@ -249,7 +249,6 @@ class OTPScreen extends StatelessWidget {
             Obx(() {
               return GestureDetector(
                 onTap: () {
-                log("hitting api");
                   otpViewModel.verifyOTP(signupParams.phone, otpControllerField.text.trim());
                 },
                 child: Container(

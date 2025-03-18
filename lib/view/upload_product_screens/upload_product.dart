@@ -65,7 +65,6 @@ class UploadVideoViewModel extends GetxController {
           });
       }
     } catch (e) {
-      log(e.toString());
       Utils.showCustomSnackBar("Error", "$e", ContentType.failure);
     }
   }

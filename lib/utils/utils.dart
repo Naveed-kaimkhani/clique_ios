@@ -26,14 +26,14 @@ class Utils {
   }
 }
 
-static Future<void> saveJoinedGroup(String guid) async {
-  final prefs = await SharedPreferences.getInstance();
-  List<String> joinedGroups = prefs.getStringList('joined_groups') ?? [];
-  if (!joinedGroups.contains(guid)) {
-    joinedGroups.add(guid);
-    await prefs.setStringList('joined_groups', joinedGroups);
-  }
-}
+// static Future<void> saveJoinedGroup(String guid) async {
+//   final prefs = await SharedPreferences.getInstance();
+//   List<String> joinedGroups = prefs.getStringList('joined_groups') ?? [];
+//   if (!joinedGroups.contains(guid)) {
+//     joinedGroups.add(guid);
+//     await prefs.setStringList('joined_groups', joinedGroups);
+//   }
+// }
 static Future<List<String>> getJoinedGroups() async {
   final prefs = await SharedPreferences.getInstance();
   return prefs.getStringList('joined_groups') ?? [];

@@ -38,7 +38,7 @@ class AuthRepository {
    
       );
       if (response.statusCode == 200) {
-        log("verfifieddd");
+    
         // return OTPResponseModel.fromJson(jsonDecode(response.body));
         
         return OTPResponseModel(success: true, message: "OTP verified Successfully.");
@@ -58,8 +58,6 @@ class AuthRepository {
   "phone": phone,
 })
 );
-      log(response.statusCode.toString());
-      log(response.body);
       return response.statusCode;
    
     } catch (e) {
@@ -69,8 +67,7 @@ class AuthRepository {
     }
   }
   Future<void> loginUser(Map<String, String> credentials) async {
-    log("in loginuser");
-    log(credentials.toString());
+
     try {
       final response = await apiClient.loginUser(
         ApiEndpoints.login,
@@ -79,10 +76,9 @@ class AuthRepository {
       );
    
   // final UserController userController = Get.put(UserController());
-        Get.toNamed(RouteName.homeScreen,);
+       
       // return UserRegistrationResponse.fromJson(response);
     } catch (e) {
-      log(e.toString());
       Utils.showCustomSnackBar("Login Failed", Utils.mapErrorMessage(e.toString()), ContentType.failure);
       throw Exception("Login Failed: $e");
     }

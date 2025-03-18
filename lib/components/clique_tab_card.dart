@@ -16,12 +16,13 @@ class CliqueTabCard extends StatelessWidget {
   final int uid;
   final String authToken;
   final int memberCount;
-
+  final bool isJoined;
   const CliqueTabCard({
     required this.backgroundImage,
     required this.profileImage,
     required this.name,
     required this.followers,
+    required this.isJoined,
     required this.guid,
     required this.uid,
     required this.authToken,
@@ -145,18 +146,18 @@ class CliqueTabCard extends StatelessWidget {
                               width: buttonWidth,
                               height: buttonHeight,
                               decoration: BoxDecoration(
-                                gradient: isMember ? AppColors.appGradientColors : AppColors.backGradientColors,
+                                gradient: isJoined ? AppColors.appGradientColors : AppColors.backGradientColors,
                                 borderRadius: BorderRadius.circular(30),
                               ),
                               child: Center(
                                 child: TextButton(
                                   onPressed: () async {
-                                    if (isMember) {
+                                    if (isJoined) {
                                       Get.toNamed(RouteName.groupChatScreen);
                                     } else {
-                                      bool isAdded = await GroupRepository().joinGroup(guid, uid);
-                                      if (isAdded) {
-                                        await Utils.saveJoinedGroup(guid);
+                                      // bool isAdded = await GroupRepository().joinGroup(guid, uid);
+                                      if (isJoined) {
+                                        // await Utils.saveJoinedGroup(guid);
                                         Get.toNamed(RouteName.groupChatScreen);
                                       }
                                     }

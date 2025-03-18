@@ -31,7 +31,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
       color: Colors.black,
       child: SafeArea(
         child: Scaffold(
-          appBar:     CustomAppBar(title: "Notification", isNotification: true, icon: Icons.arrow_back_ios),
+          appBar:     CustomAppBar(title: "Notification",  icon: Icons.arrow_back_ios),
         
           backgroundColor: Colors.white,
           body: Column(

@@ -27,10 +27,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     super.initState();
     
      Get.put(UserController());
-    //   log("user token");
-    // log(userController.token.value);
  Get.put(DiscoverViewModel());
-  log("controllers initialized");
   }
 
 

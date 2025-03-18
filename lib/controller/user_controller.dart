@@ -37,6 +37,7 @@ class UserController extends GetxController {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final storedUserName = prefs.getString('userName');
     final storedToken = prefs.getString('token');
+      
         final storedRole = prefs.getString('role')??'';
         
         final email = prefs.getString('email');
@@ -58,9 +59,6 @@ class UserController extends GetxController {
       coverPhoto.value=coverPhotoUrl??'';
       phone.value=phoneNo??'';
     }
-  log("i am in controller");
-  log(token.value);
-    
   }
 
   void logout() async {

@@ -41,8 +41,8 @@ class InfluencerModel {
           ? DateTime.parse(json['email_verified_at'])
           : null,
       cometchatAuthToken: json['cometchat_auth_token'],
-      profilePhoto: json['profile_photo'],
-      coverPhoto: json['cover_photo'],
+      profilePhoto: json['profile_photo_url'],
+      coverPhoto: json['cover_photo_url'],
       followersCount: json['followers_count'],
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),

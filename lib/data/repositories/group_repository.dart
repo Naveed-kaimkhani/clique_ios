@@ -46,7 +46,7 @@ class GroupRepository {
     }
   }
 static  Future<Map<String, dynamic>> fetchGroupMembers(String authToken, String guid, int uid) async {
-    // log(widget.guid.toString());
+
     try {
       final response = await http.get(
         Uri.parse('https://dev.moutfits.com/api/v1/cometchat/groups/$guid/members'),
@@ -54,7 +54,6 @@ static  Future<Map<String, dynamic>> fetchGroupMembers(String authToken, String 
           'Authorization': 'Bearer $authToken',
         },
       );
-      log(response.statusCode.toString());
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         List<String> fetchedImages = (data['data'] as List)
@@ -69,67 +68,27 @@ static  Future<Map<String, dynamic>> fetchGroupMembers(String authToken, String 
           'isMember': isMember,
         };
       } else {
-        log("failed");
         throw Exception("Failed to load members");
       }
     } catch (e) {
-      log("Error: $e");
       throw Exception("Error fetching members");
     }
   }
 
-  /// **Fetch Groups from API**
-  // Future<List<Group>> fetchGroups() async {
-  //   try {
-  //     final prefs = await SharedPreferences.getInstance();
-  //     String token = prefs.getString('token') ?? '';
-  //     // // String token = userController.token.value;
-  //     // log(userController.token.value);
-  //     if (token.isEmpty) {
-  //       throw Exception("User token not found. Please log in again.");
-  //     }
-  // log("fetching groupss");
-  // log(userController.token.value);
-  //     final response = await apiClient.getGroup(
-  //       ApiEndpoints.getGroups,
-  //       headers: {
-  //         'Authorization': 'Bearer $token',
-  //         'Content-Type': 'application/json',
-  //       },
-  //     );
-
-   
-
-  //     // if (response == null || !response.containsKey('data')) {
-  //     //   throw Exception("Invalid response from server");
-  //     // }
-  //     final decodedResponse = jsonDecode(response.body);
-  //     return (decodedResponse['data'] as List)
-  //         .map((group) => Group.fromJson(group))
-  //         .toList();
-  //   } catch (e) {
-  //     // Utils.showCustomSnackBar("Failed to load groups", Utils.mapErrorMessage(e.toString()), ContentType.failure);
-  //     throw Exception("Failed to load groups: $e");
-  //   }
-  // }
 
 
     /// **Fetch Groups from API**
   Future<List<Group>> fetchGroups(String token) async {
     try {
       final prefs = await SharedPreferences.getInstance();
+    
     final storedToken = prefs.getString('token');
-      // if (token.isEmpty) {
-      //   throw Exception("User token not found. Please log in again.");
-      // }
+     log("again fetched the token$storedToken");
       
-          // 'Authorization': 'Bearer ${userController.token.value}',
-        log("fetching groupss in fetchGroup function");
-        log("token value is${userController.token.value}");
       final response = await apiClient.getGroup(
         ApiEndpoints.getGroups,
         headers: {
-          'Authorization': 'Bearer 197|fN81yrDEsyiaTTwLZeABsZXKJCanE0AXjlIj0cFNbc02acd2',
+          'Authorization': 'Bearer $storedToken',
           'Content-Type': 'application/json',
         },
       );

@@ -27,8 +27,7 @@ class AuthViewModel extends GetxController {
   }
 
   Future<void> loginUser(String email, String password,) async {
-        log(email);
-        log(password);
+     
     try {
       loginResponse.value = ApiResponse.loading();
       final response = await _authRepo.loginUser({

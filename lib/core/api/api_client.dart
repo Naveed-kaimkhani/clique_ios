@@ -51,7 +51,6 @@ class ApiClient extends GetxService {
     Map<String, String>? headers,
     Object? body,
   }) async {
-    log(url);
     return await http.post(Uri.parse("https://dev.moutfits.com/api/v1/otp/send"),
      body: body,
      headers: headers,
@@ -60,8 +59,7 @@ class ApiClient extends GetxService {
 
 Future<dynamic> getGroup(String endpoint, {Map<String, String>? headers}) async {
     final response = await http.get(Uri.parse(endpoint), headers: headers);
-      log("groupss resposne");
-    log(response.body);
+
     return response;
   }
 
@@ -138,16 +136,15 @@ Future<http.Response> getInfluencersApi({
       await prefs.setString('cover_photo_url', coverPhotoUrl ?? '');
       await prefs.setString('email', email);
        await prefs.setString('phone', phone);
-      log(token);
-      log("message");
-      log(userId.toString());
+    
+    final storedToken = prefs.getString('token');
+    log("token fetchedddd$storedToken");
     // await  UserController().loadUserSession();
       await  userController.loadUserSession();
   //     final UserController userController = Get.put(UserController());
-  //     log("user token");
-  //   log(userController.token.value);
-  // final DiscoverViewModel _viewModel = Get.put(DiscoverViewModel());
 
+  // final DiscoverViewModel _viewModel = Get.put(DiscoverViewModel());
+ Get.toNamed(RouteName.homeScreen,);
   // Get.to(()=> HomeScreen(), transition: Transition.zoom);
       
 //       Get.put(UserController());
@@ -168,10 +165,9 @@ Future<http.Response> getInfluencersApi({
       {Map<String, String>? headers, dynamic body}) async {
     final response = await http.post(Uri.parse(endpoint),
         headers: headers, body: jsonEncode(body));
-        log(response.statusCode.toString());
                  if (response.statusCode == 201 || response.statusCode==200) {
                         Get.offAllNamed(RouteName.loginScreen);
-                        // log("signup success");
+                      
     }
     return _handleResponse(response);
   }
