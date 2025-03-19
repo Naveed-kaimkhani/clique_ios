@@ -23,14 +23,13 @@ class SignupScreen extends StatelessWidget {
   );
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  // final TextEditingController _passwordController = TextEditingController();
+  // final TextEditingController _confirmPasswordController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
 
   static const List<String> _validEmailDomains = ['@gmail.com', '@yahoo.com', '@icloud.com'];
   static const int _requiredPhoneLength = 11;
-  static const int _minPasswordLength = 8;
-  final _passwordRegex = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$');
+  // final _passwordRegex = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$');
 
   final OTPViewModel otpViewModel = Get.put(OTPViewModel());
   @override
@@ -64,44 +63,10 @@ class SignupScreen extends StatelessWidget {
       _showValidationError("Phone number is required", "Please enter your phone number");
       return false;
     }
-    // if (_phoneNumberController.text.length != _requiredPhoneLength) {
-    //   _showValidationError("Invalid phone number", "Phone number must be 11 digits long");
-    //   return false;
-    // }
-    if (!_validatePassword()) return false;
     return true;
   }
 
-  bool _validatePassword() {
-    if (_passwordController.text.isEmpty) {
-      _showValidationError("Password is required", "Please enter your password");
-      return false;
-    }
-    //  if (_passwordController.text.length != 10) {
-    //   _showValidationError("Invalid password length", "Password must be exactly 10 digits");
-    //   return false;
-    // }
-    if (_passwordController.text.length < _minPasswordLength) {
-      _showValidationError("Password is too short", 
-        "Password must be at least 8 characters long");
-      return false;
-    }
-    if (_confirmPasswordController.text.isEmpty) {
-      _showValidationError("Confirm password is required", "Please confirm your password");
-      return false;
-    }
-    if (!_passwordRegex.hasMatch(_passwordController.text)) {
-      _showValidationError("Invalid Password", 
-        "Password must include at least one letter, one number, and one special character.");
-      return false;
-    }
-    if (_passwordController.text != _confirmPasswordController.text) {
-      _showValidationError("Passwords don't match", 
-        "Password and confirm password must match");
-      return false;
-    }
-    return true;
-  }
+
 
   void _showValidationError(String title, String message) {
     Utils.showCustomSnackBar(title, message, ContentType.warning);
@@ -144,18 +109,6 @@ class SignupScreen extends StatelessWidget {
         CustomTextField(
           hintText: "Phone Number",
           controller: _phoneNumberController,
-        ),
-        SizedBox(height: Get.height * 0.02),
-        CustomTextField(
-          hintText: "Password",
-          controller: _passwordController,
-          obscureText: true,
-        ),
-        SizedBox(height: Get.height * 0.02),
-        CustomTextField(
-          hintText: "Confirm Password",
-          controller: _confirmPasswordController,
-          obscureText: true,
         ),
         SizedBox(height: Get.height * 0.02),
     Align(
@@ -292,12 +245,9 @@ class SignupScreen extends StatelessWidget {
         final SignupParams request = SignupParams(
           name: name,
           email: email,
-          password: "google_sign_in_password", // Use a placeholder or generate a random password
           phone: "", // You can leave this empty or ask the user to fill it
-          confirmPassword: "google_sign_in_password",
           role: _selectedRole.value,
         );
-
         // Call your signup API
         _authViewModel.registerUser(request, name)
           .then((_) => _authViewModel.isLoading.value = false)
@@ -311,37 +261,37 @@ class SignupScreen extends StatelessWidget {
 
   void _handleSignup() async{
     
-      // final SignupParams request = SignupParams(
-      //   name: "naveed kk",
-      //   email: "kn@gmail.com",
-      //   password: "nav44108@Kk",
-      //   phone: "3103443527",
-      //   confirmPassword: "nav44108",
-      //   role: "influencer",
-      // );
-      //    int statusCode=await  otpViewModel.sendOTP(request.phone,);
-      //         if (statusCode==200) {
-      //           // Utils.showCustomSnackBar("Success", message, contentType)
-      // Get.toNamed(RouteName.oTPScreen, arguments: request);
-      //         }
-    if (_validateFields()) {
-      _authViewModel.isLoading.value = true;
       final SignupParams request = SignupParams(
-        name: _nameController.text,
-        email: _emailController.text,
-        password: _passwordController.text,
-        phone: _phoneNumberController.text,
-        confirmPassword: _confirmPasswordController.text,
-        role: _selectedRole.value,
+        name: "naveed kk",
+        email: "raahimkhan.orhan@gmail.com",
+        phone: "3103232527",
+        role: "influencer",
       );
-
+       
       // Get.toNamed(RouteName.oTPScreen, arguments: request);
       _authViewModel.registerUser(request, _nameController.text)
         .then((_) => _authViewModel.isLoading.value = false)
         .catchError((_) => _authViewModel.isLoading.value = false);
 
 
-    }
+    // if (_validateFields()) {
+    //   _authViewModel.isLoading.value = true;
+    //   final SignupParams request = SignupParams(
+    //     name: _nameController.text,
+    //     email: _emailController.text,
+    //     password:"",
+    //     phone: _phoneNumberController.text,
+    //     confirmPassword:"",
+    //     role: _selectedRole.value,
+    //   );
+
+    //   // Get.toNamed(RouteName.oTPScreen, arguments: request);
+    //   _authViewModel.registerUser(request, _nameController.text)
+    //     .then((_) => _authViewModel.isLoading.value = false)
+    //     .catchError((_) => _authViewModel.isLoading.value = false);
+
+
+    // }
   }
 
   @override

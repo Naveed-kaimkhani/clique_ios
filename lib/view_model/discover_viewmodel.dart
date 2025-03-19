@@ -18,9 +18,10 @@ class DiscoverViewModel extends GetxController {
 
   RxList<PopstreamModel> popstreams = <PopstreamModel>[].obs;
   final String apiUrl = "https://clique.revovideo.net/api/popstream/get-all-popstream?language=en";
-  final String lamdaToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5leHRnZW5lcmF0aW9uc2RldmVsb3BlckBnbWFpbC5jb20iLCJvcmduYW1lIjoiYWRtaW5fdXNlciIsImNyZWF0ZWRfb24iOjAsImlzcmVnaXN0ZXJlZCI6dHJ1ZX0.iRF5vN4hh9NmQbNFTuke-jygVxlbTm0TNa-FPkJR5j8"; // Securely store this
- final String authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJuZXh0Z2VuZXJhdGlvbnNkZXZlbG9wZXJAZ21haWwuY29tIiwianRpIjoiZGRhMDljZmUtZWUxNi00ZDJhLTk4MGItYjMzOGNmYmMyNzczIiwiZXhwIjoxNzQyMzM5OTY0LCJpc3MiOiJyZXZvLmNsaXF1ZSIsImF1ZCI6InJldm8uY2xpcXVlIn0.kvFGJYOng8L4OXm05u3NJ5zCaRXVHjOVhi8y1bWzqNE"; // Securely store this
+//   final String lamdaToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5leHRnZW5lcmF0aW9uc2RldmVsb3BlckBnbWFpbC5jb20iLCJvcmduYW1lIjoiYWRtaW5fdXNlciIsImNyZWF0ZWRfb24iOjAsImlzcmVnaXN0ZXJlZCI6dHJ1ZX0.iRF5vN4hh9NmQbNFTuke-jygVxlbTm0TNa-FPkJR5j8"; // Securely store this
+//  final String authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJuZXh0Z2VuZXJhdGlvbnNkZXZlbG9wZXJAZ21haWwuY29tIiwianRpIjoiZGRhMDljZmUtZWUxNi00ZDJhLTk4MGItYjMzOGNmYmMyNzczIiwiZXhwIjoxNzQyMzM5OTY0LCJpc3MiOiJyZXZvLmNsaXF1ZSIsImF1ZCI6InJldm8uY2xpcXVlIn0.kvFGJYOng8L4OXm05u3NJ5zCaRXVHjOVhi8y1bWzqNE"; // Securely store this
 
+ 
   @override
   void onInit() {
     super.onInit();
@@ -29,6 +30,9 @@ class DiscoverViewModel extends GetxController {
   }
 
     Future<void> fetchPopstreams() async {
+       final String lamdaToken = userController.revoLamdaToken.value; // Securely store this
+ final String authToken = userController.revoAccessToken.value; // Securely store this
+
     try {
       final response = await GetConnect().post(
         apiUrl,

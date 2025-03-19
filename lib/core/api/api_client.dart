@@ -166,8 +166,7 @@ Future<http.Response> getInfluencersApi({
     final response = await http.post(Uri.parse(endpoint),
         headers: headers, body: jsonEncode(body));
                  if (response.statusCode == 201 || response.statusCode==200) {
-                        Get.offAllNamed(RouteName.loginScreen);
-                      
+                        Get.offAllNamed(RouteName.loginScreen);               
     }
     return _handleResponse(response);
   }

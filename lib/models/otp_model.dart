@@ -1,11 +1,11 @@
 class OTPRequestModel {
-  String phone;
+  String email;
   String otp;
 
-  OTPRequestModel({required this.phone, required this.otp});
+  OTPRequestModel({required this.email, required this.otp});
 
   Map<String, dynamic> toJson() {
-    return {"phone": phone, "otp": otp};
+    return {"email": email, "otp": otp};
   }
 }
 

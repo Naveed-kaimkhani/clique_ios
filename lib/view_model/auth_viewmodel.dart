@@ -15,6 +15,7 @@ class AuthViewModel extends GetxController {
   final RxBool isLoading = false.obs;
   Future<void> registerUser(SignupParams request, String userName) async {
     try {
+      isLoading.value = true;
       signupResponse.value = ApiResponse.loading();
      await _authRepo.registerUser(request);
       

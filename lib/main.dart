@@ -5,6 +5,7 @@ import 'package:clique/data/repositories/influencer_repository.dart';
 import 'package:clique/routes/app_routes.dart';
 import 'package:clique/view/auth/login_screen.dart';
 import 'package:clique/view/auth/signup_screen.dart';
+import 'package:clique/view/auth/verify_otp.dart';
 import 'package:clique/view/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -43,7 +44,7 @@ class MyApp extends StatelessWidget {
           bodySmall: TextStyle(fontFamily: 'SofiaPro'),
         ),
       ),
-      home:SplashScreen(),
+      home:SignupScreen(),
       // initialRoute: RouteName.homeScreen,
       getPages: AppRoutes.getAppRoutes(),
     );

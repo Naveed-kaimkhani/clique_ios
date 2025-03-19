@@ -7,6 +7,8 @@ class UserController extends GetxController {
   late SharedPreferences prefs;
   Rxn<User> user = Rxn<User>();
   var token = ''.obs;
+  var revoAccessToken = ''.obs;
+  var revoLamdaToken = ''.obs;
   var email = ''.obs;
   var profilePhoto = ''.obs;
   var coverPhoto = ''.obs;
@@ -36,8 +38,14 @@ class UserController extends GetxController {
   Future<void> loadUserSession() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final storedUserName = prefs.getString('userName');
+
     final storedToken = prefs.getString('token');
+    final revoAcess = prefs.getString('revo_access_token');
+    final lamdaToken = prefs.getString('revo_lambda_token');
       
+      //  final String revoAccessToken = responseData["revo_access_token"];
+       
+      //  final String revoLambdaToken = responseData["revo_lambda_token"];
         final storedRole = prefs.getString('role')??'';
         
         final email = prefs.getString('email');
@@ -55,6 +63,8 @@ class UserController extends GetxController {
       userName.value = storedUserName; // Set the observable value directly
       token.value = storedToken;
       role.value=storedRole;
+      revoAccessToken.value=revoAcess??'';
+      revoLamdaToken.value=lamdaToken??'';
       profilePhoto.value=profilePhotoUrl??'';
       coverPhoto.value=coverPhotoUrl??'';
       phone.value=phoneNo??'';

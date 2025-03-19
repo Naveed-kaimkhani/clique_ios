@@ -2,21 +2,24 @@ import 'package:clique/components/auth_button.dart';
 import 'package:clique/components/custom_textfield.dart';
 import 'package:clique/components/gradient_text.dart';
 import 'package:clique/constants/index.dart';
+import 'package:clique/data/models/signup_params.dart';
 import 'package:clique/utils/utils.dart';
 import 'package:clique/view_model/auth_viewmodel.dart';
+import 'package:clique/view_model/otp_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 class LoginScreen extends StatelessWidget {
   final RxBool isChecked = false.obs;
   final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  // final TextEditingController passwordController = TextEditingController();
 
   final AuthViewModel authViewModel = Get.put(AuthViewModel());
 
   final passwordRegex = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$');
 RegExp emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.com|icloud\.com|hotmail\.com|live\.com)$');
 
+  final OTPViewModel otpViewModel = Get.put(OTPViewModel());
 
 
   bool validateFields() {
@@ -37,38 +40,38 @@ RegExp emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.
   );
   return false;
 }
-    if (passwordController.text.isEmpty) {
-      Utils.showCustomSnackBar(
-        'Password Required',
-        'Please enter your password',
-        ContentType.warning
-      );
-      return false;
-    }
-        if (passwordController.text.isEmpty) {
-      Utils.showCustomSnackBar(
-        'Password Required', 
-        'Please enter your password',
-        ContentType.warning
-      );
-      return false;
-    }
-    if (passwordController.text.length < 8) {
-      Utils.showCustomSnackBar(
-        'Invalid Password',
-        'Password must be at least 8 characters long',
-        ContentType.warning
-      );
-      return false;
-    }
-    if (!passwordRegex.hasMatch(passwordController.text)) {
-       Utils.showCustomSnackBar(
-        'Invalid Password',
-        'Password must include at least one letter, one number, and one special character.',
-        ContentType.failure
-      );
-      return false;
-    }
+    // if (passwordController.text.isEmpty) {
+    //   Utils.showCustomSnackBar(
+    //     'Password Required',
+    //     'Please enter your password',
+    //     ContentType.warning
+    //   );
+    //   return false;
+    // }
+    //     if (passwordController.text.isEmpty) {
+    //   Utils.showCustomSnackBar(
+    //     'Password Required', 
+    //     'Please enter your password',
+    //     ContentType.warning
+    //   );
+    //   return false;
+    // }
+    // if (passwordController.text.length < 8) {
+    //   Utils.showCustomSnackBar(
+    //     'Invalid Password',
+    //     'Password must be at least 8 characters long',
+    //     ContentType.warning
+    //   );
+    //   return false;
+    // }
+    // if (!passwordRegex.hasMatch(passwordController.text)) {
+    //    Utils.showCustomSnackBar(
+    //     'Invalid Password',
+    //     'Password must include at least one letter, one number, and one special character.',
+    //     ContentType.failure
+    //   );
+    //   return false;
+    // }
     return true;
   }
 
@@ -104,12 +107,12 @@ RegExp emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.
           controller: emailController,
         ),
         SizedBox(height: Get.height * 0.015),
-        CustomTextField(
-          hintText: 'Password',
-          // isPassword: true,
-                obscureText: true,
-          controller: passwordController,
-        ),
+        // CustomTextField(
+        //   hintText: 'Password',
+        //   // isPassword: true,
+        //         obscureText: true,
+        //   controller: passwordController,
+        // ),
       ],
     );
   }
@@ -204,20 +207,30 @@ RegExp emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.
               AuthButton(
                 buttonText: 'Login',
                 isLoading: authViewModel.isLoading,
-                onPressed: () {
-             if (true) {
-                        authViewModel.isLoading.value=true;
-                        authViewModel.loginUser("tola@gmail.com","nav44108@Kk", )
-                      .then((_) => authViewModel.isLoading.value = false)
-                      .catchError((_) => authViewModel.isLoading.value = false);
+                onPressed: ()async {
+  if (true) {
+  otpViewModel.isLoading.value = true;
+  try {
+    final SignupParams request = SignupParams(
+      name: "",
+      email: "raahimkhan.orhan@gmail.com",
+      phone: "",
+      role: "",
+    );
 
-             }
-            //  if (validateFields()) {
-            //             authViewModel.isLoading.value=true;
-            //             authViewModel.loginUser(emailController.text,passwordController.text)
-            //           .then((_) => authViewModel.isLoading.value = false)
-            //           .catchError((_) => authViewModel.isLoading.value = false);
-            //  }
+    int statusCode = await otpViewModel.sendOTP(request.email);
+
+    if (statusCode == 200) {
+      Get.toNamed(RouteName.oTPScreen, arguments: request);
+    } else {
+      Utils.showCustomSnackBar("Error", "Failed to send OTP", ContentType.failure);
+    }
+  } catch (error) {
+    Utils.showCustomSnackBar("Error", "Something went wrong", ContentType.failure);
+  } finally {
+    otpViewModel.isLoading.value = false;
+  }
+}
                   
                 },
               ),
