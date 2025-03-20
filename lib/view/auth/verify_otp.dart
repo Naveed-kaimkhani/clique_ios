@@ -194,7 +194,9 @@ class OTPScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: Icon(Icons.arrow_back, color: Colors.black),
+        leading: GestureDetector(
+          onTap: ()=>Get.back(),
+          child: Icon(Icons.arrow_back, color: Colors.black)),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24),

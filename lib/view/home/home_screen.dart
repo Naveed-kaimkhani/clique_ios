@@ -73,10 +73,10 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     return Scaffold(
       backgroundColor: Colors.black,
       body: Obx(() {
-        // final videoUrls = discoverViewModel.popstreams
-        //     .map((popstream) => popstream.videoUrl)
-        //     .toList();
-        final videoUrls=  ["https://videos.pexels.com/video-files/8473407/8473407-hd_1080_1920_25fps.mp4"];
+        final videoUrls = discoverViewModel.popstreams
+            .map((popstream) => popstream.videoUrl)
+            .toList();
+        // final videoUrls=  ["https://videos.pexels.com/video-files/8473407/8473407-hd_1080_1920_25fps.mp4"];
         log('videoUrls: $videoUrls');
 
         // Prevent navigation if videoUrls is empty

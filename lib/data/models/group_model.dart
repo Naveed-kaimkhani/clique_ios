@@ -8,11 +8,10 @@ class Group {
   final String type;
   final int membersCount;
   final String conversationId;
-  final int createdAt;
+  // final int createdAt;
   final String owner;
-  final int updatedAt;
-  final String? icon;
-  
+  // final int updatedAt;
+  final String? icon; 
   final bool isJoined;
 
   Group({
@@ -22,9 +21,9 @@ class Group {
     required this.type,
     required this.membersCount,
     required this.conversationId,
-    required this.createdAt,
+    // required this.createdAt,
     required this.owner,
-    required this.updatedAt,
+    // required this.updatedAt,
     this.icon,
   });
 
@@ -36,9 +35,9 @@ class Group {
       isJoined: json['is_joined'],
       membersCount: json['membersCount'],
       conversationId: json['conversationId'],
-      createdAt: json['createdAt'],
+      // createdAt: json['createdAt'],
       owner: json['owner'],
-      updatedAt: json['updatedAt'],
+      // updatedAt: json['updatedAt'],
       icon: json['icon'],
     );
   }

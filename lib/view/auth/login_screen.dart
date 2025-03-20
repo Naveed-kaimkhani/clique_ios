@@ -9,6 +9,7 @@ import 'package:clique/view_model/otp_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 class LoginScreen extends StatelessWidget {
   final RxBool isChecked = false.obs;
   final TextEditingController emailController = TextEditingController();
@@ -20,7 +21,9 @@ class LoginScreen extends StatelessWidget {
 RegExp emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.com|icloud\.com|hotmail\.com|live\.com)$');
 
   final OTPViewModel otpViewModel = Get.put(OTPViewModel());
-
+ final GoogleSignIn _googleSignIn = GoogleSignIn(
+    // scopes: ['email', 'profile'], // Request email and profile details
+  );
 
   bool validateFields() {
     if (emailController.text.isEmpty) {
@@ -40,38 +43,6 @@ RegExp emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.
   );
   return false;
 }
-    // if (passwordController.text.isEmpty) {
-    //   Utils.showCustomSnackBar(
-    //     'Password Required',
-    //     'Please enter your password',
-    //     ContentType.warning
-    //   );
-    //   return false;
-    // }
-    //     if (passwordController.text.isEmpty) {
-    //   Utils.showCustomSnackBar(
-    //     'Password Required', 
-    //     'Please enter your password',
-    //     ContentType.warning
-    //   );
-    //   return false;
-    // }
-    // if (passwordController.text.length < 8) {
-    //   Utils.showCustomSnackBar(
-    //     'Invalid Password',
-    //     'Password must be at least 8 characters long',
-    //     ContentType.warning
-    //   );
-    //   return false;
-    // }
-    // if (!passwordRegex.hasMatch(passwordController.text)) {
-    //    Utils.showCustomSnackBar(
-    //     'Invalid Password',
-    //     'Password must include at least one letter, one number, and one special character.',
-    //     ContentType.failure
-    //   );
-    //   return false;
-    // }
     return true;
   }
 
@@ -98,7 +69,40 @@ RegExp emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.
       ],
     );
   }
+  Future<void> _handleGoogleSignIn() async {
+    try {
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      if (googleUser != null) {
+        // Fetch user details
+        final String name = googleUser.displayName ?? "Unknown";
+        final String email = googleUser.email;
+        // final String phone = googleUser.
+        final String profilePicture = googleUser.photoUrl ?? "";
 
+
+
+
+        // Optionally, you can send these details to your API
+        final SignupParams request = SignupParams(
+          name: name,
+          email: email,
+          phone: "", // You can leave this empty or ask the user to fill it
+          role: "",
+        );
+            int statusCode = await otpViewModel.sendOTP(request.email);
+
+    if (statusCode == 200) {
+      Get.toNamed(RouteName.oTPScreen, arguments: request);
+    } else {
+      Utils.showCustomSnackBar("Error", "Failed to send OTP", ContentType.failure);
+    }
+  } 
+      }
+     catch (e) {
+        Utils.showCustomSnackBar("Error","Google Sign-In Failed", ContentType.failure);
+      // _showValidationError("Google Sign-In Failed", "An error occurred during Google Sign-In.");
+    }
+  }
   Widget _buildTextFields() {
     return Column(
       children: [
@@ -144,6 +148,7 @@ RegExp emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.
                 label: "Google",
                 borderColor: Colors.red,
                 isGradientText: true,
+                onPressed: () => _handleGoogleSignIn(),
               ),
             ),
             SizedBox(width: Get.width * 0.02),
@@ -153,6 +158,7 @@ RegExp emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.
                 label: "Apple",
                 borderColor: Colors.black,
                 textColor: Colors.black,
+                onPressed: ()=>_handleGoogleSignIn()
               ),
             ),
           ],
@@ -160,32 +166,32 @@ RegExp emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.
       ],
     );
   }
-
-  Widget _socialButton({
-    required Widget icon,
-    required String label,
-    required Color borderColor,
-    Color textColor = Colors.red,
-    bool isGradientText = false,
-  }) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.white,
-        side: BorderSide(color: borderColor),
-      ),
-      onPressed: () {},
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          icon,
-          SizedBox(width: Get.width * 0.02),
-          isGradientText
-              ? GradientText(label, gradient: AppColors.appGradientColors, fontSize: 14)
-              : Text(label, style: TextStyle(color: textColor)),
-        ],
-      ),
-    );
-  }
+Widget _socialButton({
+  required Widget icon,
+  required String label,
+  required Color borderColor,
+  required VoidCallback onPressed,
+  Color textColor = Colors.red,
+  bool isGradientText = false,
+}) {
+  return ElevatedButton(
+    style: ElevatedButton.styleFrom(
+      backgroundColor: Colors.white,
+      side: BorderSide(color: borderColor),
+    ),
+    onPressed: onPressed,
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        icon,
+        SizedBox(width: Get.width * 0.02),
+        isGradientText
+            ? GradientText(label, gradient: AppColors.appGradientColors, fontSize: 14)
+            : Text(label, style: TextStyle(color: textColor)),
+      ],
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
@@ -201,15 +207,25 @@ RegExp emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.
               _buildHeader(context),
               SizedBox(height: Get.height * 0.03),
               _buildTextFields(),
+              // SizedBox(height: Get.height * 0.02),
+              // _buildSocialButtons(),
+               Row(
+          children: [
+            Obx(() => Checkbox(
+              activeColor: AppColors.black,
+              value: isChecked.value,
+              onChanged: (value) => isChecked.value = value ?? false,
+            )),
+            const Text('I agree with the terms & conditions')
+          ],
+        ),
               SizedBox(height: Get.height * 0.02),
-              _buildSocialButtons(),
-              SizedBox(height: Get.height * 0.03),
               AuthButton(
                 buttonText: 'Login',
                 isLoading: authViewModel.isLoading,
                 onPressed: ()async {
   if (true) {
-  otpViewModel.isLoading.value = true;
+  authViewModel.isLoading.value = true;
   try {
     final SignupParams request = SignupParams(
       name: "",
@@ -219,7 +235,8 @@ RegExp emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.
     );
 
     int statusCode = await otpViewModel.sendOTP(request.email);
-
+    
+  authViewModel.isLoading.value = false;
     if (statusCode == 200) {
       Get.toNamed(RouteName.oTPScreen, arguments: request);
     } else {
