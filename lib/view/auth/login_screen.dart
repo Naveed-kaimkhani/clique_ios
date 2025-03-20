@@ -16,7 +16,7 @@ class LoginScreen extends StatelessWidget {
 
   final AuthViewModel authViewModel = Get.put(AuthViewModel());
 
-  final passwordRegex = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$');
+  // final passwordRegex = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$');
 RegExp emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.com|icloud\.com|hotmail\.com|live\.com)$');
 
   final OTPViewModel otpViewModel = Get.put(OTPViewModel());
@@ -213,7 +213,7 @@ RegExp emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.
   try {
     final SignupParams request = SignupParams(
       name: "",
-      email: "raahimkhan.orhan@gmail.com",
+      email: "naveedkaimkhami@gmail.com",
       phone: "",
       role: "",
     );

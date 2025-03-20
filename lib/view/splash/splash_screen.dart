@@ -21,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _checkAuthentication();
+    // _checkAuthentication();
   }
 
   void _checkAuthentication() async {
@@ -37,6 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Center(
         child: TweenAnimationBuilder(
           duration: Duration(milliseconds: 1500),

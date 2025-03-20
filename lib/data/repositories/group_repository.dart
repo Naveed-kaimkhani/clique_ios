@@ -78,6 +78,35 @@ static  Future<Map<String, dynamic>> fetchGroupMembers(String authToken, String 
 
 
     /// **Fetch Groups from API**
+  // Future<List<Group>> fetchGroups(String token) async {
+  //   try {
+  //     final prefs = await SharedPreferences.getInstance();
+    
+  //   final storedToken = prefs.getString('token');
+  //    log("again fetched the token$storedToken");
+      
+  //   if (storedToken != null) {
+  //       final response = await apiClient.getGroup(
+  //       ApiEndpoints.getGroups,
+  //       headers: {
+  //         'Authorization': 'Bearer $storedToken',
+  //         'Content-Type': 'application/json',
+  //       },
+  //     );
+
+      
+  //   }
+  //     final decodedResponse = jsonDecode(response.body);
+  //     return (decodedResponse['data'] as List)
+  //         .map((group) => Group.fromJson(group))
+  //         .toList();
+  //   } catch (e) {
+  //     // Utils.showCustomSnackBar("Failed to load groups", Utils.mapErrorMessage(e.toString()), ContentType.failure);
+  //     throw Exception("Failed to load groups: $e");
+  //   }
+  // }
+
+      /// **Fetch Groups from API**
   Future<List<Group>> fetchGroups(String token) async {
     try {
       final prefs = await SharedPreferences.getInstance();

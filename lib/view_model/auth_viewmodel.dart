@@ -27,19 +27,19 @@ class AuthViewModel extends GetxController {
     }
   }
 
-  Future<void> loginUser(String email, String password,) async {
+  // Future<void> loginUser(String email, String password,) async {
      
-    try {
-      loginResponse.value = ApiResponse.loading();
-      final response = await _authRepo.loginUser({
-           "email": email,
-        "password": password,
+  //   try {
+  //     loginResponse.value = ApiResponse.loading();
+  //     final response = await _authRepo.loginUser({
+  //          "email": email,
+  //       "password": password,
 
-      });
-    } catch (e) {
-      loginResponse.value = ApiResponse.error(Utils.mapErrorMessage(e.toString()));
-    }
-  }
+  //     });
+  //   } catch (e) {
+  //     loginResponse.value = ApiResponse.error(Utils.mapErrorMessage(e.toString()));
+  //   }
+  // }
 }
 
 
