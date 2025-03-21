@@ -7,6 +7,7 @@ import 'package:clique/view/auth/login_screen.dart';
 import 'package:clique/view/auth/signup_screen.dart';
 import 'package:clique/view/auth/verify_otp.dart';
 import 'package:clique/view/splash/splash_screen.dart';
+import 'package:clique/view/upload_product_screens/upload_product.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -44,7 +45,7 @@ class MyApp extends StatelessWidget {
           bodySmall: TextStyle(fontFamily: 'SofiaPro'),
         ),
       ),
-      home:LoginScreen(),
+      home:UploadVideo(),
       // initialRoute: RouteName.homeScreen,
       getPages: AppRoutes.getAppRoutes(),
     );
