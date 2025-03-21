@@ -32,7 +32,6 @@ class UserController extends GetxController {
     this.userName.value = userName; // Set the observable value directly
     await prefs.setString('token', response.token!);
     await prefs.setString('userName', userName);
-
   }
 
   Future<void> loadUserSession() async {

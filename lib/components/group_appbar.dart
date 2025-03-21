@@ -18,7 +18,7 @@ class GroupAppBar extends StatelessWidget {
     return Container(
       height: size.height * 0.11, // 12% of screen height
       width: double.infinity,
-      padding: EdgeInsets.only(top: size.height * 0.02), // 4% of screen height
+      padding: EdgeInsets.only(top: size.height * 0.03), // 4% of screen height
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [Colors.redAccent, Colors.orangeAccent],

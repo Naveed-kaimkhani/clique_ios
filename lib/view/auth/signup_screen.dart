@@ -261,37 +261,37 @@ class SignupScreen extends StatelessWidget {
 
   void _handleSignup() async{
     
-      final SignupParams request = SignupParams(
-        name: "naveed kk",
-        email: "raahimkhan.orhan@gmail.com",
-        phone: "3103232527",
-        role: "influencer",
-      );
+      // final SignupParams request = SignupParams(
+      //   name: "naveed kk",
+      //   email: "raahimkhan.orhan@gmail.com",
+      //   phone: "3103232527",
+      //   role: "influencer",
+      // );
        
+      // // Get.toNamed(RouteName.oTPScreen, arguments: request);
+      // _authViewModel.registerUser(request, _nameController.text)
+      //   .then((_) => _authViewModel.isLoading.value = false)
+      //   .catchError((_) => _authViewModel.isLoading.value = false);
+
+
+    if (_validateFields()) {
+      _authViewModel.isLoading.value = true;
+      final SignupParams request = SignupParams(
+        name: _nameController.text,
+        email: _emailController.text,
+        // password:"",
+        phone: _phoneNumberController.text,
+        // confirmPassword:"",
+        role: _selectedRole.value,
+      );
+
       // Get.toNamed(RouteName.oTPScreen, arguments: request);
       _authViewModel.registerUser(request, _nameController.text)
         .then((_) => _authViewModel.isLoading.value = false)
         .catchError((_) => _authViewModel.isLoading.value = false);
 
 
-    // if (_validateFields()) {
-    //   _authViewModel.isLoading.value = true;
-    //   final SignupParams request = SignupParams(
-    //     name: _nameController.text,
-    //     email: _emailController.text,
-    //     password:"",
-    //     phone: _phoneNumberController.text,
-    //     confirmPassword:"",
-    //     role: _selectedRole.value,
-    //   );
-
-    //   // Get.toNamed(RouteName.oTPScreen, arguments: request);
-    //   _authViewModel.registerUser(request, _nameController.text)
-    //     .then((_) => _authViewModel.isLoading.value = false)
-    //     .catchError((_) => _authViewModel.isLoading.value = false);
-
-
-    // }
+    }
   }
 
   @override

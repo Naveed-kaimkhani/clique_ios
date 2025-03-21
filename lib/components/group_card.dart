@@ -251,11 +251,8 @@ class _GroupCardState extends State<GroupCard> {
                                       );
                                     } else {
                                       // Join the group
-                                      // bool isAdded = await GroupRepository().joinGroup(widget.guid, widget.uid);
-                                      if (widget.isJoin) {
-                                        // Refresh the UI or show a success message
-                                        //  await Utils.saveJoinedGroup(widget.guid);
-                                            Navigator.push(
+                                    await GroupRepository().joinGroup(widget.guid, widget.uid);
+                                           Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => GroupChatScreen(
@@ -266,7 +263,7 @@ class _GroupCardState extends State<GroupCard> {
                                           ),
                                         ),
                                       );
-                                      }
+                                   
                                     }
                                   },
                                   child: Text(

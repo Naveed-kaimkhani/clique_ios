@@ -53,6 +53,9 @@ class ProfileScreenState extends State<ProfileScreen> with SingleTickerProviderS
                         Obx(() => UserProfileCard(
                           profileImage: userController.profilePhoto.value,
                           isInfluencer: false,
+                          posts: 1,
+                          followers: 1,
+                          following: 2,
                           username: userController.userName.value,
                         )),
                         SizedBox(height: size.height * 0.02),

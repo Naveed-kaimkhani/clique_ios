@@ -1,8 +1,4 @@
 
-// // // // views/group_chat_screen.dart
-
-
-// import 'dart:developer';
 
 // import 'package:clique/components/chat_input.dart';
 // import 'package:clique/components/chat_message.dart';
@@ -13,7 +9,6 @@
 // import 'package:get/get.dart';
 // import '../../controller/user_controller.dart';
 
-// // views/group_chat_screen.dart
 // class GroupChatScreen extends StatefulWidget {
 //   final String groupName;
 //   final int memberCount;
@@ -33,33 +28,35 @@
 // }
 
 // class _GroupChatScreenState extends State<GroupChatScreen> {
-//   final ScrollController _scrollController = ScrollController();
 //   late GroupChatViewModel viewModel;
+//   final ScrollController _scrollController = ScrollController();
 
 //   @override
 //   void initState() {
 //     super.initState();
 //     final UserController userController = Get.find<UserController>();
 
-//     // Create a new instance of GroupChatViewModel for this screen
+//     // Initialize ViewModel
 //     viewModel = Get.put(GroupChatViewModel(
 //       groupId: widget.guid,
 //       token: userController.token.value,
 //       userId: userController.uid.value.toString(),
 //     ));
+//   }
 
-//     // Add a listener to detect when the user scrolls to the top
-//     _scrollController.addListener(() {
-//       if (_scrollController.position.pixels == _scrollController.position.minScrollExtent) {
-//         viewModel.loadMoreMessages();
-//       }
-//     });
+//   void _scrollToBottom() {
+//     if (_scrollController.hasClients) {
+//       _scrollController.animateTo(
+//         _scrollController.position.maxScrollExtent,
+//         duration: Duration(milliseconds: 300),
+//         curve: Curves.easeOut,
+//       );
+//     }
 //   }
 
 //   @override
 //   void dispose() {
 //     _scrollController.dispose();
-//     // Dispose of the ViewModel when the screen is closed
 //     Get.delete<GroupChatViewModel>();
 //     super.dispose();
 //   }
@@ -80,29 +77,24 @@
 //             child: StreamBuilder<List<MessageModel>>(
 //               stream: viewModel.messagesStream,
 //               builder: (context, snapshot) {
-//                 if (snapshot.connectionState == ConnectionState.waiting && snapshot.data == null) {
+//                 if (snapshot.connectionState == ConnectionState.waiting) {
 //                   return Center(child: CircularProgressIndicator());
 //                 }
 
-//                 if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
+//                 if (!snapshot.hasData || snapshot.data!.isEmpty) {
 //                   return Center(child: Text("No messages found"));
 //                 }
 
 //                 final messages = snapshot.data!;
+//                 // Scroll to bottom after building the list
+//                 WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+                
 //                 return ListView.builder(
 //                   controller: _scrollController,
-//                   reverse: false, // Set to true to show latest messages at the bottom
 //                   padding: EdgeInsets.all(16),
-//                   itemCount: messages.length + 1, // +1 for the loading indicator
+//                   reverse: false, // Show latest messages at bottom
+//                   itemCount: messages.length,
 //                   itemBuilder: (context, index) {
-//                     if (index == messages.length) {
-//                       // Show a loading indicator at the top of the list
-//                       return Center(
-//                         child: viewModel.hasMoreMessages
-//                             ? CircularProgressIndicator()
-//                             : SizedBox.shrink(),
-//                       );
-//                     }
 //                     return ChatMessageWidget(message: messages[index]);
 //                   },
 //                 );
@@ -112,6 +104,8 @@
 //           ChatInputWidget(
 //             onSend: (message) {
 //               viewModel.sendMessage(message);
+//               // Scroll to bottom when sending new message
+//               _scrollToBottom();
 //             },
 //           ),
 //         ],
@@ -121,8 +115,8 @@
 // }
 
 
-// // // views/group_chat_screen.dart
 
+import 'dart:developer';
 
 import 'package:clique/components/chat_input.dart';
 import 'package:clique/components/chat_message.dart';
@@ -160,22 +154,37 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
     super.initState();
     final UserController userController = Get.find<UserController>();
 
-    // Initialize ViewModel
     viewModel = Get.put(GroupChatViewModel(
       groupId: widget.guid,
       token: userController.token.value,
       userId: userController.uid.value.toString(),
     ));
+
+    _scrollController.addListener(_onScroll);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+    _scrollToBottom();
+  });
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels == _scrollController.position.minScrollExtent) {
+      log(
+        "reaced at top"
+      );
+      viewModel.loadMoreMessages();
+    }
   }
 
   void _scrollToBottom() {
-    if (_scrollController.hasClients) {
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        duration: Duration(milliseconds: 300),
-        curve: Curves.easeOut,
-      );
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
   }
 
   @override
@@ -210,13 +219,10 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                 }
 
                 final messages = snapshot.data!;
-                // Scroll to bottom after building the list
-                WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
-                
                 return ListView.builder(
                   controller: _scrollController,
                   padding: EdgeInsets.all(16),
-                  reverse: false, // Show latest messages at bottom
+                  reverse: false,
                   itemCount: messages.length,
                   itemBuilder: (context, index) {
                     return ChatMessageWidget(message: messages[index]);
@@ -228,7 +234,6 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
           ChatInputWidget(
             onSend: (message) {
               viewModel.sendMessage(message);
-              // Scroll to bottom when sending new message
               _scrollToBottom();
             },
           ),

@@ -117,7 +117,7 @@ static  Future<Map<String, dynamic>> fetchGroupMembers(String authToken, String 
       final response = await apiClient.getGroup(
         ApiEndpoints.getGroups,
         headers: {
-          'Authorization': 'Bearer $storedToken',
+          'Authorization': 'Bearer 257|VR9svQCn7tuN1Ilq7lghllUiBSUq8nsvxvlqYs0y6ed0e9a6',
           'Content-Type': 'application/json',
         },
       );
