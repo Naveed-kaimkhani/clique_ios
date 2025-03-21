@@ -6,9 +6,6 @@
 // import 'package:pin_code_fields/pin_code_fields.dart';
 
 import 'dart:async';
-import 'dart:developer';
-
-import 'package:clique/constants/app_colors.dart';
 import 'package:clique/data/models/signup_params.dart';
 import 'package:clique/view_model/otp_controller.dart';
 import 'package:flutter/material.dart';
