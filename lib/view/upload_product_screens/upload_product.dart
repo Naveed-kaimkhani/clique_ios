@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:clique/components/auth_button.dart';
@@ -92,7 +93,7 @@ class UploadVideo extends StatelessWidget {
   }
 
 Widget _buildThumbnailSection(double screenHeight) {
-  return _buildMediaSection(
+  return _buildThumnailSection(
     "Upload Thumbnail", 
     () => viewModel.pickImage(true),
     viewModel.thumbnailBytes, // Use Uint8List directly
@@ -101,12 +102,12 @@ Widget _buildThumbnailSection(double screenHeight) {
 
 Widget _buildVideoSection(double screenHeight) {
   return _buildMediaSection(
-    "Upload Video", 
-    viewModel.pickVideo, 
-    viewModel.videoFile.map((file) => file?.readAsBytesSync()).obs, // Convert File to Uint8List
+    "Upload Video",
+    viewModel.pickVideo,
+    viewModel.videoFile, // Directly pass Rxn<Uint8List>
   );
 }
-Widget _buildMediaSection(String label, VoidCallback onTap, Rxn<Uint8List> file) {
+Widget _buildThumnailSection(String label, VoidCallback onTap, Rxn<Uint8List> file) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -118,12 +119,80 @@ Widget _buildMediaSection(String label, VoidCallback onTap, Rxn<Uint8List> file)
                 ? _uploadContainer()
                 : ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                    child: Image.memory(file.value!, width: double.infinity, fit: BoxFit.cover),
+                    child: Image.memory(file.value!,     width: double.infinity,
+      height: 150, fit: BoxFit.cover),
                   ),
           )),
     ],
   );
 }
+Widget _buildMediaSection(String label, VoidCallback onTap, Rxn<File> file) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(label, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+      SizedBox(height: 10),
+      Obx(() {
+        if (file.value == null) {
+          return GestureDetector(
+            onTap: onTap,
+            child: _uploadContainer(),
+          );
+        } else {
+          return _buildVideoPlayer(file.value!);
+        }
+      }),
+    ],
+  );
+}
+// Widget _buildVideoPlayer(File videoFile) {
+//   VideoPlayerController _controller = VideoPlayerController.file(videoFile);
+
+//   return FutureBuilder(
+//     future: _controller.initialize(),
+//     builder: (context, snapshot) {
+//       if (snapshot.connectionState == ConnectionState.done) {
+//         _controller.play(); // Start playing once initialized
+//         return ClipRRect(
+//           borderRadius: BorderRadius.circular(10),
+//           child: AspectRatio(
+//             aspectRatio: _controller.value.aspectRatio,
+//             child: VideoPlayer(_controller),
+//           ),
+//         );
+//       } else {
+//         return Center(child: CircularProgressIndicator()); // Show loading indicator
+//       }
+//     },
+//   );
+// }
+
+Widget _buildVideoPlayer(File videoFile) {
+  VideoPlayerController _controller = VideoPlayerController.file(videoFile);
+
+  return FutureBuilder(
+    future: _controller.initialize(),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.done) {
+        _controller.play(); // Auto-play video
+        
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: SizedBox(
+            height: 200, // Set a fixed height
+            child: AspectRatio(
+              aspectRatio: _controller.value.aspectRatio,
+              child: VideoPlayer(_controller),
+            ),
+          ),
+        );
+      } else {
+        return Center(child: CircularProgressIndicator()); // Show loading indicator
+      }
+    },
+  );
+}
+
   Widget _uploadContainer() {
     return Container(
       width: double.infinity,

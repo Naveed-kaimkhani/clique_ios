@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
           bodySmall: TextStyle(fontFamily: 'SofiaPro'),
         ),
       ),
-      home:UploadVideo(),
+      home:LoginScreen(),
       // initialRoute: RouteName.homeScreen,
       getPages: AppRoutes.getAppRoutes(),
     );

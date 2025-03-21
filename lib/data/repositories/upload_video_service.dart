@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:clique/models/upload_video_response.dart';
+import 'package:clique/utils/utils.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 
@@ -85,11 +86,13 @@ class UploadVideoService {
     var response = await request.send();
     var responseBody = await response.stream.bytesToString();
 
-    print("Response Status Code: ${response.statusCode}");
-    print("Response Body: $responseBody");
+    log("Response Status Code: ${response.statusCode}");
+    log("Response Body: $responseBody");
 
     if (response.statusCode == 200) {
       var decoded = jsonDecode(responseBody);
+      
+      // Utils.showCustomSnackBar("Success", "Video Uploaded Succesfully", ContentType.success);
       return UploadVideoResponse.fromJson(decoded);
     } else {
       return UploadVideoResponse(success: false, message: responseBody);
