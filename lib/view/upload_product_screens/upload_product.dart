@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import '../../constants/index.dart';
 
 

@@ -100,7 +100,9 @@ class AuthRepository {
       return response.statusCode;
    
     } catch (e) {
-   Utils.showCustomSnackBar("Error","Failed to send OTP: $e ", ContentType.failure);
+  //  Utils.showCustomSnackBar("Error","Failed to send OTP: $e ", ContentType.failure);
+  
+   Utils.showCustomSnackBar("Error","$e ", ContentType.failure);
       return 0;
       // return OTPResponseModel(success: false, message: "Network error.");
     }

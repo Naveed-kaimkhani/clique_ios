@@ -4,13 +4,14 @@ class InfluencerModel {
   final String email;
   final String phone;
   final String role;
-  final DateTime? emailVerifiedAt;
-  final String? cometchatAuthToken;
+  // final DateTime? emailVerifiedAt;
+  // final String? cometchatAuthToken;
   final String? profilePhoto;
   final String? coverPhoto;
   final int followersCount;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+    final int postCount;
+  // final DateTime createdAt;
+  // final DateTime updatedAt;
   final bool isFollowing;
 
   InfluencerModel({
@@ -19,13 +20,14 @@ class InfluencerModel {
     required this.email,
     required this.phone,
     required this.role,
-    this.emailVerifiedAt,
-    this.cometchatAuthToken,
+    required this.postCount,
+    // this.emailVerifiedAt,
+    // this.cometchatAuthToken,
     this.profilePhoto,
     this.coverPhoto,
     required this.followersCount,
-    required this.createdAt,
-    required this.updatedAt,
+    // required this.createdAt,
+    // required this.updatedAt,
     required this.isFollowing,
   });
 
@@ -37,15 +39,16 @@ class InfluencerModel {
       email: json['email'],
       phone: json['phone'],
       role: json['role'],
-      emailVerifiedAt: json['email_verified_at'] != null
-          ? DateTime.parse(json['email_verified_at'])
-          : null,
-      cometchatAuthToken: json['cometchat_auth_token'],
+      // emailVerifiedAt: json['email_verified_at'] != null
+      //     ? DateTime.parse(json['email_verified_at'])
+      //     : null,
+      // cometchatAuthToken: json['cometchat_auth_token'],
       profilePhoto: json['profile_photo_url'],
       coverPhoto: json['cover_photo_url'],
       followersCount: json['followers_count'],
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: DateTime.parse(json['updated_at']),
+       postCount: json['posts_count'],
+      // createdAt: DateTime.parse(json['created_at']),
+      // updatedAt: DateTime.parse(json['updated_at']),
       isFollowing: json['is_following'] ?? false,
     );
   }
@@ -58,13 +61,13 @@ class InfluencerModel {
       'email': email,
       'phone': phone,
       'role': role,
-      'email_verified_at': emailVerifiedAt?.toIso8601String(),
-      'cometchat_auth_token': cometchatAuthToken,
+      // 'email_verified_at': emailVerifiedAt?.toIso8601String(),
+      // 'cometchat_auth_token': cometchatAuthToken,
       'profile_photo': profilePhoto,
       'cover_photo': coverPhoto,
       'followers_count': followersCount,
-      'created_at': createdAt.toIso8601String(),
-      'updated_at': updatedAt.toIso8601String(),
+      // 'created_at': createdAt.toIso8601String(),
+      // 'updated_at': updatedAt.toIso8601String(),
       'is_following': isFollowing,
     };
   }

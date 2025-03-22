@@ -6,6 +6,7 @@ import 'package:clique/utils/utils.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 class UploadVideoService {
   static const String baseUrl = "https://dev.moutfits.com/api/v1/popstream/create";
 
@@ -92,7 +93,7 @@ class UploadVideoService {
     if (response.statusCode == 200) {
       var decoded = jsonDecode(responseBody);
       
-      // Utils.showCustomSnackBar("Success", "Video Uploaded Succesfully", ContentType.success);
+ Utils.showCustomSnackBar("Success", "Video Uploaded Succesfully", ContentType.success);
       return UploadVideoResponse.fromJson(decoded);
     } else {
       return UploadVideoResponse(success: false, message: responseBody);

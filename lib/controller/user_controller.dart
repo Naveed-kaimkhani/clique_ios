@@ -9,7 +9,7 @@ class UserController extends GetxController {
   var token = ''.obs;
   var revoAccessToken = ''.obs;
   var revoLamdaToken = ''.obs;
-  var email = ''.obs;
+  var userEmail = ''.obs;
   var profilePhoto = ''.obs;
   var coverPhoto = ''.obs;
     var phone = ''.obs;
@@ -56,11 +56,12 @@ class UserController extends GetxController {
         final phoneNo = prefs.getString('phone');
     uid.value = prefs.getInt('uid') ?? 0;
 
-    if (storedUserName != null && storedToken != null) {
+    if (storedUserName != null && storedToken != null ) {
       userName.value = storedUserName; // Set the observable value directly
       token.value = storedToken; // Set the observable value directly
       userName.value = storedUserName; // Set the observable value directly
       token.value = storedToken;
+      userEmail.value=email??'';
       role.value=storedRole;
       revoAccessToken.value=revoAcess??'';
       revoLamdaToken.value=lamdaToken??'';

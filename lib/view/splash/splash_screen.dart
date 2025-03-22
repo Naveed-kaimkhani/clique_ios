@@ -16,12 +16,12 @@ class _SplashScreenState extends State<SplashScreen> {
   
     // discoverViewModel = Get.put(DiscoverViewModel());
 
-  final DiscoverViewModel _viewModel = Get.put(DiscoverViewModel());
+  // final DiscoverViewModel _viewModel = Get.put(DiscoverViewModel());
   
   @override
   void initState() {
     super.initState();
-    // _checkAuthentication();
+    _checkAuthentication();
   }
 
   void _checkAuthentication() async {

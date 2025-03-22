@@ -11,6 +11,7 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 class UploadVideoViewModel extends GetxController {
   final UploadVideoService _uploadService = UploadVideoService();
 
+  // final userController = Get.find<UserController>();
   final userController = Get.find<UserController>();
   final titleController = TextEditingController();
   final hashtagsController = TextEditingController();
@@ -68,12 +69,12 @@ Future<void> pickVideo() async {
     var response = await _uploadService.uploadVideo(
       thumbnail: thumbnailFile.value!,
       video: videoFile.value!,
-      userId: "432432423234",  // Replace with actual user ID
+      userId:userController.uid.toString(),  // Replace with actual user ID
       name: titleController.text,
       showType: layout.value,
-      lambdaToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5hdmVlZGthaW1raGFtaUBnbWFpbC5jb20iLCJvcmduYW1lIjoiYWRtaW5fdXNlciIsImNyZWF0ZWRfb24iOjAsImlzcmVnaXN0ZXJlZCI6dHJ1ZX0.iihJJO7nUSAKqH6f4gYEfV6qLTQGThuXQG-bQJsfEuM",  // Replace with actual token
-      createdBy: "naveed@gmail.com",  // Replace with actual email
-      authToken: "257|VR9svQCn7tuN1Ilq7lghllUiBSUq8nsvxvlqYs0y6ed0e9a6",  // Replace with actual token
+      lambdaToken: userController.revoLamdaToken.value,  // Replace with actual token
+      createdBy: userController.userEmail.value,  // Replace with actual email
+      authToken: userController.token.value,  // Replace with actual token
     );
 
     isLoading.value = false;

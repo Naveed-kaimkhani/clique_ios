@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:clique/data/models/group_model.dart';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/data/repositories/group_repository.dart';
+import 'package:get_storage/get_storage.dart';
 
 class DiscoverViewModel extends GetxController {
   final userController = Get.find<UserController>();
@@ -29,38 +30,114 @@ class DiscoverViewModel extends GetxController {
     fetchGroups();
   }
 
-    Future<void> fetchPopstreams() async {
-       final String lamdaToken = userController.revoLamdaToken.value; // Securely store this
- final String authToken = userController.revoAccessToken.value; // Securely store this
+//     Future<void> fetchPopstreams() async {
+//        final String lamdaToken = userController.revoLamdaToken.value; // Securely store this
+//  final String authToken = userController.revoAccessToken.value; // Securely store this
+//     log("auth token");
+//     log(authToken);
+//     try {
+//       final response = await GetConnect().post(
+//         apiUrl,
+//         {
+//           "last_id": "",
+//           "brand_name": "clique",
+//           "email": "",
+//           "search_text": "",
+//           "size": 12,
+//           "lambda_token": "$lamdaToken"
+//         },
+//         headers: {
+//           "Authorization": "Bearer $authToken",
+//           "Content-Type": "application/json",
+//         },
+//       );
+//       log(response.body.toString());
+//       log(response.statusCode.toString());
+//       if (response.statusCode == 200) {
+//         List<dynamic> popstreamList = response.body['popstreams'];
+//         popstreams.value = popstreamList.map((item) => PopstreamModel.fromJson(item)).toList();
+//       } else {
+//         Get.snackbar("Error", "Failed to fetch Popstreams");
+//       }
+//     } catch (e) {
+//       Get.snackbar("Error", "An error occurred: $e");
+//     }
+//   }
 
+
+Future<void> fetchPopstreams() async {
+  final storage = GetStorage(); // Local storage to store token and expiration time
+  final String lamdaToken = userController.revoLamdaToken.value;
+  String authToken = userController.revoAccessToken.value;
+
+  // Check if the token is expired
+  final int? tokenExpiration = storage.read('tokenExpiration');
+  final bool isTokenExpired = tokenExpiration == null || DateTime.now().millisecondsSinceEpoch > tokenExpiration;
+
+  if (isTokenExpired) {
     try {
-      final response = await GetConnect().post(
-        apiUrl,
+      // Refresh the token
+      final refreshResponse = await GetConnect().post(
+        'https://clique.revovideo.net/api/auth/token',
         {
-          "last_id": "",
-          "brand_name": "clique",
-          "email": "",
-          "search_text": "",
-          "size": 12,
-          "lambda_token": "$lamdaToken"
-        },
-        headers: {
-          "Authorization": "Bearer $authToken",
-          "Content-Type": "application/json",
+          "email": userController.userEmail.value
         },
       );
-      log(response.body.toString());
-      log(response.statusCode.toString());
-      if (response.statusCode == 200) {
-        List<dynamic> popstreamList = response.body['popstreams'];
-        popstreams.value = popstreamList.map((item) => PopstreamModel.fromJson(item)).toList();
+
+      if (refreshResponse.statusCode == 200) {
+        authToken = refreshResponse.body['access_token']; // Assuming the response contains the new token
+        final int expiresIn = refreshResponse.body['expires_in']; // Assuming the response contains the expiration time in seconds
+        final int newExpirationTime = DateTime.now().millisecondsSinceEpoch + (expiresIn * 1000);
+
+        // Update the token and expiration time in local storage
+        storage.write('revoAccessToken', authToken);
+        storage.write('tokenExpiration', newExpirationTime);
+
+        // Update the token in the userController
+        userController.revoAccessToken.value = authToken;
       } else {
-        Get.snackbar("Error", "Failed to fetch Popstreams");
+        Get.snackbar("Error", "Failed to refresh token");
+        return;
       }
     } catch (e) {
-      Get.snackbar("Error", "An error occurred: $e");
+      Get.snackbar("Error", "An error occurred while refreshing token: $e");
+      return;
     }
   }
+
+  log("auth token");
+  log(authToken);
+
+  try {
+    final response = await GetConnect().post(
+      apiUrl,
+      {
+        "last_id": "",
+        "brand_name": "clique",
+        "email": "",
+        "search_text": "",
+        "size": 12,
+        "lambda_token": "$lamdaToken"
+      },
+      headers: {
+        "Authorization": "Bearer $authToken",
+        "Content-Type": "application/json",
+      },
+    );
+
+    log(response.body.toString());
+    log(response.statusCode.toString());
+
+    if (response.statusCode == 200) {
+      List<dynamic> popstreamList = response.body['popstreams'];
+      popstreams.value = popstreamList.map((item) => PopstreamModel.fromJson(item)).toList();
+    } else {
+      Get.snackbar("Error", "Failed to fetch Popstreams");
+    }
+  } catch (e) {
+    Get.snackbar("Error", "An error occurred: $e");
+  }
+}
 
   Future<void> fetchGroups() async {
     isLoading.value = true;
