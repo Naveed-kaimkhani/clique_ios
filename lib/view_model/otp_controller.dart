@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:clique/data/repositories/auth_respository.dart';
 import 'package:clique/utils/utils.dart';
@@ -28,6 +30,7 @@ class OTPViewModel extends GetxController {
     isLoading.value = false;
   }
     Future<int> sendOTP(String phone) async {
+      log("in send otp");
     int response = await _authRepo.SendOTP(phone);
   return response;
     

@@ -86,6 +86,7 @@ class AuthRepository {
   }
     Future<int> SendOTP(String email) async {
     try {
+      log("send otp calld");
       final response = await apiClient.sendOtp(
         url: ApiEndpoints.sendOtp,
         headers: {"Content-Type": "application/json"},
@@ -93,6 +94,9 @@ class AuthRepository {
   "email": email,
 })
 );
+    log(email);
+    log(response.statusCode.toString());
+    log(response.body.toString());
       return response.statusCode;
    
     } catch (e) {

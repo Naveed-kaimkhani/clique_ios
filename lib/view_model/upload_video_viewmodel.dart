@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:clique/controller/user_controller.dart';
 import 'package:clique/data/repositories/upload_video_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,6 +11,7 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 class UploadVideoViewModel extends GetxController {
   final UploadVideoService _uploadService = UploadVideoService();
 
+  final userController = Get.find<UserController>();
   final titleController = TextEditingController();
   final hashtagsController = TextEditingController();
   final RxString layout = 'Portrait'.obs;
