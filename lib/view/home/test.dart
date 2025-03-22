@@ -1,5 +1,3 @@
-
-
 import 'package:clique/components/shopping_widget.dart';
 import 'package:clique/controller/navigation_controller.dart';
 import 'package:clique/view/bottom_navigation_bar.dart';
@@ -23,30 +21,31 @@ class VideoScrollScreen extends StatefulWidget {
 
 class _VideoScrollScreenState extends State<VideoScrollScreen> with SingleTickerProviderStateMixin {
   static const int _tabCount = 4;
-
+  
   late final PageController _pageController;
+  late final List<VideoPlayerController> _controllers;
   late final TabController _tabController;
   final NavigationController _navigationController = Get.put(NavigationController());
-
-  final Map<int, VideoPlayerController> _controllers = {}; // Lazy-loaded controllers
-  int _currentIndex = 0; // Track current index
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: _tabCount, vsync: this);
-    _pageController = PageController();
-    _loadVideo(_currentIndex); // Load first video initially
+    _initializeControllers();
   }
 
-  /// Loads the video lazily (only current & next)
-  void _loadVideo(int index) {
-    if (index < 0 || index >= widget.videoUrls.length) return;
+  void _initializeControllers() {
+    _tabController = TabController(length: _tabCount, vsync: this);
+    _pageController = PageController();
+    _controllers = _initializeVideoControllers();
+  }
 
-    if (!_controllers.containsKey(index)) {
-      final controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrls[index]));
-      _controllers[index] = controller;
-
+  List<VideoPlayerController> _initializeVideoControllers() {
+    final controllers = <VideoPlayerController>[];
+    
+    for (final url in widget.videoUrls) {
+      final controller = VideoPlayerController.networkUrl(Uri.parse(url));
+      controllers.add(controller);
+      
       controller.initialize().then((_) {
         if (mounted) {
           setState(() {});
@@ -55,31 +54,21 @@ class _VideoScrollScreenState extends State<VideoScrollScreen> with SingleTicker
         }
       });
     }
+    
+    return controllers;
   }
 
-  /// Dispose of videos that are off-screen
-  void _disposeVideo(int index) {
-    if (_controllers.containsKey(index)) {
-      _controllers[index]!.dispose();
-      _controllers.remove(index);
-    }
-  }
-
-  /// Handles page changes for lazy loading
-  void _onPageChanged(int index) {
-    _disposeVideo(_currentIndex - 1); // Dispose previous
-    _disposeVideo(_currentIndex + 1); // Dispose next
-
-    _currentIndex = index;
-    _loadVideo(_currentIndex); // Load current video
-    _loadVideo(_currentIndex + 1); // Preload next video
+  void _onNavItemTapped(int index) {
+    _navigationController.changeIndex(index, 0);
   }
 
   @override
   void dispose() {
     _pageController.dispose();
+    for (final controller in _controllers) {
+      controller.dispose();
+    }
     _tabController.dispose();
-    _controllers.forEach((_, controller) => controller.dispose());
     super.dispose();
   }
 
@@ -90,62 +79,55 @@ class _VideoScrollScreenState extends State<VideoScrollScreen> with SingleTicker
     return Scaffold(
       body: Stack(
         children: [
-          Obx(() => _buildMainContent(screenSize)),
-          Obx(() => _buildShoppingWidget(screenSize)),
-          Obx(() => _buildBottomNavBar()),
+          _buildMainContent(screenSize),
+          _buildShoppingWidget(screenSize),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+          _buildBottomNavBar(),
         ],
       ),
     );
   }
 
   Widget _buildMainContent(Size screenSize) {
-    switch (_navigationController.selectedIndex.value) {
-      case 0:
-        return VideoView(
+    return Obx(() {
+      return switch (_navigationController.selectedIndex.value) {
+        0 => VideoView(
           tabController: _tabController,
           pageController: _pageController,
-          videoUrls: widget.videoUrls,
+          widget: widget,
           controllers: _controllers,
-          onPageChanged: _onPageChanged,
           screenHeight: screenSize.height,
           screenWidth: screenSize.width,
-        );
-      case 1:
-        return const DiscoverScreen();
-      case 3:
-        return ProfileScreen();
-      default:
-        return const Center(child: Text('Page not found'));
-    }
+        ),
+        1 => const DiscoverScreen(),
+        3 => ProfileScreen(),
+        _ => const Center(child: Text('Page not found')),
+      };
+    });
   }
 
   Widget _buildShoppingWidget(Size screenSize) {
-    return _navigationController.selectedIndex.value == 0
-        ? ShoppingWidget(
-            screenHeight: screenSize.height,
-            screenWidth: screenSize.width,
-          )
-        : const SizedBox.shrink();
+    return Obx(() => _navigationController.selectedIndex.value == 0
+      ? ShoppingWidget(
+          screenHeight: screenSize.height,
+          screenWidth: screenSize.width,
+        )
+      : const SizedBox.shrink());
   }
 
   Widget _buildBottomNavBar() {
-    return CustomBottomNavBar(
+    return Obx(() => CustomBottomNavBar(
       onTap: _onNavItemTapped,
       selectedIndex: _navigationController.selectedIndex.value,
-    );
-  }
-
-  void _onNavItemTapped(int index) {
-    _navigationController.changeIndex(index, 0);
+    ));
   }
 }
 
 class VideoView extends StatelessWidget {
   final TabController _tabController;
   final PageController _pageController;
-  final List<String> videoUrls;
-  final Map<int, VideoPlayerController> controllers;
-  final void Function(int) onPageChanged;
+  final VideoScrollScreen widget;
+  final List<VideoPlayerController> _controllers;
   final double screenHeight;
   final double screenWidth;
 
@@ -153,13 +135,13 @@ class VideoView extends StatelessWidget {
     super.key,
     required TabController tabController,
     required PageController pageController,
-    required this.videoUrls,
-    required this.controllers,
-    required this.onPageChanged,
+    required this.widget,
+    required List<VideoPlayerController> controllers,
     required this.screenHeight,
     required this.screenWidth,
   }) : _tabController = tabController,
-       _pageController = pageController;
+       _pageController = pageController,
+       _controllers = controllers;
 
   @override
   Widget build(BuildContext context) {
@@ -168,43 +150,42 @@ class VideoView extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         extendBodyBehindAppBar: true,
-        appBar: _buildAppBar(),
-        body: Stack(
-          children: [
-            _buildTabBarView(),
-            _buildTabBar(),
-            _buildBottomNavBar(),
-          ],
-        ),
+        appBar: _buildAppBar(context),
+        body: _buildTabBarView(),
       ),
     );
   }
 
-  PreferredSizeWidget _buildAppBar() {
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
       toolbarHeight: 0,
+      centerTitle: true,
       backgroundColor: Colors.transparent,
       elevation: 0,
+      bottom: _buildTabBar(),
     );
   }
 
-  Widget _buildTabBar() {
-    return Positioned(
-      top: 0,
-      left: 0,
-      right: 0,
+  PreferredSize _buildTabBar() {
+    return PreferredSize(
+      preferredSize: Size.fromHeight(screenHeight * 0.06),
       child: TabBar(
         controller: _tabController,
+        isScrollable: false,
         indicatorColor: Colors.white,
         labelColor: Colors.white,
         unselectedLabelColor: Colors.white,
         labelStyle: TextStyle(fontSize: screenWidth * 0.038),
         tabs: [
           Tab(child: Text("Pet Food", style: TextStyle(fontSize: screenWidth * 0.037, fontWeight: FontWeight.bold))),
+          
           Tab(child: Text("Pull Toys", style: TextStyle(fontSize: screenWidth * 0.036, fontWeight: FontWeight.bold))),
+          
           Tab(child: Text("Leashes", style: TextStyle(fontSize: screenWidth * 0.037, fontWeight: FontWeight.bold))),
+          
           Tab(child: Text("Collars", style: TextStyle(fontSize: screenWidth * 0.037, fontWeight: FontWeight.bold))),
+          
         ],
       ),
     );
@@ -221,40 +202,29 @@ class VideoView extends StatelessWidget {
     return PageView.builder(
       controller: _pageController,
       scrollDirection: Axis.vertical,
-      itemCount: videoUrls.length,
-      onPageChanged: onPageChanged,
+      itemCount: widget.videoUrls.length,
       itemBuilder: (context, index) => _buildVideoItem(index),
     );
   }
 
-  Widget _buildVideoItem(int index) {
-    return Stack(
-      children: [
-        SizedBox.expand(
-          child: controllers.containsKey(index) && controllers[index]!.value.isInitialized
-              ? FittedBox(
-                  fit: BoxFit.cover,
-                  child: SizedBox(
-                    width: controllers[index]!.value.size.width * 1.5,
-                    height: controllers[index]!.value.size.height * 1.5,
-                    child: VideoPlayer(controllers[index]!),
-                  ),
-                )
-              : const Center(child: CircularProgressIndicator()),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildBottomNavBar() {
-    return Positioned(
-      bottom: 0,
-      left: 0,
-      right: 0,
-      child: CustomBottomNavBar(
-        selectedIndex: 0,
-        onTap: (index) {},
+Widget _buildVideoItem(int index) {
+  return Stack(
+    children: [
+      SizedBox.expand(
+        child: _controllers[index].value.isInitialized
+            ? FittedBox(
+                fit: BoxFit.cover,
+                child: SizedBox(
+                  width: _controllers[index].value.size.width * 1.5,
+                  height: _controllers[index].value.size.height * 1.5,
+                  child: VideoPlayer(_controllers[index]),
+                ),
+              )
+            : const Center(child: CircularProgressIndicator()),
       ),
-    );
-  }
+    ],
+  );
 }
+
+}
+
