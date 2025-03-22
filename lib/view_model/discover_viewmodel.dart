@@ -6,6 +6,7 @@ import 'package:clique/data/models/group_model.dart';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/data/repositories/group_repository.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DiscoverViewModel extends GetxController {
   final userController = Get.find<UserController>();
@@ -66,12 +67,12 @@ class DiscoverViewModel extends GetxController {
 
 
 Future<void> fetchPopstreams() async {
-  final storage = GetStorage(); // Local storage to store token and expiration time
-  final String lamdaToken = userController.revoLamdaToken.value;
-  String authToken = userController.revoAccessToken.value;
+  final prefs = await SharedPreferences.getInstance(); // Initialize SharedPreferences
+  final String lamdaToken =userController.revoLamdaToken.value; // Retrieve lambda token
+  String authToken = userController.revoAccessToken.value; // Retrieve access token
 
   // Check if the token is expired
-  final int? tokenExpiration = storage.read('tokenExpiration');
+  final int? tokenExpiration = prefs.getInt('tokenExpiration'); // Retrieve expiration time
   final bool isTokenExpired = tokenExpiration == null || DateTime.now().millisecondsSinceEpoch > tokenExpiration;
 
   if (isTokenExpired) {
@@ -80,7 +81,7 @@ Future<void> fetchPopstreams() async {
       final refreshResponse = await GetConnect().post(
         'https://clique.revovideo.net/api/auth/token',
         {
-          "email": userController.userEmail.value
+          "email": userController.userEmail.value// Retrieve email from SharedPreferences
         },
       );
 
@@ -89,11 +90,11 @@ Future<void> fetchPopstreams() async {
         final int expiresIn = refreshResponse.body['expires_in']; // Assuming the response contains the expiration time in seconds
         final int newExpirationTime = DateTime.now().millisecondsSinceEpoch + (expiresIn * 1000);
 
-        // Update the token and expiration time in local storage
-        storage.write('revoAccessToken', authToken);
-        storage.write('tokenExpiration', newExpirationTime);
+        // Update the token and expiration time in SharedPreferences
+        await prefs.setString('revo_access_token', authToken);
+        await prefs.setInt('tokenExpiration', newExpirationTime);
 
-        // Update the token in the userController
+        // Update the token in the userController (if needed)
         userController.revoAccessToken.value = authToken;
       } else {
         Get.snackbar("Error", "Failed to refresh token");
@@ -117,7 +118,7 @@ Future<void> fetchPopstreams() async {
         "email": "",
         "search_text": "",
         "size": 12,
-        "lambda_token": "$lamdaToken"
+        "lambda_token": lamdaToken,
       },
       headers: {
         "Authorization": "Bearer $authToken",
@@ -138,7 +139,6 @@ Future<void> fetchPopstreams() async {
     Get.snackbar("Error", "An error occurred: $e");
   }
 }
-
   Future<void> fetchGroups() async {
     isLoading.value = true;
     try {
