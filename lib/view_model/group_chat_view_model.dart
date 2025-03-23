@@ -157,6 +157,11 @@ Future<void> _loadMoreMessages() async {
           final List<MessageModel> newMessages = messagesData
               .map((msg) => MessageModel.fromJson({...msg, 'userId': userId}))
               .toList();
+
+              
+_messageController.add(newMessages);
+            _messages.insertAll(0, newMessages); // Add new messages at the beginning
+            // messagesStream.add(List.from(_messages)); // Update stream
         } else {
           hasMoreMessages = false; // No more messages to load
         }

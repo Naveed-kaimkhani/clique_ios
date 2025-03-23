@@ -78,18 +78,18 @@ class InfluencerCard extends StatelessWidget {
                   height: cardHeight * 0.3, // Responsive image height
                   width: double.infinity,
                   fit: BoxFit.cover,
-                  placeholder: (context, url) => Image.asset(
-                   AppSvgIcons.cloth, // Replace with actual placeholder image
-                    height: cardHeight * 0.3,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
-                  errorWidget: (context, url, error) => Image.asset(
-                   AppSvgIcons.cloth, // Replace with actual placeholder image
-                    height: cardHeight * 0.3,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
+                  placeholder: (context, url) => Container(
+  height: cardHeight * 0.3,
+  width: double.infinity,
+  color: Colors.grey[300], // Light grey background
+),
+
+                  errorWidget: (context, url, error) => Container(
+  height: cardHeight * 0.3,
+  width: double.infinity,
+  color: Colors.grey[300], // Light grey background
+),
+
                 ),
               ),
               Container(
