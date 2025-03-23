@@ -61,7 +61,7 @@ class InfluencerProfileState extends State<InfluencerProfile>
                     children: [
                       SizedBox(height: size.height * 0.02),
                       UserProfileCard(
-                        posts:1,
+                        posts:influencer.postCount,
                         followers: influencer.followersCount,
                         following: 1,
                         profileImage: influencer.profilePhoto, // Use influencer data from Get.arguments

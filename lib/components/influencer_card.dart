@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clique/constants/app_colors.dart';
+import 'package:clique/constants/app_images.dart';
 import 'package:clique/constants/app_svg_icons.dart';
 import 'package:clique/data/models/influencer_model.dart';
 import 'package:clique/routes/routes_name.dart';
@@ -12,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class InfluencerCard extends StatelessWidget {
-  final String backgroundImage;
+  final String? backgroundImage;
   final String? profileImage;
   final String name;
   final String followers;
@@ -60,13 +61,35 @@ class InfluencerCard extends StatelessWidget {
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              ClipRRect(
+              // ClipRRect(
+              //   borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+              //   child:  Image.asset(
+              //     backgroundImage,
+              //     height: cardHeight * 0.3, // Responsive image height
+              //     width: double.infinity,
+              //     fit: BoxFit.cover,
+              //   ),
+              // ),
+
+                ClipRRect(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
-                child: Image.asset(
-                  backgroundImage,
+                child: CachedNetworkImage(
+                  imageUrl: backgroundImage ?? '',
                   height: cardHeight * 0.3, // Responsive image height
                   width: double.infinity,
                   fit: BoxFit.cover,
+                  placeholder: (context, url) => Image.asset(
+                   AppSvgIcons.cloth, // Replace with actual placeholder image
+                    height: cardHeight * 0.3,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                  errorWidget: (context, url, error) => Image.asset(
+                   AppSvgIcons.cloth, // Replace with actual placeholder image
+                    height: cardHeight * 0.3,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               Container(
@@ -130,45 +153,31 @@ class InfluencerCard extends StatelessWidget {
               ),
             ],
           ),
-          Positioned(
-            top: cardHeight * 0.14, // Responsive position for profile image
+       Positioned(
+            top: cardHeight * 0.14,
             left: size.width * 0.02,
             child: GestureDetector(
-              onTap: () => Get.toNamed(RouteName.influencerProfile,arguments: influencerModel),
-              child: profileImage == null 
-    ?  
-    Image.asset(
-        AppSvgIcons.profile,
-        height: profileImageSize,
-        width: profileImageSize,
-      )
-    : ClipOval(
-      child: CachedNetworkImage(
-          imageUrl: "https://dev.moutfits.com/storage/profile_photos/nWFNIjFPxxXPWnmhDm1ZtCs1tcv5qdpBOCwNny4U.jpg" ?? "", // Ensure non-nullable type
-          width: profileImageSize,
-          height: profileImageSize,
-          fit: BoxFit.cover,
-          placeholder: (context, url) => CircularProgressIndicator(),
-          errorWidget: (context, url, error) => Icon(Icons.error),
-        ),
-    ),
-
-//      child:ClipOval(
-//   child: CachedNetworkImage(
-//             width: profileImageSize,
-//         height: profileImageSize,
-//     imageUrl: profileImage ?? 'https://png.pngtree.com/png-vector/20210604/ourmid/pngtree-gray-avatar-placeholder-png-image_3416697.jpg',
-//     placeholder: (context, url) => SizedBox(
-//       width: 50, // Adjust size as needed
-//       height: 50,
-//       child: CircularProgressIndicator(),
-//     ),
-//     errorWidget: (context, url, error) => Icon(Icons.error),
-//     fit: BoxFit.cover,
-//   ),
-// )
-
-
+              onTap: () => Get.toNamed(RouteName.influencerProfile, arguments: influencerModel),
+              child: ClipOval(
+                child: CachedNetworkImage(
+                  imageUrl: profileImage ?? "",
+                  width: profileImageSize,
+                  height: profileImageSize,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => Container(
+                    width: profileImageSize,
+                    height: profileImageSize,
+                    color: Colors.grey[300],
+                    child: Icon(Icons.person, color: Colors.white70, size: profileImageSize),
+                  ),
+                  errorWidget: (context, url, error) => Container(
+                    width: profileImageSize,
+                    height: profileImageSize,
+                    color: Colors.grey[300],
+                    child:  Icon(Icons.person, color: Colors.white70, size: profileImageSize),
+                  ),
+                ),
+              ),
             ),
           ),
         ],
@@ -176,3 +185,5 @@ class InfluencerCard extends StatelessWidget {
     );
   }
 }
+
+

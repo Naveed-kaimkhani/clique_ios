@@ -3,6 +3,7 @@ import 'package:clique/data/repositories/auth_respository.dart';
 import 'package:clique/data/repositories/group_repository.dart';
 import 'package:clique/data/repositories/influencer_repository.dart';
 import 'package:clique/routes/app_routes.dart';
+import 'package:clique/view/discover/discover_screen.dart';
 import 'package:clique/view/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

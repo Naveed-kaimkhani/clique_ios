@@ -61,8 +61,8 @@ class ViewAllInfluencersScreen extends StatelessWidget {
               influencerModel: influencer,
               isFollowing: influencer.isFollowing,
             id: influencer.id,
-              backgroundImage: influencer.coverPhoto ?? AppSvgIcons.cloth, // Use cover photo if available
-              profileImage: influencer.profilePhoto ?? AppSvgIcons.profile, // Use profile photo if available
+              backgroundImage: influencer.coverPhoto , // Use cover photo if available
+              profileImage: influencer.profilePhoto , // Use profile photo if available
               name: influencer.name,
               followers: '${influencer.followersCount} Followers', // Use followers count
             );

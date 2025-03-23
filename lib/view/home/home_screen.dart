@@ -5,6 +5,7 @@ import 'dart:developer';
 
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/view/home/video_scroll_screen.dart';
+import 'package:clique/view/splash/loading_placeholder.dart';
 import 'package:clique/view_model/discover_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -37,9 +38,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
         // Prevent navigation if videoUrls is empty
         if (videoUrls.isEmpty) {
-          return const Center(
-            child: CircularProgressIndicator(color: Colors.white),
-          );
+          return LoadingPlaceHolder();
         }
 
         return VideoScrollScreen(videoUrls: videoUrls);

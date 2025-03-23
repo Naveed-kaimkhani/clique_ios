@@ -87,13 +87,15 @@ class _VideoScrollScreenState extends State<VideoScrollScreen> with SingleTicker
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
 
-    return Scaffold(
-      body: Stack(
-        children: [
-          Obx(() => _buildMainContent(screenSize)),
-          Obx(() => _buildShoppingWidget(screenSize)),
-          // Obx(() => _buildBottomNavBar()),
-        ],
+    return SafeArea(
+      child: Scaffold(
+        body: Stack(
+          children: [
+            Obx(() => _buildMainContent(screenSize)),
+            Obx(() => _buildShoppingWidget(screenSize)),
+            Obx(() => _buildBottomNavBar()),
+          ],
+        ),
       ),
     );
   }
@@ -173,7 +175,7 @@ class VideoView extends StatelessWidget {
           children: [
             _buildTabBarView(),
             _buildTabBar(),
-            _buildBottomNavBar(),
+            // _buildBottomNavBar(),
           ],
         ),
       ),
@@ -194,7 +196,7 @@ class VideoView extends StatelessWidget {
       automaticallyImplyLeading: false,
       toolbarHeight: 0,
       centerTitle: true,
-      backgroundColor: Colors.transparent,
+      backgroundColor: const Color.fromARGB(255, 214, 211, 211),
       elevation: 0,
       bottom: _buildTabBar(),
     );
@@ -202,7 +204,7 @@ class VideoView extends StatelessWidget {
 
   PreferredSize _buildTabBar() {
     return PreferredSize(
-      preferredSize: Size.fromHeight(screenHeight * 0.06),
+      preferredSize: Size.fromHeight(screenHeight * 0.08),
       child: TabBar(
         controller: _tabController,
         isScrollable: false,
@@ -272,195 +274,3 @@ class VideoView extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
-// import 'package:clique/components/shopping_widget.dart';
-// import 'package:clique/controller/navigation_controller.dart';
-// import 'package:clique/view/bottom_navigation_bar.dart';
-// import 'package:clique/view/discover/discover_screen.dart';
-// import 'package:clique/view/profile/profile_screen.dart';
-// import 'package:flutter/material.dart';
-// import 'package:video_player/video_player.dart';
-// import 'package:get/get.dart';
-
-// class VideoScrollScreen extends StatefulWidget {
-//   final List<String> videoUrls;
-
-//   const VideoScrollScreen({super.key, required this.videoUrls});
-
-//   @override
-//   State<VideoScrollScreen> createState() => _VideoScrollScreenState();
-// }
-
-// class _VideoScrollScreenState extends State<VideoScrollScreen> with SingleTickerProviderStateMixin {
-//   static const int _tabCount = 4;
-
-//   late final PageController _pageController;
-//   late final TabController _tabController;
-//   final NavigationController _navigationController = Get.put(NavigationController());
-
-//   // final Map<int, VideoPlayerController> _controllers = {}; // Lazy-loaded controllers
-//   final Map<int, VideoPlayerController> _controllers = {};
-//   int _currentIndex = 0;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _tabController = TabController(length: _tabCount, vsync: this);
-//     _pageController = PageController();
-//     _loadVideo(_currentIndex);
-//   }
-
-//   void _loadVideo(int index) {
-//     if (index < 0 || index >= widget.videoUrls.length) return;
-
-//     if (!_controllers.containsKey(index)) {
-//       final controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrls[index]));
-//       _controllers[index] = controller;
-//       controller.initialize().then((_) {
-//         if (mounted) {
-//           setState(() {});
-//           controller.play();
-//           controller.setLooping(false);
-//         }
-//       });
-//     }
-//   }
-
-//   void _disposeVideo(int index) {
-//     if (_controllers.containsKey(index)) {
-//       _controllers[index]!.dispose();
-//       _controllers.remove(index);
-//     }
-//   }
-
-//   void _onPageChanged(int index) {
-//     _disposeVideo(_currentIndex - 1);
-//     _disposeVideo(_currentIndex + 1);
-//     _currentIndex = index;
-//     _loadVideo(_currentIndex);
-//     _loadVideo(_currentIndex + 1);
-//   }
-
-//   @override
-//   void dispose() {
-//     _pageController.dispose();
-//     _tabController.dispose();
-//     _controllers.forEach((_, controller) => controller.dispose());
-//     super.dispose();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-    
-//     final screenSize = MediaQuery.of(context).size;
-//     return Scaffold(
-//         appBar: _buildAppBar(context),
-//       body: Stack(
-//         children: [
-//           Obx(() => _buildMainContent()),
-//           Obx(() => _buildShoppingWidget(screenSize)),
-//           Obx(() => _buildBottomNavBar()),
-//         ],
-//       ),
-//     );
-//   }
-
-//   Widget _buildMainContent() {
-//     switch (_navigationController.selectedIndex.value) {
-//       case 0:
-//         return _buildVideoPageView();
-//       case 1:
-//         return const DiscoverScreen();
-//       case 3:
-//         return ProfileScreen();
-//       default:
-//         return const Center(child: Text('Page not found'));
-//     }
-//   }
-//   PreferredSizeWidget _buildAppBar(BuildContext context) {
-
-//     return AppBar(
-//       automaticallyImplyLeading: false,
-//       toolbarHeight: 0,
-//       centerTitle: true,
-//       backgroundColor: Colors.transparent,
-//       elevation: 0,
-//       bottom: _buildTabBar(),
-//     );
-//   }
-//     PreferredSize _buildTabBar() {
-      
-//     final screenHeight = MediaQuery.of(context).size.height;
-    
-//     final screenWidth = MediaQuery.of(context).size.width;
-//     return PreferredSize(
-//       preferredSize: Size.fromHeight(screenHeight * 0.06),
-//       child: TabBar(
-//         controller: _tabController,
-//         isScrollable: false,
-//         indicatorColor: Colors.white,
-//         labelColor: Colors.white,
-//         unselectedLabelColor: Colors.white,
-//         labelStyle: TextStyle(fontSize: screenWidth * 0.038),
-//         tabs: [
-//           Tab(child: Text("Pet Food", style: TextStyle(fontSize: screenWidth * 0.037, fontWeight: FontWeight.bold))),
-          
-//           Tab(child: Text("Pull Toys", style: TextStyle(fontSize: screenWidth * 0.036, fontWeight: FontWeight.bold))),
-          
-//           Tab(child: Text("Leashes", style: TextStyle(fontSize: screenWidth * 0.037, fontWeight: FontWeight.bold))),
-          
-//           Tab(child: Text("Collars", style: TextStyle(fontSize: screenWidth * 0.037, fontWeight: FontWeight.bold))),
-          
-//         ],
-//       ),
-//     );
-//   }
-//   Widget _buildShoppingWidget(Size screenSize) {
-//     return _navigationController.selectedIndex.value == 0
-//         ? ShoppingWidget(screenHeight:screenSize.height , screenWidth:screenSize.width ,)
-//         : const SizedBox.shrink();
-//   }
-
-//   Widget _buildBottomNavBar() {
-//     return CustomBottomNavBar(
-//       onTap: _onNavItemTapped,
-//       selectedIndex: _navigationController.selectedIndex.value,
-//     );
-//   }
-
-//   void _onNavItemTapped(int index) {
-//     _navigationController.changeIndex(index, 0);
-//   }
-
-//   Widget _buildVideoPageView() {
-//     return PageView.builder(
-//       controller: _pageController,
-//       scrollDirection: Axis.vertical,
-//       itemCount: widget.videoUrls.length,
-//       onPageChanged: _onPageChanged,
-//       itemBuilder: (context, index) => _buildVideoItem(index),
-//     );
-//   }
-
-//   Widget _buildVideoItem(int index) {
-//     return Stack(
-//       children: [
-//         SizedBox.expand(
-//           child: _controllers.containsKey(index) && _controllers[index]!.value.isInitialized
-//               ? FittedBox(
-//                   fit: BoxFit.cover,
-//                   child: SizedBox(
-//                     width: _controllers[index]!.value.size.width * 1.5,
-//                     height: _controllers[index]!.value.size.height * 1.5,
-//                     child: VideoPlayer(_controllers[index]!)),
-//                 )
-//               : const Center(child: CircularProgressIndicator()),
-//         ),
-//       ],
-//     );
-//   }
-// }

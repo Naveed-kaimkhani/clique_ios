@@ -111,24 +111,6 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
     );
   }
 
-  // Widget _buildInfluencerList(Size size) {
-  //   return SizedBox(
-  //     height: size.height * 0.26,
-  //     child: ListView.builder(
-  //       controller: _influencerScrollController,
-  //       scrollDirection: Axis.horizontal,
-  //       itemCount: 3,
-  //       itemBuilder: (context, index) => index == 2 
-  //         ? _buildViewAllButton(size, RouteName.viewAllInfluencersScreen)
-  //         : InfluencerCard(
-  //             backgroundImage: AppSvgIcons.cloth,
-  //             profileImage: AppSvgIcons.profile,
-  //             name: index == 0 ? 'Isabella Wilson' : 'Amelia Taylor',
-  //             followers: '10.5k Followers',
-  //           ),
-  //     ),
-  //   );
-  // }
   Widget _buildInfluencerList(Size size) {
   return Obx(() {
     if (_influencerViewModel.isLoading.value) {
@@ -162,7 +144,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
             id: influencer.id,
               influencerModel: influencer,
             // backgroundImage: influencer.backgroundImage,
-            backgroundImage: AppSvgIcons.cloth, // Replace with actual image from influencer data if available
+            backgroundImage:influencer.coverPhoto, // Replace with actual image from influencer data if available
             profileImage:influencer.profilePhoto, // Replace with actual profile image from influencer data if available
             // profileImage: "https://dev.moutfits.com/storage/profile_photos/nWFNIjFPxxXPWnmhDm1ZtCs1tcv5qdpBOCwNny4U.jpg",
             name: influencer.name,

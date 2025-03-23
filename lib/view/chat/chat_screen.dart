@@ -1,8 +1,4 @@
-
-
-
 import 'dart:developer';
-
 import 'package:clique/components/chat_input.dart';
 import 'package:clique/components/chat_message.dart';
 import 'package:clique/components/group_appbar.dart';
@@ -67,15 +63,24 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
     }
   }
 
+  // void _scrollToBottom() {
+  //   if (_scrollController.hasClients && !_isLoadingOlderMessages) {
+  //     _scrollController.animateTo(
+  //       _scrollController.position.maxScrollExtent,
+  //       duration: Duration(milliseconds: 300),
+  //       curve: Curves.easeOut,
+  //     );
+  //   }
+  // }
+
   void _scrollToBottom() {
-    if (_scrollController.hasClients && !_isLoadingOlderMessages) {
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        duration: Duration(milliseconds: 300),
-        curve: Curves.easeOut,
-      );
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    if (_scrollController.hasClients) {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     }
-  }
+  });
+}
+
 @override
 void dispose() {
   // Dispose the ScrollController
@@ -111,6 +116,7 @@ void dispose() {
                 }
 
                 final messages = snapshot.data!;
+//  WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
 
                 return ListView.builder(
                   controller: _scrollController,

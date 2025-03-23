@@ -40,7 +40,7 @@ class UploadVideo extends StatelessWidget {
             SizedBox(height: screenHeight * 0.015),
             _buildVideoSection(screenHeight),
             SizedBox(height: screenHeight * 0.02),
-            _buildCheckoutOptions(),
+            // _buildCheckoutOptions(),
             SizedBox(height: screenHeight * 0.03),
             _buildAddProductsButton(),
             SizedBox(height: screenHeight * 0.03),
@@ -68,8 +68,8 @@ class UploadVideo extends StatelessWidget {
   Widget _buildTextFields(double screenHeight) {
     return Column(
       children: [
-        CustomTextField(hintText: "Enter Title", controller: viewModel.titleController),
-        SizedBox(height: screenHeight * 0.015),
+        // CustomTextField(hintText: "Enter Title", controller: viewModel.titleController),
+        // SizedBox(height: screenHeight * 0.015),
         CustomTextField(hintText: "Enter Hashtags", controller: viewModel.hashtagsController),
         SizedBox(height: screenHeight * 0.015),
         _buildDropdownField("Select Layout", viewModel.layout, ['Portrait', 'Landscape']),
@@ -203,9 +203,9 @@ Widget _buildVideoPlayer(File videoFile) {
     );
   }
 
-  Widget _buildCheckoutOptions() {
-    return _buildDropdownField("Shopping Flow Redirect", viewModel.selectedCheckoutOption, ['Inline Checkout', 'Cart', 'Product Page']);
-  }
+  // Widget _buildCheckoutOptions() {
+  //   return _buildDropdownField("Shopping Flow Redirect", viewModel.selectedCheckoutOption, ['Inline Checkout', 'Cart', 'Product Page']);
+  // }
 
   Widget _buildAddProductsButton() {
     return ElevatedButton(
