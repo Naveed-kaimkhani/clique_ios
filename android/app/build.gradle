@@ -29,14 +29,14 @@ android {
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
-    // signingConfigs {
-    //     debug{
-    //         storeFile file("clique-keystore.jks") // Path to your keystore
-    //         storePassword "nav44108"
-    //         keyAlias "clique"
-    //         keyPassword "nav44108"
-    //     }
-    // }
+    signingConfigs {
+        debug{
+            storeFile file("clique-keystore.jks") // Path to your keystore
+            storePassword "nav44108"
+            keyAlias "clique"
+            keyPassword "nav44108"
+        }
+    }
     
     buildTypes {
         release {

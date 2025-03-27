@@ -27,6 +27,7 @@ class UploadVideo extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: _buildAppBar(),
       body: SingleChildScrollView(
+    
         padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,9 +42,9 @@ class UploadVideo extends StatelessWidget {
             _buildVideoSection(screenHeight),
             SizedBox(height: screenHeight * 0.02),
             // _buildCheckoutOptions(),
-            SizedBox(height: screenHeight * 0.03),
+            SizedBox(height: screenHeight * 0.02),
             _buildAddProductsButton(),
-            SizedBox(height: screenHeight * 0.03),
+            SizedBox(height: screenHeight * 0.01),
             _buildUploadButton(),
             SizedBox(height: screenHeight * 0.02),
           ],
@@ -52,7 +53,11 @@ class UploadVideo extends StatelessWidget {
     );
   }
 
-  PreferredSizeWidget _buildAppBar() => AppBar(leading: const BackButton());
+  PreferredSizeWidget _buildAppBar() => AppBar(
+    backgroundColor: Colors.white,
+        // backgroundColor: Colors.white,
+    elevation: 0,
+    leading: const Icon(Icons.arrow_back) );
 
   Widget _buildHeader() {
     return Text(
@@ -121,7 +126,7 @@ Widget _buildThumnailSection(String label, VoidCallback onTap, Rxn<Uint8List> fi
                 : ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: Image.memory(file.value!,     width: double.infinity,
-      height: 150, fit: BoxFit.cover),
+      height: 200, fit: BoxFit.cover),
                   ),
           )),
     ],
@@ -180,6 +185,9 @@ Widget _buildVideoPlayer(File videoFile) {
         return ClipRRect(
           borderRadius: BorderRadius.circular(10),
           child: SizedBox(
+            
+            width: double.infinity, // Make it take full width
+
             height: 200, // Set a fixed height
             child: AspectRatio(
               aspectRatio: _controller.value.aspectRatio,
