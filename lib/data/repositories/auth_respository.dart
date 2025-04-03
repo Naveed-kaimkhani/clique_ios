@@ -109,21 +109,4 @@ class AuthRepository {
       // return OTPResponseModel(success: false, message: "Network error.");
     }
   }
-  // Future<void> loginUser(Map<String, String> credentials) async {
-
-  //   try {
-  //     final response = await apiClient.loginUser(
-  //       ApiEndpoints.login,
-  //       body: credentials,
-  //       headers: {"Content-Type": "application/json"},
-  //     );
-
-  // // final UserController userController = Get.put(UserController());
-
-  //     // return UserRegistrationResponse.fromJson(response);
-  //   } catch (e) {
-  //     Utils.showCustomSnackBar("Login Failed", Utils.mapErrorMessage(e.toString()), ContentType.failure);
-  //     throw Exception("Login Failed: $e");
-  //   }
-  // }
 }

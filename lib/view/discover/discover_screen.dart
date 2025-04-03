@@ -220,7 +220,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
             : 
        
             GroupCard(
-                  isJoin: _viewModel.groups[index].isJoined,
+                  // isJoin: _viewModel.groups[index].isJoined,
                    backgroundImage: AppSvgIcons.cloth,
                   profileImage: _viewModel.groups[index].icon,
                   name: _viewModel.groups[index].name,
