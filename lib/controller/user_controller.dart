@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:clique/data/models/user_registration_response.dart';
+import 'package:clique/routes/routes_name.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -12,7 +13,7 @@ class UserController extends GetxController {
   var userEmail = ''.obs;
   var profilePhoto = ''.obs;
   var coverPhoto = ''.obs;
-    var phone = ''.obs;
+  var phone = ''.obs;
   var role = ''.obs;
   var userName = ''.obs;
   var uid = 0.obs;
@@ -23,6 +24,26 @@ class UserController extends GetxController {
     prefs = await SharedPreferences.getInstance();
     loadUserSession(); // Load session on init
   }
+Future<void> logout() async {
+  final prefs = await SharedPreferences.getInstance();
+  
+  // Clear all stored user session data
+  await prefs.remove('token');
+  await prefs.remove('revo_access_token');
+  await prefs.remove('revo_lambda_token');
+  await prefs.remove('userName');
+  await prefs.remove('role');
+  await prefs.remove('uid');
+  await prefs.remove('profile_photo_url');
+  await prefs.remove('cover_photo_url');
+  await prefs.remove('email');
+  await prefs.remove('phone');
+
+  log("User session cleared.");
+
+  // Navigate to the login screen
+  Get.offAllNamed(RouteName.loginScreen);
+}
 
   void saveUserSession(
       UserRegistrationResponse response, String userName) async {
@@ -71,13 +92,13 @@ class UserController extends GetxController {
     }
   }
 
-  void logout() async {
-    await prefs.clear();
-    user.value = null;
-    token.value = '';
-    userName.value = '';
-    uid.value = 0;
-  }
+  // void logout() async {
+  //   await prefs.clear();
+  //   user.value = null;
+  //   token.value = '';
+  //   userName.value = '';
+  //   uid.value = 0;
+  // }
 
   // Direct access methods for user data from SharedPreferences
   static Future<String> getToken() async {

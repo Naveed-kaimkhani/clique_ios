@@ -74,17 +74,6 @@ Future<dynamic> getGroup(String endpoint, {Map<String, String>? headers}) async 
     return await http.get(Uri.parse(url), headers: headers);
   }
 
-//  Future<http.Response> getInfluencersApi({
-//   required String url,
-//   Map<String, String>? params, // Add params instead of headers
-//    Map<String, String>? headers,
-// }) async {
-//   // Create a URI with query parameters
-//   Uri uri = Uri.parse(url,headers: headers).replace(queryParameters: params);
-
-//   // Make the GET request
-//   return await http.get(uri);
-// }
 Future<http.Response> getInfluencersApi({
   required String url,
   Map<String, String>? params,
