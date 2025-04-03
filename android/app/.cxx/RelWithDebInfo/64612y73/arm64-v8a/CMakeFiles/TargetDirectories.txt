@@ -1,0 +1,2 @@
+/Users/naveedkk/Desktop/clique_ios/android/app/.cxx/RelWithDebInfo/64612y73/arm64-v8a/CMakeFiles/edit_cache.dir
+/Users/naveedkk/Desktop/clique_ios/android/app/.cxx/RelWithDebInfo/64612y73/arm64-v8a/CMakeFiles/rebuild_cache.dir

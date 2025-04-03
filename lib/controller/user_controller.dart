@@ -7,7 +7,7 @@ class UserController extends GetxController {
   late SharedPreferences prefs;
   Rxn<User> user = Rxn<User>();
   var token = ''.obs;
-  var revoAccessToken = ''.obs;
+  // var revoAccessToken = ''.obs;
   var revoLamdaToken = ''.obs;
   var userEmail = ''.obs;
   var profilePhoto = ''.obs;
@@ -39,7 +39,7 @@ class UserController extends GetxController {
     final storedUserName = prefs.getString('userName');
 
     final storedToken = prefs.getString('token');
-    final revoAcess = prefs.getString('revo_access_token');
+    // final revoAcess = prefs.getString('revo_access_token');
     final lamdaToken = prefs.getString('revo_lambda_token');
       
       //  final String revoAccessToken = responseData["revo_access_token"];
@@ -63,7 +63,7 @@ class UserController extends GetxController {
       token.value = storedToken;
       userEmail.value=email??'';
       role.value=storedRole;
-      revoAccessToken.value=revoAcess??'';
+      // revoAccessToken.value=revoAcess??'';
       revoLamdaToken.value=lamdaToken??'';
       profilePhoto.value=profilePhotoUrl??'';
       coverPhoto.value=coverPhotoUrl??'';

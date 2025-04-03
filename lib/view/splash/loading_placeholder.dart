@@ -1,57 +1,26 @@
 import 'package:clique/constants/app_images.dart';
-import 'package:clique/controller/user_controller.dart';
-import 'package:clique/view/auth/login_screen.dart';
-import 'package:clique/view/home/home_screen.dart';
-import 'package:clique/view_model/discover_viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
 class LoadingPlaceHolder extends StatefulWidget {
   @override
   _LoadingPlaceHolderState createState() => _LoadingPlaceHolderState();
 }
 
 class _LoadingPlaceHolderState extends State<LoadingPlaceHolder> {
-  // final UserController userController = Get.put(UserController());
-  
-    // discoverViewModel = Get.put(DiscoverViewModel());
-
-  // final DiscoverViewModel _viewModel = Get.put(DiscoverViewModel());
-  
   @override
   void initState() {
     super.initState();
     // _checkAuthentication();
   }
 
-  // void _checkAuthentication() async {
-  //   await Future.delayed(Duration(seconds: 2)); // Simulate splash delay
-  //   userController.loadUserSession();
-  //   if (userController.token.value.isNotEmpty) {
-  //     Get.offAll(() => HomeScreen()); // Navigate to Home if logged in
-  //   } else {
-  //     Get.offAll(() => LoginScreen()); // Navigate to Login if not logged in
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: TweenAnimationBuilder(
-          duration: Duration(milliseconds: 1500),
-          tween: Tween<double>(begin: 0.0, end: 1.0),
-          builder: (context, double value, child) {
-            return Transform.scale(
-              scale: value,
-              child: Image.asset(
-                AppImages.appLogo, 
-                width: 220,
-                height: 220,
-              ),
-            );
-          },
+        child: Image.asset(
+          AppImages.appLogo,
+          width: 220,
+          height: 220,
         ),
       ),
     );

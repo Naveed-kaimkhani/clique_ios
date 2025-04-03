@@ -10,7 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class DiscoverViewModel extends GetxController {
   final userController = Get.find<UserController>();
-  
+
 //  final userController =    Get.put(UserController());
   final groupRepository = Get.find<GroupRepository>();
   final RxList<Group> groups = <Group>[].obs;
@@ -19,11 +19,11 @@ class DiscoverViewModel extends GetxController {
   var userJoinedGroups = <String>[].obs; // List of groups user has joined
 
   RxList<PopstreamModel> popstreams = <PopstreamModel>[].obs;
-  final String apiUrl = "https://clique.revovideo.net/api/popstream/get-all-popstream?language=en";
+  final String apiUrl =
+      "https://clique.revovideo.net/api/popstream/get-all-popstream?language=en";
 //   final String lamdaToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5leHRnZW5lcmF0aW9uc2RldmVsb3BlckBnbWFpbC5jb20iLCJvcmduYW1lIjoiYWRtaW5fdXNlciIsImNyZWF0ZWRfb24iOjAsImlzcmVnaXN0ZXJlZCI6dHJ1ZX0.iRF5vN4hh9NmQbNFTuke-jygVxlbTm0TNa-FPkJR5j8"; // Securely store this
 //  final String authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJuZXh0Z2VuZXJhdGlvbnNkZXZlbG9wZXJAZ21haWwuY29tIiwianRpIjoiZGRhMDljZmUtZWUxNi00ZDJhLTk4MGItYjMzOGNmYmMyNzczIiwiZXhwIjoxNzQyMzM5OTY0LCJpc3MiOiJyZXZvLmNsaXF1ZSIsImF1ZCI6InJldm8uY2xpcXVlIn0.kvFGJYOng8L4OXm05u3NJ5zCaRXVHjOVhi8y1bWzqNE"; // Securely store this
 
- 
   @override
   void onInit() {
     super.onInit();
@@ -31,71 +31,33 @@ class DiscoverViewModel extends GetxController {
     fetchGroups();
   }
 
-//     Future<void> fetchPopstreams() async {
-//        final String lamdaToken = userController.revoLamdaToken.value; // Securely store this
-//  final String authToken = userController.revoAccessToken.value; // Securely store this
-//     log("auth token");
-//     log(authToken);
-//     try {
-//       final response = await GetConnect().post(
-//         apiUrl,
-//         {
-//           "last_id": "",
-//           "brand_name": "clique",
-//           "email": "",
-//           "search_text": "",
-//           "size": 12,
-//           "lambda_token": "$lamdaToken"
-//         },
-//         headers: {
-//           "Authorization": "Bearer $authToken",
-//           "Content-Type": "application/json",
-//         },
-//       );
-//       log(response.body.toString());
-//       log(response.statusCode.toString());
-//       if (response.statusCode == 200) {
-//         List<dynamic> popstreamList = response.body['popstreams'];
-//         popstreams.value = popstreamList.map((item) => PopstreamModel.fromJson(item)).toList();
-//       } else {
-//         Get.snackbar("Error", "Failed to fetch Popstreams");
-//       }
-//     } catch (e) {
-//       Get.snackbar("Error", "An error occurred: $e");
-//     }
-//   }
+  Future<void> fetchPopstreams() async {
+    // final prefs =
+    //     await SharedPreferences.getInstance(); // Initialize SharedPreferences
+    String authToken = "";
+    final String lamdaToken =
+        userController.revoLamdaToken.value; // Retrieve lambda token
 
-
-Future<void> fetchPopstreams() async {
-  final prefs = await SharedPreferences.getInstance(); // Initialize SharedPreferences
-  final String lamdaToken =userController.revoLamdaToken.value; // Retrieve lambda token
-  String authToken = userController.revoAccessToken.value; // Retrieve access token
-
-  // Check if the token is expired
-  final int? tokenExpiration = prefs.getInt('tokenExpiration'); // Retrieve expiration time
-  final bool isTokenExpired = tokenExpiration == null || DateTime.now().millisecondsSinceEpoch > tokenExpiration;
-
-  if (isTokenExpired) {
     try {
-      // Refresh the token
+      // Fetch a fresh token
       final refreshResponse = await GetConnect().post(
         'https://clique.revovideo.net/api/auth/token',
         {
-          "email": userController.userEmail.value// Retrieve email from SharedPreferences
+          "email": userController.userEmail.value // Retrieve email
         },
       );
-
+      // log("access token fetced");
+      // log(refreshResponse.body['access_token']);
+      // log("status code mila h");
+      // log(refreshResponse.statusCode.toString());
       if (refreshResponse.statusCode == 200) {
-        authToken = refreshResponse.body['access_token']; // Assuming the response contains the new token
-        final int expiresIn = refreshResponse.body['expires_in']; // Assuming the response contains the expiration time in seconds
-        final int newExpirationTime = DateTime.now().millisecondsSinceEpoch + (expiresIn * 1000);
+        authToken = refreshResponse.body['access_token'];
 
-        // Update the token and expiration time in SharedPreferences
-        await prefs.setString('revo_access_token', authToken);
-        await prefs.setInt('tokenExpiration', newExpirationTime);
+        // Store the new token in SharedPreferences
+        // await prefs.setString('revo_access_token', authToken);
 
-        // Update the token in the userController (if needed)
-        userController.revoAccessToken.value = authToken;
+        // // Update the token in the userController
+        // userController.revoAccessToken.value = authToken;
       } else {
         Get.snackbar("Error", "Failed to refresh token");
         return;
@@ -104,45 +66,56 @@ Future<void> fetchPopstreams() async {
       Get.snackbar("Error", "An error occurred while refreshing token: $e");
       return;
     }
-  }
 
-  log("auth token");
-  log(authToken);
+    // log("auth token");
+    // log(authToken);
 
-  try {
-    final response = await GetConnect().post(
-      apiUrl,
-      {
-        "last_id": "",
-        "brand_name": "clique",
-        "email": "",
-        "search_text": "",
-        "size": 12,
-        "lambda_token": lamdaToken,
-      },
-      headers: {
-        "Authorization": "Bearer $authToken",
-        "Content-Type": "application/json",
-      },
-    );
+    // log("lamda token");
+    // log(lamdaToken);
 
-    log(response.body.toString());
-    log(response.statusCode.toString());
-
-    if (response.statusCode == 200) {
-      List<dynamic> popstreamList = response.body['popstreams'];
-      popstreams.value = popstreamList.map((item) => PopstreamModel.fromJson(item)).toList();
-    } else {
-      Get.snackbar("Error", "Failed to fetch Popstreams");
+    try {
+      final response = await GetConnect().post(
+        apiUrl,
+        {
+          "last_id": "",
+          "brand_name": "clique",
+          "email": "",
+          "search_text": "",
+          "size": 12,
+          "lambda_token": lamdaToken,
+        },
+        headers: {
+          "Authorization": "Bearer $authToken",
+          "Content-Type": "application/json",
+        },
+      );
+      log("lamda token me issue to nh hy $lamdaToken");
+      log(response.body.toString());
+      log(response.statusCode.toString());
+      if (response.statusCode == 200) {
+        log("initialize popstrem");
+        log(response.statusCode.toString());
+        List<dynamic> popstreamList = response.body['popstreams'];
+        popstreams.value =
+            popstreamList.map((item) => PopstreamModel.fromJson(item)).toList();
+      } else {
+        Get.put(UserController());
+        fetchPopstreams();
+        // log("in else");
+        // log(response.body.toString());
+        // log(response.statusCode.toString());
+        // Get.snackbar("Error", "Failed to fetch Popstreams");
+      }
+    } catch (e) {
+      Get.snackbar("Error", "An error occurred: $e");
     }
-  } catch (e) {
-    Get.snackbar("Error", "An error occurred: $e");
   }
-}
+
   Future<void> fetchGroups() async {
     isLoading.value = true;
     try {
-      final fetchedGroups = await groupRepository.fetchGroups(userController.token.value);
+      final fetchedGroups =
+          await groupRepository.fetchGroups(userController.token.value);
       groups.value = fetchedGroups;
       isLoading.value = false;
     } catch (e) {
