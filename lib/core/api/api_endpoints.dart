@@ -20,4 +20,9 @@ class ApiEndpoints {
 
  static final String updateApi = "https://dev.moutfits.com/api/v1/user/update?_method=PUT";
 //  static const String getGroupMembers = "$baseUrl/cometchat/groups/g2/members";
+static final String revoApiUrl =
+      "https://clique.revovideo.net/api/popstream/get-all-popstream?language=en";
+
+
+static final String revoAccessToken ='https://clique.revovideo.net/api/auth/token';
 }
