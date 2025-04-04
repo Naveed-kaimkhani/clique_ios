@@ -78,12 +78,12 @@ class InfluencerRepository {
 
         // Print or use the extracted values
         // print("Token: $token");
-        print("User Name: $userName");
-        print("User ID: $userId");
-        print("Role: $role");
-        print("Profile Image: $profileImage");
-        print("Cover Photo URL: $coverPhotoUrl");
-        print("Email: $email");
+        // print("User Name: $userName");
+        // print("User ID: $userId");
+        // print("Role: $role");
+        // print("Profile Image: $profileImage");
+        // print("Cover Photo URL: $coverPhotoUrl");
+        // print("Email: $email");
 
    
       final prefs = await SharedPreferences.getInstance();

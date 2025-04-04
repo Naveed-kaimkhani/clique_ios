@@ -10,6 +10,7 @@ import '../core/api/api_response.dart';
 
 class AuthViewModel extends GetxController {
   final AuthRepository _authRepo = Get.find<AuthRepository>();
+
   final Rx<ApiResponse<UserRegistrationResponse>> signupResponse = ApiResponse<UserRegistrationResponse>.loading().obs;
   final Rx<ApiResponse<UserRegistrationResponse>> loginResponse = ApiResponse<UserRegistrationResponse>.loading().obs;
   final RxBool isLoading = false.obs;

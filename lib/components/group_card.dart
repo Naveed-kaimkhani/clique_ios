@@ -313,22 +313,19 @@
 // }
 
 
-
-
-
+import 'package:avatar_stack/animated_avatar_stack.dart';
+import 'package:clique/constants/app_colors.dart';
 import 'package:clique/controller/group_controler.dart';
 import 'package:clique/view/chat/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:clique/constants/app_colors.dart';
-// import 'package:clique/controllers/group_controller.dart';
-// import 'package:clique/screens/group_chat_screen.dart';
 
 class GroupCard extends StatefulWidget {
   final String backgroundImage;
   final String? profileImage;
   final String name;
   final String followers;
+  final bool isJoin;
   final String guid;
   final int uid;
   final String groupName;
@@ -337,6 +334,7 @@ class GroupCard extends StatefulWidget {
 
   const GroupCard({
     required this.backgroundImage,
+    required this.isJoin,
     this.profileImage,
     required this.name,
     required this.authToken,
@@ -353,132 +351,175 @@ class GroupCard extends StatefulWidget {
 }
 
 class _GroupCardState extends State<GroupCard> {
-  final GroupController groupController = Get.put(GroupController()); // Inject GetX controller
+  final GroupController groupController = Get.put(GroupController());
 
   @override
   void initState() {
     super.initState();
-    groupController.fetchGroupStatus(widget.authToken, widget.guid, widget.uid); // Fetch status on init
+    // groupController.isMember.value=widget.isJoin;
+    // groupController.fetchGroupStatus(widget.authToken, widget.guid, widget.uid);
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final double cardWidth = size.width * 0.75;
+    final double cardHeight = size.height * 0.18;
+    final double profileImageSize = size.width * 0.11;
+    final double avatarStackWidth = size.width * 0.3;
     final double buttonWidth = size.width * 0.25;
     final double buttonHeight = size.height * 0.043;
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      padding: const EdgeInsets.all(10),
+      width: cardWidth,
+      height: cardHeight,
+      padding: EdgeInsets.only(left: size.width * 0.03),
       decoration: BoxDecoration(
-        color: Colors.white,
         borderRadius: BorderRadius.circular(15),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 5,
-            spreadRadius: 2,
-          ),
-        ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
+        clipBehavior: Clip.none,
         children: [
-          // Background Image
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Image.network(
-              widget.backgroundImage,
-              width: double.infinity,
-              height: 120,
-              fit: BoxFit.cover,
-            ),
-          ),
-
-          const SizedBox(height: 10),
-
-          // Profile Image & Group Name
-          Row(
+          Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              if (widget.profileImage != null)
-                CircleAvatar(
-                  backgroundImage: NetworkImage(widget.profileImage!),
-                  radius: 20,
+              ClipRRect(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+                child: Image.asset(
+                  widget.backgroundImage,
+                  height: cardHeight * 0.3,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
                 ),
-              const SizedBox(width: 10),
-              Text(
-                widget.name,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: size.width * 0.03,
+                  vertical: size.height * 0.02,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(bottom: Radius.circular(15)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: size.height * 0.015),
+                    Text(
+                      widget.name,
+                      style: TextStyle(
+                        fontSize: size.width * 0.045,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    SizedBox(height: size.height * 0.005),
+                    Row(
+                      children: [
+                        Icon(Icons.group, size: size.width * 0.04, color: Colors.grey),
+                        SizedBox(width: size.width * 0.01),
+                        Text(
+                          widget.followers,
+                          style: TextStyle(fontSize: size.width * 0.035, color: Colors.grey),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: size.height * 0.015),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          width: avatarStackWidth,
+                          child: AnimatedAvatarStack(
+                            height: size.height * 0.03,
+                            avatars: [
+                              for (var n = 1; n < widget.memberCount + 1; n++)
+                                NetworkImage('https://i.pravatar.cc/150?img=$n'),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          width: buttonWidth,
+                          height: buttonHeight,
+                          decoration: BoxDecoration(
+                            gradient: widget.isJoin
+                                ? AppColors.appGradientColors
+                                : AppColors.backGradientColors,
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Center(
+                            child: TextButton(
+                              onPressed: () async {
+                                if (widget.isJoin) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => GroupChatScreen(
+                                        profileImage: widget.profileImage,
+                                        guid: widget.guid,
+                                        groupName: widget.groupName,
+                                        memberCount: widget.memberCount,
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  await groupController.joinGroup(widget.guid, widget.uid);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => GroupChatScreen(
+                                        profileImage: widget.profileImage,
+                                        guid: widget.guid,
+                                        groupName: widget.groupName,
+                                        memberCount: widget.memberCount,
+                                      ),
+                                    ),
+                                  );
+                                }
+                              },
+                              child: Text(
+                                widget.isJoin ? "Message" : "Join Now",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: size.width * 0.032,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
-
-          const SizedBox(height: 5),
-
-          // Followers & Members Count
-          Text(
-            "${widget.followers} followers | ${widget.memberCount} members",
-            style: const TextStyle(color: Colors.grey),
+          Positioned(
+            top: cardHeight * 0.16,
+            left: size.width * 0.03,
+            child: Container(
+              height: profileImageSize,
+              width: profileImageSize,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: widget.profileImage != null
+                    ? DecorationImage(
+                        image: NetworkImage(widget.profileImage!),
+                        fit: BoxFit.cover,
+                      )
+                    : null,
+                color: widget.profileImage == null ? Colors.grey[300] : null,
+              ),
+              child: widget.profileImage == null
+                  ? Icon(Icons.person, size: profileImageSize * 0.6, color: Colors.grey[600])
+                  : null,
+            ),
           ),
-
-          const SizedBox(height: 10),
-
-          // Join/Message Button
-          Obx(() => Container(
-                width: buttonWidth,
-                height: buttonHeight,
-                decoration: BoxDecoration(
-                  gradient: groupController.isMember.value
-                      ? AppColors.appGradientColors
-                      : AppColors.backGradientColors,
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: Center(
-                  child: TextButton(
-                    onPressed: () async {
-                      if (groupController.isMember.value) {
-                        // Navigate to Group Chat Screen
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => GroupChatScreen(
-                              profileImage: widget.profileImage,
-                              guid: widget.guid,
-                              groupName: widget.groupName,
-                              memberCount: widget.memberCount,
-                            ),
-                          ),
-                        );
-                      } else {
-                        // Join Group & Update UI
-                        await groupController.joinGroup(widget.guid, widget.uid);
-                        // No need for setState, GetX automatically updates UI
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => GroupChatScreen(
-                              profileImage: widget.profileImage,
-                              guid: widget.guid,
-                              groupName: widget.groupName,
-                              memberCount: widget.memberCount,
-                            ),
-                          ),
-                        );
-                      }
-                    },
-                    child: Text(
-                      groupController.isMember.value ? "Message" : "Join Now",
-                      style: TextStyle(color: Colors.white, fontSize: size.width * 0.032),
-                    ),
-                  ),
-                ),
-              )),
         ],
       ),
     );
   }
 }
-

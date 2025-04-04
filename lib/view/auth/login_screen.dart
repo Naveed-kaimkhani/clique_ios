@@ -2,7 +2,11 @@ import 'package:clique/components/auth_button.dart';
 import 'package:clique/components/custom_textfield.dart';
 import 'package:clique/components/gradient_text.dart';
 import 'package:clique/constants/index.dart';
+import 'package:clique/core/api/api_client.dart';
 import 'package:clique/data/models/signup_params.dart';
+import 'package:clique/data/repositories/auth_respository.dart';
+import 'package:clique/data/repositories/group_repository.dart';
+import 'package:clique/data/repositories/influencer_repository.dart';
 import 'package:clique/utils/utils.dart';
 import 'package:clique/view_model/auth_viewmodel.dart';
 import 'package:clique/view_model/otp_controller.dart';
@@ -194,6 +198,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -228,9 +233,9 @@ class LoginScreen extends StatelessWidget {
                     try {
                       final SignupParams request = SignupParams(
                         name: "",
-                        // email: emailController.text,
+                        email: emailController.text,
 
-                        email: "naveedkaimkhami@gmail.com",
+                        // email: "fakegamer3456@gmail.com",
                         phone: "",
                         role: "",
                       );

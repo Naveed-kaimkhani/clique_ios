@@ -79,9 +79,13 @@
 
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clique/components/auth_button.dart';
 import 'package:clique/constants/app_svg_icons.dart';
+import 'package:clique/controller/user_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 class UserProfileCard extends StatelessWidget {
   final bool isInfluencer;
@@ -91,7 +95,7 @@ class UserProfileCard extends StatelessWidget {
   final int followers;
   final int following;
 
-  const UserProfileCard({
+   UserProfileCard({
     super.key,
     required this.isInfluencer,
     required this.username,
@@ -101,6 +105,7 @@ class UserProfileCard extends StatelessWidget {
     required this.following,
   });
 
+  final userController = Get.find<UserController>();
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -143,7 +148,7 @@ class UserProfileCard extends StatelessWidget {
                         height: screenWidth * 0.3,
                         fit: BoxFit.cover,
                         placeholder: (context, url) => SpinKitChasingDots(color: Colors.black, size: 20),
-                        errorWidget: (context, url, error) => Icon(Icons.error),
+                        errorWidget: (context, url, error) => Icon(Icons.person, size: screenWidth * 0.3),
                       ),
                     ),
               SizedBox(height: screenHeight * 0.015),
@@ -154,6 +159,10 @@ class UserProfileCard extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              
+              SizedBox(height: screenHeight * 0.015),
+              isInfluencer? 
+              SizedBox():  logout_button(userController: userController),
               SizedBox(height: screenHeight * 0.02),
              
             ],
@@ -192,5 +201,47 @@ class UserProfileCard extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class logout_button extends StatelessWidget {
+  const logout_button({
+    super.key,
+    required this.userController,
+  });
+
+  final UserController userController;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.black,
+              // padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              elevation: 0, // Important for web to avoid flashy hover effects
+            ),
+            onPressed: () {
+              // Handle button press here
+              userController.logout();
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text(
+          "Logout",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        SizedBox(width: 10,),
+        Icon(Icons.logout, color: Colors.white),
+              ],
+            ),
+          );
   }
 }

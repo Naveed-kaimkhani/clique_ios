@@ -109,7 +109,7 @@ static  Future<Map<String, dynamic>> fetchGroupMembers(String authToken, String 
       /// **Fetch Groups from API**
   Future<List<Group>> fetchGroups(String token) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
+      // final prefs = await SharedPreferences.getInstance();
     
     // final storedToken = await prefs.getString('token');
     //  log("again fetched the token$storedToken");

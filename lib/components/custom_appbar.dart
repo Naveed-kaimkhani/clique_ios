@@ -1,5 +1,7 @@
 import 'package:clique/constants/app_colors.dart';
+import 'package:clique/controller/user_controller.dart';
 import 'package:clique/routes/routes_name.dart';
+import 'package:clique/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -8,9 +10,11 @@ class CustomAppBar extends PreferredSize {
   final IconData? icon;
   final bool isNotification;
   
+  final IconData? logoutIcon;
   CustomAppBar({
     super.key,
     required this.title,
+    this.logoutIcon,
     this.icon,
     this.isNotification = false,
   }) : super(
@@ -28,7 +32,7 @@ class _CustomAppBarWidget extends StatelessWidget {
   final IconData? icon;
   final bool isNotification;
 
-  const _CustomAppBarWidget({
+   _CustomAppBarWidget({
     required this.title,
     this.icon,
     this.isNotification = false,

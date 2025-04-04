@@ -103,7 +103,7 @@ class _VideoScrollScreenState extends State<VideoScrollScreen> with SingleTicker
   Widget _buildMainContent(Size screenSize) {
     switch (_navigationController.selectedIndex.value) {
       case 0:
-        return VideoView(
+        return  VideoView(
           tabController: _tabController,
           pageController: _pageController,
           videoUrls: widget.videoUrls,

@@ -1,5 +1,9 @@
 import 'dart:developer';
+import 'package:clique/core/api/api_client.dart';
 import 'package:clique/data/models/user_registration_response.dart';
+import 'package:clique/data/repositories/auth_respository.dart';
+import 'package:clique/data/repositories/group_repository.dart';
+import 'package:clique/data/repositories/influencer_repository.dart';
 import 'package:clique/routes/routes_name.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,8 +44,6 @@ Future<void> logout() async {
   await prefs.remove('phone');
 
   log("User session cleared.");
-
-  // Navigate to the login screen
   Get.offAllNamed(RouteName.loginScreen);
 }
 

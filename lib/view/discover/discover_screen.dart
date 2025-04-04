@@ -159,73 +159,73 @@ final ProductViewModel _productViewModel = Get.put(ProductViewModel());
   });
 }
 
-  // Widget  _buildProductList(Size size) {
-  //   return SizedBox(
-  //     height: size.height * 0.38,
-  //     child: ListView.builder(
-  //       controller: _productScrollController,
-  //       scrollDirection: Axis.horizontal,
-  //       itemCount: 3,
-  //       itemBuilder: (context, index) => index == 2
-  //         ? _buildViewAllButton(size, RouteName.viewAllProductsScreen)
-  //         : ProductCard(
-  //             isShowDiscount: true,
-  //             uid: (index + 1).toString(),
-  //             backgroundImage: index == 0 ? 'assets/png/product.png' : 'assets/png/product2.png',
-  //             productName: index == 0 ? "Girl's Full Blazers" : "Girl's Moisturizing Shampoo",
-  //             productDescription: "Crafted from premium, breathable cotton fabric",
-  //             price: 53.23,
-  //             oldPrice: 100.23,
-  //             discount: "10% OFF",
-  //           ),
-  //     ),
-  //   );
-  // }
-
-
-  Widget _buildProductList(Size size) {
-  return Obx(() {
-    if (_productViewModel.isLoading.value && _productViewModel.products.isEmpty) {
-      return CircularProgressIndicator();
-    }
-
-    if (_productViewModel.error.value.isNotEmpty) {
-      return Center(child: Text(_productViewModel.error.value));
-    }
-
-    if (_productViewModel.products.isEmpty) {
-      return Center(child: Text('No products available'));
-    }
-
+  Widget  _buildProductList(Size size) {
     return SizedBox(
       height: size.height * 0.38,
       child: ListView.builder(
         controller: _productScrollController,
         scrollDirection: Axis.horizontal,
-        itemCount: _productViewModel.products.length + 1,
-        itemBuilder: (context, index) {
-          if (index == _productViewModel.products.length) {
-            return _buildViewAllButton(size, RouteName.viewAllProductsScreen);
-          }
-
-          final product = _productViewModel.products[index];
-          final discount = ((product.msrp - product.cost) / product.msrp * 100).round();
-
-          return ProductCard(
-            isShowDiscount: discount > 0,
-            uid: product.id.toString(),
-            backgroundImage: product.imageUrls.isNotEmpty ? product.imageUrls.first : '',
-            productName: product.productTitle,
-            productDescription: product.productDesc,
-            price: product.cost,
-            oldPrice: product.msrp,
-            discount: "$discount% OFF",
-          );
-        },
+        itemCount: 3,
+        itemBuilder: (context, index) => index == 2
+          ? _buildViewAllButton(size, RouteName.viewAllProductsScreen)
+          : ProductCard(
+              isShowDiscount: true,
+              uid: (index + 1).toString(),
+              backgroundImage: index == 0 ? 'assets/png/product.png' : 'assets/png/product2.png',
+              productName: index == 0 ? "Girl's Full Blazers" : "Girl's Moisturizing Shampoo",
+              productDescription: "Crafted from premium, breathable cotton fabric",
+              price: 53.23,
+              oldPrice: 100.23,
+              discount: "10% OFF",
+            ),
       ),
     );
-  });
-}
+  }
+
+
+//   Widget _buildProductList(Size size) {
+//   return Obx(() {
+//     if (_productViewModel.isLoading.value && _productViewModel.products.isEmpty) {
+//       return CircularProgressIndicator();
+//     }
+
+//     if (_productViewModel.error.value.isNotEmpty) {
+//       return Center(child: Text(_productViewModel.error.value));
+//     }
+
+//     if (_productViewModel.products.isEmpty) {
+//       return Center(child: Text('No products available'));
+//     }
+
+//     return SizedBox(
+//       height: size.height * 0.38,
+//       child: ListView.builder(
+//         controller: _productScrollController,
+//         scrollDirection: Axis.horizontal,
+//         itemCount: _productViewModel.products.length + 1,
+//         itemBuilder: (context, index) {
+//           if (index == _productViewModel.products.length) {
+//             return _buildViewAllButton(size, RouteName.viewAllProductsScreen);
+//           }
+
+//           final product = _productViewModel.products[index];
+//           final discount = ((product.msrp - product.cost) / product.msrp * 100).round();
+
+//           return ProductCard(
+//             isShowDiscount: discount > 0,
+//             uid: product.id.toString(),
+//             backgroundImage: product.imageUrls.isNotEmpty ? product.imageUrls.first : '',
+//             productName: product.productTitle,
+//             productDescription: product.productDesc,
+//             price: product.cost,
+//             oldPrice: product.msrp,
+//             discount: "$discount% OFF",
+//           );
+//         },
+//       ),
+//     );
+//   });
+// }
 
   Widget _buildViewAllButton(Size size, String route) {
     return Center(
@@ -268,7 +268,7 @@ final ProductViewModel _productViewModel = Get.put(ProductViewModel());
             : 
        
             GroupCard(
-                  // isJoin: _viewModel.groups[index].isJoined,
+                  isJoin: _viewModel.groups[index].isJoined,
                    backgroundImage: AppSvgIcons.cloth,
                   profileImage: _viewModel.groups[index].icon,
                   name: _viewModel.groups[index].name,

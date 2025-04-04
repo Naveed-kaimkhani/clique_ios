@@ -8,14 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 
-void main() {
+void main() { 
    Get.put(ApiClient());
-
-   Get.lazyPut(()=>GroupRepository());
-   
-   Get.lazyPut(()=>AuthRepository());
-   
-   Get.lazyPut(()=>InfluencerRepository());
+  Get.put(GroupRepository());
+  Get.put(AuthRepository());
+  Get.put(InfluencerRepository());
   //  Get.put(UserController());
   runApp(
 MyApp(),
