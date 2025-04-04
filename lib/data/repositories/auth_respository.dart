@@ -52,6 +52,8 @@ class AuthRepository {
         final String? coverPhotoUrl = responseData["user"]["cover_photo_url"];
         final String email = responseData["user"]["email"];
         final String phone = responseData["user"]["phone"];
+      log("access token");
+        log( responseData["auth_token"]);
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('token', token);
         await prefs.setString('revo_access_token', revoAccessToken);
@@ -71,7 +73,7 @@ class AuthRepository {
         //     final UserController userController = Get.put(UserController());
 
         // final DiscoverViewModel _viewModel = Get.put(DiscoverViewModel());
-        Get.toNamed(
+        Get.offAllNamed(
           RouteName.homeScreen,
         );
         // return OTPResponseModel.fromJson(jsonDecode(response.body));

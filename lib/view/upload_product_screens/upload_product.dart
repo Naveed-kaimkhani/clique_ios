@@ -173,6 +173,35 @@ Widget _buildMediaSection(String label, VoidCallback onTap, Rxn<File> file) {
 //   );
 // }
 
+// Widget _buildVideoPlayer(File videoFile) {
+//   VideoPlayerController _controller = VideoPlayerController.file(videoFile);
+
+//   return FutureBuilder(
+//     future: _controller.initialize(),
+//     builder: (context, snapshot) {
+//       if (snapshot.connectionState == ConnectionState.done) {
+//         _controller.play(); // Auto-play video
+        
+//         return ClipRRect(
+//           borderRadius: BorderRadius.circular(10),
+//           child: SizedBox(
+            
+//             width: double.infinity, // Make it take full width
+
+//             height: 200, // Set a fixed height
+//             child: AspectRatio(
+//               aspectRatio: _controller.value.aspectRatio,
+//               child: VideoPlayer(_controller),
+//             ),
+//           ),
+//         );
+//       } else {
+//         return Center(child: CircularProgressIndicator()); // Show loading indicator
+//       }
+//     },
+//   );
+// }
+
 Widget _buildVideoPlayer(File videoFile) {
   VideoPlayerController _controller = VideoPlayerController.file(videoFile);
 
@@ -181,14 +210,14 @@ Widget _buildVideoPlayer(File videoFile) {
     builder: (context, snapshot) {
       if (snapshot.connectionState == ConnectionState.done) {
         _controller.play(); // Auto-play video
-        
+
+        final isPortrait = _controller.value.aspectRatio < 1;
+
         return ClipRRect(
           borderRadius: BorderRadius.circular(10),
           child: SizedBox(
-            
-            width: double.infinity, // Make it take full width
-
-            height: 200, // Set a fixed height
+            width: double.infinity,
+            height: isPortrait ? 300 : 200, // Taller if portrait
             child: AspectRatio(
               aspectRatio: _controller.value.aspectRatio,
               child: VideoPlayer(_controller),
@@ -196,7 +225,7 @@ Widget _buildVideoPlayer(File videoFile) {
           ),
         );
       } else {
-        return Center(child: CircularProgressIndicator()); // Show loading indicator
+        return Center(child: CircularProgressIndicator());
       }
     },
   );

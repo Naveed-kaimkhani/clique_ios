@@ -40,22 +40,57 @@ class _VideoScrollScreenState extends State<VideoScrollScreen> with SingleTicker
   }
 
   /// Loads the video lazily (only current & next)
+  // void _loadVideo(int index) {
+  //   if (index < 0 || index >= widget.videoUrls.length) return;
+
+  //   if (!_controllers.containsKey(index)) {
+  //     final controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrls[index]));
+  //     _controllers[index] = controller;
+
+  //     controller.initialize().then((_) {
+  //       if (mounted) {
+  //         setState(() {});
+  //         controller.play();
+  //         controller.setLooping(false);
+  //       }
+  //     });
+  //   }
+  // }
   void _loadVideo(int index) {
-    if (index < 0 || index >= widget.videoUrls.length) return;
+  if (index < 0 || index >= widget.videoUrls.length) return;
 
-    if (!_controllers.containsKey(index)) {
-      final controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrls[index]));
-      _controllers[index] = controller;
+  if (!_controllers.containsKey(index)) {
+    final controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrls[index]));
+    _controllers[index] = controller;
 
-      controller.initialize().then((_) {
-        if (mounted) {
-          setState(() {});
-          controller.play();
-          controller.setLooping(false);
+    controller.initialize().then((_) {
+      if (mounted) {
+        setState(() {});
+        
+        if (index == _currentIndex) {
+          controller.play(); // Only play the current video
+        } else {
+          controller.setVolume(0); // Prevent audio bleed
+          controller.pause();      // Ensure it's not playing
         }
-      });
-    }
+
+        controller.setLooping(false);
+      }
+    });
+  } else {
+    // Even if already initialized, ensure only current plays
+    _controllers.forEach((i, c) {
+      if (i == _currentIndex) {
+        c.play();
+        c.setVolume(1);
+      } else {
+        c.pause();
+        c.setVolume(0);
+      }
+    });
   }
+}
+
 
   /// Dispose of videos that are off-screen
   void _disposeVideo(int index) {

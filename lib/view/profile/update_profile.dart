@@ -1,6 +1,7 @@
 
 
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:clique/components/auth_button.dart';
 import 'package:clique/components/custom_appbar.dart';
@@ -30,7 +31,16 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
   final UserController userController = Get.find<UserController>();
   final RxBool isLoading = false.obs; // Create isLoading as an RxBool
-
+@override
+void initState() {
+  super.initState();
+  nameController.text = userController.userName.value;
+  phoneController.text = userController.phone.value;
+  // profilePhoto = userController.profilePhoto.value != null
+  //     ? File(userController.profilePhoto.value!)
+  //     : null;
+  // coverPhoto = userController.coverPhoto.value 
+}
   Future<void> pickImage(bool isProfile) async {
     final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
@@ -45,56 +55,62 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   }
 
   Future<void> updateUserProfile() async {
-    if (_formKey.currentState!.validate() && profilePhoto != null && coverPhoto != null) {
+    if (true) {
       isLoading.value = true; // Set isLoading to true when the API call starts
 
       try {
         var url = Uri.parse('https://dev.moutfits.com/api/v1/user/update?_method=PUT');
         var request = http.MultipartRequest('POST', url);
-
+log("user auth");
+log(userController.token.value);
         request.headers.addAll({
-          'Authorization': 'Bearer ${userController.token.value}',
+          'Authorization': 'Bearer ${'353|5mRTVQaa7G01kLanrbABWtvsACwu0W7CO391h1wP29163da9'}',
           'Accept': 'application/json',
         });
 
         request.fields['name'] = nameController.text;
         // request.fields['email'] = emailController.text;
         request.fields['phone'] = phoneController.text;
-
-        request.files.add(await http.MultipartFile.fromPath('profile_photo', profilePhoto!.path));
-        request.files.add(await http.MultipartFile.fromPath('cover_photo', coverPhoto!.path));
-
+      profilePhoto != null
+            ? request.files.add(await http.MultipartFile.fromPath('profile_photo', profilePhoto!.path))
+            : '';
+        coverPhoto != null
+            ? request.files.add(await http.MultipartFile.fromPath('cover_photo', coverPhoto!.path))
+            : '';
+// request.files.add(await http.MultipartFile.fromPath('cover_photo',''));
         var response = await request.send();
-
+        // print("Response status: ${response.statusCode}");
+        // // print("Response headers: ${response.headers}");
+        // // log(response.);
+        // print("Response content length: ${response.contentLength}");
+        // print("Response reason phrase: ${response.reasonPhrase}");
+        // print("Response request: ${response.request}");
+        // print("Response body: ${response.stream.bytesToString()}");
         if (response.statusCode == 200) {
           final responseBody = await response.stream.bytesToString();
           final Map<String, dynamic> responseData = jsonDecode(responseBody);
 
           final String userName = responseData["user"]["name"];
-          final int userId = responseData["user"]["id"];
-          final String role = responseData["user"]["role"];
           final String? profileImage = responseData["user"]["profile_photo_url"];
           final String? coverPhotoUrl = responseData["user"]["cover_photo_url"];
-          final String email = responseData["user"]["email"];
           final String phone = responseData["user"]["phone"];
 
           final prefs = await SharedPreferences.getInstance();
           await prefs.setString('userName', userName);
-          await prefs.setString('role', role);
-          await prefs.setInt('uid', userId);
           await prefs.setString('profile_photo_url', profileImage ?? '');
           await prefs.setString('cover_photo_url', coverPhotoUrl ?? '');
           await prefs.setString('phone', phone);
-          await prefs.setString('email', email);
 
           await userController.loadUserSession();
 
           Utils.showCustomSnackBar("Profile Updated", "Profile updated successfully", ContentType.success);
           Get.back();
         } else {
+          
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to update profile')));
         }
       } catch (e) {
+        log(e.toString());
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
       } finally {
         isLoading.value = false; // Set isLoading to false when the API call completes

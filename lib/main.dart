@@ -4,6 +4,7 @@ import 'package:clique/data/repositories/group_repository.dart';
 import 'package:clique/data/repositories/influencer_repository.dart';
 import 'package:clique/routes/app_routes.dart';
 import 'package:clique/view/splash/splash_screen.dart';
+import 'package:clique/view/upload_product_screens/upload_product.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

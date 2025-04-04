@@ -78,6 +78,8 @@
 // }
 
 
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clique/components/auth_button.dart';
 import 'package:clique/constants/app_svg_icons.dart';
@@ -108,6 +110,8 @@ class UserProfileCard extends StatelessWidget {
   final userController = Get.find<UserController>();
   @override
   Widget build(BuildContext context) {
+    log("profile image");
+    log(profileImage.toString());
     final size = MediaQuery.of(context).size;
     final screenWidth = size.width;
     final screenHeight = size.height;
