@@ -34,8 +34,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 @override
 void initState() {
   super.initState();
-  nameController.text = userController.userName.value;
-  phoneController.text = userController.phone.value;
+  // nameController.text = userController.userName.value;
+  // phoneController.text = userController.phone.value;
   // profilePhoto = userController.profilePhoto.value != null
   //     ? File(userController.profilePhoto.value!)
   //     : null;
@@ -64,28 +64,21 @@ void initState() {
 log("user auth");
 log(userController.token.value);
         request.headers.addAll({
-          'Authorization': 'Bearer ${'353|5mRTVQaa7G01kLanrbABWtvsACwu0W7CO391h1wP29163da9'}',
+          'Authorization': 'Bearer ${userController.token.value}',
           'Accept': 'application/json',
         });
 
-        request.fields['name'] = nameController.text;
+        request.fields['name'] = nameController.text.isEmpty? userController.userName.value : nameController.text;
         // request.fields['email'] = emailController.text;
-        request.fields['phone'] = phoneController.text;
+        request.fields['phone'] = phoneController.text.isEmpty? userController.phone.value : phoneController.text;
       profilePhoto != null
             ? request.files.add(await http.MultipartFile.fromPath('profile_photo', profilePhoto!.path))
-            : '';
+            : userController.profilePhoto.value;
         coverPhoto != null
             ? request.files.add(await http.MultipartFile.fromPath('cover_photo', coverPhoto!.path))
-            : '';
+            : userController.coverPhoto.value;
 // request.files.add(await http.MultipartFile.fromPath('cover_photo',''));
         var response = await request.send();
-        // print("Response status: ${response.statusCode}");
-        // // print("Response headers: ${response.headers}");
-        // // log(response.);
-        // print("Response content length: ${response.contentLength}");
-        // print("Response reason phrase: ${response.reasonPhrase}");
-        // print("Response request: ${response.request}");
-        // print("Response body: ${response.stream.bytesToString()}");
         if (response.statusCode == 200) {
           final responseBody = await response.stream.bytesToString();
           final Map<String, dynamic> responseData = jsonDecode(responseBody);
@@ -166,6 +159,9 @@ log(userController.token.value);
                               ),
                             ),
                           ),
+
+
+                           
                           SizedBox(height: 10),
                           Text("Select Profile Photo"),
                         ],
@@ -188,6 +184,7 @@ log(userController.token.value);
                               ),
                             ),
                           ),
+
                           SizedBox(height: 10),
                           Text("Select Cover Photo"),
                         ],
@@ -198,14 +195,14 @@ log(userController.token.value);
 
                   // Name Field
                   CustomTextField(
-                    hintText: userController.userName.value,
+                    hintText: "Name",
                     controller: nameController,
                   ),
                   SizedBox(height: 20),
 
                   // Phone Field
                   CustomTextField(
-                    hintText: userController.phone.value,
+                    hintText: "Phone",
                     controller: phoneController,
                   ),
                   SizedBox(height: 50),
