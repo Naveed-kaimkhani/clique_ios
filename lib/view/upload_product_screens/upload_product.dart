@@ -1,21 +1,25 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clique/components/auth_button.dart';
 import 'package:clique/components/custom_textfield.dart';
+import 'package:clique/view_model/product_details_controller.dart';
+import 'package:clique/view_model/product_view_model.dart';
 import 'package:clique/view_model/upload_video_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import '../../constants/index.dart';
 
 
 class UploadVideo extends StatelessWidget {
   final UploadVideoViewModel viewModel = Get.put(UploadVideoViewModel());
 
+  // final ProductController _productViewModel = Get.find<ProductController>();
+  
+final ProductViewModel _productViewModel = Get.put(ProductViewModel());
   UploadVideo({Key? key}) : super(key: key);
 
   @override
@@ -57,7 +61,7 @@ class UploadVideo extends StatelessWidget {
     backgroundColor: Colors.white,
         // backgroundColor: Colors.white,
     elevation: 0,
-    leading: const Icon(Icons.arrow_back) );
+    leading: IconButton(onPressed: ()=> Get.back(),icon: Icon( Icons.arrow_back)) );
 
   Widget _buildHeader() {
     return Text(
@@ -262,26 +266,38 @@ Widget _buildVideoPlayer(File videoFile) {
             Text("Select Products", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             Expanded(
               child: ListView.builder(
-                itemCount: 10,
+                itemCount: _productViewModel.products.length,
                 itemBuilder: (context, index) {
                   return Obx(() {
                     bool isSelected = viewModel.selectedProducts.contains(index);
                     return ListTile(
-                      leading: Icon(Icons.shopping_bag),
-                      title: Text('Product $index'),
-                      trailing: Checkbox(
-                        value: isSelected,
-                        onChanged: (value) {
-                          if (value == true) {
-                            viewModel.selectedProducts.add(index);
-                          } else {
-                            viewModel.selectedProducts.remove(index);
-                          }
-                        },
-                      ),
-                      tileColor: isSelected ? Colors.green.withOpacity(0.1) : null,
-                      onTap: () => isSelected ? viewModel.selectedProducts.remove(index) : viewModel.selectedProducts.add(index),
-                    );
+  leading: SizedBox(
+    width: 60, // or any reasonable width
+    height: 60,
+    child: CachedNetworkImage(
+      imageUrl: _productViewModel.products[index].imageUrls.first,
+      fit: BoxFit.cover,
+      placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+      errorWidget: (context, url, error) => Icon(Icons.error),
+    ),
+  ),
+  title: Text(_productViewModel.products[index].productTitle),
+  trailing: Checkbox(
+    value: isSelected,
+    onChanged: (value) {
+      if (value == true) {
+        viewModel.selectedProducts.add(index);
+      } else {
+        viewModel.selectedProducts.remove(index);
+      }
+    },
+  ),
+  tileColor: isSelected ? Colors.green.withOpacity(0.1) : null,
+  onTap: () => isSelected
+      ? viewModel.selectedProducts.remove(index)
+      : viewModel.selectedProducts.add(index),
+);
+
                   });
                 },
               ),

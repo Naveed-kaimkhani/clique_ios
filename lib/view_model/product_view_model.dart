@@ -1,10 +1,12 @@
 // view_models/product_viewmodel.dart
+import 'package:clique/controller/user_controller.dart';
 import 'package:clique/data/models/product_model.dart';
 import 'package:clique/data/repositories/product_repo.dart';
 import 'package:get/get.dart';
 
 class ProductViewModel extends GetxController {
   final ProductRepository _productRepository = ProductRepository();
+  
   var products = <ProductModel>[].obs;
   var isLoading = true.obs;
   var error = ''.obs;

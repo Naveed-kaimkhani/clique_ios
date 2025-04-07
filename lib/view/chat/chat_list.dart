@@ -6,8 +6,10 @@ import 'package:clique/view_model/group_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ChatList extends StatelessWidget {
-  final GroupViewModel _viewModel = Get.find<GroupViewModel>();
+class ChatList extends StatelessWidget {final GroupViewModel _viewModel = Get.isRegistered<GroupViewModel>()
+    ? Get.find<GroupViewModel>()
+    : Get.put(GroupViewModel());
+
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +58,7 @@ class ChatList extends StatelessWidget {
             child: ListTile(
               contentPadding: EdgeInsets.symmetric(
                 horizontal: horizontalPadding * 1.3,
-                vertical: verticalPadding * 1.5,
+                vertical: verticalPadding * 0.8,
               ),
               leading: Container(
                 height: profileImageSize,

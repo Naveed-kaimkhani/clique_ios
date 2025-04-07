@@ -1,4 +1,5 @@
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clique/routes/routes_name.dart';
 import 'package:flutter/material.dart';
 import 'package:clique/constants/app_colors.dart';
@@ -36,21 +37,28 @@ class ProductCard extends StatelessWidget {
     final cardWidth = screenWidth * 0.6; // 60% of screen width
     final cardHeight = screenHeight * 0.35; // 35% of screen height
     final padding = screenWidth * 0.03; // 3% of screen width
-    final fontSizeTitle = screenWidth * 0.05; // 5% of screen width
+    final fontSizeTitle = screenWidth * 0.038; // 5% of screen width
     final fontSizeDescription = screenWidth * 0.03; // 3% of screen width
     final fontSizePrice = screenWidth * 0.04; // 4% of screen width
     final fontSizeOldPrice = screenWidth * 0.035; // 3.5% of screen width
     final fontSizeDiscount = screenWidth * 0.03; // 3% of screen width
 
     return GestureDetector(
-      // onTap:  () =>Get.toNamed(RouteName.productDetailsScreen),
-      onTap: (){
-//         Navigator.push(
-//   context,
-//   MaterialPageRoute(builder: (context) => ProductDetailsScreen(uid: uid,)),
-// );
-Get.toNamed(RouteName.productDetailsScreen,arguments: uid);
-      },
+   onTap: () {
+  Get.toNamed(
+    RouteName.productDetailsScreen,
+    arguments: {
+      'uid': uid,
+      'backgroundImage': backgroundImage,
+      'productName': productName,
+      'productDescription': productDescription,
+      'price': price,
+      'oldPrice': oldPrice,
+      'discount': discount,
+    },
+  );
+},
+
       child: Container(
         width: cardWidth,
         height: cardHeight,
@@ -60,20 +68,56 @@ Get.toNamed(RouteName.productDetailsScreen,arguments: uid);
         ),
         child: Stack(
           children: [
-            // Background Image
-            Hero(
-              // key: Key(uid),
-              tag: uid,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image.asset(
-                  backgroundImage,
-                  width: double.infinity,
-                  height: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-              ),
+
+//             Hero(
+//   tag: uid,
+//   child: ClipRRect(
+//     borderRadius: BorderRadius.circular(20),
+//     child: CachedNetworkImage(
+//       imageUrl: backgroundImage, // assuming this is a URL now
+//       width: double.infinity,
+//       height:276,
+//       fit: BoxFit.cover,
+//       placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+//       errorWidget: (context, url, error) => Icon(Icons.error),
+//     ),
+//   ),
+// ),
+
+
+Hero(
+  tag: uid,
+  child: ClipRRect(
+    borderRadius: BorderRadius.circular(20),
+    child: Stack(
+      children: [
+        CachedNetworkImage(
+          imageUrl: backgroundImage,
+          width: double.infinity,
+          height: 276,
+          fit: BoxFit.cover,
+          placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+          errorWidget: (context, url, error) => Icon(Icons.error),
+        ),
+        Container(
+          width: double.infinity,
+          height: 276,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter,
+              colors: [
+                Colors.black.withOpacity(0.6),
+                Colors.transparent,
+              ],
             ),
+          ),
+        ),
+      ],
+    ),
+  ),
+),
+
       
             // Cart Icon (Top Right)
             Positioned(
@@ -92,7 +136,7 @@ Get.toNamed(RouteName.productDetailsScreen,arguments: uid);
       
             // Product Details (Bottom)
             Positioned(
-              bottom: 0,
+              bottom: 5,
               left: 0,
               right: 0,
               child: Container(
@@ -111,15 +155,18 @@ Get.toNamed(RouteName.productDetailsScreen,arguments: uid);
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: padding * 0.5),
+                    // SizedBox(height: padding * 0.5),
                     Text(
-                      productDescription,
-                      style: TextStyle(
-                        color: textColor.withOpacity(0.7),
-                        fontSize: fontSizeDescription,
-                      ),
-                    ),
-                    SizedBox(height: padding),
+  productDescription,
+  maxLines: 2,
+  overflow: TextOverflow.ellipsis,
+  style: TextStyle(
+    color: textColor.withOpacity(0.7),
+    fontSize: fontSizeDescription,
+  ),
+),
+
+                    SizedBox(height: screenWidth * 0.01),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

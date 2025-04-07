@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:clique/components/index.dart';
+import 'package:clique/components/product_shimmer.dart';
+import 'package:clique/components/shimmer_influence.dart';
 import 'package:clique/constants/index.dart';
 import 'package:clique/view_model/group_view_model.dart';
 import 'package:clique/view_model/influencer_viewmodel.dart';
@@ -20,7 +22,7 @@ class DiscoverScreen extends StatefulWidget {
 class _DiscoverScreenState extends State<DiscoverScreen> {
   final DiscoverViewModel _viewModel = Get.find<DiscoverViewModel>();
   
-  // final InfluencerViewmodel _influencersViewModel = Get.find<InfluencerViewmodel>();
+  // final DiscoverViewModel _viewModel =     Get.put(DiscoverViewModel());
   final PageController controller = PageController(viewportFraction: 0.8, keepPage: true);
   final ScrollController _productScrollController = ScrollController();
   final ScrollController _influencerScrollController = ScrollController();
@@ -119,7 +121,17 @@ final ProductViewModel _productViewModel = Get.put(ProductViewModel());
   return Obx(() {
     if (_influencerViewModel.isLoading.value) {
       // return _buildInfluencerShimmer(size); // Show shimmer effect while loading
-      return CircularProgressIndicator();
+      return SizedBox(
+        height: size.height * 0.26,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: 3,
+          itemBuilder: (context, index) {
+            return ShimmerInfluencerCard(); // Show shimmer effect for influencer cards
+          },
+        ),
+
+      );
     }
 
     if (_influencerViewModel.error.value.isNotEmpty) {
@@ -130,7 +142,8 @@ final ProductViewModel _productViewModel = Get.put(ProductViewModel());
       return Center(child: Text('No influencers available')); // Show message if no influencers
     }
 
-    return SizedBox(
+    return 
+    SizedBox(
       height: size.height * 0.26,
       child: ListView.builder(
         controller: _influencerScrollController,
@@ -142,7 +155,6 @@ final ProductViewModel _productViewModel = Get.put(ProductViewModel());
           }
 
           var influencer = _influencerViewModel.influencers[index];
-          log('Influencer: ${influencer.profilePhoto}');
           return InfluencerCard(
             isFollowing: influencer.isFollowing,
             id: influencer.id,
@@ -160,73 +172,60 @@ final ProductViewModel _productViewModel = Get.put(ProductViewModel());
   });
 }
 
-  Widget  _buildProductList(Size size) {
-    return SizedBox(
-      height: size.height * 0.38,
+  Widget _buildProductList(Size size) {
+  return Obx(() {
+    if (_productViewModel.isLoading.value && _productViewModel.products.isEmpty) {
+      return SizedBox(
+      
+      height: size.height * 0.32,
+      child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+
+          itemCount:2,
+         itemBuilder: (context, index) {
+           return ShimmerProductCard();}
+      ),
+    ) ; // Show shimmer effect while loading
+    }
+
+    if (_productViewModel.error.value.isNotEmpty) {
+      return Center(child: Text(_productViewModel.error.value));
+    }
+
+    if (_productViewModel.products.isEmpty) {
+      return Center(child: Text('No products available'));
+    }
+
+    return 
+    SizedBox(
+      height: size.height * 0.32,
       child: ListView.builder(
         controller: _productScrollController,
         scrollDirection: Axis.horizontal,
-        itemCount: 3,
-        itemBuilder: (context, index) => index == 2
-          ? _buildViewAllButton(size, RouteName.viewAllProductsScreen)
-          : ProductCard(
-              isShowDiscount: true,
-              uid: (index + 1).toString(),
-              backgroundImage: index == 0 ? 'assets/png/product.png' : 'assets/png/product2.png',
-              productName: index == 0 ? "Girl's Full Blazers" : "Girl's Moisturizing Shampoo",
-              productDescription: "Crafted from premium, breathable cotton fabric",
-              price: 53.23,
-              oldPrice: 100.23,
-              discount: "10% OFF",
-            ),
+        itemCount: _productViewModel.products.length + 1,
+        itemBuilder: (context, index) {
+          if (index == _productViewModel.products.length) {
+            return _buildViewAllButton(size, RouteName.viewAllProductsScreen);
+          }
+
+          final product = _productViewModel.products[index];
+          final discount = ((product.msrp - product.cost) / product.msrp * 100).round();
+
+          return ProductCard(
+            isShowDiscount: discount > 0,
+            uid: product.id.toString(),
+            backgroundImage: product.imageUrls.isNotEmpty ? product.imageUrls.first : '',
+            productName: product.productTitle,
+            productDescription: product.productDesc,
+            price: product.cost,
+            oldPrice: product.msrp,
+            discount: "$discount% OFF",
+          );
+        },
       ),
     );
-  }
-
-
-//   Widget _buildProductList(Size size) {
-//   return Obx(() {
-//     if (_productViewModel.isLoading.value && _productViewModel.products.isEmpty) {
-//       return CircularProgressIndicator();
-//     }
-
-//     if (_productViewModel.error.value.isNotEmpty) {
-//       return Center(child: Text(_productViewModel.error.value));
-//     }
-
-//     if (_productViewModel.products.isEmpty) {
-//       return Center(child: Text('No products available'));
-//     }
-
-//     return SizedBox(
-//       height: size.height * 0.38,
-//       child: ListView.builder(
-//         controller: _productScrollController,
-//         scrollDirection: Axis.horizontal,
-//         itemCount: _productViewModel.products.length + 1,
-//         itemBuilder: (context, index) {
-//           if (index == _productViewModel.products.length) {
-//             return _buildViewAllButton(size, RouteName.viewAllProductsScreen);
-//           }
-
-//           final product = _productViewModel.products[index];
-//           final discount = ((product.msrp - product.cost) / product.msrp * 100).round();
-
-//           return ProductCard(
-//             isShowDiscount: discount > 0,
-//             uid: product.id.toString(),
-//             backgroundImage: product.imageUrls.isNotEmpty ? product.imageUrls.first : '',
-//             productName: product.productTitle,
-//             productDescription: product.productDesc,
-//             price: product.cost,
-//             oldPrice: product.msrp,
-//             discount: "$discount% OFF",
-//           );
-//         },
-//       ),
-//     );
-//   });
-// }
+  });
+}
 
   Widget _buildViewAllButton(Size size, String route) {
     return Center(

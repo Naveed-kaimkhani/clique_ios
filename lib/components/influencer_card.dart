@@ -1,11 +1,7 @@
 
 
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clique/constants/app_colors.dart';
-import 'package:clique/constants/app_images.dart';
-import 'package:clique/constants/app_svg_icons.dart';
 import 'package:clique/data/models/influencer_model.dart';
 import 'package:clique/routes/routes_name.dart';
 import 'package:clique/view_model/follow_controller.dart';
