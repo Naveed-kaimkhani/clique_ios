@@ -4,6 +4,7 @@ import 'package:clique/routes/routes_name.dart';
 import 'package:flutter/material.dart';
 import 'package:clique/constants/app_colors.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ProductCard extends StatelessWidget {
   final String backgroundImage;
@@ -69,21 +70,6 @@ class ProductCard extends StatelessWidget {
         child: Stack(
           children: [
 
-//             Hero(
-//   tag: uid,
-//   child: ClipRRect(
-//     borderRadius: BorderRadius.circular(20),
-//     child: CachedNetworkImage(
-//       imageUrl: backgroundImage, // assuming this is a URL now
-//       width: double.infinity,
-//       height:276,
-//       fit: BoxFit.cover,
-//       placeholder: (context, url) => Center(child: CircularProgressIndicator()),
-//       errorWidget: (context, url, error) => Icon(Icons.error),
-//     ),
-//   ),
-// ),
-
 
 Hero(
   tag: uid,
@@ -96,7 +82,7 @@ Hero(
           width: double.infinity,
           height: 276,
           fit: BoxFit.cover,
-          placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+          placeholder: (context, url) => LoadImageShimmer(),
           errorWidget: (context, url, error) => Icon(Icons.error),
         ),
         Container(
@@ -221,5 +207,24 @@ Hero(
         ),
       ),
     );
+  }
+}
+
+class LoadImageShimmer extends StatelessWidget {
+  const LoadImageShimmer({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+        child: Container(
+          width: double.infinity,
+          height: 276,
+          color: Colors.white,
+        ),
+      );
   }
 }

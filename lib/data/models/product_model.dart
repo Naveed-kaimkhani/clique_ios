@@ -1,4 +1,3 @@
-// models/product_model.dart
 class ProductModel {
   final int id;
   final String productTitle;
@@ -9,6 +8,7 @@ class ProductModel {
   final List<String> imageUrls;
   final String thumbnailUrl;
   final int quantityAvailable;
+  final String variantGroupId;
 
   ProductModel({
     required this.id,
@@ -20,10 +20,10 @@ class ProductModel {
     required this.imageUrls,
     required this.thumbnailUrl,
     required this.quantityAvailable,
+    required this.variantGroupId,
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
-    // Parse image URLs (comma-separated string to list)
     final imageUrls = (json['image_url'] as String).split(',');
     final thumbnails = (json['thumbnail_url'] as String).split(',');
 
@@ -37,6 +37,7 @@ class ProductModel {
       imageUrls: imageUrls,
       thumbnailUrl: thumbnails.isNotEmpty ? thumbnails.first : '',
       quantityAvailable: int.tryParse(json['quantity_available'].toString()) ?? 0,
+      variantGroupId: json['variant_group_id'] ?? '',
     );
   }
 }

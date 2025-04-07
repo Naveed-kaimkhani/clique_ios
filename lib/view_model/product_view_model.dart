@@ -1,5 +1,4 @@
-// view_models/product_viewmodel.dart
-import 'package:clique/controller/user_controller.dart';
+
 import 'package:clique/data/models/product_model.dart';
 import 'package:clique/data/repositories/product_repo.dart';
 import 'package:get/get.dart';
