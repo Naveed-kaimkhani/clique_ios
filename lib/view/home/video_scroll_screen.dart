@@ -1,11 +1,10 @@
-
-
 import 'package:clique/components/shopping_widget.dart';
 import 'package:clique/controller/navigation_controller.dart';
 import 'package:clique/view/bottom_navigation_bar.dart';
 import 'package:clique/view/discover/discover_screen.dart';
 import 'package:clique/view/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:video_player/video_player.dart';
 import 'package:get/get.dart';
 
@@ -21,14 +20,17 @@ class VideoScrollScreen extends StatefulWidget {
   State<VideoScrollScreen> createState() => _VideoScrollScreenState();
 }
 
-class _VideoScrollScreenState extends State<VideoScrollScreen> with SingleTickerProviderStateMixin {
+class _VideoScrollScreenState extends State<VideoScrollScreen>
+    with SingleTickerProviderStateMixin {
   static const int _tabCount = 4;
 
   late final PageController _pageController;
   late final TabController _tabController;
-  final NavigationController _navigationController = Get.put(NavigationController());
+  final NavigationController _navigationController =
+      Get.put(NavigationController());
 
-  final Map<int, VideoPlayerController> _controllers = {}; // Lazy-loaded controllers
+  final Map<int, VideoPlayerController> _controllers =
+      {}; // Lazy-loaded controllers
   int _currentIndex = 0; // Track current index
 
   @override
@@ -39,58 +41,83 @@ class _VideoScrollScreenState extends State<VideoScrollScreen> with SingleTicker
     _loadVideo(_currentIndex); // Load first video initially
   }
 
-  /// Loads the video lazily (only current & next)
   // void _loadVideo(int index) {
   //   if (index < 0 || index >= widget.videoUrls.length) return;
 
   //   if (!_controllers.containsKey(index)) {
-  //     final controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrls[index]));
+  //     final controller =
+  //         VideoPlayerController.networkUrl(Uri.parse(widget.videoUrls[index]));
   //     _controllers[index] = controller;
 
   //     controller.initialize().then((_) {
   //       if (mounted) {
   //         setState(() {});
-  //         controller.play();
+
+  //         if (index == _currentIndex) {
+  //           controller.play(); // Play the current video
+  //         } else {
+  //           controller.setVolume(0); // Prevent audio bleed
+  //           controller.pause(); // Ensure it's not playing
+  //         }
+
   //         controller.setLooping(false);
   //       }
   //     });
+  //   } else {
+  //     // Even if already initialized, ensure only current plays
+  //     _controllers.forEach((i, c) {
+  //       if (i == _currentIndex) {
+  //         c.play();
+  //         c.setVolume(1);
+  //       } else {
+  //         c.pause();
+  //         c.setVolume(0);
+  //       }
+  //     });
   //   }
+
+  //   // Preload next and previous video
+  //   if (index + 1 < widget.videoUrls.length)
+  //     _loadVideo(index + 1); // Preload next video
+  //   if (index - 1 >= 0) _loadVideo(index - 1); // Preload previous video
   // }
+
+
   void _loadVideo(int index) {
-  if (index < 0 || index >= widget.videoUrls.length) return;
+    if (index < 0 || index >= widget.videoUrls.length) return;
 
-  if (!_controllers.containsKey(index)) {
-    final controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrls[index]));
-    _controllers[index] = controller;
+    if (!_controllers.containsKey(index)) {
+      final controller =
+          VideoPlayerController.networkUrl(Uri.parse(widget.videoUrls[index]));
+      _controllers[index] = controller;
 
-    controller.initialize().then((_) {
-      if (mounted) {
-        setState(() {});
-        
-        if (index == _currentIndex) {
-          controller.play(); // Only play the current video
-        } else {
-          controller.setVolume(0); // Prevent audio bleed
-          controller.pause();      // Ensure it's not playing
+      controller.initialize().then((_) {
+        if (mounted) {
+          setState(() {});
+
+          if (index == _currentIndex) {
+            controller.play(); // Only play the current video
+          } else {
+            controller.setVolume(0); // Prevent audio bleed
+            controller.pause(); // Ensure it's not playing
+          }
+
+          controller.setLooping(false);
         }
-
-        controller.setLooping(false);
-      }
-    });
-  } else {
-    // Even if already initialized, ensure only current plays
-    _controllers.forEach((i, c) {
-      if (i == _currentIndex) {
-        c.play();
-        c.setVolume(1);
-      } else {
-        c.pause();
-        c.setVolume(0);
-      }
-    });
+      });
+    } else {
+      // Even if already initialized, ensure only current plays
+      _controllers.forEach((i, c) {
+        if (i == _currentIndex) {
+          c.play();
+          c.setVolume(1);
+        } else {
+          c.pause();
+          c.setVolume(0);
+        }
+      });
+    }
   }
-}
-
 
   /// Dispose of videos that are off-screen
   void _disposeVideo(int index) {
@@ -138,7 +165,7 @@ class _VideoScrollScreenState extends State<VideoScrollScreen> with SingleTicker
   Widget _buildMainContent(Size screenSize) {
     switch (_navigationController.selectedIndex.value) {
       case 0:
-        return  VideoView(
+        return VideoView(
           tabController: _tabController,
           pageController: _pageController,
           videoUrls: widget.videoUrls,
@@ -195,8 +222,8 @@ class VideoView extends StatelessWidget {
     required this.onPageChanged,
     required this.screenHeight,
     required this.screenWidth,
-  }) : _tabController = tabController,
-       _pageController = pageController;
+  })  : _tabController = tabController,
+        _pageController = pageController;
 
   @override
   Widget build(BuildContext context) {
@@ -217,26 +244,6 @@ class VideoView extends StatelessWidget {
     );
   }
 
-  // PreferredSizeWidget _buildAppBar() {
-  //   return AppBar(
-  //     automaticallyImplyLeading: false,
-  //     toolbarHeight: 0,
-  //     backgroundColor: Colors.transparent,
-  //     elevation: 0,
-  //   );
-  // }
-
-    PreferredSizeWidget _buildAppBar(BuildContext context) {
-    return AppBar(
-      automaticallyImplyLeading: false,
-      toolbarHeight: 0,
-      centerTitle: true,
-      backgroundColor: const Color.fromARGB(255, 214, 211, 211),
-      elevation: 0,
-      bottom: _buildTabBar(),
-    );
-  }
-
   PreferredSize _buildTabBar() {
     return PreferredSize(
       preferredSize: Size.fromHeight(screenHeight * 0.08),
@@ -248,14 +255,26 @@ class VideoView extends StatelessWidget {
         unselectedLabelColor: Colors.white,
         labelStyle: TextStyle(fontSize: screenWidth * 0.038),
         tabs: [
-          Tab(child: Text("Pet Food", style: TextStyle(fontSize: screenWidth * 0.037, fontWeight: FontWeight.bold))),
-          
-          Tab(child: Text("Pull Toys", style: TextStyle(fontSize: screenWidth * 0.036, fontWeight: FontWeight.bold))),
-          
-          Tab(child: Text("Leashes", style: TextStyle(fontSize: screenWidth * 0.037, fontWeight: FontWeight.bold))),
-          
-          Tab(child: Text("Collars", style: TextStyle(fontSize: screenWidth * 0.037, fontWeight: FontWeight.bold))),
-          
+          Tab(
+              child: Text("Pet Food",
+                  style: TextStyle(
+                      fontSize: screenWidth * 0.037,
+                      fontWeight: FontWeight.bold))),
+          Tab(
+              child: Text("Pull Toys",
+                  style: TextStyle(
+                      fontSize: screenWidth * 0.036,
+                      fontWeight: FontWeight.bold))),
+          Tab(
+              child: Text("Leashes",
+                  style: TextStyle(
+                      fontSize: screenWidth * 0.037,
+                      fontWeight: FontWeight.bold))),
+          Tab(
+              child: Text("Collars",
+                  style: TextStyle(
+                      fontSize: screenWidth * 0.037,
+                      fontWeight: FontWeight.bold))),
         ],
       ),
     );
@@ -282,7 +301,8 @@ class VideoView extends StatelessWidget {
     return Stack(
       children: [
         SizedBox.expand(
-          child: controllers.containsKey(index) && controllers[index]!.value.isInitialized
+          child: controllers.containsKey(index) &&
+                  controllers[index]!.value.isInitialized
               ? FittedBox(
                   fit: BoxFit.cover,
                   child: SizedBox(
@@ -291,20 +311,26 @@ class VideoView extends StatelessWidget {
                     child: VideoPlayer(controllers[index]!),
                   ),
                 )
-              : const Center(child: CircularProgressIndicator()),
+              : 
+          const Center(child: CircularProgressIndicator()),
         ),
       ],
     );
   }
 
-  Widget _buildBottomNavBar() {
-    return Positioned(
-      bottom: 0,
-      left: 0,
-      right: 0,
-      child: CustomBottomNavBar(
-        selectedIndex: 0,
-        onTap: (index) {},
+  Widget _buildShimmerLoading() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey.shade400,
+      highlightColor: Colors.grey.shade100,
+      child: Center(
+        child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          color: Colors.black,
+          child: Center(
+            child: Icon(Icons.video_library, color: Colors.white, size: 100),
+          ),
+        ),
       ),
     );
   }

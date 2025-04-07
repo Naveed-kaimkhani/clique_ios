@@ -6,6 +6,7 @@ import 'package:clique/models/message_model.dart';
 import 'package:clique/view_model/group_chat_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import '../../controller/user_controller.dart';
 
 class GroupChatScreen extends StatefulWidget {
@@ -25,6 +26,7 @@ class GroupChatScreen extends StatefulWidget {
   @override
   _GroupChatScreenState createState() => _GroupChatScreenState();
 }
+
 class _GroupChatScreenState extends State<GroupChatScreen> {
   late GroupChatViewModel viewModel;
   final ScrollController _scrollController = ScrollController();
@@ -50,47 +52,41 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels == _scrollController.position.minScrollExtent) {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.minScrollExtent) {
       log("Reached at top");
       setState(() {
-        _isLoadingOlderMessages = true; // Set flag to true when loading older messages
+        _isLoadingOlderMessages =
+            true; // Set flag to true when loading older messages
       });
       viewModel.loadMoreMessages().then((_) {
         setState(() {
-          _isLoadingOlderMessages = false; // Reset flag after loading is complete
+          _isLoadingOlderMessages =
+              false; // Reset flag after loading is complete
         });
       });
     }
   }
 
-  // void _scrollToBottom() {
-  //   if (_scrollController.hasClients && !_isLoadingOlderMessages) {
-  //     _scrollController.animateTo(
-  //       _scrollController.position.maxScrollExtent,
-  //       duration: Duration(milliseconds: 300),
-  //       curve: Curves.easeOut,
-  //     );
-  //   }
-  // }
-
   void _scrollToBottom() {
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    if (_scrollController.hasClients) {
-      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-    }
-  });
-}
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      }
+    });
+  }
 
-@override
-void dispose() {
-  // Dispose the ScrollController
-  _scrollController.dispose();
+  @override
+  void dispose() {
+    // Dispose the ScrollController
+    _scrollController.dispose();
 
-  // Dispose the ViewModel
-  Get.delete<GroupChatViewModel>(); // Dispose the ViewModel
+    // Dispose the ViewModel
+    Get.delete<GroupChatViewModel>(); // Dispose the ViewModel
 
-  super.dispose();
-}
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -108,7 +104,9 @@ void dispose() {
               stream: viewModel.messagesStream,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return LoadMessageAnimation();
+
+                  // Center(child: CircularProgressIndicator());
                 }
 
                 if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -121,7 +119,8 @@ void dispose() {
                 return ListView.builder(
                   controller: _scrollController,
                   padding: EdgeInsets.all(16),
-                  reverse: false, // Set to false to show latest messages at the bottom
+                  reverse:
+                      false, // Set to false to show latest messages at the bottom
                   itemCount: messages.length,
                   itemBuilder: (context, index) {
                     return ChatMessageWidget(message: messages[index]);
@@ -137,6 +136,29 @@ void dispose() {
               });
             },
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class LoadMessageAnimation extends StatelessWidget {
+  const LoadMessageAnimation({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Lottie.asset('assets/lottie/chat_loading.json', width: 100),
+          SizedBox(height: 16),
+          Text(
+            "Fetching hot gossip...",
+            style: TextStyle(fontSize: 16, color: Colors.grey),
+          )
         ],
       ),
     );

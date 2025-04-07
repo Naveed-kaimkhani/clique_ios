@@ -2,12 +2,12 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clique/view/chat/chat_screen.dart';
+import 'package:clique/view_model/group_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:clique/view_model/discover_viewmodel.dart';
 
 class ChatList extends StatelessWidget {
-  final DiscoverViewModel _viewModel = Get.find<DiscoverViewModel>();
+  final GroupViewModel _viewModel = Get.find<GroupViewModel>();
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,6 @@ class ChatList extends StatelessWidget {
     final double verticalPadding = size.height * 0.01;
     final double profileImageSize = size.width * 0.11;
     final double fontSize = size.width * 0.04;
-    final double timeFontSize = size.width * 0.035;
 
     return Obx(() {
       if (_viewModel.isLoading.value) {

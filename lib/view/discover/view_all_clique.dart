@@ -1,17 +1,17 @@
 import 'package:clique/components/clique_tab_card.dart';
 import 'package:clique/components/index.dart';
 import 'package:clique/controller/user_controller.dart';
+import 'package:clique/view_model/group_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../constants/index.dart';
-import '../../view_model/discover_viewmodel.dart';
 
 class ViewAllCliqueScreen extends StatelessWidget {
   const ViewAllCliqueScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final DiscoverViewModel _viewModel = Get.find<DiscoverViewModel>();
+    final GroupViewModel _viewModel = Get.find<GroupViewModel>();
 final UserController _userController = Get.find<UserController>();
 
     return Container(

@@ -1,10 +1,3 @@
-// import 'dart:async';
-// import 'package:clique/components/gradient_text.dart';
-// import 'package:clique/constants/app_colors.dart';
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
-// import 'package:pin_code_fields/pin_code_fields.dart';
-
 import 'dart:async';
 import 'package:clique/data/models/signup_params.dart';
 import 'package:clique/view_model/otp_controller.dart';
@@ -23,7 +16,7 @@ class OTPController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    startTimer();
+    // startTimer();
   }
 
   void startTimer() {
@@ -80,18 +73,6 @@ class OTPScreen extends StatelessWidget {
             Text("Enter OTP sent to your email", style: TextStyle(color: Colors.grey, fontSize: 16)),
             SizedBox(height: 20),
 
-            /// Email Input
-            // TextField(
-            //   controller: emailController,
-            //   style: TextStyle(color: Colors.white),
-            //   decoration: InputDecoration(
-            //     hintText: "Enter Phone Number",
-            //     hintStyle: TextStyle(color: Colors.grey),
-            //     filled: true,
-            //     fillColor: Color(0xFF161622),
-            //     border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
-            //   ),
-            // ),
             SizedBox(height: 20),
             /// OTP Input
             PinCodeTextField(

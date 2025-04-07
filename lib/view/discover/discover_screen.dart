@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:clique/components/index.dart';
 import 'package:clique/constants/index.dart';
+import 'package:clique/view_model/group_view_model.dart';
 import 'package:clique/view_model/influencer_viewmodel.dart';
 import 'package:clique/view_model/product_view_model.dart';
 import 'package:flutter/material.dart';
@@ -23,10 +24,10 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   final PageController controller = PageController(viewportFraction: 0.8, keepPage: true);
   final ScrollController _productScrollController = ScrollController();
   final ScrollController _influencerScrollController = ScrollController();
-
   final InfluencerViewmodel _influencerViewModel = Get.put((InfluencerViewmodel()));
-  
 final ProductViewModel _productViewModel = Get.put(ProductViewModel());
+  final GroupViewModel _groupViewModel = Get.put(GroupViewModel());
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -246,15 +247,15 @@ final ProductViewModel _productViewModel = Get.put(ProductViewModel());
 
   Widget _buildGroupList(Size size) {
     return Obx(() {
-      if (_viewModel.isLoading.value) {
+      if (_groupViewModel.isLoading.value) {
         return _buildGroupShimmer(size);
       }
       
-      if (_viewModel.error.value.isNotEmpty) {
+      if (_groupViewModel.error.value.isNotEmpty) {
         return Center(child: Text(_viewModel.error.value));
       }
 
-      if (_viewModel.groups.isEmpty) {
+      if (_groupViewModel.groups.isEmpty) {
         return Center(child: Text('No groups available'));
       }
 
@@ -262,22 +263,22 @@ final ProductViewModel _productViewModel = Get.put(ProductViewModel());
         height: size.height * 0.25,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: _viewModel.groups.length + 1,
-          itemBuilder: (context, index) => index == _viewModel.groups.length
+          itemCount: _groupViewModel.groups.length + 1,
+          itemBuilder: (context, index) => index == _groupViewModel.groups.length
             ? _buildViewAllButton(size, RouteName.viewAllCliquesScreen)
             : 
        
             GroupCard(
-                  isJoin: _viewModel.groups[index].isJoined,
+                  isJoin: _groupViewModel.groups[index].isJoined,
                    backgroundImage: AppSvgIcons.cloth,
-                  profileImage: _viewModel.groups[index].icon,
-                  name: _viewModel.groups[index].name,
-                  followers: '${_viewModel.groups[index].membersCount} members',
-                  guid: _viewModel.groups[index].guid,
+                  profileImage: _groupViewModel.groups[index].icon,
+                  name: _groupViewModel.groups[index].name,
+                  followers: '${_groupViewModel.groups[index].membersCount} members',
+                  guid: _groupViewModel.groups[index].guid,
                   authToken: _viewModel.userController.token.value,
                   uid: _viewModel.userController.uid.value,
-                  groupName: _viewModel.groups[index].name,
-                  memberCount: _viewModel.groups[index].membersCount,
+                  groupName: _groupViewModel.groups[index].name,
+                  memberCount: _groupViewModel.groups[index].membersCount,
               ),
         ),
       );

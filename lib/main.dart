@@ -17,10 +17,6 @@ void main() {
   //  Get.put(UserController());
   runApp(
 MyApp(),
-    // DevicePreview(
-    //   enabled: true, // Enable DevicePreview for testing
-    //   builder: (context) =>  MyApp()
-    // ),
   );
 }
  

@@ -2,29 +2,20 @@ import 'package:clique/components/auth_button.dart';
 import 'package:clique/components/custom_textfield.dart';
 import 'package:clique/components/gradient_text.dart';
 import 'package:clique/constants/index.dart';
-import 'package:clique/core/api/api_client.dart';
 import 'package:clique/data/models/signup_params.dart';
-import 'package:clique/data/repositories/auth_respository.dart';
-import 'package:clique/data/repositories/group_repository.dart';
-import 'package:clique/data/repositories/influencer_repository.dart';
 import 'package:clique/utils/utils.dart';
 import 'package:clique/view_model/auth_viewmodel.dart';
 import 'package:clique/view_model/otp_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginScreen extends StatelessWidget {
   final RxBool isChecked = false.obs;
   final TextEditingController emailController = TextEditingController();
-  // final TextEditingController passwordController = TextEditingController();
-
   final AuthViewModel authViewModel = Get.put(AuthViewModel());
-
-  // final passwordRegex = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$');
-  RegExp emailRegex = RegExp(
+ RegExp emailRegex = RegExp(
       r'^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.com|icloud\.com|hotmail\.com|live\.com)$');
 
   final OTPViewModel otpViewModel = Get.put(OTPViewModel());
@@ -112,12 +103,6 @@ class LoginScreen extends StatelessWidget {
           controller: emailController,
         ),
         SizedBox(height: Get.height * 0.015),
-        // CustomTextField(
-        //   hintText: 'Password',
-        //   // isPassword: true,
-        //         obscureText: true,
-        //   controller: passwordController,
-        // ),
       ],
     );
   }
