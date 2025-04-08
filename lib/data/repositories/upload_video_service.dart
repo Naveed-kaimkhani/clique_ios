@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'package:clique/data/models/product_model.dart';
 import 'package:clique/models/upload_video_response.dart';
 import 'package:clique/utils/utils.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 
@@ -21,10 +21,15 @@ class UploadVideoService {
   required String name,
   required String showType,
   required String lambdaToken,
+  required ProductModel product,
   required String createdBy,
   required String authToken,
 }) async {
   try {
+    log(product.id.toString());
+    log(product.productTitle.toString());
+    log(product.cost.toString());
+    log(product.imageUrls.toString());
     var request = http.MultipartRequest('POST', Uri.parse(baseUrl));
     request.headers['Authorization'] = 'Bearer $authToken';
     request.headers['Content-Type'] = 'multipart/form-data';
@@ -44,6 +49,20 @@ class UploadVideoService {
     request.fields['show_type'] = showType.toLowerCase(); // Ensure lowercase
     request.fields['lambda_token'] = lambdaToken;
     request.fields['created_by'] = createdBy;
+    
+
+
+        log("Product ID: ${product.id}");
+    log("Product Name: ${product.productTitle}");
+    log("Product Price: ${product.cost}");
+    log("Product Description: ${product.imageUrls.first}");
+    request.fields['product_id'] = product.id.toString();
+    
+    request.fields['product_name'] = product.productTitle;
+    
+    request.fields['product_price'] = product.cost.toString();
+    
+    request.fields['product_image'] = product.imageUrls.first;
 
     var response = await request.send();
     var responseBody = await response.stream.bytesToString();

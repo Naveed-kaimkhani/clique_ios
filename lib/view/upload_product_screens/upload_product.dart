@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clique/components/auth_button.dart';
 import 'package:clique/components/custom_textfield.dart';
+import 'package:clique/data/models/product_model.dart';
 import 'package:clique/view_model/product_details_controller.dart';
 import 'package:clique/view_model/product_view_model.dart';
 import 'package:clique/view_model/upload_video_viewmodel.dart';
@@ -155,56 +156,6 @@ Widget _buildMediaSection(String label, VoidCallback onTap, Rxn<File> file) {
     ],
   );
 }
-// Widget _buildVideoPlayer(File videoFile) {
-//   VideoPlayerController _controller = VideoPlayerController.file(videoFile);
-
-//   return FutureBuilder(
-//     future: _controller.initialize(),
-//     builder: (context, snapshot) {
-//       if (snapshot.connectionState == ConnectionState.done) {
-//         _controller.play(); // Start playing once initialized
-//         return ClipRRect(
-//           borderRadius: BorderRadius.circular(10),
-//           child: AspectRatio(
-//             aspectRatio: _controller.value.aspectRatio,
-//             child: VideoPlayer(_controller),
-//           ),
-//         );
-//       } else {
-//         return Center(child: CircularProgressIndicator()); // Show loading indicator
-//       }
-//     },
-//   );
-// }
-
-// Widget _buildVideoPlayer(File videoFile) {
-//   VideoPlayerController _controller = VideoPlayerController.file(videoFile);
-
-//   return FutureBuilder(
-//     future: _controller.initialize(),
-//     builder: (context, snapshot) {
-//       if (snapshot.connectionState == ConnectionState.done) {
-//         _controller.play(); // Auto-play video
-        
-//         return ClipRRect(
-//           borderRadius: BorderRadius.circular(10),
-//           child: SizedBox(
-            
-//             width: double.infinity, // Make it take full width
-
-//             height: 200, // Set a fixed height
-//             child: AspectRatio(
-//               aspectRatio: _controller.value.aspectRatio,
-//               child: VideoPlayer(_controller),
-//             ),
-//           ),
-//         );
-//       } else {
-//         return Center(child: CircularProgressIndicator()); // Show loading indicator
-//       }
-//     },
-//   );
-// }
 
 Widget _buildVideoPlayer(File videoFile) {
   VideoPlayerController _controller = VideoPlayerController.file(videoFile);
@@ -248,56 +199,51 @@ Widget _buildVideoPlayer(File videoFile) {
   //   return _buildDropdownField("Shopping Flow Redirect", viewModel.selectedCheckoutOption, ['Inline Checkout', 'Cart', 'Product Page']);
   // }
 
-  Widget _buildAddProductsButton() {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
-      onPressed: _openProductPickerBottomSheet,
-      child: Text("Add Products", style: TextStyle(color: Colors.white)),
-    );
-  }
 
   void _openProductPickerBottomSheet() {
     Get.bottomSheet(
       Container(
         color: Colors.white,
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            Text("Select Products", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            Text(
+              "Select Product", 
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
+            ),
             Expanded(
               child: ListView.builder(
                 itemCount: _productViewModel.products.length,
                 itemBuilder: (context, index) {
+                  final product = _productViewModel.products[index];
                   return Obx(() {
-                    bool isSelected = viewModel.selectedProducts.contains(index);
+                    bool isSelected = viewModel.selectedProduct.value?.id == product.id;
                     return ListTile(
-  leading: SizedBox(
-    width: 60, // or any reasonable width
-    height: 60,
-    child: CachedNetworkImage(
-      imageUrl: _productViewModel.products[index].imageUrls.first,
-      fit: BoxFit.cover,
-      placeholder: (context, url) => Center(child: CircularProgressIndicator()),
-      errorWidget: (context, url, error) => Icon(Icons.error),
-    ),
-  ),
-  title: Text(_productViewModel.products[index].productTitle),
-  trailing: Checkbox(
-    value: isSelected,
-    onChanged: (value) {
-      if (value == true) {
-        viewModel.selectedProducts.add(index);
-      } else {
-        viewModel.selectedProducts.remove(index);
-      }
-    },
-  ),
-  tileColor: isSelected ? Colors.green.withOpacity(0.1) : null,
-  onTap: () => isSelected
-      ? viewModel.selectedProducts.remove(index)
-      : viewModel.selectedProducts.add(index),
-);
-
+                      leading: SizedBox(
+                        width: 60,
+                        height: 60,
+                        child: CachedNetworkImage(
+                          imageUrl: product.imageUrls.first,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+                          errorWidget: (context, url, error) => Icon(Icons.error),
+                        ),
+                      ),
+                      title: Text(product.productTitle),
+                      trailing: Radio<ProductModel>(
+                        value: product,
+                        groupValue: viewModel.selectedProduct.value,
+                        onChanged: (ProductModel? value) {
+                          viewModel.selectedProduct.value = value;
+                          Get.back(); // Close the bottom sheet after selection
+                        },
+                      ),
+                      tileColor: isSelected ? Colors.green.withOpacity(0.1) : null,
+                      onTap: () {
+                        viewModel.selectedProduct.value = product;
+                        Get.back(); // Close the bottom sheet after selection
+                      },
+                    );
                   });
                 },
               ),
@@ -307,7 +253,14 @@ Widget _buildVideoPlayer(File videoFile) {
       ),
     );
   }
-
+  
+  Widget _buildAddProductsButton() {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
+      onPressed: _openProductPickerBottomSheet,
+      child: Text("Add Products", style: TextStyle(color: Colors.white)),
+    );
+  }
   Widget _buildUploadButton() {
     return AuthButton(buttonText: 'Upload Video', isLoading: viewModel.isLoading, onPressed: viewModel.uploadVideo);
   }

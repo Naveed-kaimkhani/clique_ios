@@ -11,7 +11,6 @@ class DiscoverViewModel extends GetxController {
 
   final RxBool isLoading = false.obs;
   final RxString error = ''.obs;
-
   RxList<PopstreamModel> popstreams = <PopstreamModel>[].obs;
 
   @override
@@ -141,11 +140,11 @@ class DiscoverViewModel extends GetxController {
           "Content-Type": "application/json",
         },
       );
+      // log(response.body.toString());
       log(response.statusCode.toString());
       if (response.statusCode == 200) {
         List<dynamic> popstreamList = response.body['popstreams'];
-        // log("pop stream ki list");
-        // log(popstreamList.toString());
+
         popstreams.value =
             popstreamList.map((item) => PopstreamModel.fromJson(item)).toList();
       } else {

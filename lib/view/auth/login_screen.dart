@@ -209,18 +209,18 @@ class LoginScreen extends StatelessWidget {
                 ],
               ),
               SizedBox(height: Get.height * 0.02),
-              AuthButton(
+              AuthButton( 
                 buttonText: 'Login',
                 isLoading: authViewModel.isLoading,
                 onPressed: () async {
-                  if (validateFields()) {
+                  if (true) {
                     authViewModel.isLoading.value = true;
                     try {
                       final SignupParams request = SignupParams(
                         name: "",
-                        // email: "naveedkaimkhami@gmail.com",
+                        email: "naveedkaimkhami@gmail.com",
                         
-                        email: emailController.text,
+                        // email: emailController.text,
                         phone: "",
                         role: "",
                       );

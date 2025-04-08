@@ -35,8 +35,8 @@ class ProductModel {
       productTitle: json['product_title'],
       productDesc: json['product_desc'],
       brandName: json['brand_name'],
-      cost: double.tryParse(json['cost']) ?? 0.0,
-      msrp: double.tryParse(json['msrp']) ?? 0.0,
+      cost: json['cost'],
+      msrp:json['msrp'],
       imageUrls: imageUrls,
       thumbnailUrl: thumbnails.isNotEmpty ? thumbnails.first : '',
       categories: categories, // Assign categories from JSON
