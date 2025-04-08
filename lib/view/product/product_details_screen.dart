@@ -365,13 +365,13 @@ Widget _buildImageThumbnail(Size size, int index) {
       children: [
         GradientText(
         
-    controller.productData['price'].toString(),
+    "\$${controller.productData['price'].toString()}",
           gradient: AppColors.appGradientColors,
           fontSize: size.width * 0.06,
         ),
         SizedBox(width: size.width * 0.02),
         Text(
-          "\$100.23",
+       controller.productData['oldPrice'].toString(),
           style: TextStyle(
             fontSize: size.width * 0.05,
             color: Colors.grey,
@@ -404,7 +404,7 @@ Widget _buildDescriptionSection(Size size) {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          controller.productData['productDescription'],
+          removeHtmlTags(controller.productData['productDescription']),
           style: TextStyle(
             fontSize: size.width * 0.04,
             color: Colors.grey,
@@ -427,29 +427,11 @@ Widget _buildDescriptionSection(Size size) {
     );
   });
 }
+String removeHtmlTags(String text) {
+  final RegExp exp = RegExp(r'<[^>]*>', multiLine: true, caseSensitive: false);
+  return text.replaceAll(exp, '');
+}
 
-
-  // Widget _buildDescriptionSection(Size size) {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Text(
-     
-  //   controller.productData['productDescription'],
-  //         style: TextStyle(
-  //           fontSize: size.width * 0.04,
-  //           color: Colors.grey,
-  //         ),
-  //       ),
-  //       SizedBox(height: size.height * 0.01),
-  //       GradientText(
-  //         "Read More>>",
-  //         gradient: AppColors.appGradientColors,
-  //         fontSize: size.width * 0.04,
-  //       ),
-  //     ],
-  //   );
-  // }
 
   Widget _buildAddToCartButton(Size size) {
     return Center(
@@ -492,7 +474,7 @@ Widget _buildDescriptionSection(Size size) {
           borderRadius: BorderRadius.circular(20),
         ),
         child: Text(
-          '10% OFF',
+         controller.productData['discount'] + "% OFF",
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,

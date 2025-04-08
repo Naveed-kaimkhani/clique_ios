@@ -7,8 +7,8 @@ class ProductModel {
   final double msrp;
   final List<String> imageUrls;
   final String thumbnailUrl;
-  final int quantityAvailable;
-  final String variantGroupId;
+  final String? categories; // New field for categories
+  final String? variantGroupId;
 
   ProductModel({
     required this.id,
@@ -19,13 +19,16 @@ class ProductModel {
     required this.msrp,
     required this.imageUrls,
     required this.thumbnailUrl,
-    required this.quantityAvailable,
+    required this.categories, // Initialize categories in constructor
     required this.variantGroupId,
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
     final imageUrls = (json['image_url'] as String).split(',');
     final thumbnails = (json['thumbnail_url'] as String).split(',');
+
+    // Assuming the categories field is a string of comma-separated category names
+    final categories = json['categories'];
 
     return ProductModel(
       id: json['id'],
@@ -36,8 +39,8 @@ class ProductModel {
       msrp: double.tryParse(json['msrp']) ?? 0.0,
       imageUrls: imageUrls,
       thumbnailUrl: thumbnails.isNotEmpty ? thumbnails.first : '',
-      quantityAvailable: int.tryParse(json['quantity_available'].toString()) ?? 0,
-      variantGroupId: json['variant_group_id'] ?? '',
+      categories: categories, // Assign categories from JSON
+      variantGroupId: json['variant_group_id'],
     );
   }
 }

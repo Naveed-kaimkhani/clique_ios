@@ -171,21 +171,19 @@ final ProductViewModel _productViewModel = Get.put(ProductViewModel());
     );
   });
 }
-
-  Widget _buildProductList(Size size) {
+Widget _buildProductList(Size size) {
   return Obx(() {
     if (_productViewModel.isLoading.value && _productViewModel.products.isEmpty) {
       return SizedBox(
-      
-      height: size.height * 0.32,
-      child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-
-          itemCount:2,
-         itemBuilder: (context, index) {
-           return ShimmerProductCard();}
-      ),
-    ) ; // Show shimmer effect while loading
+        height: size.height * 0.32,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: 2,
+          itemBuilder: (context, index) {
+            return ShimmerProductCard(); // Show shimmer effect while loading
+          },
+        ),
+      );
     }
 
     if (_productViewModel.error.value.isNotEmpty) {
@@ -196,8 +194,10 @@ final ProductViewModel _productViewModel = Get.put(ProductViewModel());
       return Center(child: Text('No products available'));
     }
 
-    return 
-    SizedBox(
+    // Filter products to show only one per category
+    Set<String> displayedCategories = Set<String>();
+    
+    return SizedBox(
       height: size.height * 0.32,
       child: ListView.builder(
         controller: _productScrollController,
@@ -209,6 +209,15 @@ final ProductViewModel _productViewModel = Get.put(ProductViewModel());
           }
 
           final product = _productViewModel.products[index];
+
+          // Skip product if it's from a category that has already been displayed
+          if (displayedCategories.contains(product.categories)) {
+            return SizedBox.shrink(); // Don't show this product
+          }
+
+          // Add the product's category to the displayed categories set
+          displayedCategories.add(product.categories??'');
+
           final discount = ((product.msrp - product.cost) / product.msrp * 100).round();
 
           return ProductCard(
@@ -226,6 +235,61 @@ final ProductViewModel _productViewModel = Get.put(ProductViewModel());
     );
   });
 }
+
+//   Widget _buildProductList(Size size) {
+//   return Obx(() {
+//     if (_productViewModel.isLoading.value && _productViewModel.products.isEmpty) {
+//       return SizedBox(
+      
+//       height: size.height * 0.32,
+//       child: ListView.builder(
+//               scrollDirection: Axis.horizontal,
+
+//           itemCount:2,
+//          itemBuilder: (context, index) {
+//            return ShimmerProductCard();}
+//       ),
+//     ) ; // Show shimmer effect while loading
+//     }
+
+//     if (_productViewModel.error.value.isNotEmpty) {
+//       return Center(child: Text(_productViewModel.error.value));
+//     }
+
+//     if (_productViewModel.products.isEmpty) {
+//       return Center(child: Text('No products available'));
+//     }
+
+//     return 
+//     SizedBox(
+//       height: size.height * 0.32,
+//       child: ListView.builder(
+//         controller: _productScrollController,
+//         scrollDirection: Axis.horizontal,
+//         itemCount: _productViewModel.products.length + 1,
+//         itemBuilder: (context, index) {
+//           if (index == _productViewModel.products.length) {
+//             return _buildViewAllButton(size, RouteName.viewAllProductsScreen);
+//           }
+
+//           final product = _productViewModel.products[index];
+//           final discount = ((product.msrp - product.cost) / product.msrp * 100).round();
+
+//           return ProductCard(
+//             isShowDiscount: discount > 0,
+//             uid: product.id.toString(),
+//             backgroundImage: product.imageUrls.isNotEmpty ? product.imageUrls.first : '',
+//             productName: product.productTitle,
+//             productDescription: product.productDesc,
+//             price: product.cost,
+//             oldPrice: product.msrp,
+//             discount: "$discount% OFF",
+//           );
+//         },
+//       ),
+//     );
+//   });
+// }
 
   Widget _buildViewAllButton(Size size, String route) {
     return Center(
