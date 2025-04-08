@@ -62,58 +62,6 @@ class DiscoverViewModel extends GetxController {
       return storedToken;
     }
   }
-  // Future<void> fetchPopstreams() async {
-  //   String authToken = "";
-  //   final String lamdaToken =
-  //       userController.revoLamdaToken.value; // Retrieve lambda token
-
-  //   try {
-  //     // Fetch a fresh token
-  //     final refreshResponse = await GetConnect().post(
-  //      ApiEndpoints.getRevoAccessApi, {
-  //         "email": userController.userEmail.value // Retrieve email
-  //       },
-  //     );
-  //     if (refreshResponse.statusCode == 200) {
-  //       authToken = refreshResponse.body['access_token'];
-  //     } else {
-  //       Get.snackbar("Error", "Failed to refresh token");
-  //       return;
-  //     }
-  //   } catch (e) {
-  //     Get.snackbar("Error", "An error occurred while refreshing token: $e");
-  //     return;
-  //   }
-
-  //   try {
-  //     final response = await GetConnect().post(
-  //       ApiEndpoints.getAllPopstreamUrl,
-  //       {
-  //         "last_id": "",
-  //         "brand_name": "clique",
-  //         "email": "",
-  //         "search_text": "",
-  //         "size": 12,
-  //         "lambda_token": lamdaToken,
-  //       },
-  //       headers: {
-  //         "Authorization": "Bearer $authToken",
-  //         "Content-Type": "application/json",
-  //       },
-  //     );
-  //     if (response.statusCode == 200) {
-  //       List<dynamic> popstreamList = response.body['popstreams'];
-  //       popstreams.value =
-  //           popstreamList.map((item) => PopstreamModel.fromJson(item)).toList();
-  //     } else {
-  //       Get.put(UserController());
-  //       fetchPopstreams();
-  //     }
-  //   } catch (e) {
-  //     Get.snackbar("Error", "An error occurred: $e");
-  //   }
-  // }
-
   Future<void> fetchPopstreams() async {
     final String lamdaToken = userController.revoLamdaToken.value;
 

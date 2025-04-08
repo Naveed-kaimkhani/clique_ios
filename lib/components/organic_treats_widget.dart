@@ -1,10 +1,19 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clique/components/label_text.dart';
+import 'package:clique/data/models/pop_stream_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:marquee/marquee.dart';
+import 'package:shimmer/shimmer.dart';
 import '../constants/app_svg_icons.dart';
 
 class OrganicTreatsWidget extends StatelessWidget {
-  const OrganicTreatsWidget({super.key});
+  
+  final PopstreamModel popstream;
+
+  const OrganicTreatsWidget({
+    required this.popstream,    
+    super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,18 +23,20 @@ class OrganicTreatsWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Image.asset(
-          AppSvgIcons.bone,
-          height: screenHeight * 0.06, // Responsive height
-          width: screenWidth * 0.12, // Responsive width
-        ),
+  
+        ProductImageWidget(popstream: popstream, screenHeight: screenHeight, screenWidth: screenWidth),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            LabelText(text: "Organic Treats", fontSize: screenWidth * 0.04, ),
+       
+ SizedBox(
+        width: screenWidth * 0.3, // Fixed width
+        height: screenHeight * 0.04, // Fixed height
+        child: _buildMarqueeText( popstream.name, screenWidth),
+      ),
             LabelText(
-              text: "\$39.00",
+              text: " \$${popstream.partyName}",
               weight: FontWeight.bold,
               fontSize: screenWidth * 0.042, // Responsive font size
             ),
@@ -49,6 +60,59 @@ class OrganicTreatsWidget extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+  Widget _buildMarqueeText(String text , double screenWidth) {
+  return Marquee(
+    text: text,
+    style: TextStyle(
+      fontWeight: FontWeight.bold,
+      fontSize: screenWidth * 0.038,
+    ),
+    blankSpace: 30.0,
+    velocity: 50.0,
+    pauseAfterRound: Duration(seconds: 1),
+    startPadding: 10.0,
+  );
+}
+}
+
+class ProductImageWidget extends StatelessWidget {
+  const ProductImageWidget({
+    super.key,
+    required this.popstream,
+    required this.screenHeight,
+    required this.screenWidth,
+  });
+
+  final PopstreamModel popstream;
+  final double screenHeight;
+  final double screenWidth;
+
+  @override
+  Widget build(BuildContext context) {
+    return CachedNetworkImage(
+      imageUrl: popstream.consultantIds , // Handle null case
+      height: screenHeight * 0.06,  // Same height
+      width: screenWidth * 0.12,    // Same width
+      fit: BoxFit.cover,            // Same fit
+      placeholder: (context, url) =>  Shimmer.fromColors(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+        child: Container(
+          height: screenHeight * 0.06,
+          width: screenWidth * 0.12,
+          decoration: BoxDecoration(
+    color: Colors.white,
+    borderRadius: BorderRadius.circular(4), // Adjust as needed
+          ),
+        ),
+      ),
+      errorWidget: (context, url, error) => Icon(
+        Icons.image, 
+        size: screenHeight * 0.06,
+        color: Colors.grey[400],
+      ),
     );
   }
 }

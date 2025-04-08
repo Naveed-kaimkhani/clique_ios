@@ -1,17 +1,20 @@
-
 import 'package:clique/components/organic_treats_widget.dart';
 import 'package:clique/components/shop_all_widget.dart';
+import 'package:clique/data/models/pop_stream_model.dart';
 import 'package:flutter/material.dart';
 
 class ShoppingWidget extends StatelessWidget {
-  const ShoppingWidget({
+   ShoppingWidget({
     super.key,
     required this.screenHeight,
     required this.screenWidth,
+    required this.popstream,
   });
 
   final double screenHeight;
   final double screenWidth;
+  
+  final PopstreamModel popstream;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +46,7 @@ class ShoppingWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(15),
               boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 10)],
             ),
-            child: OrganicTreatsWidget(),
+            child: OrganicTreatsWidget(popstream:popstream ,),
           ),
         ],
       ),
