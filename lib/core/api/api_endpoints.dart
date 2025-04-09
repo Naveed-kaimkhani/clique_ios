@@ -21,4 +21,11 @@ class ApiEndpoints {
 
   static final String getRevoAccessApi =
       'https://clique.revovideo.net/api/auth/token';
+
+
+  static const String stripePaymentApi = "$baseUrl/stripe/payment-intent";
+  
+  static const String createOrderApi = "$baseUrl/topdawg/orders";
+// /api/v1
+
 }

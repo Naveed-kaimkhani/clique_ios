@@ -1,0 +1,119 @@
+import 'dart:developer';
+
+import 'package:clique/controller/user_controller.dart';
+import 'package:clique/core/api/api_endpoints.dart';
+import 'package:clique/data/models/address.dart';
+import 'package:clique/data/models/order.dart';
+import 'package:clique/data/models/product_model.dart';
+import 'package:clique/models/order_summary.dart';
+import 'package:clique/view_model/cart_quantity_controller.dart';
+import 'package:get/get.dart';
+import 'package:clique/view_model/address_controller.dart';
+
+  import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+class OrderViewModel extends GetxController {
+  final AddressController addressController = Get.find<AddressController>();
+
+  final CartQuantityController cartQuantityController = Get.find<CartQuantityController>();
+  final userController = Get.find<UserController>();
+  var isLoading = false.obs;
+  var errorMessage = ''.obs;
+  Rx<OrderSummary?> orderSummary = Rx<OrderSummary?>(null); // Define the orderSummary field
+
+Future<OrderSummary?> submitOrder() async {
+  log("submit order called");
+  try {
+    isLoading.value = true;
+
+    // Prepare the order data using the Address Controller
+    if (addressController.address1.isEmpty) {
+        Get.snackbar("Error", "Please enter address");
+    }
+    var address = Address(
+      address1: addressController.address1.value,
+      address2: addressController.address2.value,
+      city: addressController.city.value,
+      stateCode: addressController.stateCode.value,
+      countryCode: addressController.countryCode.value,
+      zipCode: addressController.zipCode.value,
+    );
+
+    var order = Order(
+      customerId: userController.uid.toString(), // Use the actual customer ID
+      firstName: userController.userName.value, // Use the actual first name
+      lastName: "", // Use the actual last name
+      phone: userController.phone.value, // Use the actual phone number
+      address: address,
+      transactions: [
+        Transaction(
+          tdid: cartQuantityController.products.first.tdid ?? "",
+          quantity: cartQuantityController.quantity.value,
+        )
+      ],
+      productDetails: [
+        ProductModel(
+          id: cartQuantityController.products.first.id,
+          productCode: cartQuantityController.products.first.productCode,
+          productTitle: cartQuantityController.products.first.productTitle,
+          productDesc: cartQuantityController.products.first.productDesc,
+          imageUrls: cartQuantityController.products.first.imageUrls,
+          cost: cartQuantityController.products.first.cost,
+          brandName: "",
+          msrp: 0,
+          thumbnailUrl: "",
+          categories: "",
+          variantGroupId: "",
+        )
+      ],
+    );
+
+    // Send POST request to the API
+    // final url = Uri.parse(ApiEndpoints.createOrderApi);
+
+    final url = Uri.parse("https://dev.moutfits.com/api/v1/topdawg/orders");
+
+    // final token = 'your_bearer_token';  // Replace with actual token
+
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${userController.token.value}',
+    };
+
+    // Prepare the request body by converting the order object to a map
+    final Map<String, dynamic> orderMap = order.toMap();
+    // log(orderMap.toString());
+    log(jsonEncode(orderMap).toString()); // Log the JSON string
+    final response = await http.post(
+      url,
+      headers: headers,
+      body: jsonEncode(orderMap),  // Encode the order map to JSON
+    
+    );
+    log(response.statusCode.toString());
+  log(response.body.toString());
+    if (response.statusCode == 200) {
+      // Success
+    final parsedOrderSummary = OrderSummary.fromJson(jsonDecode(response.body));
+
+        // Store the orderSummary in the field
+        orderSummary.value = parsedOrderSummary;
+
+        // Return the OrderSummary object
+        return parsedOrderSummary;
+    } else {
+      // Failure
+      print('Failed to place order: ${response.body}');
+
+      // Handle failure
+      print('Failed to place order: ${response.statusCode}');
+    }
+  } catch (e) {
+    print('Error: $e');
+  } finally {
+    isLoading.value = false;
+  }
+}
+
+}

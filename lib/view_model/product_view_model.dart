@@ -1,48 +1,3 @@
-
-// import 'package:clique/data/models/product_model.dart';
-// import 'package:clique/data/repositories/product_repo.dart';
-// import 'package:get/get.dart';
-
-// class ProductViewModel extends GetxController {
-//   final ProductRepository _productRepository = ProductRepository();
-  
-//   var products = <ProductModel>[].obs;
-//   var isLoading = true.obs;
-//   var error = ''.obs;
-//   var currentPage = 1.obs;
-//   var totalPages = 1.obs;
-
-//   @override
-//   void onInit() {
-//     fetchProducts();
-//     super.onInit();
-//   }
-
-//   Future<void> fetchProducts() async {
-//     try {
-//       isLoading(true);
-//       error('');
-//       final fetchedProducts = await _productRepository.fetchProducts(
-//         page: currentPage.value,
-//       );
-//       products.assignAll(fetchedProducts);
-//     } catch (e) {
-//       error(e.toString());
-//       Get.snackbar('Error', e.toString());
-//     } finally {
-//       isLoading(false);
-//     }
-//   }
-
-//   void loadMoreProducts() {
-//     if (currentPage.value < totalPages.value && !isLoading.value) {
-//       currentPage.value++;
-//       fetchProducts();
-//     }
-//   }
-// }
-
-
 import 'package:clique/data/models/product_model.dart';
 import 'package:clique/data/repositories/product_repo.dart';
 import 'package:get/get.dart';
@@ -74,12 +29,10 @@ class ProductViewModel extends GetxController {
       final List<ProductModel> fetchedProducts = (data['products'] as List)
           .map((json) => ProductModel.fromJson(json))
           .toList();
-
-      // Assign the fetched products to the observable list
       if (currentPage.value == 1) {
-        products.assignAll(fetchedProducts); // Reset products if it's the first page
+        products.assignAll(fetchedProducts); 
       } else {
-        products.addAll(fetchedProducts); // Add products if it's a subsequent page
+        products.addAll(fetchedProducts); 
       }
 
       // Update pagination details

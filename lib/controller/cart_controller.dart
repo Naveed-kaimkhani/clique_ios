@@ -1,18 +1,10 @@
-import 'package:clique/constants/app_images.dart';
 import 'package:clique/constants/app_svg_icons.dart';
 import 'package:clique/models/cart_model.dart';
 import 'package:get/get.dart';
 
 class CartController extends GetxController {
   var cartItems = <CartItem>[
-    CartItem(
-      id: '1', 
-      name: 'Jacket Boucle',
-       price: 53.23, quantity: 1, imageUrl: AppSvgIcons.product, size: 'XL'),
-      //    CartItem(
-      // id: '2', 
-      // name: 'Jacket Boucle',
-      //  price: 53.23, quantity: 1, imageUrl: AppSvgIcons.cloth, size: 'XL'),
+ 
        
   ].obs;
   
@@ -50,4 +42,3 @@ class CartController extends GetxController {
     }
   }
 }
-

@@ -2,39 +2,18 @@
 
 class PopstreamModel {
   final String id;
-  // final String brandId;
-  // final String createdBy;
-  // final String createdOn;
   final String eventCover;
-  // final String eventType;
-  // final String groupId;
-  // final bool isDeleted;
-  // final bool isPublished;
   final String name;
   final String showType;
-  // final int videoDurationInSeconds;
   final List<String> hashtags;
-  // final String url;
   final String partyId;
   final String partyName;
-  // final bool isTemplate;
   final String videoUrl;
-  // final List<dynamic> storeProduct;
-  // final String playerCountdownAt;
-  // final Map<String, dynamic> context;
-  // final List<VideoFile> videofiles;
   final String consultantIds;
 
   PopstreamModel({
     required this.id,
-    // required this.brandId,
-    // required this.createdBy,
-    // required this.createdOn,
     required this.eventCover,
-    // required this.eventType,
-    // required this.groupId,
-    // required this.isDeleted,
-    // required this.isPublished,
     required this.name,
     required this.showType,
     // required this.videoDurationInSeconds,

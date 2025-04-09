@@ -1,7 +1,9 @@
 import 'package:clique/components/organic_treats_widget.dart';
 import 'package:clique/components/shop_all_widget.dart';
 import 'package:clique/data/models/pop_stream_model.dart';
+import 'package:clique/routes/routes_name.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ShoppingWidget extends StatelessWidget {
    ShoppingWidget({
@@ -37,16 +39,21 @@ class ShoppingWidget extends StatelessWidget {
             ),
             child: ShopAllWidget(),
           ),
-          Container(
-            height: screenHeight * 0.14,
-            width: screenWidth * 0.65,
-            padding: EdgeInsets.all(screenWidth * 0.02),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 10)],
+          GestureDetector(
+            child: Container(
+              height: screenHeight * 0.14,
+              width: screenWidth * 0.65,
+              padding: EdgeInsets.all(screenWidth * 0.02),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 10)],
+              ),
+              child: OrganicTreatsWidget(popstream:popstream ,),
             ),
-            child: OrganicTreatsWidget(popstream:popstream ,),
+            onTap: (){
+              Get.toNamed(RouteName.cartScreen, arguments: popstream.partyId);
+            },
           ),
         ],
       ),

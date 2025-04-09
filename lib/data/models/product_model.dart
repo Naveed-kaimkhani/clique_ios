@@ -9,6 +9,9 @@ class ProductModel {
   final String thumbnailUrl;
   final String? categories; // New field for categories
   final String? variantGroupId;
+  final String? tdid; // New field for tdid
+  final String? productCode; // New field for product_code
+  // final String? type; // New field for type
 
   ProductModel({
     required this.id,
@@ -21,6 +24,9 @@ class ProductModel {
     required this.thumbnailUrl,
     required this.categories, // Initialize categories in constructor
     required this.variantGroupId,
+    this.tdid, // Optional field for tdid
+    this.productCode, // Optional field for product_code
+    // this.type, // Optional field for type
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
@@ -36,11 +42,25 @@ class ProductModel {
       productDesc: json['product_desc'],
       brandName: json['brand_name'],
       cost: json['cost'],
-      msrp:json['msrp'],
+      msrp: json['msrp'],
       imageUrls: imageUrls,
       thumbnailUrl: thumbnails.isNotEmpty ? thumbnails.first : '',
       categories: categories, // Assign categories from JSON
       variantGroupId: json['variant_group_id'],
+      tdid: json['tdid'], // Assign tdid from JSON
+      productCode: json['product_code'], // Assign product_code from JSON
+      // type: json['type'], // Assign type from JSON
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'pid': id,
+      'product_title': productTitle,
+      'product_desc': productDesc,
+      'price': cost,
+      'product_image': imageUrls.join(','), 
+      'product_code': productCode, 
+    };
   }
 }

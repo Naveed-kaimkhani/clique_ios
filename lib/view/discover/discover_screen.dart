@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:clique/components/index.dart';
 import 'package:clique/components/product_shimmer.dart';
 import 'package:clique/components/shimmer_influence.dart';

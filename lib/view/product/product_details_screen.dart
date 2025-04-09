@@ -442,7 +442,7 @@ String removeHtmlTags(String text) {
           onPressed: () => Get.toNamed(RouteName.cartScreen, arguments:controller.productData['uid']),
           icon: Icon(Icons.shopping_cart, color: Colors.white),
           label: Text(
-            "Add to Cart",
+            "Checkout",
             style: TextStyle(
               fontSize: size.width * 0.04,
               color: Colors.white,
@@ -458,6 +458,7 @@ String removeHtmlTags(String text) {
         ),
       ),
     );
+  
   }
 
   Widget _buildDiscountTag(Size size) {
