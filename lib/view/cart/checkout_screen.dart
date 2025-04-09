@@ -213,7 +213,7 @@ final CartQuantityController _cartQuantityController = Get.find<CartQuantityCont
                       // 
                       
             await     orderViewModel.submitOrder();
-  await stripeVM.makePayment( 100); // $63.73 in cents
+  // await stripeVM.makePayment( 100); // $63.73 in cents
   controller.isFinished.value = true;
 },
                        onFinish: () async {
