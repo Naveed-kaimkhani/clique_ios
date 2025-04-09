@@ -3,20 +3,26 @@ import 'package:clique/data/repositories/auth_respository.dart';
 import 'package:clique/data/repositories/group_repository.dart';
 import 'package:clique/data/repositories/influencer_repository.dart';
 import 'package:clique/routes/app_routes.dart';
+import 'package:clique/stipe_test.dart';
+import 'package:clique/utils/keys.dart';
 import 'package:clique/view/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 // import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 
 
-void main() { 
+void main() async{ 
+
+  
+  WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey = publishableKey;
+  await Stripe.instance.applySettings();
    Get.put(ApiClient());
   Get.put(GroupRepository());
   Get.put(AuthRepository());
   Get.put(InfluencerRepository());
-  
-  // WidgetsFlutterBinding.ensureInitialized();
-  // Stripe.publishableKey = 'pk_test_51RBMHyF2KDumDuVOylTaEasrDreMcD8OW8kuT5Qv3k7MFf055ISzIKICY8RegFrbd9HQoRFyXXe5mmjuvy5pqu7N009RT2dXt1';
+
   runApp(
 MyApp(),
   );

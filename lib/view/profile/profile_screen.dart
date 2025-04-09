@@ -2,6 +2,7 @@ import 'package:clique/components/index.dart';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/view/chat/chat_list.dart';
 import 'package:clique/view/profile/update_profile.dart';
+import 'package:clique/view_model/stripe_viewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../constants/index.dart';
@@ -15,6 +16,7 @@ class ProfileScreenState extends State<ProfileScreen> with SingleTickerProviderS
   late TabController _tabController;
   final UserController userController = Get.find<UserController>();
 
+  final StripeViewModel _groupViewModel = Get.put(StripeViewModel());
   @override
   void initState() {
     super.initState();
@@ -63,8 +65,8 @@ class ProfileScreenState extends State<ProfileScreen> with SingleTickerProviderS
                           child: CustomButton(
                             text: 'Edit Profile',
                             onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateProfileScreen()));
-
+                              // Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateProfileScreen()));
+_groupViewModel.makePayment(100.0);
                             },
                           ),
                         ),
@@ -96,35 +98,46 @@ class ProfileScreenState extends State<ProfileScreen> with SingleTickerProviderS
                  ChatList(),
                   
                   // Products Tab Content
-                  ListView(
-                    padding: EdgeInsets.only(top: 12.0),
-                    children: [
-                      ProfileProductCard(
-                        uid: '1',
-                        backgroundImage: 'assets/png/product.png',
-                        productName: "Girl's Full Blazers",
-                        productDescription: "Crafted from premium, breathable cotton fabric",
-                        price: 53.23,
-                        oldPrice: 100.23,
-                        discount: "10% OFF",
-                      ),
-                      ProfileProductCard(
-                        uid: '2',
-                        backgroundImage: 'assets/png/product2.png',
-                        productName: "Girl's Full Blazers",
-                        productDescription: "Crafted from premium, breathable cotton fabric",
-                        price: 53.23,
-                        oldPrice: 100.23,
-                        discount: "10% OFF",
-                      ),
-                    ],
-                  ),
+                  ProductsSection(),
                 ],
               ),
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class ProductsSection extends StatelessWidget {
+  const ProductsSection({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      padding: EdgeInsets.only(top: 12.0),
+      children: [
+        ProfileProductCard(
+          uid: '1',
+          backgroundImage: 'assets/png/product.png',
+          productName: "Girl's Full Blazers",
+          productDescription: "Crafted from premium, breathable cotton fabric",
+          price: 53.23,
+          oldPrice: 100.23,
+          discount: "10% OFF",
+        ),
+        ProfileProductCard(
+          uid: '2',
+          backgroundImage: 'assets/png/product2.png',
+          productName: "Girl's Full Blazers",
+          productDescription: "Crafted from premium, breathable cotton fabric",
+          price: 53.23,
+          oldPrice: 100.23,
+          discount: "10% OFF",
+        ),
+      ],
     );
   }
 }

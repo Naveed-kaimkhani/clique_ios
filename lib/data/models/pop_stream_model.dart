@@ -10,12 +10,15 @@ class PopstreamModel {
   final String partyName;
   final String videoUrl;
   final String consultantIds;
+  final String createdBy;
 
   PopstreamModel({
     required this.id,
     required this.eventCover,
     required this.name,
     required this.showType,
+    
+    required this.createdBy,
     // required this.videoDurationInSeconds,
     required this.hashtags,
     // required this.url,
@@ -42,6 +45,7 @@ class PopstreamModel {
       // isDeleted: json['is_deleted'] ?? false,
       // isPublished: json['is_published'] ?? false,
       name: json['name']?.toString() ?? '',
+       createdBy: json['created_by']?.toString() ?? '',
       showType: json['show_type']?.toString() ?? '',
       // videoDurationInSeconds: json['video_duration_in_seconds'] ?? 0,
       hashtags: List<String>.from(json['hashtags']?.map((x) => x.toString()) ?? []),

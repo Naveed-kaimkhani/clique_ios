@@ -1,5 +1,6 @@
 import 'package:clique/constants/app_images.dart';
 import 'package:clique/controller/user_controller.dart';
+import 'package:clique/stipe_test.dart';
 import 'package:clique/view/auth/login_screen.dart';
 import 'package:clique/view/home/home_screen.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,8 @@ class _SplashScreenState extends State<SplashScreen> {
     await Future.delayed(Duration(seconds: 2)); // Simulate splash delay
     userController.loadUserSession();
     if (userController.token.value.isNotEmpty) {
-      Get.offAll(() => HomeScreen()); // Navigate to Home if logged in
+      Get.offAll(() => HomeScreen()); 
+        // Get.offAll(() => Stripetest()); 
     } else {
       Get.offAll(() => LoginScreen()); // Navigate to Login if not logged in
     }

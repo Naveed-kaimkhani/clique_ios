@@ -1,9 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:clique/controller/user_controller.dart';
 import 'package:clique/core/api/api_endpoints.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
 
 class PaymentService {
@@ -23,15 +20,14 @@ class PaymentService {
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-      return data['clientSecret'];
+      return data['client_secret'];
     } else {
-      print(
+      log(
         "Error: ${response.statusCode} ${response.body}"
       );
     log("Stripe Response: ${response.body}");
-      // throw Exception('Failed to create payment intent');
+      throw Exception('Failed to create payment intent');
       
-      throw Exception('');
     }
   }
 }
