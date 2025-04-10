@@ -48,7 +48,7 @@ class ProductDetailsScreen extends StatelessWidget {
           _buildTopBar(size),
           _buildImageSelector(size),
           _buildProductDetails(size),
-          _buildDiscountTag(size),
+          // _buildDiscountTag(size),
         ],
       ),
     );

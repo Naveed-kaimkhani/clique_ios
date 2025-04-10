@@ -2,6 +2,7 @@ import 'package:clique/components/index.dart';
 import 'package:clique/components/product_shimmer.dart';
 import 'package:clique/components/shimmer_influence.dart';
 import 'package:clique/constants/index.dart';
+import 'package:clique/data/models/product_model.dart';
 import 'package:clique/view_model/group_view_model.dart';
 import 'package:clique/view_model/influencer_viewmodel.dart';
 import 'package:clique/view_model/product_view_model.dart';
@@ -172,6 +173,74 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
     );
   });
 }
+// Widget _buildProductList(Size size) {
+//   return Obx(() {
+//     if (_productViewModel.isLoading.value && _productViewModel.products.isEmpty) {
+//       return SizedBox(
+//         height: size.height * 0.32,
+//         child: ListView.builder(
+//           scrollDirection: Axis.horizontal,
+//           itemCount: 2,
+//           itemBuilder: (context, index) {
+//             return ShimmerProductCard(); // Show shimmer effect while loading
+//           },
+//         ),
+//       );
+//     }
+
+//     if (_productViewModel.error.value.isNotEmpty) {
+//       return Center(child: Text(_productViewModel.error.value));
+//     }
+
+//     if (_productViewModel.products.isEmpty) {
+//       return Center(child: Text('No products available'));
+//     }
+
+//     // Filter products to show only one per category
+//     Set<String> displayedCategories = Set<String>();
+    
+//     return SizedBox(
+//       height: size.height * 0.32,
+//       child: ListView.builder(
+//         controller: _productScrollController,
+//         scrollDirection: Axis.horizontal,
+//         itemCount: _productViewModel.products.length + 1,
+//         itemBuilder: (context, index) {
+//           if (index == _productViewModel.products.length) {
+//             return _buildViewAllButton(size, RouteName.viewAllProductsScreen);
+//           }
+
+//           final product = _productViewModel.products[index];
+
+//           // Skip product if it's from a category that has already been displayed
+//           if (displayedCategories.contains(product.categories)) {
+//             return SizedBox.shrink(); // Don't show this product
+//           }
+
+//           // Add the product's category to the displayed categories set
+//           displayedCategories.add(product.categories??'');
+
+//           final discount = ((product.msrp - product.cost) / product.msrp * 100).round();
+
+//           return ProductCard(
+//             weight:product.productWeight ,
+//             unit: product.unit,
+//             isShowDiscount: discount > 0,
+//             uid: product.id.toString(),
+//             backgroundImage: product.imageUrls.isNotEmpty ? product.imageUrls.first : '',
+//             productName: product.productTitle,
+//             productDescription: product.productDesc,
+//             price: product.cost,
+//             oldPrice: product.msrp,
+//             discount: "$discount% OFF",
+//           );
+//         },
+//       ),
+//     );
+//   });
+// }
+
+
 Widget _buildProductList(Size size) {
   return Obx(() {
     if (_productViewModel.isLoading.value && _productViewModel.products.isEmpty) {
@@ -181,7 +250,7 @@ Widget _buildProductList(Size size) {
           scrollDirection: Axis.horizontal,
           itemCount: 2,
           itemBuilder: (context, index) {
-            return ShimmerProductCard(); // Show shimmer effect while loading
+            return ShimmerProductCard();
           },
         ),
       );
@@ -195,34 +264,34 @@ Widget _buildProductList(Size size) {
       return Center(child: Text('No products available'));
     }
 
-    // Filter products to show only one per category
+    // ✅ Filter products outside the builder
+    List<ProductModel> filteredProducts = [];
     Set<String> displayedCategories = Set<String>();
-    
+
+    for (var product in _productViewModel.products) {
+      String category = product.categories ?? '';
+      if (!displayedCategories.contains(category)) {
+        filteredProducts.add(product);
+        displayedCategories.add(category);
+      }
+    }
+
     return SizedBox(
       height: size.height * 0.32,
       child: ListView.builder(
         controller: _productScrollController,
         scrollDirection: Axis.horizontal,
-        itemCount: _productViewModel.products.length + 1,
+        itemCount: filteredProducts.length + 1,
         itemBuilder: (context, index) {
-          if (index == _productViewModel.products.length) {
+          if (index == filteredProducts.length) {
             return _buildViewAllButton(size, RouteName.viewAllProductsScreen);
           }
 
-          final product = _productViewModel.products[index];
-
-          // Skip product if it's from a category that has already been displayed
-          if (displayedCategories.contains(product.categories)) {
-            return SizedBox.shrink(); // Don't show this product
-          }
-
-          // Add the product's category to the displayed categories set
-          displayedCategories.add(product.categories??'');
-
+          final product = filteredProducts[index];
           final discount = ((product.msrp - product.cost) / product.msrp * 100).round();
 
           return ProductCard(
-            weight:product.productWeight ,
+            weight: product.productWeight,
             unit: product.unit,
             isShowDiscount: discount > 0,
             uid: product.id.toString(),
@@ -238,7 +307,6 @@ Widget _buildProductList(Size size) {
     );
   });
 }
-
 
   Widget _buildViewAllButton(Size size, String route) {
     return Center(
