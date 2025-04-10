@@ -455,19 +455,6 @@ Widget _buildProductList(Size size) {
   
 
 
-// String _insertLineBreaks(String text, int interval) {
-//   if (text.length <= interval) return text;
-
-//   final buffer = StringBuffer();
-//   for (int i = 0; i < text.length; i++) {
-//     buffer.write(text[i]);
-//     if ((i + 1) % interval == 0 && i != text.length - 1) {
-//       buffer.write('\n');
-//     }
-//   }
-//   return buffer.toString();
-// }
-
 
   Widget _buildPriceSection(Size size) {
     return Row(

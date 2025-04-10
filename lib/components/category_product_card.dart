@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clique/routes/routes_name.dart';
+import 'package:clique/view_model/product_details_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:clique/constants/app_colors.dart';
 import 'package:get/get.dart';
@@ -54,14 +55,13 @@ class ProductCategoryCard extends StatelessWidget {
     final fontSizeOldPrice = screenWidth * 0.035; // 3.5% of screen width
     final fontSizeDiscount = screenWidth * 0.03; // 3% of screen width
 
+    final ProductController controller = Get.find<ProductController>();
     return GestureDetector(
    onTap: () {
     // log("tappppeddd");
     // Get.back(); // This pops the current screen
 
-  Get.toNamed(
-    RouteName.productDetailsScreen,
-    arguments: {
+    controller.setProductData( {
       'uid': uid,
       'backgroundImage': backgroundImage,
       'productName': productName,
@@ -72,8 +72,40 @@ class ProductCategoryCard extends StatelessWidget {
       'unit': unit,
       'categories':categories,
       'size':weight,
-    },
-  );
+    },);
+
+
+  //    Get.toNamed(
+  //   RouteName.productDetailsScreen,
+  //   arguments: {
+  //     'uid': uid,
+  //     'backgroundImage': backgroundImage,
+  //     'productName': productName,
+  //     'productDescription': productDescription,
+  //     'price': price,
+  //     'oldPrice': oldPrice,
+  //     'discount': discount,
+  //     'unit': unit,
+  //     'categories':categories,
+  //     'size':weight,
+  //   },
+  // );
+  // Get.toNamed(
+  //   RouteName.productDetailsScreen,
+  //   arguments: {
+  //     'uid': uid,
+  //     'backgroundImage': backgroundImage,
+  //     'productName': productName,
+
+  //     'productDescription': productDescription,
+  //     'price': price,
+  //     'oldPrice': oldPrice,
+  //     'discount': discount,
+  //     'unit': unit,
+  //     'categories':categories,
+  //     'size':weight,
+  //   },
+  // );
 },
 
       child: Container(
