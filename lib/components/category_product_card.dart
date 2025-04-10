@@ -56,8 +56,8 @@ class ProductCategoryCard extends StatelessWidget {
 
     return GestureDetector(
    onTap: () {
-    log("tappppeddd");
-    Get.back(); // This pops the current screen
+    // log("tappppeddd");
+    // Get.back(); // This pops the current screen
 
   Get.toNamed(
     RouteName.productDetailsScreen,

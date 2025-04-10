@@ -7,18 +7,16 @@ class ProductController extends GetxController {
 
   final RxList<String> productImages = <String>[].obs;
 
-  late Map<String, dynamic> productData;
+  // Make productData observable by wrapping it in an RxMap
+  final RxMap<String, dynamic> productData = <String, dynamic>{}.obs;
 
   void setProductData(Map<String, dynamic> data) {
-    productData = data;
+    productData.value = data; // This will trigger an update in the UI
 
     // Set images dynamically from productData or mix with static
     productImages.assignAll([
-      // 'https://example.com/image1.jpg',
       productData['backgroundImage'],
-      
       productData['backgroundImage'],
-      
       productData['backgroundImage'],
     ]);
   }

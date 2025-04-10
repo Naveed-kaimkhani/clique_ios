@@ -18,7 +18,7 @@ class ProductDetailsScreen extends StatelessWidget {
     'assets/png/product.jpg',
     'assets/png/product.jpg',
   ];
-  final Map<String, dynamic> productData = Get.arguments;
+  // final Map<String, dynamic> productData = Get.arguments;
 
   final ProductController controller = Get.put(ProductController());
   final FavoriteController favoriteController = Get.put(FavoriteController());
