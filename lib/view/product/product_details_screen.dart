@@ -325,7 +325,16 @@ Widget _buildImageThumbnail(Size size, int index) {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildProductTitle(size),
+                            
+                                _buildProductTitle(size),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            //   children: [
+                            //     _buildProductTitle(size),
+                              
+                            //  _buildDiscountTag(size),
+                            //   ],
+                            // ),
                             SizedBox(height: size.height * 0.006),
                             _buildPriceSection(size),
                             SizedBox(height: size.height * 0.01),
@@ -333,7 +342,9 @@ Widget _buildImageThumbnail(Size size, int index) {
                             SizedBox(height: size.height * 0.01),
                             _buildDescriptionSection(size),
                             SizedBox(height: size.height * 0.015),
-                            SizeSelector(),
+                            SizeSelector(
+                              unit: controller.productData['unit'],
+                              weight: controller.productData['size'], ),
                             SizedBox(height: size.height * 0.02),
                             _buildAddToCartButton(size),
                           ],
@@ -359,6 +370,22 @@ Widget _buildImageThumbnail(Size size, int index) {
       ),
     );
   }
+  
+
+
+// String _insertLineBreaks(String text, int interval) {
+//   if (text.length <= interval) return text;
+
+//   final buffer = StringBuffer();
+//   for (int i = 0; i < text.length; i++) {
+//     buffer.write(text[i]);
+//     if ((i + 1) % interval == 0 && i != text.length - 1) {
+//       buffer.write('\n');
+//     }
+//   }
+//   return buffer.toString();
+// }
+
 
   Widget _buildPriceSection(Size size) {
     return Row(
@@ -475,7 +502,7 @@ String removeHtmlTags(String text) {
           borderRadius: BorderRadius.circular(20),
         ),
         child: Text(
-         controller.productData['discount'] + "% OFF",
+         controller.productData['discount'] ,
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,

@@ -46,9 +46,11 @@
 
 import 'dart:developer';
 
+import 'package:clique/controller/cart_controller.dart';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/view/home/video_scroll_screen.dart';
 import 'package:clique/view/splash/loading_placeholder.dart';
+import 'package:clique/view_model/address_controller.dart';
 import 'package:clique/view_model/discover_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -61,7 +63,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
   late DiscoverViewModel discoverViewModel;
   final UserController userController = Get.put(UserController());
-
+  
+  //  CartController cartController = Get.put(CartController());
+  //  AddressController controller=   Get.put(AddressController());
   @override
   void initState() {
     super.initState();

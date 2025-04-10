@@ -9,12 +9,13 @@ static const String homeScreen = '/HomeScreen';
 
 static const String oTPScreen = '/OTPScreen';
 
+static const String productSearchScreen = '/ProductSearchScreen';
 static const String uploadVideo = '/UploadVideo';
 // static const String groupChatScreen = '/GroupChatScreen';
 static const String influencerProfile = '/InfluencerProfile';
 
 static const String notificationScreen = '/NotificationScreen';
-static const String searchScreen = '/SearchScreen';
+// static const String searchScreen = '/SearchScreen';
 
 
 static const String viewAllInfluencersScreen = '/ViewAllInfluencersScreen';

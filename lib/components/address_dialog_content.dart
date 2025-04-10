@@ -1,3 +1,5 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:clique/utils/utils.dart';
 import 'package:clique/view_model/address_controller.dart';
 import 'package:clique/view_model/order_view_model.dart';
 import 'package:flutter/material.dart';
@@ -32,22 +34,45 @@ class AddressDialogContent extends StatelessWidget {
             customTextField("Country Code", countryController),
             customTextField("ZIP Code", zipController),
             SizedBox(height: 10),
+ 
+
             ElevatedButton(
-              onPressed: () {
-                controller.address1.value = address1Controller.text;
-                controller.address2.value = address2Controller.text;
-                controller.city.value = cityController.text;
-                controller.stateCode.value = stateController.text;
-                controller.countryCode.value = countryController.text;
-                controller.zipCode.value = zipController.text;
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.black, // Set the button color
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // Set padding
+              ),
+  onPressed: () async {
+    // Validate country code
+    if (countryController.text.trim().length != 2) {
+      // Get.snackbar(
+      //   "Invalid Country Code",
+      //   "Country code must be exactly 2 characters (e.g., US, NJ).",
+      //   snackPosition: SnackPosition.BOTTOM,
+      //   backgroundColor: Colors.redAccent,
+      //   colorText: Colors.white,
+      // );
+      Utils.showCustomSnackBar("Invalid Country Code","Country code must be exactly 2 characters (e.g., US, NJ).", ContentType.failure);
+      return; // Stop further execution
+    }
 
-                controller.saveAddressToPrefs();
-                //  orderViewModel.submitOrder();
+    // Set address values
+    controller.address1.value = address1Controller.text;
+    controller.address2.value = address2Controller.text;
+    controller.city.value = cityController.text;
+    controller.stateCode.value = stateController.text;
+    controller.countryCode.value = countryController.text;
+    controller.zipCode.value = zipController.text;
+  Utils.showCustomSnackBar("Info","Calculating Shipping Cost. Please Wait..", ContentType.success);
+    await controller.saveAddressToPrefs();
+    await orderViewModel.submitOrder();
 
-                Get.back(); // Close dialog
-              },
-              child: Text("Save"),
-            ),
+    Get.back(); // Close dialog
+  },
+  child: Text("Save Address", style: TextStyle(
+   color: Colors.white, 
+  ),),
+),
+
           ],
         ),
       ),

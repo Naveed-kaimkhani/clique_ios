@@ -15,6 +15,24 @@ class AddressController extends GetxController {
     loadAddressFromPrefs();
   }
 
+  // Function to clear the saved address data
+  Future<void> clearAddress() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('address_1');
+    await prefs.remove('address_2');
+    await prefs.remove('city');
+    await prefs.remove('state_code');
+    await prefs.remove('country_code');
+    await prefs.remove('zip_code');
+
+    // Optionally, clear the Rx variables after removing them from SharedPreferences
+    address1.value = '';
+    address2.value = '';
+    city.value = '';
+    stateCode.value = '';
+    countryCode.value = '';
+    zipCode.value = '';
+  }
   Future<void> saveAddressToPrefs() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString('address_1', address1.value);
@@ -23,6 +41,7 @@ class AddressController extends GetxController {
     prefs.setString('state_code', stateCode.value);
     prefs.setString('country_code', countryCode.value);
     prefs.setString('zip_code', zipCode.value);
+    loadAddressFromPrefs();
   }
 
   Future<void> loadAddressFromPrefs() async {

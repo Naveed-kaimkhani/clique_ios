@@ -1,6 +1,8 @@
 import 'package:avatar_stack/animated_avatar_stack.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clique/constants/index.dart';
+import 'package:clique/controller/group_controler.dart';
+import 'package:clique/view/chat/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:clique/data/repositories/group_repository.dart';
@@ -12,12 +14,14 @@ class CliqueTabCard extends StatelessWidget {
   final String profileImage;
   final String name;
   final String followers;
+    final String groupName;
   final String guid;
   final int uid;
   final String authToken;
   final int memberCount;
   final bool isJoined;
-  const CliqueTabCard({
+   CliqueTabCard({
+    required this.groupName,
     required this.backgroundImage,
     required this.profileImage,
     required this.name,
@@ -29,6 +33,7 @@ class CliqueTabCard extends StatelessWidget {
     required this.memberCount,
     super.key,
   });
+final GroupController groupController = Get.find<GroupController>();
 
   @override
   Widget build(BuildContext context) {
@@ -142,36 +147,85 @@ class CliqueTabCard extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            Container(
-                              width: buttonWidth,
-                              height: buttonHeight,
-                              decoration: BoxDecoration(
-                                gradient: isJoined ? AppColors.appGradientColors : AppColors.backGradientColors,
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              child: Center(
-                                child: TextButton(
-                                  onPressed: () async {
-                                    if (isJoined) {
-                                      Get.toNamed(RouteName.groupChatScreen);
-                                    } else {
-                                      // bool isAdded = await GroupRepository().joinGroup(guid, uid);
-                                      if (isJoined) {
-                                        // await Utils.saveJoinedGroup(guid);
-                                        Get.toNamed(RouteName.groupChatScreen);
-                                      }
-                                    }
-                                  },
-                                  child: Text(
-                                    isMember ? "Message" : "Join Now",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: size.width * 0.036,
+                               Container(
+                          width: buttonWidth,
+                          height: buttonHeight,
+                          decoration: BoxDecoration(
+                            gradient: isJoined
+                                ? AppColors.appGradientColors
+                                : AppColors.backGradientColors,
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Center(
+                            child: TextButton(
+                              onPressed: () async {
+                                if (isJoined) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => GroupChatScreen(
+                                        profileImage: profileImage,
+                                        guid: guid,
+                                        groupName: groupName,
+                                        memberCount: memberCount,
+                                      ),
                                     ),
-                                  ),
+                                  );
+                                } else {
+                                  await groupController.joinGroup(guid,uid);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => GroupChatScreen(
+                                        profileImage: profileImage,
+                                        guid: guid,
+                                        groupName:groupName,
+                                        memberCount: memberCount,
+                                      ),
+                                    ),
+                                  );
+                                }
+                              },
+                              child: Text(
+                              isJoined? "Message" : "Join Now",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: size.width * 0.032,
                                 ),
                               ),
                             ),
+                          ),
+                        ),
+                            // Container(
+                            //   width: buttonWidth,
+                            //   height: buttonHeight,
+                            //   decoration: BoxDecoration(
+                            //     gradient: isJoined ? AppColors.appGradientColors : AppColors.backGradientColors,
+                            //     borderRadius: BorderRadius.circular(30),
+                            //   ),
+                            //   child: Center(
+                            //     child: TextButton(
+                            //       onPressed: () async {
+                            //         if (isJoined) {
+                            //           Get.toNamed(RouteName.groupChatScreen);
+                            //         } else {
+                            //           // bool isAdded = await GroupRepository().joinGroup(guid, uid);
+                            //           if (isJoined) {
+                            //             // await Utils.saveJoinedGroup(guid);
+                            //             Get.toNamed(RouteName.groupChatScreen);
+                            //           }
+                            //         }
+                            //       },
+                            //       child: Text(
+                            //         isMember ? "Message" : "Join Now",
+                            //         style: TextStyle(
+                            //           color: Colors.white,
+                            //           fontSize: size.width * 0.036,
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
                           ],
                         ),
                       ],

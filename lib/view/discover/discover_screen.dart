@@ -25,7 +25,10 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   final ScrollController _productScrollController = ScrollController();
   final ScrollController _influencerScrollController = ScrollController();
   final InfluencerViewmodel _influencerViewModel = Get.put((InfluencerViewmodel()));
-final ProductViewModel _productViewModel = Get.put(ProductViewModel());
+// final ProductViewModel _productViewModel = Get.put(ProductViewModel());
+  final ProductViewModel _productViewModel = Get.isRegistered<ProductViewModel>()
+    ? Get.find<ProductViewModel>()
+    : Get.put(ProductViewModel());
   final GroupViewModel _groupViewModel = Get.put(GroupViewModel());
 
   @override
@@ -219,6 +222,8 @@ Widget _buildProductList(Size size) {
           final discount = ((product.msrp - product.cost) / product.msrp * 100).round();
 
           return ProductCard(
+            weight:product.productWeight ,
+            unit: product.unit,
             isShowDiscount: discount > 0,
             uid: product.id.toString(),
             backgroundImage: product.imageUrls.isNotEmpty ? product.imageUrls.first : '',
@@ -234,60 +239,6 @@ Widget _buildProductList(Size size) {
   });
 }
 
-//   Widget _buildProductList(Size size) {
-//   return Obx(() {
-//     if (_productViewModel.isLoading.value && _productViewModel.products.isEmpty) {
-//       return SizedBox(
-      
-//       height: size.height * 0.32,
-//       child: ListView.builder(
-//               scrollDirection: Axis.horizontal,
-
-//           itemCount:2,
-//          itemBuilder: (context, index) {
-//            return ShimmerProductCard();}
-//       ),
-//     ) ; // Show shimmer effect while loading
-//     }
-
-//     if (_productViewModel.error.value.isNotEmpty) {
-//       return Center(child: Text(_productViewModel.error.value));
-//     }
-
-//     if (_productViewModel.products.isEmpty) {
-//       return Center(child: Text('No products available'));
-//     }
-
-//     return 
-//     SizedBox(
-//       height: size.height * 0.32,
-//       child: ListView.builder(
-//         controller: _productScrollController,
-//         scrollDirection: Axis.horizontal,
-//         itemCount: _productViewModel.products.length + 1,
-//         itemBuilder: (context, index) {
-//           if (index == _productViewModel.products.length) {
-//             return _buildViewAllButton(size, RouteName.viewAllProductsScreen);
-//           }
-
-//           final product = _productViewModel.products[index];
-//           final discount = ((product.msrp - product.cost) / product.msrp * 100).round();
-
-//           return ProductCard(
-//             isShowDiscount: discount > 0,
-//             uid: product.id.toString(),
-//             backgroundImage: product.imageUrls.isNotEmpty ? product.imageUrls.first : '',
-//             productName: product.productTitle,
-//             productDescription: product.productDesc,
-//             price: product.cost,
-//             oldPrice: product.msrp,
-//             discount: "$discount% OFF",
-//           );
-//         },
-//       ),
-//     );
-//   });
-// }
 
   Widget _buildViewAllButton(Size size, String route) {
     return Center(

@@ -29,7 +29,7 @@ class AuthButton extends StatelessWidget {
     final isDesktop = screenSize.width > 768;
     
     // Responsive sizing
-    final buttonHeight = isDesktop ? 50.0 : 48.0;
+    final buttonHeight = isDesktop ? 50.0 : 50.0;
     final buttonWidth = fixedWidth ?? (isDesktop ? 400.0 : screenSize.width * 0.9);
     final fontSize = isDesktop ? 12.0 : 14.0;
     final spinnerSize = isDesktop ? 24.0 : 20.0;

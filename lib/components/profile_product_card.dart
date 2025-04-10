@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clique/routes/routes_name.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -44,7 +45,18 @@ class ProfileProductCard extends StatelessWidget {
     final fontSizeDiscount = screenWidth * 0.03; // 3% of screen width
 
     return GestureDetector(
-      onTap:  () =>Get.toNamed(RouteName.productDetailsScreen, arguments: uid),
+      onTap:  () =>  Get.toNamed(
+    RouteName.productDetailsScreen,
+    arguments: {
+      'uid': uid,
+      'backgroundImage': backgroundImage,
+      'productName': productName,
+      'productDescription': productDescription,
+      'price': price,
+      'oldPrice': oldPrice,
+      'discount': discount,
+    },
+  ),
       child: Container(
         width: cardWidth,
         height: cardHeight,
@@ -55,18 +67,51 @@ class ProfileProductCard extends StatelessWidget {
         child: Stack(
           children: [
             // Background Image
-            Hero(
-              tag: uid,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image.asset(
-                  backgroundImage,
-                  width: double.infinity,
-                  height: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-              ),
+            // Hero(
+            //   tag: uid,
+            //   child: ClipRRect(
+            //     borderRadius: BorderRadius.circular(20),
+            //     child: Image.asset(
+            //       backgroundImage,
+            //       width: double.infinity,
+            //       height: double.infinity,
+            //       fit: BoxFit.cover,
+            //     ),
+            //   ),
+            // ),
+            
+Hero(
+  tag: uid,
+  child: ClipRRect(
+    borderRadius: BorderRadius.circular(20),
+    child: Stack(
+      children: [
+        CachedNetworkImage(
+          imageUrl: backgroundImage, // This should be a network URL for the image
+          width: double.infinity,
+          height: double.infinity,
+          fit: BoxFit.cover,
+          placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+          errorWidget: (context, url, error) => const Icon(Icons.error),
+        ),
+            Container(
+          width: double.infinity,
+          height: cardWidth * 2,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter,
+              colors: [
+                Colors.black.withOpacity(0.6),
+                Colors.transparent,
+              ],
             ),
+          ),
+        ),
+      ],
+    ),
+  ),
+),
       
             // Cart Icon (Top Right)
             Positioned(
@@ -104,13 +149,17 @@ class ProfileProductCard extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: padding * 0.5),
-                    Text(
-                      productDescription,
-                      style: TextStyle(
-                        color: textColor.withOpacity(0.7),
-                        fontSize: fontSizeDescription,
-                      ),
-                    ),
+                   
+
+                                Text(
+  productDescription,
+  maxLines: 2,
+  overflow: TextOverflow.ellipsis,
+  style: TextStyle(
+    color: textColor.withOpacity(0.7),
+    fontSize: fontSizeDescription,
+  ),
+),
                     SizedBox(height: padding),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

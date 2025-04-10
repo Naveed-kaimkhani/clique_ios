@@ -123,7 +123,9 @@ class ViewAllProductsScreen extends StatelessWidget {
           final product = productViewModel.products[index];
 
           return ProductCard(
+            weight: product.productWeight, // Assuming `weight` exists in `ProductModel`
             isShowDiscount: false,
+            unit: product.unit,
             uid: product.id.toString(), // Assuming `id` exists in `ProductModel`
             backgroundImage: product.imageUrls.first,
             productName: product.productTitle, // Assuming `productTitle` exists in `ProductModel`

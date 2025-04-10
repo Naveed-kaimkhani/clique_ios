@@ -15,13 +15,27 @@ import 'package:video_player/video_player.dart';
 import '../../constants/index.dart';
 
 
-class UploadVideo extends StatelessWidget {
+class UploadVideo extends StatefulWidget {
+
+  UploadVideo({Key? key}) : super(key: key);
+
+  @override
+  State<UploadVideo> createState() => _UploadVideoState();
+}
+
+class _UploadVideoState extends State<UploadVideo> {
   final UploadVideoViewModel viewModel = Get.put(UploadVideoViewModel());
 
   // final ProductController _productViewModel = Get.find<ProductController>();
-  
 final ProductViewModel _productViewModel = Get.put(ProductViewModel());
-  UploadVideo({Key? key}) : super(key: key);
+  VideoPlayerController? _videoController;
+
+@override
+void dispose() {
+      _videoController?.dispose();
+
+  super.dispose();
+}
 
   @override
   Widget build(BuildContext context) {
@@ -118,6 +132,7 @@ Widget _buildVideoSection(double screenHeight) {
     viewModel.videoFile, // Directly pass Rxn<Uint8List>
   );
 }
+
 Widget _buildThumnailSection(String label, VoidCallback onTap, Rxn<Uint8List> file) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -137,6 +152,7 @@ Widget _buildThumnailSection(String label, VoidCallback onTap, Rxn<Uint8List> fi
     ],
   );
 }
+
 Widget _buildMediaSection(String label, VoidCallback onTap, Rxn<File> file) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,26 +172,26 @@ Widget _buildMediaSection(String label, VoidCallback onTap, Rxn<File> file) {
     ],
   );
 }
-
 Widget _buildVideoPlayer(File videoFile) {
-  VideoPlayerController _controller = VideoPlayerController.file(videoFile);
+  final controller = VideoPlayerController.file(videoFile);
+  _videoController = controller;
 
   return FutureBuilder(
-    future: _controller.initialize(),
+    future: controller.initialize(),
     builder: (context, snapshot) {
       if (snapshot.connectionState == ConnectionState.done) {
-        _controller.play(); // Auto-play video
+        controller.play();
 
-        final isPortrait = _controller.value.aspectRatio < 1;
+        final isPortrait = controller.value.aspectRatio < 1;
 
         return ClipRRect(
           borderRadius: BorderRadius.circular(10),
           child: SizedBox(
             width: double.infinity,
-            height: isPortrait ? 300 : 200, // Taller if portrait
+            height: isPortrait ? 300 : 200,
             child: AspectRatio(
-              aspectRatio: _controller.value.aspectRatio,
-              child: VideoPlayer(_controller),
+              aspectRatio: controller.value.aspectRatio,
+              child: VideoPlayer(controller),
             ),
           ),
         );
@@ -185,6 +201,35 @@ Widget _buildVideoPlayer(File videoFile) {
     },
   );
 }
+
+// Widget _buildVideoPlayer(File videoFile) {
+//   // VideoPlayerController _controller = VideoPlayerController.file(videoFile);
+// _videoController = VideoPlayerController.file(videoFile);
+//   return FutureBuilder(
+//     future: _videoController!.initialize(),
+//     builder: (context, snapshot) {
+//       if (snapshot.connectionState == ConnectionState.done) {
+//         _videoController!.play(); // Auto-play video
+
+//         final isPortrait = _videoController!.value.aspectRatio < 1;
+
+//         return ClipRRect(
+//           borderRadius: BorderRadius.circular(10),
+//           child: SizedBox(
+//             width: double.infinity,
+//             height: isPortrait ? 300 : 200, // Taller if portrait
+//             child: AspectRatio(
+//               aspectRatio: _videoController!.value.aspectRatio,
+//               child: VideoPlayer(_videoController!),
+//             ),
+//           ),
+//         );
+//       } else {
+//         return Center(child: CircularProgressIndicator());
+//       }
+//     },
+//   );
+// }
 
   Widget _uploadContainer() {
     return Container(
@@ -196,10 +241,6 @@ Widget _buildVideoPlayer(File videoFile) {
   }
 
   // Widget _buildCheckoutOptions() {
-  //   return _buildDropdownField("Shopping Flow Redirect", viewModel.selectedCheckoutOption, ['Inline Checkout', 'Cart', 'Product Page']);
-  // }
-
-
   void _openProductPickerBottomSheet() {
     Get.bottomSheet(
       Container(
@@ -253,7 +294,7 @@ Widget _buildVideoPlayer(File videoFile) {
       ),
     );
   }
-  
+
   Widget _buildAddProductsButton() {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
@@ -261,7 +302,36 @@ Widget _buildVideoPlayer(File videoFile) {
       child: Text("Add Products", style: TextStyle(color: Colors.white)),
     );
   }
+
   Widget _buildUploadButton() {
     return AuthButton(buttonText: 'Upload Video', isLoading: viewModel.isLoading, onPressed: viewModel.uploadVideo);
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

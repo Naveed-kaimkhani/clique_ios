@@ -11,6 +11,7 @@ import 'package:clique/view/discover/view_all_products.dart';
 import 'package:clique/view/home/home_screen.dart';
 import 'package:clique/view/notifications/notification_screen.dart';
 import 'package:clique/view/product/product_details_screen.dart';
+import 'package:clique/view/product/search_products.dart';
 import 'package:clique/view/profile/influencer_profile.dart';
 import 'package:clique/view/splash/splash_screen.dart';
 import 'package:clique/view/upload_product_screens/upload_product.dart';
@@ -83,10 +84,10 @@ class AppRoutes {
         // name: RouteName.groupChatScreen,
         // page: () =>  GroupChatScreen(),
         // transition: Transition.cupertino),
-        //      GetPage(
-        // name: RouteName.searchScreen,
-        // page: () =>  SearchScreen(),
-        // transition: Transition.cupertino),
+             GetPage(
+        name: RouteName.productSearchScreen,
+        page: () =>  ProductSearchScreen(),
+        transition: Transition.cupertino),
   ];
 }
 

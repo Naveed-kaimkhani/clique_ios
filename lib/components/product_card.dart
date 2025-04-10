@@ -13,11 +13,18 @@ class ProductCard extends StatelessWidget {
   final double price;
   final double oldPrice;
   final String discount;
+  
+  final String weight;
   final Color textColor;
   final String uid;
+  
+  final String unit;
   final bool isShowDiscount;
 
   const ProductCard({
+    required this.weight,
+    
+    required this.unit,
     required this.backgroundImage,
     required this.productName,
     required this.productDescription,
@@ -56,6 +63,8 @@ class ProductCard extends StatelessWidget {
       'price': price,
       'oldPrice': oldPrice,
       'discount': discount,
+      'unit': unit,
+      'size':weight,
     },
   );
 },

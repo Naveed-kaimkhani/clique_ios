@@ -43,22 +43,18 @@ class UploadVideoService {
       'video_file', video.path,
       contentType: MediaType('video', 'mp4'), // Adjust type
     ));
-
     request.fields['user_id'] = userId;
-    request.fields['name'] = name;
+    // request.fields['name'] = name;
     request.fields['show_type'] = showType.toLowerCase(); // Ensure lowercase
     request.fields['lambda_token'] = lambdaToken;
     request.fields['created_by'] = createdBy;
-    
-
-
-        log("Product ID: ${product.id}");
-    log("Product Name: ${product.productTitle}");
-    log("Product Price: ${product.cost}");
-    log("Product Description: ${product.imageUrls.first}");
+        //     log("Product ID: ${product.id}");
+    // log("Product Name: ${product.productTitle}");
+    // log("Product Price: ${product.cost}");
+    // log("Product Description: ${product.imageUrls.first}");
     request.fields['product_id'] = product.id.toString();
     
-    request.fields['product_name'] = product.productTitle;
+    request.fields['name'] = product.productTitle;
     
     request.fields['product_price'] = product.cost.toString();
     

@@ -54,11 +54,11 @@ class SignupScreen extends StatelessWidget {
       _showValidationError("Email is required", "Please enter your email");
       return false;
     }
-    if (!_isValidEmail(_emailController.text)) {
-      _showValidationError("Invalid email", 
-        "Please enter a valid email address (@gmail.com, @yahoo.com or @icloud.com)");
-      return false;
-    }
+    // if (!_isValidEmail(_emailController.text)) {
+    //   _showValidationError("Invalid email", 
+    //     "Please enter a valid email address (@gmail.com, @yahoo.com or @icloud.com)");
+    //   return false;
+    // }
     if (_phoneNumberController.text.isEmpty) {
       _showValidationError("Phone number is required", "Please enter your phone number");
       return false;

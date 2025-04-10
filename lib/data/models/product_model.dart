@@ -7,6 +7,9 @@ class ProductModel {
   final double msrp;
   final List<String> imageUrls;
   final String thumbnailUrl;
+  
+  final String unit;
+  final String productWeight;
   final String? categories; // New field for categories
   final String? variantGroupId;
   final String? tdid; // New field for tdid
@@ -15,9 +18,11 @@ class ProductModel {
 
   ProductModel({
     required this.id,
+    required this.productWeight,
     required this.productTitle,
     required this.productDesc,
     required this.brandName,
+   required this.unit,
     required this.cost,
     required this.msrp,
     required this.imageUrls,
@@ -38,7 +43,11 @@ class ProductModel {
 
     return ProductModel(
       id: json['id'],
+      
+      unit: json['mass_unit'],
       productTitle: json['product_title'],
+      
+      productWeight: json['product_weight'],
       productDesc: json['product_desc'],
       brandName: json['brand_name'],
       cost: json['cost'],

@@ -1,11 +1,13 @@
 import 'dart:developer';
 
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/core/api/api_endpoints.dart';
 import 'package:clique/data/models/address.dart';
 import 'package:clique/data/models/order.dart';
 import 'package:clique/data/models/product_model.dart';
 import 'package:clique/models/order_summary.dart';
+import 'package:clique/utils/utils.dart';
 import 'package:clique/view_model/cart_quantity_controller.dart';
 import 'package:get/get.dart';
 import 'package:clique/view_model/address_controller.dart';
@@ -16,6 +18,7 @@ import 'package:http/http.dart' as http;
 class OrderViewModel extends GetxController {
   final AddressController addressController = Get.find<AddressController>();
 
+  // var orderId = ''.obs;
   final CartQuantityController cartQuantityController = Get.find<CartQuantityController>();
   final userController = Get.find<UserController>();
   var isLoading = false.obs;
@@ -54,8 +57,11 @@ Future<OrderSummary?> submitOrder() async {
       ],
       productDetails: [
         ProductModel(
+
           id: cartQuantityController.products.first.id,
+          productWeight: cartQuantityController.products.first.productWeight,
           productCode: cartQuantityController.products.first.productCode,
+          unit: cartQuantityController.products.first.unit,
           productTitle: cartQuantityController.products.first.productTitle,
           productDesc: cartQuantityController.products.first.productDesc,
           imageUrls: cartQuantityController.products.first.imageUrls,
@@ -104,13 +110,12 @@ Future<OrderSummary?> submitOrder() async {
         return parsedOrderSummary;
     } else {
       // Failure
-      print('Failed to place order: ${response.body}');
-
-      // Handle failure
-      print('Failed to place order: ${response.statusCode}');
+      Utils.showCustomSnackBar("Error", "Failed to place order", ContentType.failure);
+ 
     }
   } catch (e) {
-    print('Error: $e');
+     Utils.showCustomSnackBar("Error", "Failed to place order $e", ContentType.failure);
+ 
   } finally {
     isLoading.value = false;
   }
