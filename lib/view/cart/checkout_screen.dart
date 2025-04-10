@@ -178,12 +178,24 @@ Obx(() {
 }),
 
               SizedBox(height: screenHeight * 0.01),
-        AmountWidget(
-      label: 'Total',
-      value: total,
-      titleFontSize: titleFontSize,
-    ),
-                    SizedBox(height: verticalPadding),
+
+Obx(() {
+  final summary = orderViewModel.orderSummary.value;
+  final shippingCost = summary != null ? double.tryParse(summary.shipping) ?? 0.0 : 0.0;
+
+  return  AmountWidget(
+          label: 'Total',
+          value:subTotal+ shippingCost,
+          titleFontSize: titleFontSize,
+        );
+     
+}),
+    //     AmountWidget(
+    //   label: 'Total',
+    //   value: total,
+    //   titleFontSize: titleFontSize,
+    // ),
+                    // SizedBox(height: verticalPadding),
                     
               SizedBox(height: screenHeight * 0.01),
 //                     Obx(() => SizedBox(

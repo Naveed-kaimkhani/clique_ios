@@ -348,6 +348,7 @@ Widget _buildImageThumbnail(Size size, int index) {
                             SizeSelector(
                               unit: controller.productData['unit'],
                               weight: controller.productData['size'], ),
+                              // Center(child: Text("Scroll to See More Products")),
                             SizedBox(height: size.height * 0.02),
                             _buildAddToCartButton(size),
                             _buildProductSection(size, size.width * 0.06),
