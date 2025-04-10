@@ -1,4 +1,6 @@
 
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clique/routes/routes_name.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +8,7 @@ import 'package:clique/constants/app_colors.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 
-class ProductCard extends StatelessWidget {
+class ProductCategoryCard extends StatelessWidget {
   final String backgroundImage;
   final String productName;
   final String productDescription;
@@ -22,7 +24,7 @@ class ProductCard extends StatelessWidget {
   final String unit;
   final bool isShowDiscount;
 
-  const ProductCard({
+  const ProductCategoryCard({
     required this.weight,
     required this.categories,
     required this.unit,
@@ -54,6 +56,9 @@ class ProductCard extends StatelessWidget {
 
     return GestureDetector(
    onTap: () {
+    log("tappppeddd");
+    Get.back(); // This pops the current screen
+
   Get.toNamed(
     RouteName.productDetailsScreen,
     arguments: {
@@ -82,36 +87,33 @@ class ProductCard extends StatelessWidget {
           children: [
 
 
-Hero(
-  tag: uid,
-  child: ClipRRect(
-    borderRadius: BorderRadius.circular(20),
-    child: Stack(
-      children: [
-        CachedNetworkImage(
-          imageUrl: backgroundImage,
-          width: double.infinity,
-          height: 276,
-          fit: BoxFit.cover,
-          placeholder: (context, url) => LoadImageShimmer(),
-          errorWidget: (context, url, error) => Icon(Icons.error),
-        ),
-        Container(
-          width: double.infinity,
-          height: 276,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.bottomCenter,
-              end: Alignment.topCenter,
-              colors: [
-                Colors.black.withOpacity(0.6),
-                Colors.transparent,
-              ],
-            ),
+ClipRRect(
+  borderRadius: BorderRadius.circular(20),
+  child: Stack(
+    children: [
+      CachedNetworkImage(
+        imageUrl: backgroundImage,
+        width: double.infinity,
+        height: 276,
+        fit: BoxFit.cover,
+        placeholder: (context, url) => LoadImageShimmer(),
+        errorWidget: (context, url, error) => Icon(Icons.error),
+      ),
+      Container(
+        width: double.infinity,
+        height: 276,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.bottomCenter,
+            end: Alignment.topCenter,
+            colors: [
+              Colors.black.withOpacity(0.6),
+              Colors.transparent,
+            ],
           ),
         ),
-      ],
-    ),
+      ),
+    ],
   ),
 ),
 

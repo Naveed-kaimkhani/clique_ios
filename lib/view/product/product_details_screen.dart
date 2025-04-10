@@ -1,9 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clique/components/category_product_card.dart';
 import 'package:clique/components/gradient_text.dart';
+import 'package:clique/components/product_shimmer.dart';
 import 'package:clique/constants/index.dart';
 import 'package:clique/controller/fav_controller.dart';
 import 'package:clique/controller/size_selector.dart';
 import 'package:clique/view_model/product_details_controller.dart';
+import 'package:clique/view_model/product_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:like_button/like_button.dart';
@@ -22,7 +25,7 @@ class ProductDetailsScreen extends StatelessWidget {
   final cartItemCount = 0.obs;
   final isAnimating = false.obs;
 
-
+  final ProductViewModel _productViewModel = Get.find<ProductViewModel>();
   @override
   Widget build(BuildContext context) {
     
@@ -347,6 +350,8 @@ Widget _buildImageThumbnail(Size size, int index) {
                               weight: controller.productData['size'], ),
                             SizedBox(height: size.height * 0.02),
                             _buildAddToCartButton(size),
+                            _buildProductSection(size, size.width * 0.06),
+                               
                           ],
                         ),
                       ),
@@ -360,6 +365,83 @@ Widget _buildImageThumbnail(Size size, int index) {
       },
     );
   }
+  Widget _buildProductSection(Size size, double titleFontSize) {
+    return Container(
+      color: Color(0xFFF7F8FA),
+      child: Column(
+        children: [
+          // _buildSectionHeader('Products', RouteName.viewAllProductsScreen, titleFontSize),
+          SizedBox(height: size.height * 0.015),
+          _buildProductList(size),
+        ],
+      ),
+    );
+  }
+
+
+Widget _buildProductList(Size size) {
+  final ScrollController _productScrollController = ScrollController();
+
+  return Obx(() {
+    if (_productViewModel.isLoading.value && _productViewModel.products.isEmpty) {
+      return SizedBox(
+        height: size.height * 0.32,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: 2,
+          itemBuilder: (context, index) {
+            return ShimmerProductCard();
+          },
+        ),
+      );
+    }
+
+    if (_productViewModel.error.value.isNotEmpty) {
+      return Center(child: Text(_productViewModel.error.value));
+    }
+
+    if (_productViewModel.products.isEmpty) {
+      return Center(child: Text('No products available'));
+    }
+
+    // ✅ Filter only products where category == "pet food"
+    final filteredProducts = _productViewModel.products
+        .where((product) => (product.categories) ==  controller.productData['categories'])
+        .toList();
+
+    if (filteredProducts.isEmpty) {
+      return Center(child: Text('No products in "${controller.productData['categories']}" category'));
+    }
+
+    return SizedBox(
+      height: size.height * 0.32,
+      child: ListView.builder(
+        controller: _productScrollController,
+        scrollDirection: Axis.horizontal,
+        itemCount: filteredProducts.length,
+        itemBuilder: (context, index) {
+          final product = filteredProducts[index];
+          final discount = ((product.msrp - product.cost) / product.msrp * 100).round();
+
+          return ProductCategoryCard(
+            uid: product.id.toString(),
+            backgroundImage: product.imageUrls.isNotEmpty ? product.imageUrls.first : '',
+            productName: product.productTitle,
+            productDescription: product.productDesc,
+            price: product.cost,
+            oldPrice: product.msrp,
+            discount: "$discount% OFF",
+            weight: product.productWeight,
+            unit: product.unit,
+            isShowDiscount: discount > 0,
+            categories: product.categories??"",
+          );
+        },
+      ),
+    );
+  });
+}
+
 
   Widget _buildProductTitle(Size size) {
     return Text(
