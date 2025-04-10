@@ -43,7 +43,7 @@ double subTotal = (_cartQuantityController.products.first.cost * _cartQuantityCo
 double shipping = orderSummary != null ? double.tryParse(orderSummary.shipping) ?? 0.0 : 0.0;
 
 // Calculate the total
-double total = subTotal + shipping;
+// double total = subTotal + shipping;
 
     // Define responsive padding and font sizes
     final double horizontalPadding = screenWidth * 0.06; // 6% of screen width
@@ -117,10 +117,20 @@ double total = subTotal + shipping;
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Padding(
+           
+                
+                Obx(() {
+  final summary = orderViewModel.orderSummary.value;
+  final shippingCost = summary != null ? double.tryParse(summary.shipping) ?? 0.0 : 0.0;
+
+  return Padding(
                     padding: EdgeInsets.only(left: horizontalPadding * 0.5),
-                    child: paymentOption(total,'Master Card', '**** *****', AppSvgIcons.master, 'mastercard'),
-                  ),
+                    child: paymentOption(subTotal+shippingCost,'Master Card', '**** *****', AppSvgIcons.master, 'mastercard'),
+                  );
+     
+}),
+                
+                  
                 
                 ],
               ),
@@ -190,42 +200,9 @@ Obx(() {
         );
      
 }),
-    //     AmountWidget(
-    //   label: 'Total',
-    //   value: total,
-    //   titleFontSize: titleFontSize,
-    // ),
-                    // SizedBox(height: verticalPadding),
                     
               SizedBox(height: screenHeight * 0.01),
-//                     Obx(() => SizedBox(
-//                       width: MediaQuery.of(context).size.width * 0.7,
-//                       child: SwipeableButtonView(
-//                         buttonText: "Slide to Pay",
-//                         buttonWidget: Container(
-//                           width: 50,
-//                           child: Icon(
-//                             Icons.arrow_forward_ios_rounded,
-//                             color: Colors.grey,
-//                           ),
-//                         ),
-//                         activeColor: Colors.black,
-//                         isFinished: controller.isFinished.value,
-//                     onWaitingProcess: () async {
-//                         controller.isFinished.value = true;
-//                     await  stripeViewModel.makePayment( total * 100); // Convert to cents
-//             // await     orderViewModel.submitOrder();
-//   // await stripeVM.makePayment( 100); // $63.73 in cents
-//   controller.isFinished.value = false;
-// },
-//                        onFinish: () async {
-//   if (stripeVM.isLoading.value == false) {
-  
-//     controller.isFinished.value = false;
-//   }
-// },
-//                       ),
-//                     )),
+
                   ],
                 ),
               ),
