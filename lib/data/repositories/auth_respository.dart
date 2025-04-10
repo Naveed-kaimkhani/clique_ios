@@ -51,9 +51,9 @@ class AuthRepository {
         final String? profileImage = responseData["user"]["profile_photo_url"];
         final String? coverPhotoUrl = responseData["user"]["cover_photo_url"];
         final String email = responseData["user"]["email"];
-        final String phone = responseData["user"]["phone"];
-      log("access token");
-        log( responseData["auth_token"]);
+        final String? phone = responseData["user"]["phone"];
+        log("access token");
+        log(responseData["auth_token"]);
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('token', token);
         await prefs.setString('revo_access_token', revoAccessToken);
@@ -64,7 +64,7 @@ class AuthRepository {
         await prefs.setString('profile_photo_url', profileImage ?? '');
         await prefs.setString('cover_photo_url', coverPhotoUrl ?? '');
         await prefs.setString('email', email);
-        await prefs.setString('phone', phone);
+        await prefs.setString('phone', phone??"");
 
         final storedToken = prefs.getString('token');
         log("token fetchedddd$storedToken");
@@ -85,6 +85,7 @@ class AuthRepository {
             success: false, message: "OTP verification failed.");
       }
     } catch (e) {
+      
       return OTPResponseModel(success: false, message: "Network error.");
     }
   }
