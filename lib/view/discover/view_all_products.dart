@@ -1,70 +1,21 @@
 
-// import 'package:clique/components/index.dart';
-// import 'package:clique/constants/index.dart';
-// import 'package:flutter/material.dart';
-
-// class ViewAllProductsScreen extends StatelessWidget {
-//   const ViewAllProductsScreen({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       decoration: BoxDecoration(
-//         gradient: AppColors.appGradientColors,
-//       ),
-//       child: SafeArea(
-//         bottom: false,
-//         child: Scaffold(
-//           appBar: CustomAppBar(title: "All Products", icon: Icons.arrow_back_ios),
-//           backgroundColor: Colors.white,
-//           body: _buildProductGrid(context),
-//         ),
-//       ),
-//     );
-//   }
-
-//   Widget _buildProductGrid(BuildContext context) {
-//     final size = MediaQuery.of(context).size;
-
-//     return AnimatedSwitcher(
-//       duration: const Duration(milliseconds: 300),
-//       child: GridView.builder(
-//         key: const ValueKey('products_grid'),
-//         padding: const EdgeInsets.all(10),
-//         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-//           crossAxisCount: 2,
-//           crossAxisSpacing: size.width * 0.009,
-//           childAspectRatio: 0.6,
-//         ),
-//         itemCount: 4,
-//         itemBuilder: (_, index) => ProductCard(
-//           isShowDiscount: false,
-//           uid: index.toString(),
-//           backgroundImage: 'assets/png/product.png',
-//           productName: "Girl's Full Blazers",
-//           productDescription: "Crafted from premium, breathable cotton fabric",
-//           price: 53.23,
-//           oldPrice: 100.23,
-//           discount: "10% OFF",
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 
 import 'package:clique/components/index.dart';
 import 'package:clique/constants/index.dart';
 import 'package:clique/view_model/product_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ViewAllProductsScreen extends StatelessWidget {
   const ViewAllProductsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final ProductViewModel productViewModel = Get.find<ProductViewModel>();
+    // final ProductViewModel productViewModel = Get.find<ProductViewModel>();
+      final ProductViewModel productViewModel = Get.isRegistered<ProductViewModel>()
+    ? Get.find<ProductViewModel>()
+    : Get.put(ProductViewModel());
     return Container(
       decoration: BoxDecoration(
         gradient: AppColors.appGradientColors,
@@ -75,9 +26,10 @@ class ViewAllProductsScreen extends StatelessWidget {
           appBar: CustomAppBar(title: "All Products", icon: Icons.arrow_back_ios),
           backgroundColor: Colors.white,
           body: Obx(() {
-            if (productViewModel.isLoading.value && productViewModel.products.isEmpty) {
-              return Center(child: CircularProgressIndicator());
-            }
+           if (productViewModel.isLoading.value && productViewModel.products.isEmpty) {
+  return _buildShimmerGrid(context);
+}
+
 
             return _buildProductGrid(context, productViewModel);
           }),
@@ -139,4 +91,30 @@ class ViewAllProductsScreen extends StatelessWidget {
       ),
     );
   }
+
+  Widget _buildShimmerGrid(BuildContext context) {
+  final size = MediaQuery.of(context).size;
+
+  return GridView.builder(
+    padding: const EdgeInsets.symmetric(horizontal: 20),
+    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount: 2,
+      crossAxisSpacing: size.width * 0.009,
+      childAspectRatio: 0.6,
+    ),
+    itemCount: 6, // Number of shimmer items
+    itemBuilder: (context, index) => Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+    ),
+  );
+}
+
 }
