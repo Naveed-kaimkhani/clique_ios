@@ -24,13 +24,14 @@ class AmountWidget extends StatelessWidget {
             color: Colors.grey,
           ),
         ),
-        Text(
-          "\$${value.toString()}",
-          style: TextStyle(
-            fontSize: titleFontSize * 1.0,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+      Text(
+  "\$${value.toStringAsFixed(2)}",
+  style: TextStyle(
+    fontSize: titleFontSize * 1.0,
+    fontWeight: FontWeight.bold,
+  ),
+),
+
       ],
     );
   }

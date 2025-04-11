@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ProductCategoryCard extends StatelessWidget {
-  final String backgroundImage;
+  final List<String> backgroundImage;
   final String productName;
   final String productDescription;
    var price;
@@ -121,7 +121,7 @@ ClipRRect(
   child: Stack(
     children: [
       CachedNetworkImage(
-        imageUrl: backgroundImage,
+        imageUrl: backgroundImage.first,
         width: double.infinity,
         height: 276,
         fit: BoxFit.cover,

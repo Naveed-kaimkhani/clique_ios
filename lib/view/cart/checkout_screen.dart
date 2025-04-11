@@ -35,13 +35,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 final stripeVM = Get.put(StripeViewModel());
 
 final CartQuantityController _cartQuantityController = Get.find<CartQuantityController>();
-// final CartQuantityController _cartQuantityController = 
-//     Get.isRegistered<CartQuantityController>()
-//         ? Get.find<CartQuantityController>()
-//         : Get.put(CartQuantityController());
 
-
-// CartQuantityController _cartQuantityController = Get.find<CartQuantityController>();
   final StripeViewModel stripeViewModel = Get.put(StripeViewModel());
 
   final OrderViewModel orderViewModel = Get.put(OrderViewModel());
@@ -158,10 +152,6 @@ double subTotal = (_cartQuantityController.products.first.cost * _cartQuantityCo
                        child: cartItem(cartItemSize),
                      ),
   Spacer(),
-
-                          //  Expanded(
-                          //   child: cartItem(cartItemSize),
-                          // ),
        
               SizedBox(height: screenHeight * 0.1),
               Container(

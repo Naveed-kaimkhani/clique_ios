@@ -163,10 +163,8 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
             isFollowing: influencer.isFollowing,
             id: influencer.id,
               influencerModel: influencer,
-            // backgroundImage: influencer.backgroundImage,
             backgroundImage:influencer.coverPhoto, // Replace with actual image from influencer data if available
             profileImage:influencer.profilePhoto, // Replace with actual profile image from influencer data if available
-            // profileImage: "https://dev.moutfits.com/storage/profile_photos/nWFNIjFPxxXPWnmhDm1ZtCs1tcv5qdpBOCwNny4U.jpg",
             name: influencer.name,
             followers: '${influencer.followersCount} Followers', // Replace with actual followers count
           );
@@ -190,16 +188,9 @@ Widget _buildProductList(Size size) {
         ),
       );
     }
-
-    // if (_productViewModel.error.value.isNotEmpty) {
-    //   return Center(child: Text(_productViewModel.error.value));
-    // }
-
     if (_productViewModel.products.isEmpty) {
       return Center(child: Text('No products available'));
     }
-
-    // ✅ Filter products outside the builder
     List<ProductModel> filteredProducts = [];
     Set<String> displayedCategories = Set<String>();
 

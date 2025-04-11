@@ -444,7 +444,7 @@ Widget _buildProductList(Size size) {
 
           return ProductCategoryCard(
             uid: product.id.toString(),
-            backgroundImage: product.imageUrls.isNotEmpty ? product.imageUrls.first : '',
+            backgroundImage: product.imageUrls.isNotEmpty ? product.imageUrls :List<String>.empty(),
             productName: product.productTitle,
             productDescription: product.productDesc,
             price: product.cost,
