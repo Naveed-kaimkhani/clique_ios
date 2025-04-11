@@ -24,6 +24,8 @@ static const String viewAllCliquesScreen = '/ViewAllCliqueScreen';
 
 static const String signupScreen = '/SignupScreen';
 
+static const String addressScreen = '/AddressScreen';
+
 static const String termsAndConditionsScreen = '/TermsAndConditionsScreen';
 
 static const String updateProfileScreen = '/UpdateProfileScreen';

@@ -246,16 +246,18 @@ RichText(
   }
 
   Future<void> _handleGoogleSignIn() async {
-    try {
+
+   if (!_isChecked.value) {
+      _showValidationError("Terms & Conditions", "Please agree to the terms & conditions");
+      return ;
+    } else {
+      try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       log(googleUser.toString());
       if (googleUser != null) {
         // Fetch user details
         final String name = googleUser.displayName ?? "Unknown";
         final String email = googleUser.email;
-        // final String phone = googleUser.
-        // final String profilePicture = googleUser.photoUrl ?? "";
-
 
 
         // Populate the form fields with Google details
@@ -278,6 +280,7 @@ RichText(
     
       _showValidationError("Google Sign-In Failed", "An error occurred during Google Sign-In.");
     }
+   }
   }
 
   void _handleSignup() async{

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:clique/controller/user_controller.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -20,7 +21,7 @@ class ProductRepository {
       },
     );
 
-    // log(response.body.toString());
+    log(response.body.toString());
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);

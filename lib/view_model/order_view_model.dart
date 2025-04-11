@@ -101,7 +101,7 @@ Future<OrderSummary?> submitOrder() async {
     final parsedOrderSummary = OrderSummary.fromJson(jsonDecode(response.body));
     log('Parsed Order Summary: ${parsedOrderSummary.orderId}');
         // Store the orderSummary in the field
-        // orderSummary.value = parsedOrderSummary;
+        orderSummary.value = parsedOrderSummary;
         // Return the OrderSummary object
         return parsedOrderSummary;
     } else {

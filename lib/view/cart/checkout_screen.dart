@@ -1,12 +1,13 @@
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clique/components/address_dialog_content.dart';
+import 'package:clique/components/address_screen.dart';
 import 'package:clique/components/amount_widget.dart';
 import 'package:clique/components/custom_appbar.dart';
 import 'package:clique/components/gradient_text.dart';
 import 'package:clique/constants/app_colors.dart';
 import 'package:clique/constants/app_svg_icons.dart';
+import 'package:clique/constants/index.dart';
 import 'package:clique/models/order_summary.dart';
 import 'package:clique/utils/utils.dart';
 import 'package:clique/view_model/address_controller.dart';
@@ -83,11 +84,7 @@ double subTotal = (_cartQuantityController.products.first.cost * _cartQuantityCo
                    IconButton(
   icon: Icon(Icons.edit),
   onPressed: () {
-    // addressController.clearAddress();
-    Get.defaultDialog(
-      title: "Enter Shipping Address",
-      content: AddressDialogContent(),
-    );
+   Get.toNamed(RouteName.addressScreen, );
   },
 ),
 

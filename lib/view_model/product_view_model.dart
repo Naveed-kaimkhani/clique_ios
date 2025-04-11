@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:clique/data/models/product_model.dart';
 import 'package:clique/data/repositories/product_repo.dart';
 import 'package:get/get.dart';
@@ -24,7 +26,7 @@ class ProductViewModel extends GetxController {
       final data = await _productRepository.fetchProducts(
         page: currentPage.value,
       );
-
+  
       // Extract the products and pagination details
       final List<ProductModel> fetchedProducts = (data['products'] as List)
           .map((json) => ProductModel.fromJson(json))
@@ -37,7 +39,9 @@ class ProductViewModel extends GetxController {
 
       // Update pagination details
       totalPages.value = data['pagination']['total_pages']; // Assuming the API provides this info
+    
     } catch (e) {
+      log(e.toString());
       error(e.toString());
       Get.snackbar('Error', e.toString());
     } finally {
@@ -47,6 +51,7 @@ class ProductViewModel extends GetxController {
 
   // Load more products when user reaches the end of the list
   void loadMoreProducts() {
+    log("reached end of list");
     if (currentPage.value < totalPages.value && !isLoading.value) {
       currentPage.value++;
       fetchProducts();

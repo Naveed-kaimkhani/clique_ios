@@ -1,4 +1,5 @@
 
+import 'package:clique/components/address_screen.dart';
 import 'package:clique/routes/routes_name.dart';
 import 'package:clique/view/auth/login_screen.dart';
 import 'package:clique/view/auth/signup_screen.dart';
@@ -98,6 +99,10 @@ class AppRoutes {
             GetPage(
         name: RouteName.termsAndConditionsScreen,
         page: () =>  TermsAndConditionsScreen(),
+        transition: Transition.cupertino),
+                GetPage(
+        name: RouteName.addressScreen,
+        page: () =>  AddressScreen(),
         transition: Transition.cupertino),
   ];
 }

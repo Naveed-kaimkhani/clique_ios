@@ -9,6 +9,7 @@ import 'package:clique/components/custom_textfield.dart';
 import 'package:clique/constants/index.dart';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/utils/utils.dart';
+import 'package:clique/view/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -101,8 +102,9 @@ log(userController.token.value);
 
           await userController.loadUserSession();
           Utils.showCustomSnackBar("Profile Updated", "Profile updated successfully", ContentType.success);
-          Get.back();
-        } else {
+
+    Get.offAll(() => HomeScreen()); 
+            } else {
           
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to update profile')));
         }

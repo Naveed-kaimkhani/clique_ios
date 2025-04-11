@@ -189,9 +189,9 @@ Widget _buildProductList(Size size) {
       );
     }
 
-    if (_productViewModel.error.value.isNotEmpty) {
-      return Center(child: Text(_productViewModel.error.value));
-    }
+    // if (_productViewModel.error.value.isNotEmpty) {
+    //   return Center(child: Text(_productViewModel.error.value));
+    // }
 
     if (_productViewModel.products.isEmpty) {
       return Center(child: Text('No products available'));
