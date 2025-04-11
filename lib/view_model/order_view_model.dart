@@ -78,7 +78,7 @@ Future<OrderSummary?> submitOrder() async {
     // Send POST request to the API
     // final url = Uri.parse(ApiEndpoints.createOrderApi);
 
-    final url = Uri.parse("https://dev.moutfits.com/api/v1/topdawg/orders");
+    final url = Uri.parse("https://cactisocial.com/api-clique/public/api/v1/topdawg/orders");
 
     // final token = 'your_bearer_token';  // Replace with actual token
 
@@ -95,14 +95,11 @@ Future<OrderSummary?> submitOrder() async {
       body: jsonEncode(orderMap),  // Encode the order map to JSON
     
     );
-    log(response.body);
     if (response.statusCode == 200) {
       // Success
     final parsedOrderSummary = OrderSummary.fromJson(jsonDecode(response.body));
-    log('Parsed Order Summary: ${parsedOrderSummary.orderId}');
-        // Store the orderSummary in the field
+ 
         orderSummary.value = parsedOrderSummary;
-        // Return the OrderSummary object
         return parsedOrderSummary;
     } else {
       // Failure
@@ -120,7 +117,7 @@ Future<void> processOrder(String orderId) async {
   try {
     isLoading.value = true;
 
-    final url = Uri.parse("https://dev.moutfits.com/api/v1/topdawg/orders/process");
+    final url = Uri.parse("https://cactisocial.com/api-clique/public/api/v1/topdawg/orders/process");
 
     final headers = {
       'Content-Type': 'application/json',

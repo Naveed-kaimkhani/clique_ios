@@ -31,12 +31,11 @@ Future<void> fetchProducts(String searchQuery) async {
   try {
     final response = await http.get(
       Uri.parse(
-          'https://dev.moutfits.com/api/v1/topdawg/products?page=1&per_page50&search=$searchQuery'),
+          'https://cactisocial.com/api-clique/public/api/v1/topdawg/products?page=1&per_page50&search=$searchQuery'),
       headers: {
         'Authorization': 'Bearer ${userController.token.value}',  // Pass the token in the Authorization header
       },
     );
-    log("Response: ${response.body}");
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
@@ -140,7 +139,6 @@ Future<void> fetchProducts(String searchQuery) async {
             ProductModel product = products[index];
             return GestureDetector(
               onTap: (){
-                 log(product.imageUrls.toString());
                   Get.toNamed(
     RouteName.productDetailsScreen,
     arguments: {

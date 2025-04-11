@@ -1,7 +1,5 @@
 import 'package:clique/constants/app_colors.dart';
-import 'package:clique/controller/user_controller.dart';
 import 'package:clique/routes/routes_name.dart';
-import 'package:clique/utils/utils.dart';
 import 'package:clique/view/profile/update_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

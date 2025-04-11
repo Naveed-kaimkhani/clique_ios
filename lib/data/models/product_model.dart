@@ -3,18 +3,16 @@ class ProductModel {
   final String productTitle;
   final String productDesc;
   final String brandName;
-   var cost;
-   var msrp;
+  var cost;
+  var msrp;
   final List<String> imageUrls;
   final String thumbnailUrl;
-  
-  final String unit;
+   final String unit;
   final String productWeight;
   final String? categories; // New field for categories
   final String? variantGroupId;
   final String? tdid; // New field for tdid
   final String? productCode; // New field for product_code
-  // final String? type; // New field for type
 
   ProductModel({
     required this.id,
@@ -22,7 +20,7 @@ class ProductModel {
     required this.productTitle,
     required this.productDesc,
     required this.brandName,
-   required this.unit,
+    required this.unit,
     required this.cost,
     required this.msrp,
     required this.imageUrls,
@@ -31,22 +29,17 @@ class ProductModel {
     required this.variantGroupId,
     this.tdid, // Optional field for tdid
     this.productCode, // Optional field for product_code
-    // this.type, // Optional field for type
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
     final imageUrls = (json['image_url'] as String).split(',');
     final thumbnails = (json['thumbnail_url'] as String).split(',');
-
-    // Assuming the categories field is a string of comma-separated category names
     final categories = json['categories'];
 
     return ProductModel(
       id: json['id'],
-      
       unit: json['mass_unit'],
-      productTitle: json['product_title'],
-      
+      productTitle: json['product_title'],      
       productWeight: json['product_weight'],
       productDesc: json['product_desc'],
       brandName: json['brand_name'],
@@ -61,7 +54,6 @@ class ProductModel {
       // type: json['type'], // Assign type from JSON
     );
   }
-
   Map<String, dynamic> toMap() {
     return {
       'pid': id,

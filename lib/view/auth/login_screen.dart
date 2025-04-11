@@ -196,31 +196,20 @@ class LoginScreen extends StatelessWidget {
               _buildHeader(context),
               SizedBox(height: Get.height * 0.03),
               _buildTextFields(),
-              // SizedBox(height: Get.height * 0.02),
-              // _buildSocialButtons(),
-              // Row(
-              //   children: [
-              //     Obx(() => Checkbox(
-              //           activeColor: AppColors.black,
-              //           value: isChecked.value,
-              //           onChanged: (value) => isChecked.value = value ?? false,
-              //         )),
-              //     const Text('I agree with the terms & conditions')
-              //   ],
-              // ),
+        
               SizedBox(height: Get.height * 0.02),
               AuthButton( 
                 buttonText: 'Login',
                 isLoading: authViewModel.isLoading,
                 onPressed: () async {
-                  if (validateFields()) {
+                  if (true) {
                     authViewModel.isLoading.value = true;
                     try {
                       final SignupParams request = SignupParams(
                         name: "",
-                        // email: "naveedkaimkhami@gmail.com",
+                        email: "naveedkaimkhami@gmail.com",
                         
-                        email: emailController.text,
+                        // email: emailController.text,
                         phone: "",
                         role: "",
                       );

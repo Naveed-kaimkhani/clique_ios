@@ -1,10 +1,9 @@
-import 'dart:developer';
+
 import 'package:clique/components/auth_button.dart';
 import 'package:clique/components/custom_textfield.dart';
 import 'package:clique/components/index.dart';
 import 'package:clique/constants/app_colors.dart';
 import 'package:clique/data/models/signup_params.dart';
-import 'package:clique/routes/app_routes.dart';
 import 'package:clique/routes/routes_name.dart';
 import 'package:clique/view_model/otp_controller.dart';
 import 'package:flutter/gestures.dart';
@@ -20,17 +19,12 @@ class SignupScreen extends StatelessWidget {
   final RxBool _isChecked = false.obs;
   final RxString _selectedRole = "user".obs; // Add this for role selection
   final GoogleSignIn _googleSignIn = GoogleSignIn(
-    // scopes: ['email', 'profile'], // Request email and profile details
   );
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  // final TextEditingController _passwordController = TextEditingController();
-  // final TextEditingController _confirmPasswordController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
 
   static const List<String> _validEmailDomains = ['@gmail.com', '@yahoo.com', '@icloud.com'];
-  static const int _requiredPhoneLength = 11;
-  // final _passwordRegex = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$');
 
   final OTPViewModel otpViewModel = Get.put(OTPViewModel());
   @override
@@ -202,15 +196,7 @@ RichText(
           ),
         ),
         const SizedBox(width: 10),
-        // Expanded(
-        //   child: _socialButton(
-        //     icon: const Icon(Icons.apple, color: Colors.black),
-        //     label: "Apple",
-        //     borderColor: Colors.black,
-        //     textColor: Colors.black,
-        //     onPressed: () {},
-        //   ),
-        // ),
+
       ],
     );
   }
@@ -253,7 +239,7 @@ RichText(
     } else {
       try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      log(googleUser.toString());
+ 
       if (googleUser != null) {
         // Fetch user details
         final String name = googleUser.displayName ?? "Unknown";

@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class ProductRepository {
-  final String baseUrl = 'https://dev.moutfits.com/api/v1/topdawg/products';
+  final String baseUrl = 'https://cactisocial.com/api-clique/public/api/v1/topdawg/products';
 
   final userController = Get.find<UserController>();
 
@@ -21,7 +21,6 @@ class ProductRepository {
       },
     );
 
-    // log(response.body.toString());
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);

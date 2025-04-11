@@ -1,6 +1,7 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clique/routes/routes_name.dart';
+import 'package:clique/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:clique/constants/app_colors.dart';
 import 'package:get/get.dart';
@@ -11,7 +12,7 @@ class ProductCard extends StatelessWidget {
   final String productName;
   final String productDescription;
    var price;
-  final double oldPrice;
+  var oldPrice;
   final String discount;
   final String categories;
   
@@ -154,7 +155,7 @@ Hero(
                     ),
                     // SizedBox(height: padding * 0.5),
                     Text(
-  productDescription,
+  Utils.removeHtmlTags(productDescription),
   maxLines: 2,
   overflow: TextOverflow.ellipsis,
   style: TextStyle(

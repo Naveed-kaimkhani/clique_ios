@@ -37,7 +37,7 @@ class AuthRepository {
           url: ApiEndpoints.verifyOtp,
           headers: {"Content-Type": "application/json"},
           body: jsonEncode(otpRequest.toJson()));
-      log(response.body);
+    
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
         final String token = responseData["auth_token"];
@@ -52,8 +52,7 @@ class AuthRepository {
         final String? coverPhotoUrl = responseData["user"]["cover_photo_url"];
         final String email = responseData["user"]["email"];
         final String? phone = responseData["user"]["phone"];
-        log("access token");
-        log(responseData["auth_token"]);
+
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('token', token);
         await prefs.setString('revo_access_token', revoAccessToken);
@@ -66,17 +65,10 @@ class AuthRepository {
         await prefs.setString('email', email);
         await prefs.setString('phone', phone??"");
 
-        final storedToken = prefs.getString('token');
-        log("token fetchedddd$storedToken");
-        // await  UserController().loadUserSession();
         await userController.loadUserSession();
-        //     final UserController userController = Get.put(UserController());
-
-        // final DiscoverViewModel _viewModel = Get.put(DiscoverViewModel());
         Get.offAllNamed(
           RouteName.homeScreen,
         );
-        // return OTPResponseModel.fromJson(jsonDecode(response.body));
 
         return OTPResponseModel(
             success: true, message: "OTP verified Successfully.");

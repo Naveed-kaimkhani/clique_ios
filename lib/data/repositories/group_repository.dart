@@ -49,7 +49,7 @@ static  Future<Map<String, dynamic>> fetchGroupMembers(String authToken, String 
 
     try {
       final response = await http.get(
-        Uri.parse('https://dev.moutfits.com/api/v1/cometchat/groups/$guid/members'),
+        Uri.parse('https://cactisocial.com/api-clique/public/api/v1/cometchat/groups/$guid/members'),
         headers: {
           'Authorization': 'Bearer $authToken',
         },
@@ -83,7 +83,7 @@ static  Future<Map<String, dynamic>> fetchGroupMembers(String authToken, String 
     try {
 
       final response = await apiClient.getGroup(
-      "https://dev.moutfits.com/api/v1/cometchat/groups?uid=$uid",
+      "https://cactisocial.com/api-clique/public/api/v1/cometchat/groups?uid=$uid",
         headers: {         
           'Authorization': 'Bearer ${userController.token.value}',
           'Content-Type': 'application/json',

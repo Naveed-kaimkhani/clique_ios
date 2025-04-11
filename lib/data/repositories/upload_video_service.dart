@@ -10,7 +10,7 @@ import 'package:http_parser/http_parser.dart';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 class UploadVideoService {
-  static const String baseUrl = "https://dev.moutfits.com/api/v1/popstream/create";
+  static const String baseUrl = "https://cactisocial.com/api-clique/public/api/v1/popstream/create";
 
  
 

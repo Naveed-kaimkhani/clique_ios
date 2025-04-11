@@ -25,15 +25,11 @@ class Utils {
     // return "Something went wrong. Please try again later.";
   }
 }
+static String removeHtmlTags(String text) {
+  final RegExp exp = RegExp(r'<[^>]*>', multiLine: true, caseSensitive: false);
+  return text.replaceAll(exp, '');
+}
 
-// static Future<void> saveJoinedGroup(String guid) async {
-//   final prefs = await SharedPreferences.getInstance();
-//   List<String> joinedGroups = prefs.getStringList('joined_groups') ?? [];
-//   if (!joinedGroups.contains(guid)) {
-//     joinedGroups.add(guid);
-//     await prefs.setStringList('joined_groups', joinedGroups);
-//   }
-// }
 static Future<List<String>> getJoinedGroups() async {
   final prefs = await SharedPreferences.getInstance();
   return prefs.getStringList('joined_groups') ?? [];

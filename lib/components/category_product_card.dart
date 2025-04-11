@@ -1,5 +1,6 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clique/utils/utils.dart';
 import 'package:clique/view_model/product_details_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:clique/constants/app_colors.dart';
@@ -55,9 +56,7 @@ class ProductCategoryCard extends StatelessWidget {
     final ProductController controller = Get.find<ProductController>();
     return GestureDetector(
    onTap: () {
-    // log("tappppeddd");
-    // Get.back(); // This pops the current screen
-
+ 
     controller.setProductData( {
       'uid': uid,
       'backgroundImage': backgroundImage,
@@ -185,7 +184,7 @@ ClipRRect(
                     ),
                     // SizedBox(height: padding * 0.5),
                     Text(
-  productDescription,
+  Utils.removeHtmlTags(productDescription),
   maxLines: 2,
   overflow: TextOverflow.ellipsis,
   style: TextStyle(

@@ -41,7 +41,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
   Future<void> updateUserProfile() async {
     if (_formKey.currentState!.validate() && profilePhoto != null && coverPhoto != null) {
-      var url = Uri.parse('https://dev.moutfits.com/api/v1/user/update?_method=PUT');
+      var url = Uri.parse('https://cactisocial.com/api-clique/public/api/v1/user/update?_method=PUT');
       var request = http.MultipartRequest('POST', url);
 
       request.headers.addAll({

@@ -13,8 +13,8 @@ class ProfileProductCard extends StatelessWidget {
   final List<String> backgroundImage;
   final String productName;
   final String productDescription;
-  final double price;
-  final double oldPrice;
+   var price;
+   var oldPrice;
   final String discount;
   
   final String size;
@@ -24,7 +24,7 @@ class ProfileProductCard extends StatelessWidget {
   final String unit;
   final Color textColor;
 
-  const ProfileProductCard({
+   ProfileProductCard({
     required this.size,
     required this.backgroundImage,
     required this.productName,

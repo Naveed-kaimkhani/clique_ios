@@ -21,7 +21,7 @@ class OTPViewModel extends GetxController {
 
     if (response.success) {
      Utils.showCustomSnackBar("Success",  response.message, ContentType.success);
-      // Get.offAllNamed(RouteName.loginScreen);
+     
     } else {
          Utils.showCustomSnackBar("Error",  response.message, ContentType.failure);
   

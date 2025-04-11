@@ -45,7 +45,7 @@ class Group {
 
 Future<List<Group>> fetchGroups() async {
   final response = await http.get(
-    Uri.parse('https://dev.moutfits.com/api/v1/cometchat/groups'),
+    Uri.parse('https://cactisocial.com/api-clique/public/api/v1/cometchat/groups'),
     headers: {
       'Authorization': 'Bearer 63|9dM3rfqqIBCkelTcgGCgoMTNQn5MRJde3glXauj956689575',
       'Content-Type': 'application/json',

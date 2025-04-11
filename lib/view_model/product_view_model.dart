@@ -41,8 +41,6 @@ class ProductViewModel extends GetxController {
       totalPages.value = data['pagination']['total_pages']; // Assuming the API provides this info
     
     } catch (e) {
-      log(e.toString());
-      error(e.toString());
       Get.snackbar('Error', e.toString());
     } finally {
       isLoading(false);
@@ -51,7 +49,6 @@ class ProductViewModel extends GetxController {
 
   // Load more products when user reaches the end of the list
   void loadMoreProducts() {
-    log("reached end of list");
     if (currentPage.value < totalPages.value && !isLoading.value) {
       currentPage.value++;
       fetchProducts();

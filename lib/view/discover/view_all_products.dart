@@ -4,6 +4,7 @@ import 'package:clique/components/index.dart';
 import 'package:clique/constants/index.dart';
 import 'package:clique/view_model/product_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -17,6 +18,7 @@ class ViewAllProductsScreen extends StatelessWidget {
     ? Get.find<ProductViewModel>()
     : Get.put(ProductViewModel(), permanent: true);
     return Container(
+      // padding: EdgeInsets.only(top: 8),
       decoration: BoxDecoration(
         gradient: AppColors.appGradientColors,
       ),
@@ -25,14 +27,17 @@ class ViewAllProductsScreen extends StatelessWidget {
         child: Scaffold(
           appBar: CustomAppBar(title: "All Products", icon: Icons.arrow_back_ios),
           backgroundColor: Colors.white,
-          body: Obx(() {
-           if (productViewModel.isLoading.value && productViewModel.products.isEmpty) {
-  return _buildShimmerGrid(context);
-}
-
-
-            return _buildProductGrid(context, productViewModel);
-          }),
+          body: Padding(
+            padding: const EdgeInsets.only(top: 12.0),
+            child: Obx(() {
+             if (productViewModel.isLoading.value && productViewModel.products.isEmpty) {
+              return _buildShimmerGrid(context);
+            }
+            
+            
+              return _buildProductGrid(context, productViewModel);
+            }),
+          ),
         ),
       ),
     );
@@ -64,12 +69,18 @@ class ViewAllProductsScreen extends StatelessWidget {
         itemCount: productViewModel.products.length + 1, // +1 for the loading indicator
         itemBuilder: (_, index) {
           if (index == productViewModel.products.length) {
-            // Check if we're at the end of the list
-            if (productViewModel.currentPage.value < productViewModel.totalPages.value) {
-              return Center(child: CircularProgressIndicator());
-            } else {
-              return SizedBox(); // Empty container when no more products to load
-            }
+            
+            if (index == productViewModel.products.length) {
+  if (productViewModel.currentPage.value < productViewModel.totalPages.value) {
+    return Padding(
+      padding: const EdgeInsets.only(left:  28.0),
+      child: GradientText( "Fetching more products. Please wait...",fontSize: 12, gradient: AppColors.appGradientColors,),
+    );
+  } else {
+    return const SizedBox.shrink(); // No more products
+  }
+}
+
           }
 
           final product = productViewModel.products[index];

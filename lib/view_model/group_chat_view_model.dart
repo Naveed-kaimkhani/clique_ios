@@ -51,10 +51,9 @@ class GroupChatViewModel extends GetxController {
 
     try {
       final response = await ApiClient.getMessages(
-        url: "https://dev.moutfits.com/api/v1/cometchat/groups/$groupId/messages?limit=20",
+        url: "https://cactisocial.com/api-clique/public/api/v1/cometchat/groups/$groupId/messages?limit=20",
         headers: {"Authorization": "Bearer $token"},
       );
-log(response.body);
       if (response.statusCode == 200) {
         final dynamic responseData = jsonDecode(response.body);
 
@@ -79,63 +78,13 @@ log(response.body);
     }
   }
 
-  // Fetch messages with pagination
-  // Future<void> _fetchMessages(bool loadMore) async {
-  //   if (_isLoading || (loadMore && !hasMoreMessages)) return;
-  //   _isLoading = true;
-
-  //   try {
-  //     String apiUrl = "https://dev.moutfits.com/api/v1/cometchat/groups/$groupId/messages?limit=20";
-
-  //     if (loadMore && _messages.isNotEmpty) {
-  //       // Fetch older messages with timestamp parameter
-  //       int lastMessageTimestamp = _messages.first.time; // Timestamp of the oldest message
-  //       int oneDayBack = lastMessageTimestamp - 86400; // Subtract 1 day in seconds (Unix format)
-  //       apiUrl += "&timeStamp=$oneDayBack";
-  //     }
-
-  //     final response = await ApiClient.getMessages(
-  //       url: apiUrl,
-  //       headers: {"Authorization": "Bearer $token"},
-  //     );
-
-  //     if (response.statusCode == 200) {
-  //       final dynamic responseData = jsonDecode(response.body);
-
-  //       if (responseData is Map<String, dynamic> && responseData.containsKey("messages")) {
-  //         final messagesData = responseData["messages"];
-
-  //         if (messagesData is List && messagesData.isNotEmpty) {
-  //           final List<MessageModel> newMessages = messagesData
-  //               .map((msg) => MessageModel.fromJson({...msg, 'userId': userId}))
-  //               .toList();
-
-  //           if (loadMore) {
-  //             _messages.insertAll(0, newMessages); // Add older messages at the start
-  //           } else {
-  //             _messages = newMessages.reversed.toList(); // Show latest messages first
-  //           }
-
-  //           _messageController.add(_messages);
-  //         } else {
-  //           hasMoreMessages = false; // No more messages to load
-  //         }
-  //       }
-  //     }
-  //   } catch (e) {
-  //     debugPrint("Error fetching messages: $e");
-  //   } finally {
-  //     _isLoading = false;
-  //   }
-  // }
-
 
 Future<void> _loadMoreMessages() async {
 
   try {
      int lastMessageTimestamp = _messages.first.time; // Timestamp of the oldest message
       // apiUrl += "?limit=200&timeStamp=$lastMessageTimestamp-${8000}";
-    String apiUrl = "https://dev.moutfits.com/api/v1/cometchat/groups/$groupId/messages?limit=200&timeStamp=$lastMessageTimestamp-${8000}";
+    String apiUrl = "https://cactisocial.com/api-clique/public/api/v1/cometchat/groups/$groupId/messages?limit=200&timeStamp=$lastMessageTimestamp-${8000}";
 
 
     final response = await ApiClient.getMessages(
@@ -175,7 +124,7 @@ Future<void> _fetchMessages(bool loadMore) async {
     if (loadMore) {
     }
   try {
-    String apiUrl = "https://dev.moutfits.com/api/v1/cometchat/groups/$groupId/messages";
+    String apiUrl = "https://cactisocial.com/api-clique/public/api/v1/cometchat/groups/$groupId/messages";
 
     if (loadMore && _messages.isNotEmpty) {
       // Fetch older messages with timestamp parameter and limit of 200
@@ -248,7 +197,6 @@ Future<void> _fetchMessages(bool loadMore) async {
           "receiverType": "group",
         }),
       );
-log(response.body);
       if (response.statusCode == 200) {
         _fetchMessages(true); // Refresh messages after sending a new one
       }

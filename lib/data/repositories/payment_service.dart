@@ -16,16 +16,12 @@ class PaymentService {
         "currency": "usd"
         }),
     );
-    log("Response: ${response.body}");
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       return data['client_secret'];
     } else {
-      log(
-        "Error: ${response.statusCode} ${response.body}"
-      );
-    log("Stripe Response: ${response.body}");
+     
       throw Exception('Failed to create payment intent');
       
     }

@@ -61,10 +61,9 @@ void initState() {
       isLoading.value = true; // Set isLoading to true when the API call starts
 
       try {
-        var url = Uri.parse('https://dev.moutfits.com/api/v1/user/update?_method=PUT');
+        var url = Uri.parse('https://cactisocial.com/api-clique/public/api/v1/user/update?_method=PUT');
         var request = http.MultipartRequest('POST', url);
-log("user auth");
-log(userController.token.value);
+
         request.headers.addAll({
           'Authorization': 'Bearer ${userController.token.value}',
           'Accept': 'application/json',
@@ -79,8 +78,6 @@ log(userController.token.value);
             ? request.files.add(await http.MultipartFile.fromPath('cover_photo', coverPhoto!.path))
             : userController.coverPhoto.value;
         var response = await request.send();
-        // log(response.body.toString());
-        log("response: ${response.statusCode}");
         if(response.statusCode == 422){
           Utils.showCustomSnackBar("Error", "Record Already Exist", ContentType.failure);
     
@@ -93,13 +90,13 @@ log(userController.token.value);
           final String userName = responseData["user"]["name"];
           final String? profileImage = responseData["user"]["profile_photo_url"];
           final String? coverPhotoUrl = responseData["user"]["cover_photo_url"];
-          final String phone = responseData["user"]["phone"];
+          final String? phone = responseData["user"]["phone"];
 
           final prefs = await SharedPreferences.getInstance();
           await prefs.setString('userName', userName);
           await prefs.setString('profile_photo_url', profileImage ?? '');
           await prefs.setString('cover_photo_url', coverPhotoUrl ?? '');
-          await prefs.setString('phone', phone);
+          await prefs.setString('phone', phone??'');
 
           await userController.loadUserSession();
           Utils.showCustomSnackBar("Profile Updated", "Profile updated successfully", ContentType.success);
@@ -110,7 +107,6 @@ log(userController.token.value);
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to update profile')));
         }
       } catch (e) {
-        log(e.toString());
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
       } finally {
         isLoading.value = false; // Set isLoading to false when the API call completes

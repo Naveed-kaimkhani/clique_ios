@@ -1,42 +1,7 @@
-// // widgets/chat_input_widget.dart
-// import 'package:flutter/material.dart';
-
-// class ChatInputWidget extends StatelessWidget {
-//   final Function(String) onSend;
-
-//   const ChatInputWidget({super.key, required this.onSend});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final TextEditingController _textController = TextEditingController();
-
-//     return Padding(
-//       padding: EdgeInsets.all(16),
-//       child: Row(
-//         children: [
-//           Expanded(
-//             child: TextField(
-//               controller: _textController,
-//               decoration: InputDecoration(
-//                 hintText: 'Message...',
-//                 border: OutlineInputBorder(),
-//               ),
-//             ),
-//           ),
-//           IconButton(
-//             icon: Icon(Icons.send),
-//             onPressed: () => onSend(_textController.text),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
 
 // widgets/chat_input_widget.dart
 import 'package:clique/components/send_button.dart';
 import 'package:flutter/material.dart';
-import '../constants/app_colors.dart'; // Assuming you have this file for colors
 
 class ChatInputWidget extends StatelessWidget {
   final Function(String) onSend;
@@ -74,12 +39,6 @@ class ChatInputWidget extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // IconButton(
-                  //   icon: Icon(Icons.attach_file, color: AppColors.black),
-                  //   onPressed: () async {
-                  //     // Handle attachment logic here
-                  //   },
-                  // ),
                 ],
               ),
             ),
