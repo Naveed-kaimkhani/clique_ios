@@ -10,7 +10,7 @@ class ProductCard extends StatelessWidget {
   final List<String> backgroundImage;
   final String productName;
   final String productDescription;
-  final double price;
+   var price;
   final double oldPrice;
   final String discount;
   final String categories;
@@ -22,7 +22,7 @@ class ProductCard extends StatelessWidget {
   final String unit;
   final bool isShowDiscount;
 
-  const ProductCard({
+   ProductCard({
     required this.weight,
     required this.categories,
     required this.unit,
@@ -190,24 +190,24 @@ Hero(
                           ],
                         ),
                         // Discount Badge
-                    isShowDiscount?    Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: padding * 0.5,
-                            vertical: padding * 0.25,
-                          ),
-                          decoration: BoxDecoration(
-                            gradient: AppColors.appGradientColors,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            discount,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: fontSizeDiscount,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ):Container()
+                    // isShowDiscount?    Container(
+                    //       padding: EdgeInsets.symmetric(
+                    //         horizontal: padding * 0.5,
+                    //         vertical: padding * 0.25,
+                    //       ),
+                    //       decoration: BoxDecoration(
+                    //         gradient: AppColors.appGradientColors,
+                    //         borderRadius: BorderRadius.circular(8),
+                    //       ),
+                    //       child: Text(
+                    //         discount,
+                    //         style: TextStyle(
+                    //           color: Colors.white,
+                    //           fontSize: fontSizeDiscount,
+                    //           fontWeight: FontWeight.bold,
+                    //         ),
+                    //       ),
+                    //     ):Container()
                       ],
                     ),
                   ],

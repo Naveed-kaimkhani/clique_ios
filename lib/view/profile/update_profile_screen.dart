@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:clique/components/auth_button.dart';
 import 'package:clique/components/custom_appbar.dart';
 import 'package:clique/components/custom_textfield.dart';
+import 'package:clique/components/profile_screen_appbar.dart';
 import 'package:clique/constants/index.dart';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/utils/utils.dart';
@@ -35,8 +36,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 @override
 void initState() {
   super.initState();
-  // nameController.text = userController.userName.value;
-  // phoneController.text = userController.phone.value;
+  nameController.text = userController.userName.value;
+  phoneController.text = userController.phone.value;
   // profilePhoto = userController.profilePhoto.value != null
   //     ? File(userController.profilePhoto.value!)
   //     : null;
@@ -124,7 +125,7 @@ log(userController.token.value);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: CustomAppBar(title: 'Edit Profile', icon: Icons.arrow_back_ios),
+        appBar: ProfileScreenAppbar(title: 'Edit Profile', icon: Icons.arrow_back_ios),
         body: Padding(
           padding: EdgeInsets.all(16.0),
           child: Form(
@@ -199,18 +200,46 @@ log(userController.token.value);
                   ),
                   SizedBox(height: 60),
 
-                  // Name Field
-                  CustomTextField(
-                    hintText: "Name",
-                    controller: nameController,
-                  ),
+              Column(
+  crossAxisAlignment: CrossAxisAlignment.start,
+  children: [
+    Text(
+      "Name",
+      style: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+        color: Colors.black,
+      ),
+    ),
+    SizedBox(height: 8),
+    CustomTextField(
+      hintText: "Name",
+      controller: nameController,
+    ),
+  ],
+),
+
                   SizedBox(height: 20),
 
                   // Phone Field
-                  CustomTextField(
-                    hintText: "Phone",
-                    controller: phoneController,
-                  ),
+                        Column(
+  crossAxisAlignment: CrossAxisAlignment.start,
+  children: [
+    Text(
+      "Phone",
+      style: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+        color: Colors.black,
+      ),
+    ),
+    SizedBox(height: 8),
+    CustomTextField(
+      hintText: "Phone",
+      controller: phoneController,
+    ),
+  ],
+),
                   SizedBox(height: 50),
 
                   // Update Profile Button

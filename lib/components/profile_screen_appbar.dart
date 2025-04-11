@@ -1,18 +1,15 @@
 import 'package:clique/constants/app_colors.dart';
-import 'package:clique/controller/user_controller.dart';
 import 'package:clique/routes/routes_name.dart';
-import 'package:clique/utils/utils.dart';
-import 'package:clique/view/profile/update_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class CustomAppBar extends PreferredSize {
+class ProfileScreenAppbar extends PreferredSize {
   final String title;
   final IconData? icon;
   final bool isNotification;
   
   final IconData? logoutIcon;
-  CustomAppBar({
+  ProfileScreenAppbar({
     super.key,
     required this.title,
     this.logoutIcon,
@@ -20,7 +17,7 @@ class CustomAppBar extends PreferredSize {
     this.isNotification = false,
   }) : super(
           preferredSize: const Size.fromHeight(kToolbarHeight * 1.2), // Increased height
-          child: _CustomAppBarWidget(
+          child: _ProfileScreenAppbarWidget(
             title: title,
             icon: icon,
             isNotification: isNotification,
@@ -28,12 +25,12 @@ class CustomAppBar extends PreferredSize {
         );
 }
 
-class _CustomAppBarWidget extends StatelessWidget {
+class _ProfileScreenAppbarWidget extends StatelessWidget {
   final String title;
   final IconData? icon;
   final bool isNotification;
 
-   _CustomAppBarWidget({
+   _ProfileScreenAppbarWidget({
     required this.title,
     this.icon,
     this.isNotification = false,
@@ -81,40 +78,8 @@ class _CustomAppBarWidget extends StatelessWidget {
                 ),
               ),
               isNotification 
-                ? IconButton(
-                    icon: Icon(
-                      Icons.upload_outlined,
-                      color: Colors.white,
-                      size: iconSize,
-                    ),
-                    onPressed: () {
-                      Get.toNamed(RouteName.uploadVideo);
-                    },
-                  )
-                : GestureDetector(
-                    onTap: () {
-                       Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateProfileScreen()));
-
-                    },
-                    child: Image.asset('assets/png/edit_profile.png',
-                      height: iconSize,
-                      width: iconSize,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                
-                // IconButton(
-                //     icon: Icon(
-                //       Icons.edit,
-                //       color: Colors.white,
-                //       size: iconSize,
-                //     ),
-                //     onPressed: () {
-                //       // Get.toNamed(RouteName.updateProfileScreen);
-                //         Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateProfileScreen()));
-
-                //     },
-                //   ),
+                ? SizedBox()
+                : SizedBox()
             ],
           ),
         ),

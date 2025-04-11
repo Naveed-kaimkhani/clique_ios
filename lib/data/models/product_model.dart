@@ -3,8 +3,8 @@ class ProductModel {
   final String productTitle;
   final String productDesc;
   final String brandName;
-  final double cost;
-  final double msrp;
+   var cost;
+   var msrp;
   final List<String> imageUrls;
   final String thumbnailUrl;
   

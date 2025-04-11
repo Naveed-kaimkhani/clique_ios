@@ -1,8 +1,5 @@
 
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clique/routes/routes_name.dart';
 import 'package:clique/view_model/product_details_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:clique/constants/app_colors.dart';
@@ -13,7 +10,7 @@ class ProductCategoryCard extends StatelessWidget {
   final String backgroundImage;
   final String productName;
   final String productDescription;
-  final double price;
+   var price;
   final double oldPrice;
   final String discount;
   final String categories;
@@ -25,7 +22,7 @@ class ProductCategoryCard extends StatelessWidget {
   final String unit;
   final bool isShowDiscount;
 
-  const ProductCategoryCard({
+   ProductCategoryCard({
     required this.weight,
     required this.categories,
     required this.unit,

@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/data/models/product_model.dart';
+import 'package:clique/routes/routes_name.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -30,7 +31,7 @@ Future<void> fetchProducts(String searchQuery) async {
   try {
     final response = await http.get(
       Uri.parse(
-          'https://dev.moutfits.com/api/v1/topdawg/products?page=1&per_page=50&search=$searchQuery'),
+          'https://dev.moutfits.com/api/v1/topdawg/products?page=1&per_page50&search=$searchQuery'),
       headers: {
         'Authorization': 'Bearer ${userController.token.value}',  // Pass the token in the Authorization header
       },
@@ -136,76 +137,105 @@ Future<void> fetchProducts(String searchQuery) async {
           ),
           itemCount: products.length,
           itemBuilder: (context, index) {
-            var product = products[index];
-            return Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              elevation: 4,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(16),
-                      topRight: Radius.circular(16),
-                    ),
-                    child: Stack(
-                      children: [
-
-                        CachedNetworkImage(
-                          imageUrl: product.thumbnailUrl,
-                          fit: BoxFit.cover,
-                          height: 150,
-                          width: double.infinity,
-                          placeholder: (context, url) => Shimmer.fromColors(
-                            baseColor: Colors.grey[300]!,
-                            highlightColor: Colors.grey[100]!,
-                            child: Container(
-                              color: Colors.white,
+            ProductModel product = products[index];
+            return GestureDetector(
+              onTap: (){
+                 log(product.imageUrls.toString());
+                  Get.toNamed(
+    RouteName.productDetailsScreen,
+    arguments: {
+      'uid': product.id.toString(),
+      'backgroundImage': product.imageUrls,
+      'productName': product.productTitle,
+      'productDescription': product.productDesc,
+      'price': product.cost,
+      'oldPrice': product.msrp,
+      'discount': 0.0,
+      'unit': product.unit,
+      'categories':product.categories,
+      'size':product.productWeight,
+    },
+  );
+              },
+              child: Card(
+              
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                elevation: 4,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(16),
+                        topRight: Radius.circular(16),
+                      ),
+                      child: Stack(
+                        children: [
+              
+                          CachedNetworkImage(
+                            imageUrl: product.thumbnailUrl,
+                            fit: BoxFit.cover,
+                            height: 150,
+                            width: double.infinity,
+                            placeholder: (context, url) => Shimmer.fromColors(
+                              baseColor: Colors.grey[300]!,
+                              highlightColor: Colors.grey[100]!,
+                              child: Container(
+                                color: Colors.white,
+                              ),
                             ),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error, color: Colors.red),
                           ),
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error, color: Colors.red),
-                        ),
-        //                   Container(
-        //   width: double.infinity,
-        //   height: 170,
-        //   decoration: BoxDecoration(
-        //     gradient: LinearGradient(
-        //       begin: Alignment.bottomCenter,
-        //       end: Alignment.topCenter,
-        //       colors: [
-        //         Colors.black.withOpacity(0.6),
-        //         Colors.transparent,
-        //       ],
-        //     ),
-        //   ),
-        // ),
-                            Positioned(
-                                  bottom: 5,
-              left: 0,
-              right: 0,
-                              child: Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: Text(
-                                   product.productTitle.substring(0, 30) + '...'  // Show first 10 characters and ellipsis
-                                      ,  // If title is less than or equal to 10 characters, show the whole title
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    overflow: TextOverflow.ellipsis,  // Ensure that text is truncated with an ellipsis
+                                        Container(
+  width: double.infinity,
+  height: MediaQuery.of(context).size.height * 0.187, // 20% of screen height
+  decoration: BoxDecoration(
+    gradient: LinearGradient(
+      begin: Alignment.bottomCenter,
+      end: Alignment.topCenter,
+      colors: [
+        Colors.black.withOpacity(0.6),
+        Colors.transparent,
+      ],
+    ),
+    borderRadius: BorderRadius.only(
+      topLeft: Radius.circular(16),
+      topRight: Radius.circular(16),
+      
+      bottomRight: Radius.circular(16),
+      bottomLeft: Radius.circular(16),
+    ),
+  ),
+),
+
+                              Positioned(
+                                    bottom: 5,
+                left: 0,
+                right: 0,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Text(
+                                     product.productTitle.substring(0, 30) + '...'  // Show first 10 characters and ellipsis
+                                        ,  // If title is less than or equal to 10 characters, show the whole title
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      overflow: TextOverflow.ellipsis,  // Ensure that text is truncated with an ellipsis
+                                    ),
                                   ),
                                 ),
-                              ),
-                            )
-
-                      ],
+                              )
+              
+                        ],
+                      ),
                     ),
-                  ),
-            
-                ],
+              
+                  ],
+                ),
               ),
             );
           },

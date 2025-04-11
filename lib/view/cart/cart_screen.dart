@@ -45,7 +45,7 @@ final AddressController controller = Get.isRegistered<AddressController>()
   @override
 Widget build(BuildContext context) {
   log("CartScreen build called");
-  log(uid);
+  // log(uid);
 
   return Container(
     decoration: BoxDecoration(
