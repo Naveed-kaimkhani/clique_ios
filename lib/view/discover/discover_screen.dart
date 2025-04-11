@@ -45,6 +45,8 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
           appBar: CustomAppBar(title: 'Discover'),
           backgroundColor: Colors.white,
           body: SingleChildScrollView(
+              padding: EdgeInsets.only(bottom: kBottomNavigationBarHeight + 16),
+
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

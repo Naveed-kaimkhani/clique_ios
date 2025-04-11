@@ -1,19 +1,31 @@
+import 'package:clique/controller/user_controller.dart';
 import 'package:clique/data/models/influencer_model.dart';
 import 'package:clique/data/repositories/influencer_repository.dart';
 import 'package:get/get.dart';
 
 class InfluencerViewmodel extends GetxController {
   final InfluencerRepository _userRepository = InfluencerRepository();
+  
+  final userController = Get.find<UserController>();
   var influencers = <InfluencerModel>[].obs;
   var isLoading = true.obs; // Add this line
   var error = ''.obs; // Add this line to handle errors
+  var searchQuery = ''.obs;
 
   @override
   void onInit() {
     fetchUsers();
     super.onInit();
   }
-
+  List<InfluencerModel> get filteredInfluencers {
+    if (searchQuery.value.isEmpty) return influencers;
+    return influencers
+        .where((influencer) => influencer.name.toLowerCase().contains(searchQuery.value.toLowerCase()))
+        .toList();
+  }
+  void updateSearchQuery(String query) {
+    searchQuery.value = query;
+  }
   void fetchUsers() async {
     try {
       isLoading(true); // Set loading to true before fetching data
@@ -26,4 +38,22 @@ class InfluencerViewmodel extends GetxController {
       isLoading(false); // Set loading to false after fetching data (whether successful or not)
     }
   }
+
+
+//   void fetchUsers() async {
+//   try {
+//     isLoading(true);
+//     var fetchedUsers = await _userRepository.fetchInfluencers();
+
+//     final filtered = fetchedUsers.where((user) => user.id != userController.uid.value).toList();
+
+//     influencers.assignAll(filtered);
+//   } catch (e) {
+//     error(e.toString());
+//     Get.snackbar('Error', e.toString());
+//   } finally {
+//     isLoading(false);
+//   }
+// }
+
 }

@@ -35,6 +35,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 final stripeVM = Get.put(StripeViewModel());
 
 final CartQuantityController _cartQuantityController = Get.find<CartQuantityController>();
+// final CartQuantityController _cartQuantityController = 
+//     Get.isRegistered<CartQuantityController>()
+//         ? Get.find<CartQuantityController>()
+//         : Get.put(CartQuantityController());
+
 
 // CartQuantityController _cartQuantityController = Get.find<CartQuantityController>();
   final StripeViewModel stripeViewModel = Get.put(StripeViewModel());
@@ -130,7 +135,7 @@ double subTotal = (_cartQuantityController.products.first.cost * _cartQuantityCo
 
   return Padding(
                     padding: EdgeInsets.only(left: horizontalPadding * 0.5),
-                    child: paymentOption(subTotal+shippingCost,'Master Card', '**** *****', AppSvgIcons.master, 'mastercard'),
+                    child: paymentOption(subTotal+shippingCost,'Add Card Details', '**** *****', AppSvgIcons.master, 'mastercard'),
                   );
      
 }),

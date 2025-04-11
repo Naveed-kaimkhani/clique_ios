@@ -21,7 +21,7 @@ class ProductRepository {
       },
     );
 
-    log(response.body.toString());
+    // log(response.body.toString());
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);

@@ -56,19 +56,9 @@ class InfluencerCard extends StatelessWidget {
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // ClipRRect(
-              //   borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
-              //   child:  Image.asset(
-              //     backgroundImage,
-              //     height: cardHeight * 0.3, // Responsive image height
-              //     width: double.infinity,
-              //     fit: BoxFit.cover,
-              //   ),
-              // ),
-
-                ClipRRect(
+               ClipRRect(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
-                child: CachedNetworkImage(
+                child:backgroundImage!=null?  CachedNetworkImage(
                   imageUrl: backgroundImage ?? '',
                   height: cardHeight * 0.3, // Responsive image height
                   width: double.infinity,
@@ -85,7 +75,11 @@ class InfluencerCard extends StatelessWidget {
   color: Colors.grey[300], // Light grey background
 ),
 
-                ),
+                ):Container(
+  height: cardHeight * 0.3,
+  width: double.infinity,
+  color: Colors.grey[300], // Light grey background
+),
               ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: size.width * 0.02, vertical: size.height * 0.02),
@@ -154,8 +148,8 @@ class InfluencerCard extends StatelessWidget {
             child: GestureDetector(
               onTap: () => Get.toNamed(RouteName.influencerProfile, arguments: influencerModel),
               child: ClipOval(
-                child: CachedNetworkImage(
-                  imageUrl: profileImage ?? "",
+                child: profileImage!=null? CachedNetworkImage(
+                  imageUrl: profileImage??"",
                   width: profileImageSize,
                   height: profileImageSize,
                   fit: BoxFit.cover,
@@ -171,7 +165,12 @@ class InfluencerCard extends StatelessWidget {
                     color: Colors.grey[300],
                     child:  Icon(Icons.person, color: Colors.white70, size: profileImageSize),
                   ),
-                ),
+                ):Container(
+                    width: profileImageSize,
+                    height: profileImageSize,
+                    color: Colors.grey[300],
+                    child:  Icon(Icons.person, color: Colors.white70, size: profileImageSize),
+                  ),
               ),
             ),
           ),

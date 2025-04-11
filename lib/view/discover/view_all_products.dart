@@ -15,7 +15,7 @@ class ViewAllProductsScreen extends StatelessWidget {
     // final ProductViewModel productViewModel = Get.find<ProductViewModel>();
       final ProductViewModel productViewModel = Get.isRegistered<ProductViewModel>()
     ? Get.find<ProductViewModel>()
-    : Get.put(ProductViewModel());
+    : Get.put(ProductViewModel(), permanent: true);
     return Container(
       decoration: BoxDecoration(
         gradient: AppColors.appGradientColors,

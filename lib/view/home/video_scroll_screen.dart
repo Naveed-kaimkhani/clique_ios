@@ -137,7 +137,7 @@ void _loadVideo(int index) {
       switch (_navigationController.selectedIndex.value) {
         case 0:
           return VideoView(
-            tabController: _tabController,
+            // tabController: _tabController,
             pageController: _pageController,
             videoUrls: widget.popstreams.map((p) => p.videoUrl).toList(),
             controllers: _controllers,

@@ -30,7 +30,7 @@ class ShopAllWidget extends StatelessWidget {
               SizedBox(height: spacing),
            Center(
             child:    Text(
-              "Shop All",
+              "View All",
                 style: TextStyle(
                   fontSize: screenSize.width * 0.035,
                 ),

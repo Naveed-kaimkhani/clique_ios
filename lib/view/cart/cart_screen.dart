@@ -30,14 +30,6 @@ final OrderViewModel orderController =
 final AddressController controller = Get.isRegistered<AddressController>()
     ? Get.find<AddressController>()
     : Get.put(AddressController());
-
-  //  AddressController controller=  Get.find<AddressController>();
-  //  CartQuantityController _cartQuantityController=   Get.put(CartQuantityController());
-  // final CartQuantityController cartQuantityController =  Get.put(CartQuantityController());
-
-
-//  CartQuantityController cartQuantityController =
-//     Get.find<CartQuantityController>();
        
   final String uid = Get.arguments;
   CartScreen({super.key});
@@ -92,19 +84,7 @@ Widget build(BuildContext context) {
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                // Hero(
-                                //   tag: uid,
-                                //   child: ClipRRect(
-                                //     borderRadius: BorderRadius.circular(8),
-                                //     child: Image.network(
-                                //       product.imageUrls.first,
-                                //       width: 84,
-                                //       height: 84,
-                                //       fit: BoxFit.cover,
-                                //     ),
-                                //   ),
-                                // ),
-                                
+                           
 Hero(
   tag: uid,
   child: ClipRRect(
@@ -164,12 +144,6 @@ Hero(
                                                 onPressed: () => cartQuantityController.incrementQuantity(),
                                               ),
                                               const Spacer(),
-                                              // IconButton(
-                                              //   icon: const Icon(Icons.delete, color: AppColors.appColor),
-                                              //   onPressed: () {
-                                              //     cartQuantityController.products.removeWhere((e) => e.id.toString() == uid);
-                                              //   },
-                                              // ),
                                             ],
                                           )),
                                     ],

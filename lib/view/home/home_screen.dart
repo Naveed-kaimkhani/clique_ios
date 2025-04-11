@@ -101,6 +101,7 @@ Widget build(BuildContext context) {
       if (discoverViewModel.popstreams.isEmpty) {
         return LoadingPlaceHolder();
       }
+      log(userController.token.value);
       log("videoUrls: ${discoverViewModel.popstreams.map((p) => p.videoUrl).toList()}");
       return VideoScrollScreen(popstreams: discoverViewModel.popstreams);
     }),
