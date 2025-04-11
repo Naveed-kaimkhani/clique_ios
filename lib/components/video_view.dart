@@ -38,7 +38,35 @@ class VideoView extends StatelessWidget {
         body: Stack(
           children: [
             _buildTabBarView(),
-            _buildTabBar(),
+            // Padding(
+            //   padding: const EdgeInsets.only(left:208.0),
+            //   child: 
+            // )
+//             Padding(
+//               padding: const EdgeInsets.all(8.0),
+//               child: Row(
+//                 mainAxisAlignment: MainAxisAlignment.center,
+//                 children: [
+//                   Text.rich(
+//   TextSpan(
+//     text: 'My Feed\n ',
+//     style: TextStyle(
+//       color: Colors.white,
+//       fontSize: screenWidth * 0.037,
+//       fontWeight: FontWeight.bold,
+//       decoration: TextDecoration.underline,
+//       decorationColor: Colors.white, // 👈 Explicitly set underline color
+//         decorationThickness: 2.5, // 👈 Increase thickness here
+
+//     ),
+//   ),
+// )
+
+
+//                 ],
+//               ),
+//             ),
+            // _buildTabBar(),
             // _buildBottomNavBar(),
           ],
         ),
@@ -61,7 +89,8 @@ class VideoView extends StatelessWidget {
               child: Text("Pet Food",
                   style: TextStyle(
                       fontSize: screenWidth * 0.037,
-                      fontWeight: FontWeight.bold))),
+                      fontWeight: FontWeight.bold))
+                      ),
           Tab(
               child: Text("Pull Toys",
                   style: TextStyle(
@@ -120,20 +149,5 @@ class VideoView extends StatelessWidget {
     );
   }
 
-  // Widget _buildShimmerLoading() {
-  //   return Shimmer.fromColors(
-  //     baseColor: Colors.grey.shade400,
-  //     highlightColor: Colors.grey.shade100,
-  //     child: Center(
-  //       child: Container(
-  //         width: double.infinity,
-  //         height: double.infinity,
-  //         color: Colors.black,
-  //         child: Center(
-  //           child: Icon(Icons.video_library, color: Colors.white, size: 100),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
+
 }

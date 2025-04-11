@@ -43,7 +43,6 @@ Future<void> logout() async {
   await prefs.remove('email');
   await prefs.remove('phone');
 
-  log("User session cleared.");
   Get.offAllNamed(RouteName.loginScreen);
 }
 

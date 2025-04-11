@@ -26,7 +26,7 @@ class OrderViewModel extends GetxController {
   Rx<OrderSummary?> orderSummary = Rx<OrderSummary?>(null); // Define the orderSummary field
 
 Future<OrderSummary?> submitOrder() async {
-  log("submit order called");
+ 
   try {
     isLoading.value = true;
 
@@ -88,24 +88,20 @@ Future<OrderSummary?> submitOrder() async {
     };
 
     // Prepare the request body by converting the order object to a map
-    final Map<String, dynamic> orderMap = order.toMap();
-    // log(orderMap.toString());
-    log(jsonEncode(orderMap).toString()); // Log the JSON string
+    final Map<String, dynamic> orderMap = order.toMap(); // Log the JSON string
     final response = await http.post(
       url,
       headers: headers,
       body: jsonEncode(orderMap),  // Encode the order map to JSON
     
     );
-    log(response.statusCode.toString());
-  log(response.body.toString());
+    log(response.body);
     if (response.statusCode == 200) {
       // Success
     final parsedOrderSummary = OrderSummary.fromJson(jsonDecode(response.body));
-
+    log('Parsed Order Summary: ${parsedOrderSummary.orderId}');
         // Store the orderSummary in the field
-        orderSummary.value = parsedOrderSummary;
-
+        // orderSummary.value = parsedOrderSummary;
         // Return the OrderSummary object
         return parsedOrderSummary;
     } else {
@@ -116,6 +112,35 @@ Future<OrderSummary?> submitOrder() async {
   } catch (e) {
      Utils.showCustomSnackBar("Error", "Failed to place order $e", ContentType.failure);
  
+  } finally {
+    isLoading.value = false;
+  }
+}
+Future<void> processOrder(String orderId) async {
+  try {
+    isLoading.value = true;
+
+    final url = Uri.parse("https://dev.moutfits.com/api/v1/topdawg/orders/process");
+
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${userController.token.value}',
+    };
+
+    final body = jsonEncode({
+      "order_id": orderId,
+    });
+
+    final response = await http.post(url, headers: headers, body: body);
+    log('Process Order Response: ${response.body}');
+
+    if (response.statusCode == 200) {
+      Utils.showCustomSnackBar("Success", "Order processed successfully", ContentType.success);
+    } else {
+      Utils.showCustomSnackBar("Error", "Failed to process order", ContentType.failure);
+    }
+  } catch (e) {
+    Utils.showCustomSnackBar("Exception", "Error while processing order: $e", ContentType.failure);
   } finally {
     isLoading.value = false;
   }

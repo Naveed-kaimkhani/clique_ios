@@ -7,6 +7,7 @@ import 'package:clique/data/models/signup_params.dart';
 import 'package:clique/routes/app_routes.dart';
 import 'package:clique/routes/routes_name.dart';
 import 'package:clique/view_model/otp_controller.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
@@ -160,7 +161,26 @@ class SignupScreen extends StatelessWidget {
           value: _isChecked.value,
           onChanged: (value) => _isChecked.value = value ?? false,
         )),
-        const Text('I agree with the terms & conditions')
+        // const Text('I agree with the terms & conditions'),
+RichText(
+  text: TextSpan(
+    style: TextStyle(color: Colors.black, fontSize: 14), // base style
+    children: [
+      TextSpan(text: 'I agree with the '),
+      TextSpan(
+        text: 'terms & conditions',
+        style: TextStyle(
+          color: AppColors.appColor,
+          decoration: TextDecoration.underline,
+        ),
+        recognizer: TapGestureRecognizer()
+          ..onTap = () {
+            Get.toNamed(RouteName.termsAndConditionsScreen);
+          },
+      ),
+    ],
+  ),
+)
       ],
     );
   }
@@ -182,15 +202,15 @@ class SignupScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 10),
-        Expanded(
-          child: _socialButton(
-            icon: const Icon(Icons.apple, color: Colors.black),
-            label: "Apple",
-            borderColor: Colors.black,
-            textColor: Colors.black,
-            onPressed: () {},
-          ),
-        ),
+        // Expanded(
+        //   child: _socialButton(
+        //     icon: const Icon(Icons.apple, color: Colors.black),
+        //     label: "Apple",
+        //     borderColor: Colors.black,
+        //     textColor: Colors.black,
+        //     onPressed: () {},
+        //   ),
+        // ),
       ],
     );
   }
@@ -228,12 +248,13 @@ class SignupScreen extends StatelessWidget {
   Future<void> _handleGoogleSignIn() async {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      log(googleUser.toString());
       if (googleUser != null) {
         // Fetch user details
         final String name = googleUser.displayName ?? "Unknown";
         final String email = googleUser.email;
         // final String phone = googleUser.
-        final String profilePicture = googleUser.photoUrl ?? "";
+        // final String profilePicture = googleUser.photoUrl ?? "";
 
 
 

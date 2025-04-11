@@ -6,20 +6,31 @@ import 'package:clique/constants/app_colors.dart';
 import 'package:clique/constants/app_svg_icons.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ProfileProductCard extends StatelessWidget {
   final String uid;
-  final String backgroundImage;
+  final List<String> backgroundImage;
   final String productName;
   final String productDescription;
   final double price;
   final double oldPrice;
   final String discount;
+  
+  final String size;
+  
+  final String categories;
+  
+  final String unit;
   final Color textColor;
 
   const ProfileProductCard({
+    required this.size,
     required this.backgroundImage,
     required this.productName,
+    
+    required this.categories,
+    required this.unit,
     required this.productDescription,
     required this.price,
     required this.oldPrice,
@@ -55,6 +66,10 @@ class ProfileProductCard extends StatelessWidget {
       'price': price,
       'oldPrice': oldPrice,
       'discount': discount,
+      'unit': unit, 
+      'categories':categories,
+      'size': size,
+
     },
   ),
       child: Container(
@@ -66,19 +81,7 @@ class ProfileProductCard extends StatelessWidget {
         ),
         child: Stack(
           children: [
-            // Background Image
-            // Hero(
-            //   tag: uid,
-            //   child: ClipRRect(
-            //     borderRadius: BorderRadius.circular(20),
-            //     child: Image.asset(
-            //       backgroundImage,
-            //       width: double.infinity,
-            //       height: double.infinity,
-            //       fit: BoxFit.cover,
-            //     ),
-            //   ),
-            // ),
+         
             
 Hero(
   tag: uid,
@@ -86,14 +89,22 @@ Hero(
     borderRadius: BorderRadius.circular(20),
     child: Stack(
       children: [
-        CachedNetworkImage(
-          imageUrl: backgroundImage, // This should be a network URL for the image
-          width: double.infinity,
-          height: double.infinity,
-          fit: BoxFit.cover,
-          placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
-          errorWidget: (context, url, error) => const Icon(Icons.error),
-        ),
+       CachedNetworkImage(
+  imageUrl: backgroundImage.first,
+  width: double.infinity,
+  height: double.infinity,
+  fit: BoxFit.cover,
+  placeholder: (context, url) => Shimmer.fromColors(
+    baseColor: Colors.grey.shade300,
+    highlightColor: Colors.grey.shade100,
+    child: Container(
+      width: double.infinity,
+      height: double.infinity,
+      color: Colors.grey, // or Colors.black if you want a dark shimmer
+    ),
+  ),
+  errorWidget: (context, url, error) => const Icon(Icons.error),
+),
             Container(
           width: double.infinity,
           height: cardWidth * 2,

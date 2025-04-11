@@ -103,19 +103,19 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
             child: StreamBuilder<List<MessageModel>>(
               stream: viewModel.messagesStream,
               builder: (context, snapshot) {
+                    if (snapshot.hasError ) {
+                  return  Center(child: Text(snapshot.error.toString()));
+
+                }
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return LoadMessageAnimation();
 
-                  // Center(child: CircularProgressIndicator());
                 }
 
-                if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return Center(child: Text("No messages found"));
-                }
-
+               if (!snapshot.hasData || snapshot.data!.isEmpty) {
+  return const Center(child: Text("No messages found"));
+}
                 final messages = snapshot.data!;
-//  WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
-
                 return ListView.builder(
                   controller: _scrollController,
                   padding: EdgeInsets.all(16),

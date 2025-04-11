@@ -67,7 +67,6 @@ log(userController.token.value);
           'Authorization': 'Bearer ${userController.token.value}',
           'Accept': 'application/json',
         });
-
         request.fields['name'] = nameController.text.isEmpty? userController.userName.value : nameController.text;
         // request.fields['email'] = emailController.text;
         request.fields['phone'] = phoneController.text.isEmpty? userController.phone.value : phoneController.text;
@@ -77,8 +76,14 @@ log(userController.token.value);
         coverPhoto != null
             ? request.files.add(await http.MultipartFile.fromPath('cover_photo', coverPhoto!.path))
             : userController.coverPhoto.value;
-// request.files.add(await http.MultipartFile.fromPath('cover_photo',''));
         var response = await request.send();
+        // log(response.body.toString());
+        log("response: ${response.statusCode}");
+        if(response.statusCode == 422){
+          Utils.showCustomSnackBar("Error", "Record Already Exist", ContentType.failure);
+    
+
+        }
         if (response.statusCode == 200) {
           final responseBody = await response.stream.bytesToString();
           final Map<String, dynamic> responseData = jsonDecode(responseBody);
@@ -95,7 +100,6 @@ log(userController.token.value);
           await prefs.setString('phone', phone);
 
           await userController.loadUserSession();
-
           Utils.showCustomSnackBar("Profile Updated", "Profile updated successfully", ContentType.success);
           Get.back();
         } else {

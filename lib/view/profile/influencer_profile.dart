@@ -1,8 +1,10 @@
 
 
+import 'package:clique/components/product_section.dart';
 import 'package:clique/constants/index.dart';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/data/models/influencer_model.dart';
+import 'package:clique/view/chat/influencer_chatlist.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../components/index.dart';
@@ -19,7 +21,7 @@ class InfluencerProfileState extends State<InfluencerProfile>
   late TabController _tabController;
   final UserController userController = Get.find<UserController>();
   
-  late InfluencerModel influencer; // Store the influencer data
+  late InfluencerModel influencer; 
 
   @override
   void initState() {
@@ -84,7 +86,7 @@ class InfluencerProfileState extends State<InfluencerProfile>
                       tabs: const [
                         Tab(
                           child: Text(
-                            'Posts',
+                            'Cliques',
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -110,40 +112,18 @@ class InfluencerProfileState extends State<InfluencerProfile>
               controller: _tabController,
               children: [
                 // Posts Tab Content
-                ListView(
-                  padding: EdgeInsets.only(top: 12.0),
-                  children: [
-                    PostWidget(),
-                    PostWidget(),
-                  ],
-                ),
+                // ListView(
+                //   padding: EdgeInsets.only(top: 12.0),
+                //   children: [
+                //     PostWidget(),
+                //     PostWidget(),
+                //   ],
+                // ),
+                InfluencerChatList(influencerId: influencer.id,),
 
                 // Products Tab Content
-                ListView(
-                  padding: EdgeInsets.only(top: 12.0),
-                  children: [
-                    ProfileProductCard(
-                      uid: '1',
-                      backgroundImage: 'assets/png/product.png',
-                      productName: "Girl’s Full Blazers",
-                      productDescription:
-                          "Crafted from premium, breathable cotton fabric",
-                      price: 53.23,
-                      oldPrice: 100.23,
-                      discount: "10% OFF",
-                    ),
-                    ProfileProductCard(
-                      uid: '2',
-                      backgroundImage: 'assets/png/product2.png',
-                      productName: "Girl’s Full Blazers",
-                      productDescription:
-                          "Crafted from premium, breathable cotton fabric",
-                      price: 53.23,
-                      oldPrice: 100.23,
-                      discount: "10% OFF",
-                    ),
-                  ],
-                ),
+           
+                  ProductsSection(userEmail:influencer.email,),
               ],
             ),
           ),

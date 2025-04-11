@@ -26,10 +26,6 @@ class UploadVideoService {
   required String authToken,
 }) async {
   try {
-    log(product.id.toString());
-    log(product.productTitle.toString());
-    log(product.cost.toString());
-    log(product.imageUrls.toString());
     var request = http.MultipartRequest('POST', Uri.parse(baseUrl));
     request.headers['Authorization'] = 'Bearer $authToken';
     request.headers['Content-Type'] = 'multipart/form-data';
@@ -48,10 +44,6 @@ class UploadVideoService {
     request.fields['show_type'] = showType.toLowerCase(); // Ensure lowercase
     request.fields['lambda_token'] = lambdaToken;
     request.fields['created_by'] = createdBy;
-        //     log("Product ID: ${product.id}");
-    // log("Product Name: ${product.productTitle}");
-    // log("Product Price: ${product.cost}");
-    // log("Product Description: ${product.imageUrls.first}");
     request.fields['product_id'] = product.id.toString();
     
     request.fields['name'] = product.productTitle;
@@ -63,8 +55,6 @@ class UploadVideoService {
     var response = await request.send();
     var responseBody = await response.stream.bytesToString();
 
-    log("Response Status Code: ${response.statusCode}");
-    log("Response Body: $responseBody");
 
     if (response.statusCode == 202) {
       var decoded = jsonDecode(responseBody);

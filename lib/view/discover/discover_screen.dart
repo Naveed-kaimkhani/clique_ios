@@ -173,73 +173,6 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
     );
   });
 }
-// Widget _buildProductList(Size size) {
-//   return Obx(() {
-//     if (_productViewModel.isLoading.value && _productViewModel.products.isEmpty) {
-//       return SizedBox(
-//         height: size.height * 0.32,
-//         child: ListView.builder(
-//           scrollDirection: Axis.horizontal,
-//           itemCount: 2,
-//           itemBuilder: (context, index) {
-//             return ShimmerProductCard(); // Show shimmer effect while loading
-//           },
-//         ),
-//       );
-//     }
-
-//     if (_productViewModel.error.value.isNotEmpty) {
-//       return Center(child: Text(_productViewModel.error.value));
-//     }
-
-//     if (_productViewModel.products.isEmpty) {
-//       return Center(child: Text('No products available'));
-//     }
-
-//     // Filter products to show only one per category
-//     Set<String> displayedCategories = Set<String>();
-    
-//     return SizedBox(
-//       height: size.height * 0.32,
-//       child: ListView.builder(
-//         controller: _productScrollController,
-//         scrollDirection: Axis.horizontal,
-//         itemCount: _productViewModel.products.length + 1,
-//         itemBuilder: (context, index) {
-//           if (index == _productViewModel.products.length) {
-//             return _buildViewAllButton(size, RouteName.viewAllProductsScreen);
-//           }
-
-//           final product = _productViewModel.products[index];
-
-//           // Skip product if it's from a category that has already been displayed
-//           if (displayedCategories.contains(product.categories)) {
-//             return SizedBox.shrink(); // Don't show this product
-//           }
-
-//           // Add the product's category to the displayed categories set
-//           displayedCategories.add(product.categories??'');
-
-//           final discount = ((product.msrp - product.cost) / product.msrp * 100).round();
-
-//           return ProductCard(
-//             weight:product.productWeight ,
-//             unit: product.unit,
-//             isShowDiscount: discount > 0,
-//             uid: product.id.toString(),
-//             backgroundImage: product.imageUrls.isNotEmpty ? product.imageUrls.first : '',
-//             productName: product.productTitle,
-//             productDescription: product.productDesc,
-//             price: product.cost,
-//             oldPrice: product.msrp,
-//             discount: "$discount% OFF",
-//           );
-//         },
-//       ),
-//     );
-//   });
-// }
-
 
 Widget _buildProductList(Size size) {
   return Obx(() {
@@ -296,7 +229,7 @@ Widget _buildProductList(Size size) {
             isShowDiscount: discount > 0,
             uid: product.id.toString(),
             categories: product.categories??'',
-            backgroundImage: product.imageUrls.isNotEmpty ? product.imageUrls.first : '',
+            backgroundImage: product.imageUrls.isNotEmpty ? product.imageUrls :List<String>.empty(),
             productName: product.productTitle,
             productDescription: product.productDesc,
             price: product.cost,

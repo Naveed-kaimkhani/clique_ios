@@ -128,7 +128,7 @@ class ViewAllProductsScreen extends StatelessWidget {
             unit: product.unit,
             categories: product.categories??"",
             uid: product.id.toString(), // Assuming `id` exists in `ProductModel`
-            backgroundImage: product.imageUrls.first,
+            backgroundImage: product.imageUrls,
             productName: product.productTitle, // Assuming `productTitle` exists in `ProductModel`
             productDescription: product.productDesc, // Assuming `productDescription` exists
             price: product.cost, // Assuming `price` exists in `ProductModel`

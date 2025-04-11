@@ -17,7 +17,9 @@ import 'package:shimmer/shimmer.dart';
 
 
 class CartScreen extends StatelessWidget {
-  
+  final CartQuantityController cartQuantityController =
+  Get.put(CartQuantityController());
+
   final ProductViewModel _productViewModel = Get.isRegistered<ProductViewModel>()
     ? Get.find<ProductViewModel>()
     : Get.put(ProductViewModel());
@@ -31,9 +33,9 @@ final AddressController controller = Get.isRegistered<AddressController>()
 
   //  AddressController controller=  Get.find<AddressController>();
   //  CartQuantityController _cartQuantityController=   Get.put(CartQuantityController());
-  final CartQuantityController cartQuantityController = Get.isRegistered<CartQuantityController>()
-    ? Get.find<CartQuantityController>()
-    : Get.put(CartQuantityController());
+  // final CartQuantityController cartQuantityController =  Get.put(CartQuantityController());
+
+
 //  CartQuantityController cartQuantityController =
 //     Get.find<CartQuantityController>();
        
@@ -162,12 +164,12 @@ Hero(
                                                 onPressed: () => cartQuantityController.incrementQuantity(),
                                               ),
                                               const Spacer(),
-                                              IconButton(
-                                                icon: const Icon(Icons.delete, color: AppColors.appColor),
-                                                onPressed: () {
-                                                  cartQuantityController.products.removeWhere((e) => e.id.toString() == uid);
-                                                },
-                                              ),
+                                              // IconButton(
+                                              //   icon: const Icon(Icons.delete, color: AppColors.appColor),
+                                              //   onPressed: () {
+                                              //     cartQuantityController.products.removeWhere((e) => e.id.toString() == uid);
+                                              //   },
+                                              // ),
                                             ],
                                           )),
                                     ],

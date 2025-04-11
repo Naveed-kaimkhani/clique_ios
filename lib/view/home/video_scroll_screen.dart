@@ -60,20 +60,20 @@ void _loadVideo(int index) {
       if (mounted) {
         setState(() {});
 
-        if (index == _currentIndex) {
+        if (index == _currentIndex.value) {
           controller.play(); // Only play the current video
         } else {
           controller.setVolume(0); // Prevent audio bleed
           controller.pause(); // Ensure it's not playing
         }
 
-        controller.setLooping(false);
+        controller.setLooping(true);
       }
     });
   } else {
     // Even if already initialized, ensure only current plays
     _controllers.forEach((i, c) {
-      if (i == _currentIndex) {
+      if (i == _currentIndex.value) {
         c.play();
         c.setVolume(1);
       } else {
@@ -131,27 +131,6 @@ void _loadVideo(int index) {
       ),
     );
   }
-
-//  Widget _buildMainContent(Size screenSize) {
-//   switch (_navigationController.selectedIndex.value) {
-//     case 0:
-//       return VideoView(
-//         tabController: _tabController,
-//         pageController: _pageController,
-//         videoUrls: widget.popstreams.map((p) => p.videoUrl).toList(), // Extract URLs from popstreams
-//         controllers: _controllers,
-//         onPageChanged: _onPageChanged,
-//         screenHeight: screenSize.height,
-//         screenWidth: screenSize.width,
-//       );
-//     case 1:
-//       return const DiscoverScreen();
-//     case 3:
-//       return ProfileScreen();
-//     default:
-//       return const Center(child: Text('Page not found'));
-//   }
-// }
 
   Widget _buildMainContent(Size screenSize) {
     return Obx(() {

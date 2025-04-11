@@ -21,29 +21,37 @@ class CheckoutController extends GetxController {
   var isFinished = false.obs;
 }
 
-class CheckoutScreen extends StatelessWidget {
+class CheckoutScreen extends StatefulWidget {
+  @override
+  State<CheckoutScreen> createState() => _CheckoutScreenState();
+}
+
+class _CheckoutScreenState extends State<CheckoutScreen> {
   final CheckoutController controller = Get.put(CheckoutController());
+
   final AddressController addressController = Get.find();
 
 final stripeVM = Get.put(StripeViewModel());
-final CartQuantityController _cartQuantityController = Get.find<CartQuantityController>();
-// CartQuantityController _cartQuantityController = Get.find<CartQuantityController>();
-// StripeViewModel
 
+final CartQuantityController _cartQuantityController = Get.find<CartQuantityController>();
+
+// CartQuantityController _cartQuantityController = Get.find<CartQuantityController>();
   final StripeViewModel stripeViewModel = Get.put(StripeViewModel());
+
   final OrderViewModel orderViewModel = Get.put(OrderViewModel());
+ @override
+  void dispose() {
+    // Delete the cart controller when screen is disposed
+    Get.delete<CartQuantityController>();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
 
     // Get the screen size
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-OrderSummary? orderSummary = orderViewModel.orderSummary.value;
 double subTotal = (_cartQuantityController.products.first.cost * _cartQuantityController.quantity.value) ;
-double shipping = orderSummary != null ? double.tryParse(orderSummary.shipping) ?? 0.0 : 0.0;
-
-// Calculate the total
-// double total = subTotal + shipping;
 
     // Define responsive padding and font sizes
     final double horizontalPadding = screenWidth * 0.06; // 6% of screen width
@@ -212,6 +220,7 @@ Obx(() {
       ),
     );
   }
+
   Widget paymentOption(double total, String title, String subtitle, String path, String value) {
     return Obx(() => ListTile(
       onTap:(){
@@ -220,7 +229,7 @@ Obx(() {
           
         }else{
 
-  stripeViewModel.makePayment( total * 100);
+            stripeViewModel.makePayment( total * 100);
         }
       },
       leading: Image.asset(path),
@@ -246,46 +255,48 @@ Obx(() {
     ));
   }
 
+  // Widget cartItem(double size) {
   Widget cartItem(double size) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-       Container(
-      height: size,
-      width: size,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: CachedNetworkImage(
-        imageUrl: _cartQuantityController.products.first.imageUrls.first, // Replace with your image URL
-        placeholder: (context, url) => const CircularProgressIndicator(), // Placeholder while loading
-        errorWidget: (context, url, error) => const Icon(Icons.error), // Error widget
-        fit: BoxFit.cover,
-      ),
-    ),
-        SizedBox(width: 18),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-    
-    Container(
-      width: 200, // or any fixed/relative width
-      child: Text(
-        _cartQuantityController.products.first.productTitle,
-        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        overflow: TextOverflow.ellipsis,
-        softWrap: true,
-        maxLines: 2,
-      ),
-    )
-    ,
-    
-            GradientText((_cartQuantityController.products.first.cost*_cartQuantityController.quantity.value).toString(), gradient: AppColors.appGradientColors, fontSize: 14),
-          ],
-        ),
-      ],
-    );
-  }
+  return Obx(() => Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: size,
+            width: size,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: CachedNetworkImage(
+              imageUrl: _cartQuantityController.products.first.imageUrls.first,
+              placeholder: (context, url) => const Center(child: CircularProgressIndicator(strokeWidth: 1.5)),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
+              fit: BoxFit.cover,
+            ),
+          ),
+          SizedBox(width: 18),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 200,
+                child: Text(
+                  _cartQuantityController.products.first.productTitle,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: true,
+                  maxLines: 2,
+                ),
+              ),
+              GradientText(
+                (_cartQuantityController.products.first.cost * _cartQuantityController.quantity.value).toString(),
+                gradient: AppColors.appGradientColors,
+                fontSize: 14,
+              ),
+            ],
+          ),
+        ],
+      ));
+}
 }

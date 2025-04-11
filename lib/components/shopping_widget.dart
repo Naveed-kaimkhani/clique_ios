@@ -1,7 +1,11 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:clique/components/organic_treats_widget.dart';
 import 'package:clique/components/shop_all_widget.dart';
+import 'package:clique/controller/user_controller.dart';
 import 'package:clique/data/models/pop_stream_model.dart';
 import 'package:clique/routes/routes_name.dart';
+import 'package:clique/utils/utils.dart';
+import 'package:clique/view/profile/update_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,6 +22,7 @@ class ShoppingWidget extends StatelessWidget {
   
   final PopstreamModel popstream;
 
+  final userController = Get.find<UserController>();
   @override
   Widget build(BuildContext context) {
     return Positioned(
@@ -52,7 +57,15 @@ class ShoppingWidget extends StatelessWidget {
               child: OrganicTreatsWidget(popstream:popstream ,),
             ),
             onTap: (){
+               if (userController.phone.value.isNotEmpty) {
+                
               Get.toNamed(RouteName.cartScreen, arguments: popstream.partyId);
+            }else{
+              Utils.showCustomSnackBar("Warning", "Please enter phone number to checkout", ContentType.warning);
+            //  Get.toNamed(RouteName.updateProfileScreen);
+            Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateProfileScreen()));
+
+            }
             },
           ),
         ],
@@ -60,3 +73,5 @@ class ShoppingWidget extends StatelessWidget {
     );
   }
 }
+
+

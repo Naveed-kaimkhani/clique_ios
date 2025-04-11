@@ -12,13 +12,11 @@ class ProductController extends GetxController {
 
   void setProductData(Map<String, dynamic> data) {
     productData.value = data; // This will trigger an update in the UI
+List<dynamic> backgroundImageList = productData['backgroundImage'];
 
-    // Set images dynamically from productData or mix with static
-    productImages.assignAll([
-      productData['backgroundImage'],
-      productData['backgroundImage'],
-      productData['backgroundImage'],
-    ]);
+  productImages.assignAll(
+  backgroundImageList.map((item) => item.toString()).toList()
+);
   }
 
   void incrementCart() {

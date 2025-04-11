@@ -54,7 +54,7 @@ class GroupChatViewModel extends GetxController {
         url: "https://dev.moutfits.com/api/v1/cometchat/groups/$groupId/messages?limit=20",
         headers: {"Authorization": "Bearer $token"},
       );
-
+log(response.body);
       if (response.statusCode == 200) {
         final dynamic responseData = jsonDecode(response.body);
 
@@ -131,22 +131,17 @@ class GroupChatViewModel extends GetxController {
 
 
 Future<void> _loadMoreMessages() async {
-  // if (_isLoading || (loadMore && !hasMoreMessages)) return;
-  // _isLoading = true;
-  //   if (loadMore) {
-  //     log("loading more messages");
-  //   }
+
   try {
      int lastMessageTimestamp = _messages.first.time; // Timestamp of the oldest message
       // apiUrl += "?limit=200&timeStamp=$lastMessageTimestamp-${8000}";
     String apiUrl = "https://dev.moutfits.com/api/v1/cometchat/groups/$groupId/messages?limit=200&timeStamp=$lastMessageTimestamp-${8000}";
 
-    log("Calling api");
+
     final response = await ApiClient.getMessages(
       url: apiUrl,
       headers: {"Authorization": "Bearer $token"},
     );
-    log(response.body);
     if (response.statusCode == 200) {
       final dynamic responseData = jsonDecode(response.body);
 
@@ -178,7 +173,6 @@ Future<void> _fetchMessages(bool loadMore) async {
   if (_isLoading || (loadMore && !hasMoreMessages)) return;
   _isLoading = true;
     if (loadMore) {
-      log("loading more messages");
     }
   try {
     String apiUrl = "https://dev.moutfits.com/api/v1/cometchat/groups/$groupId/messages";
@@ -187,7 +181,7 @@ Future<void> _fetchMessages(bool loadMore) async {
       // Fetch older messages with timestamp parameter and limit of 200
       int lastMessageTimestamp = _messages.first.time; // Timestamp of the oldest message
       apiUrl += "?limit=200&timeStamp=$lastMessageTimestamp-${8000}"; // Use limit=200 for older messages
-   log("limit added");
+
     } else {
       // Fetch initial messages with limit of 20
       apiUrl += "?limit=10";
@@ -228,11 +222,7 @@ Future<void> _fetchMessages(bool loadMore) async {
   }
 }
   Future<void> loadMoreMessages() async {
-    // if (!_isLoading && hasMoreMessages) {
-    //   log("calling fetch message");
-    //   await _fetchMessages(true); // Fetch older messages
-    // }
-      log("calling fetch message");
+   
       await _loadMoreMessages(); 
   }
 
@@ -258,9 +248,9 @@ Future<void> _fetchMessages(bool loadMore) async {
           "receiverType": "group",
         }),
       );
-
+log(response.body);
       if (response.statusCode == 200) {
-        _fetchMessages(false); // Refresh messages after sending a new one
+        _fetchMessages(true); // Refresh messages after sending a new one
       }
     } catch (e) {
       Get.snackbar("Error", "Failed to send message: $e");

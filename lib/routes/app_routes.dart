@@ -2,6 +2,7 @@
 import 'package:clique/routes/routes_name.dart';
 import 'package:clique/view/auth/login_screen.dart';
 import 'package:clique/view/auth/signup_screen.dart';
+import 'package:clique/view/auth/terms_and_conditions.dart';
 import 'package:clique/view/auth/verify_otp.dart';
 import 'package:clique/view/cart/cart_screen.dart';
 import 'package:clique/view/cart/checkout_screen.dart';
@@ -13,6 +14,7 @@ import 'package:clique/view/notifications/notification_screen.dart';
 import 'package:clique/view/product/product_details_screen.dart';
 import 'package:clique/view/product/search_products.dart';
 import 'package:clique/view/profile/influencer_profile.dart';
+import 'package:clique/view/profile/test.dart';
 import 'package:clique/view/splash/splash_screen.dart';
 import 'package:clique/view/upload_product_screens/upload_product.dart';
 import 'package:get/get.dart';
@@ -87,6 +89,15 @@ class AppRoutes {
              GetPage(
         name: RouteName.productSearchScreen,
         page: () =>  ProductSearchScreen(),
+        transition: Transition.cupertino),
+        
+             GetPage(
+        name: RouteName.updateProfileScreen,
+        page: () =>  UpdateProfileScreen(),
+        transition: Transition.cupertino),
+            GetPage(
+        name: RouteName.termsAndConditionsScreen,
+        page: () =>  TermsAndConditionsScreen(),
         transition: Transition.cupertino),
   ];
 }

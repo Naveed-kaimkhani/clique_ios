@@ -4,14 +4,10 @@ class InfluencerModel {
   final String email;
   final String phone;
   final String role;
-  // final DateTime? emailVerifiedAt;
-  // final String? cometchatAuthToken;
   final String? profilePhoto;
   final String? coverPhoto;
   final int followersCount;
     final int postCount;
-  // final DateTime createdAt;
-  // final DateTime updatedAt;
   final bool isFollowing;
 
   InfluencerModel({

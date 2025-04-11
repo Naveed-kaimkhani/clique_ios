@@ -35,8 +35,7 @@ class InfluencerCard extends StatelessWidget {
     final double cardWidth = size.width * 0.35; // Adjust width based on screen size
     final double cardHeight = size.height * 0.26; // Adjust height dynamically
     final double profileImageSize = size.width * 0.12; // Responsive profile image size
-    // log(profileImage.toString());
-    // log(profileImage.isEmpty.toString());    
+  
     return Container(
       width: cardWidth,
       height: cardHeight,

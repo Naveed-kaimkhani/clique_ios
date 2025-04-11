@@ -1,3 +1,4 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clique/components/category_product_card.dart';
 import 'package:clique/components/gradient_text.dart';
@@ -5,11 +6,16 @@ import 'package:clique/components/product_shimmer.dart';
 import 'package:clique/constants/index.dart';
 import 'package:clique/controller/fav_controller.dart';
 import 'package:clique/controller/size_selector.dart';
+import 'package:clique/controller/user_controller.dart';
+import 'package:clique/utils/utils.dart';
+import 'package:clique/view/profile/update_profile_screen.dart';
+// import 'package:clique/view/profile/update_profile_screen.dart';
 import 'package:clique/view_model/product_details_controller.dart';
 import 'package:clique/view_model/product_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:like_button/like_button.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
   final selectedImageIndex = 0.obs;
@@ -25,6 +31,7 @@ class ProductDetailsScreen extends StatelessWidget {
   final cartItemCount = 0.obs;
   final isAnimating = false.obs;
 
+  final userController = Get.find<UserController>();
   final ProductViewModel _productViewModel = Get.find<ProductViewModel>();
   @override
   Widget build(BuildContext context) {
@@ -88,13 +95,22 @@ Widget _buildHeroImage(Size size) {
                   );
                 },
                 child: CachedNetworkImage(
-                  key: ValueKey<int>(controller.selectedImageIndex.value),
-                  imageUrl: controller.productImages[controller.selectedImageIndex.value],
-                  fit: BoxFit.cover,
-                  width: size.width,
-                  placeholder: (context, url) => Center(child: CircularProgressIndicator()),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                ),
+  key: ValueKey<int>(controller.selectedImageIndex.value),
+  imageUrl: controller.productImages[controller.selectedImageIndex.value],
+  fit: BoxFit.cover,
+  width: size.width,
+  placeholder: (context, url) => Shimmer.fromColors(
+    baseColor: Colors.grey[300]!,
+    highlightColor: Colors.grey[100]!,
+    child: Container(
+      width: size.width,
+      height: size.height * 0.4, // Adjust the height as needed
+      color: Colors.white,
+    ),
+  ),
+  errorWidget: (context, url, error) => Icon(Icons.error),
+),
+
               ),
             ),
           ),
@@ -261,14 +277,23 @@ Widget _buildImageThumbnail(Size size, int index) {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
-        child: CachedNetworkImage(
-          imageUrl:controller.productImages[index],
-          width: size.width * 0.11,
-          height: size.height * 0.07,
-          fit: BoxFit.cover,
-          placeholder: (context, url) => Center(child: CircularProgressIndicator(strokeWidth: 1.5)),
-          errorWidget: (context, url, error) => Icon(Icons.error, size: 20),
-        ),
+        child:CachedNetworkImage(
+  imageUrl: controller.productImages[index],
+  width: size.width * 0.11,
+  height: size.height * 0.07,
+  fit: BoxFit.cover,
+  placeholder: (context, url) => Shimmer.fromColors(
+    baseColor: Colors.grey[300]!,
+    highlightColor: Colors.grey[100]!,
+    child: Container(
+      width: size.width * 0.11,
+      height: size.height * 0.07,
+      color: Colors.white,
+    ),
+  ),
+  errorWidget: (context, url, error) => Icon(Icons.error, size: 20),
+),
+
       ),
     )),
   );
@@ -330,14 +355,7 @@ Widget _buildImageThumbnail(Size size, int index) {
                           children: [
                             
                                 _buildProductTitle(size),
-                            // Row(
-                            //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            //   children: [
-                            //     _buildProductTitle(size),
-                              
-                            //  _buildDiscountTag(size),
-                            //   ],
-                            // ),
+                        
                             SizedBox(height: size.height * 0.006),
                             _buildPriceSection(size),
                             SizedBox(height: size.height * 0.01),
@@ -350,7 +368,7 @@ Widget _buildImageThumbnail(Size size, int index) {
                               weight: controller.productData['size'], ),
                               // Center(child: Text("Scroll to See More Products")),
                             SizedBox(height: size.height * 0.02),
-                            _buildAddToCartButton(size),
+                            _buildAddToCartButton(size,context),
                             _buildProductSection(size, size.width * 0.06),
                                
                           ],
@@ -530,13 +548,22 @@ String removeHtmlTags(String text) {
 }
 
 
-  Widget _buildAddToCartButton(Size size) {
+  Widget _buildAddToCartButton(Size size, context) {
     return Center(
       child: SizedBox(
         width: size.width * 0.8,
         height: size.height * 0.064,
         child: ElevatedButton.icon(
-          onPressed: () => Get.toNamed(RouteName.cartScreen, arguments:controller.productData['uid']),
+          onPressed: () {
+            if (userController.phone.value.isNotEmpty) {
+             Get.toNamed(RouteName.cartScreen, arguments:controller.productData['uid']);
+            }else{
+Utils.showCustomSnackBar("Warning", "Please enter your phone number to checkout", ContentType.warning);
+            //  Get.toNamed(RouteName.updateProfileScreen);
+            Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateProfileScreen()));
+
+            }
+          },
           icon: Icon(Icons.shopping_cart, color: Colors.white),
           label: Text(
             "Checkout",

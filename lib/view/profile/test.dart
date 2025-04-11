@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:clique/components/custom_appbar.dart';
 import 'package:clique/components/custom_textfield.dart';
-import 'package:clique/constants/index.dart';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/utils/utils.dart';
 import 'package:flutter/material.dart';

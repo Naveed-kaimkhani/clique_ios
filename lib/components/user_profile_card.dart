@@ -110,8 +110,6 @@ class UserProfileCard extends StatelessWidget {
   final userController = Get.find<UserController>();
   @override
   Widget build(BuildContext context) {
-    log("profile image");
-    log(profileImage.toString());
     final size = MediaQuery.of(context).size;
     final screenWidth = size.width;
     final screenHeight = size.height;

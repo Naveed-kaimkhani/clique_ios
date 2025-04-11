@@ -1,7 +1,10 @@
 import 'dart:developer';
 
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/data/repositories/payment_service.dart';
+import 'package:clique/utils/utils.dart';
+import 'package:clique/view/home/home_screen.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 // import 'package:flutter_stripe/flutter_stripe.dart';
@@ -16,10 +19,8 @@ class StripeViewModel extends GetxController {
 
       final clientSecret = await PaymentService.createPaymentIntent(amount, userController.token.value);
      
-      log("Client Secret: $clientSecret");
 
       await Stripe.instance.initPaymentSheet(
-      
         paymentSheetParameters: SetupPaymentSheetParameters(
       allowsDelayedPaymentMethods: true,
           paymentIntentClientSecret: clientSecret,
@@ -28,8 +29,10 @@ class StripeViewModel extends GetxController {
       );
 
       await Stripe.instance.presentPaymentSheet();
-
-      Get.snackbar('Success', 'Payment completed');
+      
+      Utils.showCustomSnackBar("Success", "Payment completed", ContentType.success);
+    
+      // Get.snackbar('Success', 'Payment completed');
     } catch (e) {
       if (e is StripeException) {
         Get.snackbar('Error', e.error.message ?? 'Stripe error');
@@ -37,7 +40,9 @@ class StripeViewModel extends GetxController {
         Get.snackbar('Error', e.toString());
       }
     } finally {
+    
       isLoading.value = false;
+    Get.offAll(() => HomeScreen()); 
     }
   }
 }
