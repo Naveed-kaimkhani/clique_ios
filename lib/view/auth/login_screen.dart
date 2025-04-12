@@ -14,9 +14,10 @@ import 'package:google_sign_in/google_sign_in.dart';
 class LoginScreen extends StatelessWidget {
   final RxBool isChecked = false.obs;
   final TextEditingController emailController = TextEditingController();
-  final AuthViewModel authViewModel = Get.put(AuthViewModel());
- RegExp emailRegex = RegExp(
-      r'^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.com|icloud\.com|hotmail\.com|live\.com)$');
+  final AuthViewModel authViewModel = Get.put(AuthViewModel());RegExp emailRegex = RegExp(
+  r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+);
+
 
   final OTPViewModel otpViewModel = Get.put(OTPViewModel());
   final GoogleSignIn _googleSignIn = GoogleSignIn(
