@@ -1,3 +1,4 @@
+import 'package:clique/components/discover_screen_appBar.dart';
 import 'package:clique/components/index.dart';
 import 'package:clique/components/product_shimmer.dart';
 import 'package:clique/components/shimmer_influence.dart';
@@ -42,7 +43,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
       child: SafeArea(
         bottom: false,
         child: Scaffold(
-          appBar: CustomAppBar(title: 'Discover'),
+          appBar: DiscoverScreenAppBar(title: 'Discover'),
           backgroundColor: Colors.white,
           body: SingleChildScrollView(
               padding: EdgeInsets.only(bottom: kBottomNavigationBarHeight + 16),
