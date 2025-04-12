@@ -55,6 +55,7 @@ dependencies:
   marquee: ^2.3.0
   flutter_stripe: ^11.4.0
   dropdown_search: ^6.0.2
+  drop_down_list: ^2.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

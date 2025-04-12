@@ -2,9 +2,12 @@
 
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:clique/components/address_list.dart';
 import 'package:clique/utils/utils.dart';
 import 'package:clique/view_model/address_controller.dart';
 import 'package:clique/view_model/order_view_model.dart';
+import 'package:drop_down_list/drop_down_list.dart';
+import 'package:drop_down_list/model/selected_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,15 +19,22 @@ class AddressScreen extends StatelessWidget {
 
   final TextEditingController address1Controller = TextEditingController();
   final TextEditingController address2Controller = TextEditingController();
-  final TextEditingController cityController = TextEditingController();
   final TextEditingController stateController = TextEditingController();
   final TextEditingController countryController = TextEditingController();
   final TextEditingController zipController = TextEditingController();
+  late final TextEditingController cityController = TextEditingController(text: controller.city.value)
+    ..addListener(() {
+      controller.city.value = cityController.text;
+    });
 
   final RxBool isLoading = false.obs;
 
+  // List of major US cities for the dropdown
+
+
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -43,10 +53,12 @@ class AddressScreen extends StatelessWidget {
             children: [
               customTextField("Address 1", address1Controller, TextInputType.text),
               customTextField("Address 2", address2Controller, TextInputType.text),
-              customTextField("City", cityController, TextInputType.text),
+             
+cityDropDown(context),
+              
               customTextField("State Code", stateController, TextInputType.text),
-              customTextField("Country Code", countryController, TextInputType.text),
               customTextField("ZIP Code", zipController, TextInputType.number),
+              
               SizedBox(height: 20),
               Obx(() {
                 return SizedBox(
@@ -54,8 +66,7 @@ class AddressScreen extends StatelessWidget {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.black,
-                      padding: EdgeInsets.symmetric(vertical: 14),
-                    ),
+                      padding: EdgeInsets.symmetric(vertical: 14),),
                     onPressed: isLoading.value
                         ? null
                         : () async {
@@ -79,7 +90,6 @@ class AddressScreen extends StatelessWidget {
 
                             controller.address1.value = address1Controller.text;
                             controller.address2.value = address2Controller.text;
-                            controller.city.value = cityController.text;
                             controller.stateCode.value = stateController.text;
                             controller.countryCode.value = countryController.text;
                             controller.zipCode.value = zipController.text;
@@ -117,6 +127,62 @@ class AddressScreen extends StatelessWidget {
     );
   }
 
+Obx stateDropDown(BuildContext context) {
+    return Obx(()=>
+Padding(
+padding: const EdgeInsets.symmetric(vertical: 8.0),
+child: TextFormField(
+  controller: TextEditingController(text: controller.city.value),
+  readOnly: true,
+  decoration: InputDecoration(
+    labelText: "City",
+    border: OutlineInputBorder(),
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.grey),
+    ),
+    suffixIcon: IconButton(
+      icon: Icon(Icons.arrow_drop_down),
+      onPressed: () => _showCityDropdown(context),
+    ),
+  ),
+  validator: (value) {
+    if (value == null || value.isEmpty) {
+      return "Please select a city";
+    }
+    return null;
+  },
+),
+),);
+  }
+
+  Obx cityDropDown(BuildContext context) {
+    return Obx(()=>
+Padding(
+padding: const EdgeInsets.symmetric(vertical: 8.0),
+child: TextFormField(
+  controller: TextEditingController(text: controller.city.value),
+  readOnly: true,
+  decoration: InputDecoration(
+    labelText: "City",
+    border: OutlineInputBorder(),
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.grey),
+    ),
+    suffixIcon: IconButton(
+      icon: Icon(Icons.arrow_drop_down),
+      onPressed: () => _showCityDropdown(context),
+    ),
+  ),
+  validator: (value) {
+    if (value == null || value.isEmpty) {
+      return "Please select a city";
+    }
+    return null;
+  },
+),
+),);
+  }
+
   Widget customTextField(String label, TextEditingController controller, TextInputType type) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -133,4 +199,57 @@ class AddressScreen extends StatelessWidget {
       ),
     );
   }
+  Widget stateDropDown(BuildContext context) {
+    return Obx(() => Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: TextFormField(
+        controller: TextEditingController(text: controller.stateCode.value),
+        readOnly: true,
+        decoration: InputDecoration(
+          labelText: "State",
+          border: OutlineInputBorder(),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey),
+          ),
+          suffixIcon: IconButton(
+            icon: Icon(Icons.arrow_drop_down),
+            onPressed: () => _showStateDropdown(context),
+          ),
+        ),
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return "Please select a state";
+          }
+          return null;
+        },
+      ),
+    ));
+  }
+
+  void _showStateDropdown(BuildContext context) {
+    DropDownState<String>(
+      dropDown: DropDown<String>(
+        data: stateList.map((state) => SelectedListItem<String>(data: state)).toList(),
+        onSelected: (selectedItems) {
+          if (selectedItems.isNotEmpty) {
+            controller.stateCode.value = selectedItems.first.data;
+          }
+        },
+      ),
+    ).showModal(context);
+ 
+ void _showCityDropdown(BuildContext context) {
+  DropDownState<String>(
+    dropDown: DropDown<String>(
+      data: usCities.map((city) => SelectedListItem<String>(data: city)).toList(),
+      onSelected: (selectedItems) {
+        if (selectedItems.isNotEmpty) {
+          controller.city.value = selectedItems.first.data;
+        }
+      },
+    ),
+  ).showModal(context);
+} }
 }
+
+

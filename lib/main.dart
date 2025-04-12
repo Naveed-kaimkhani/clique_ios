@@ -5,7 +5,6 @@ import 'package:clique/data/repositories/group_repository.dart';
 import 'package:clique/data/repositories/influencer_repository.dart';
 import 'package:clique/routes/app_routes.dart';
 import 'package:clique/utils/keys.dart';
-import 'package:clique/view/auth/login_screen.dart';
 import 'package:clique/view/splash/splash_screen.dart';
 import 'package:clique/view_model/address_controller.dart';
 import 'package:clique/view_model/cart_quantity_controller.dart';
@@ -15,8 +14,6 @@ import 'package:get/get.dart';
 
 
 void main() async{ 
-
-  
   WidgetsFlutterBinding.ensureInitialized();
   Stripe.publishableKey = publishableKey;
   await Stripe.instance.applySettings();

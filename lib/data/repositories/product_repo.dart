@@ -14,7 +14,9 @@ class ProductRepository {
     int perPage = 10,
   }) async {
     final response = await http.get(
-      Uri.parse('$baseUrl?page=$page'),
+      // Uri.parse('$baseUrl?page=$page$per_page=800'),
+      
+      Uri.parse('https://cactisocial.com/api-clique/public/api/v1/topdawg/products?page=$page&per_page=800'),
       headers: {
         'Authorization': 'Bearer ${userController.token.value}',
         'Accept': 'application/json',

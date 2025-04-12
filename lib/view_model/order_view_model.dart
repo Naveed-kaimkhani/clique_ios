@@ -39,7 +39,8 @@ Future<OrderSummary?> submitOrder() async {
       address2: addressController.address2.value,
       city: addressController.city.value,
       stateCode: addressController.stateCode.value,
-      countryCode: addressController.countryCode.value,
+      // countryCode: addressController.countryCode.value,
+      countryCode: 'US',
       zipCode: addressController.zipCode.value,
     );
     var order = Order(
