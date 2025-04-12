@@ -42,7 +42,6 @@ Future<OrderSummary?> submitOrder() async {
       countryCode: addressController.countryCode.value,
       zipCode: addressController.zipCode.value,
     );
-
     var order = Order(
       customerId: userController.uid.toString(), // Use the actual customer ID
       firstName: userController.userName.value, // Use the actual first name
@@ -57,7 +56,6 @@ Future<OrderSummary?> submitOrder() async {
       ],
       productDetails: [
         ProductModel(
-
           id: cartQuantityController.products.first.id,
           productWeight: cartQuantityController.products.first.productWeight,
           productCode: cartQuantityController.products.first.productCode,

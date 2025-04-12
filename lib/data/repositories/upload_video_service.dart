@@ -26,7 +26,7 @@ class UploadVideoService {
   required String authToken,
 }) async {
   try {
-
+    log(product.productTitle);
     var request = http.MultipartRequest('POST', Uri.parse(baseUrl));
     request.headers['Authorization'] = 'Bearer $authToken';
     request.headers['Content-Type'] = 'multipart/form-data';
@@ -41,27 +41,14 @@ class UploadVideoService {
       'video_file', video.path,
       contentType: MediaType('video', 'mp4'), // Adjust type
     ));
-    // request.fields['video_file'] = video.path; // or whatever value the API expects
-log("Uploaded video file: ${request.files.firstWhere((f) => f.field == 'video_file').filename}");
-
-log("Uploaded thumbnail file: ${request.files.firstWhere((f) => f.field == 'thumbnail_file').filename}");
-
-    // log(request.fields['video_file'].toString());
-    
-    log(request.fields['thumbnail_file'].toString());
     request.fields['user_id'] = userId;
-    // request.fields['name'] = name;
     request.fields['show_type'] = showType.toLowerCase(); // Ensure lowercase
     request.fields['lambda_token'] = lambdaToken;
     request.fields['created_by'] = createdBy;
     request.fields['product_id'] = product.id.toString();
-    
     request.fields['name'] = product.productTitle;
-    
     request.fields['product_price'] = product.cost.toString();
-    
     request.fields['product_image'] = product.imageUrls.first;
-
     var response = await request.send();
     var responseBody = await response.stream.bytesToString();
 

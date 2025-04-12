@@ -202,34 +202,6 @@ Widget _buildVideoPlayer(File videoFile) {
   );
 }
 
-// Widget _buildVideoPlayer(File videoFile) {
-//   // VideoPlayerController _controller = VideoPlayerController.file(videoFile);
-// _videoController = VideoPlayerController.file(videoFile);
-//   return FutureBuilder(
-//     future: _videoController!.initialize(),
-//     builder: (context, snapshot) {
-//       if (snapshot.connectionState == ConnectionState.done) {
-//         _videoController!.play(); // Auto-play video
-
-//         final isPortrait = _videoController!.value.aspectRatio < 1;
-
-//         return ClipRRect(
-//           borderRadius: BorderRadius.circular(10),
-//           child: SizedBox(
-//             width: double.infinity,
-//             height: isPortrait ? 300 : 200, // Taller if portrait
-//             child: AspectRatio(
-//               aspectRatio: _videoController!.value.aspectRatio,
-//               child: VideoPlayer(_videoController!),
-//             ),
-//           ),
-//         );
-//       } else {
-//         return Center(child: CircularProgressIndicator());
-//       }
-//     },
-//   );
-// }
 
   Widget _uploadContainer() {
     return Container(
@@ -303,9 +275,30 @@ Widget _buildVideoPlayer(File videoFile) {
     );
   }
 
+  // Widget _buildUploadButton() {
+  //   return AuthButton(buttonText: 'Upload Video', isLoading: viewModel.isLoading, onPressed: viewModel.uploadVideo);
+  // }
   Widget _buildUploadButton() {
-    return AuthButton(buttonText: 'Upload Video', isLoading: viewModel.isLoading, onPressed: viewModel.uploadVideo);
-  }
+  return AuthButton(
+    buttonText: 'Upload Video',
+    isLoading: viewModel.isLoading,
+    onPressed: () {
+      if (viewModel.selectedProduct.value == null) {
+        Get.snackbar(
+          "Product Required",
+          "Please select a product before uploading the video.",
+          backgroundColor: Colors.red.withOpacity(0.8),
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM,
+          margin: const EdgeInsets.all(12),
+        );
+      } else {
+        viewModel.uploadVideo();
+      }
+    },
+  );
+}
+
 }
 
 

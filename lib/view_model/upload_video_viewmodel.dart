@@ -58,18 +58,22 @@ Future<void> pickVideo() async {
     }
 
     isLoading.value = true;
-    var response = await _uploadService.uploadVideo(
+  if (selectedProduct.value==null) {
+    Utils.showCustomSnackBar("Warning", "Please Select a product", ContentType.warning);
+  } else {
+      var response = await _uploadService.uploadVideo(
       thumbnail: thumbnailFile.value!,
       video: videoFile.value!,
       userId:userController.uid.toString(),  // Replace with actual user ID
       name: titleController.text,
-product: ,
+      product:   selectedProduct.value!,   
       showType: layout.value,
       // product: ProductModel(id: 111, productWeight: "", productTitle: "productTitle", productDesc: "productDesc", brandName: "brandName", unit: "s", cost: 12, msrp: 12, imageUrls: List<S>, thumbnailUrl: "thumbnailUrl", categories: "categories", variantGroupId: "variantGroupId"),  // Replace with actual product
       lambdaToken: userController.revoLamdaToken.value,  // Replace with actual token
       createdBy: userController.userEmail.value,  // Replace with actual email
       authToken: userController.token.value,  // Replace with actual token
     );
+  }
     isLoading.value = false;
   }
 

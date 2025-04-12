@@ -1,6 +1,4 @@
 
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 
 class Group {
   final String guid;
@@ -40,24 +38,24 @@ class Group {
       // createdAt: json['createdAt'],
       owner: json['owner'] ?? '0',
       // updatedAt: json['updatedAt'],
-      icon: json['icon'] ?? 'https://cdn-icons-png.flaticon.com/512/3273/3273898.png',
+      icon: json['icon'] ?? 'https://cdn-icons-png.freepik.com/256/1998/1998627.png?semt=ais_hybrid',
       // icon: null,
     );
   }
 }
 
-Future<List<Group>> fetchGroups() async {
-  final response = await http.get(
-    Uri.parse('https://cactisocial.com/api-clique/public/api/v1/cometchat/groups'),
-    headers: {
-      'Authorization': 'Bearer 63|9dM3rfqqIBCkelTcgGCgoMTNQn5MRJde3glXauj956689575',
-      'Content-Type': 'application/json',
-    },
-  );
-  if (response.statusCode == 200) {
-    final data = json.decode(response.body);
-    return (data['data'] as List).map((group) => Group.fromJson(group)).toList();
-  } else {
-    throw Exception('Failed to load groups');
-  }
-}
+// Future<List<Group>> fetchGroups(String token) async {
+//   final response = await http.get(
+//     Uri.parse('https://cactisocial.com/api-clique/public/api/v1/cometchat/groups'),
+//     headers: {
+//       'Authorization': 'Bearer 63|9dM3rfqqIBCkelTcgGCgoMTNQn5MRJde3glXauj956689575',
+//       'Content-Type': 'application/json',
+//     },
+//   );
+//   if (response.statusCode == 200) {
+//     final data = json.decode(response.body);
+//     return (data['data'] as List).map((group) => Group.fromJson(group)).toList();
+//   } else {
+//     throw Exception('Failed to load groups');
+//   }
+// }
