@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
           bodySmall: TextStyle(fontFamily: 'SofiaPro'),
         ),
       ),
-      home:SplashScreen(),
+      home:LoginScreen(),
       // initialRoute: RouteName.homeScreen,
       getPages: AppRoutes.getAppRoutes(),
     );
