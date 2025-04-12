@@ -43,40 +43,10 @@ class AddressScreen extends StatelessWidget {
             children: [
               customTextField("Address 1", address1Controller, TextInputType.text),
               customTextField("Address 2", address2Controller, TextInputType.text),
+              customTextField("City", cityController, TextInputType.text),
               customTextField("State Code", stateController, TextInputType.text),
               customTextField("Country Code", countryController, TextInputType.text),
-              // customTextField("ZIP Code", zipController, TextInputType.number),
-              Obx(() {
-  return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 8.0),
-    child: DropdownButtonFormField<String>(
-      value: selectedZip.value.isEmpty ? null : selectedZip.value,
-      decoration: InputDecoration(
-        labelText: "ZIP Code",
-        border: OutlineInputBorder(),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey),
-        ),
-      ),
-      items: usZipCodes.map((zip) {
-        return DropdownMenuItem<String>(
-          value: zip,
-          child: Text(zip),
-        );
-      }).toList(),
-      onChanged: (value) {
-        selectedZip.value = value!;
-      },
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please select a ZIP code';
-        }
-        return null;
-      },
-    ),
-  );
-}),
-
+              customTextField("ZIP Code", zipController, TextInputType.number),
               SizedBox(height: 20),
               Obx(() {
                 return SizedBox(
