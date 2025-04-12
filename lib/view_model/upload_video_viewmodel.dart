@@ -63,20 +63,14 @@ Future<void> pickVideo() async {
       video: videoFile.value!,
       userId:userController.uid.toString(),  // Replace with actual user ID
       name: titleController.text,
+product: ,
       showType: layout.value,
-      product: selectedProduct.value!,  // Replace with actual product
+      // product: ProductModel(id: 111, productWeight: "", productTitle: "productTitle", productDesc: "productDesc", brandName: "brandName", unit: "s", cost: 12, msrp: 12, imageUrls: List<S>, thumbnailUrl: "thumbnailUrl", categories: "categories", variantGroupId: "variantGroupId"),  // Replace with actual product
       lambdaToken: userController.revoLamdaToken.value,  // Replace with actual token
       createdBy: userController.userEmail.value,  // Replace with actual email
       authToken: userController.token.value,  // Replace with actual token
     );
-
     isLoading.value = false;
-
-    // if (response.success) {
-    //   Utils.showCustomSnackBar("Success", response.message, ContentType.success);
-    // } else {
-    //   Utils.showCustomSnackBar("Error", response.message, ContentType.failure);
-    // }
   }
 
   @override

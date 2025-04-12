@@ -123,7 +123,7 @@ class _GroupCardState extends State<GroupCard> {
                           child: AnimatedAvatarStack(
                             height: size.height * 0.03,
                             avatars: [
-                              for (var n = 1; n < widget.memberCount + 1; n++)
+                              for (var n = 1; n < widget.memberCount +1 ; n++)
                                 NetworkImage('https://i.pravatar.cc/150?img=$n'),
                             ],
                           ),

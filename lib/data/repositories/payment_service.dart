@@ -1,10 +1,8 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:clique/core/api/api_endpoints.dart';
 import 'package:http/http.dart' as http;
 
-class PaymentService {
-  // final userController = Get.find<UserController>();
+class PaymentService { 
   static Future<String> createPaymentIntent(double amount , String token) async {
     final response = await http.post(
       Uri.parse(ApiEndpoints.stripePaymentApi),

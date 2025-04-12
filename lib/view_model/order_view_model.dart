@@ -95,6 +95,7 @@ Future<OrderSummary?> submitOrder() async {
       body: jsonEncode(orderMap),  // Encode the order map to JSON
     
     );
+    log(response.body);
     if (response.statusCode == 200) {
       // Success
     final parsedOrderSummary = OrderSummary.fromJson(jsonDecode(response.body));

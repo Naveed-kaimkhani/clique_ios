@@ -26,6 +26,7 @@ class UploadVideoService {
   required String authToken,
 }) async {
   try {
+
     var request = http.MultipartRequest('POST', Uri.parse(baseUrl));
     request.headers['Authorization'] = 'Bearer $authToken';
     request.headers['Content-Type'] = 'multipart/form-data';
@@ -35,10 +36,19 @@ class UploadVideoService {
       contentType: MediaType('image', 'jpeg'), // Adjust type
     ));
 
+    log("video pathh $video.path");
     request.files.add(await http.MultipartFile.fromPath(
       'video_file', video.path,
       contentType: MediaType('video', 'mp4'), // Adjust type
     ));
+    // request.fields['video_file'] = video.path; // or whatever value the API expects
+log("Uploaded video file: ${request.files.firstWhere((f) => f.field == 'video_file').filename}");
+
+log("Uploaded thumbnail file: ${request.files.firstWhere((f) => f.field == 'thumbnail_file').filename}");
+
+    // log(request.fields['video_file'].toString());
+    
+    log(request.fields['thumbnail_file'].toString());
     request.fields['user_id'] = userId;
     // request.fields['name'] = name;
     request.fields['show_type'] = showType.toLowerCase(); // Ensure lowercase
@@ -55,7 +65,8 @@ class UploadVideoService {
     var response = await request.send();
     var responseBody = await response.stream.bytesToString();
 
-
+log(responseBody);
+// log(response)
     if (response.statusCode == 202) {
       var decoded = jsonDecode(responseBody);
       

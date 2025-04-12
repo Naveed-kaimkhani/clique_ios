@@ -33,12 +33,15 @@ class Group {
       name: json['name'],
       type: json['type'],
       isJoined: json['is_joined'],
-      membersCount: json['membersCount'],
+      membersCount: json['membersCount'] ?? 0,
+      
+      // membersCount: 2,
       conversationId: json['conversationId'],
       // createdAt: json['createdAt'],
-      owner: json['owner'],
+      owner: json['owner'] ?? '0',
       // updatedAt: json['updatedAt'],
-      icon: json['icon'],
+      icon: json['icon'] ?? 'https://cdn-icons-png.flaticon.com/512/3273/3273898.png',
+      // icon: null,
     );
   }
 }

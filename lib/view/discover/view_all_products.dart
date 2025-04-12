@@ -2,6 +2,7 @@
 
 import 'package:clique/components/index.dart';
 import 'package:clique/constants/index.dart';
+import 'package:clique/view/splash/loading_placeholder.dart';
 import 'package:clique/view_model/product_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -74,7 +75,14 @@ class ViewAllProductsScreen extends StatelessWidget {
   if (productViewModel.currentPage.value < productViewModel.totalPages.value) {
     return Padding(
       padding: const EdgeInsets.only(left:  28.0),
-      child: GradientText( "Fetching more products. Please wait...",fontSize: 12, gradient: AppColors.appGradientColors,),
+      child: Column(
+        children: [
+          CircularProgressIndicator(),
+          SizedBox(height: 2,),
+          GradientText( "Fetching more products. Please wait...",fontSize: 12, gradient: AppColors.appGradientColors,),
+          
+        ],
+      ),
     );
   } else {
     return const SizedBox.shrink(); // No more products

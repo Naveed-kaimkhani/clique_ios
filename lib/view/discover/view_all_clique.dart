@@ -35,11 +35,15 @@ final UserController _userController = Get.find<UserController>();
                 guid: _viewModel.groups[index].guid,
                 uid: _userController.uid.value,
                 authToken: _userController.token.value,
-                memberCount:_viewModel.groups[index].membersCount ,
+                // memberCount:_viewModel.groups[index].membersCount ,
+                
+                memberCount:2,
                 backgroundImage: AppSvgIcons.cloth,
                 profileImage: _viewModel.groups[index].icon??"",
                 name: _viewModel.groups[index].name,
-                followers: '${_viewModel.groups[index].membersCount} members',
+                // followers: '${_viewModel.groups[index].membersCount} members',
+                
+                followers: '${2} members',
               ),
             )),
           ),

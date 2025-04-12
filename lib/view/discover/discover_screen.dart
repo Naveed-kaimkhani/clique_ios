@@ -286,6 +286,7 @@ Widget _buildProductList(Size size) {
                   uid: _viewModel.userController.uid.value,
                   groupName: _groupViewModel.groups[index].name,
                   memberCount: _groupViewModel.groups[index].membersCount,
+
               ),
         ),
       );
