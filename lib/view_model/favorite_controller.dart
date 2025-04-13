@@ -18,6 +18,12 @@ class FavoriteController extends GetxController {
     favoriteIds.value = await _favoriteService.getFavoriteIds();
   }
 
+// favorite_controller.dart
+void clearFavorites() async {
+  favoriteIds.clear(); // Clear local list
+  await _favoriteService.clearFavorites(); // Clear from storage
+}
+
   // Toggle the favorite status of a product by ID (String)
   void toggleFavorite(String productId) async {
     if (isFavorite(productId)) {
@@ -27,7 +33,6 @@ class FavoriteController extends GetxController {
     }
     await _favoriteService.saveFavoriteIds(favoriteIds);
   }
-
   // Check if a product is in the favorites list by ID (String)
   bool isFavorite(String productId) {
     return favoriteIds.contains(productId);

@@ -152,7 +152,6 @@ Widget _buildThumnailSection(String label, VoidCallback onTap, Rxn<Uint8List> fi
     ],
   );
 }
-
 Widget _buildMediaSection(String label, VoidCallback onTap, Rxn<File> file) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,18 +159,36 @@ Widget _buildMediaSection(String label, VoidCallback onTap, Rxn<File> file) {
       Text(label, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
       SizedBox(height: 10),
       Obx(() {
-        if (file.value == null) {
-          return GestureDetector(
-            onTap: onTap,
-            child: _uploadContainer(),
-          );
-        } else {
-          return _buildVideoPlayer(file.value!);
-        }
+        return GestureDetector(
+          onTap: onTap, // 👈 Allow selecting new video on tap
+          child: file.value == null
+              ? _uploadContainer()
+              : _buildVideoPlayer(file.value!),
+        );
       }),
     ],
   );
 }
+
+// Widget _buildMediaSection(String label, VoidCallback onTap, Rxn<File> file) {
+//   return Column(
+//     crossAxisAlignment: CrossAxisAlignment.start,
+//     children: [
+//       Text(label, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+//       SizedBox(height: 10),
+//       Obx(() {
+//         if (file.value == null) {
+//           return GestureDetector(
+//             onTap: onTap,
+//             child: _uploadContainer(),
+//           );
+//         } else {
+//           return _buildVideoPlayer(file.value!);
+//         }
+//       }),
+//     ],
+//   );
+// }
 Widget _buildVideoPlayer(File videoFile) {
   final controller = VideoPlayerController.file(videoFile);
   _videoController = controller;

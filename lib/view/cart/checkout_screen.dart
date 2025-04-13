@@ -30,7 +30,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
 final stripeVM = Get.put(StripeViewModel());
 
-final CartQuantityController _cartQuantityController = Get.find<CartQuantityController>();
+// final CartQuantityController _cartQuantityController = Get.find<CartQuantityController>();
+final CartQuantityController _cartQuantityController = 
+    Get.isRegistered<CartQuantityController>()
+        ? Get.find<CartQuantityController>()
+        : Get.put(CartQuantityController());
+
 
   final StripeViewModel stripeViewModel = Get.put(StripeViewModel());
 
@@ -38,7 +43,6 @@ final CartQuantityController _cartQuantityController = Get.find<CartQuantityCont
  @override
   void dispose() {
     // Delete the cart controller when screen is disposed
-    Get.delete<CartQuantityController>();
     super.dispose();
   }
   @override

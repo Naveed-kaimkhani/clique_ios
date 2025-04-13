@@ -121,31 +121,17 @@ Future<http.Response> getInfluencersApi({
     log("token fetchedddd$storedToken");
     // await  UserController().loadUserSession();
       await  userController.loadUserSession();
-  //     final UserController userController = Get.put(UserController());
-
-  // final DiscoverViewModel _viewModel = Get.put(DiscoverViewModel());
  Get.toNamed(RouteName.homeScreen,);
-  // Get.to(()=> HomeScreen(), transition: Transition.zoom);
-      
-//       Get.put(UserController());
-//  Get.put(DiscoverViewModel());
       return responseData;
     }
     return _handleResponse(response);
   }
-
-  // Future<dynamic> post(String endpoint,
-  //     {Map<String, String>? headers, dynamic body}) async {
-  //   final response = await http.post(Uri.parse(endpoint),
-  //       headers: headers, body: jsonEncode(body));
- 
-  //   return _handleResponse(response);
-  // }
     Future<void> signUpApi(String endpoint,
       {Map<String, String>? headers, dynamic body}) async {
     final response = await http.post(Uri.parse(endpoint),
         headers: headers, body: jsonEncode(body));
                  if (response.statusCode == 201 || response.statusCode==200) {
+                  Utils.showCustomSnackBar("Success", " You’ve signed up successfully", ContentType.success);
                         Get.offAllNamed(RouteName.loginScreen);               
     }
     return _handleResponse(response);
@@ -158,12 +144,6 @@ Future<http.Response> getInfluencersApi({
         headers: headers, body: jsonEncode(body));
     return _handleResponse(response);
   }
-  //  Future<dynamic> fetchGroupMembersApi(String endpoint,
-  //     {Map<String, String>? headers, dynamic body}) async {
-  //   final response = await http.post(Uri.parse(endpoint),
-  //       headers: headers, body: jsonEncode(body));
-  //   return _handleResponse(response);
-  // }
   Future<dynamic> put(String endpoint,
       {Map<String, String>? headers, dynamic body}) async {
     final response = await http.put(Uri.parse('$baseUrl$endpoint'),

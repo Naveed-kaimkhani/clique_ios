@@ -1,15 +1,16 @@
-import 'dart:developer';
-import 'package:clique/core/api/api_client.dart';
+
 import 'package:clique/data/models/user_registration_response.dart';
-import 'package:clique/data/repositories/auth_respository.dart';
-import 'package:clique/data/repositories/group_repository.dart';
-import 'package:clique/data/repositories/influencer_repository.dart';
 import 'package:clique/routes/routes_name.dart';
+import 'package:clique/view_model/address_controller.dart';
+import 'package:clique/view_model/favorite_controller.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserController extends GetxController {
   late SharedPreferences prefs;
+  final AddressController controller = Get.put(AddressController());
+
+
   Rxn<User> user = Rxn<User>();
   var token = ''.obs;
   // var revoAccessToken = ''.obs;
@@ -42,8 +43,18 @@ Future<void> logout() async {
   await prefs.remove('cover_photo_url');
   await prefs.remove('email');
   await prefs.remove('phone');
+  await controller.clearAddress(); 
+  
+  FavoriteController favoriteController;
+  if (Get.isRegistered<FavoriteController>()) {
+    favoriteController = Get.find<FavoriteController>();
+  } else {
+    favoriteController = Get.put(FavoriteController());
+  }
+  favoriteController.clearFavorites();
 
   Get.offAllNamed(RouteName.loginScreen);
+
 }
 
   void saveUserSession(

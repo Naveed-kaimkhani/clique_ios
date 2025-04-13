@@ -32,17 +32,23 @@ class ShoppingWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            height: screenHeight * 0.14,
-            width: screenWidth * 0.2,
-            padding: EdgeInsets.all(screenWidth * 0.02),
-            margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.02),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 10)],
+          GestureDetector(
+            onTap: (){
+              
+            Get.toNamed(RouteName.viewAllProductsScreen);
+            },
+            child: Container(
+              height: screenHeight * 0.14,
+              width: screenWidth * 0.2,
+              padding: EdgeInsets.all(screenWidth * 0.02),
+              margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.02),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 10)],
+              ),
+              child: ShopAllWidget(),
             ),
-            child: ShopAllWidget(),
           ),
           GestureDetector(
             child: Container(

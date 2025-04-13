@@ -1,13 +1,9 @@
-
-
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:clique/components/auth_button.dart';
-import 'package:clique/components/custom_appbar.dart';
 import 'package:clique/components/custom_textfield.dart';
 import 'package:clique/components/profile_screen_appbar.dart';
-import 'package:clique/constants/index.dart';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/utils/utils.dart';
 import 'package:clique/view/home/home_screen.dart';
@@ -40,10 +36,6 @@ void initState() {
   super.initState();
   nameController.text = userController.userName.value;
   phoneController.text = userController.phone.value;
-  // profilePhoto = userController.profilePhoto.value != null
-  //     ? File(userController.profilePhoto.value!)
-  //     : null;
-  // coverPhoto = userController.coverPhoto.value 
 }
   Future<void> pickImage(bool isProfile) async {
     final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -87,6 +79,7 @@ void initState() {
     
 
         }
+        log(response.statusCode.toString());
         if (response.statusCode == 200) {
           final responseBody = await response.stream.bytesToString();
           final Map<String, dynamic> responseData = jsonDecode(responseBody);

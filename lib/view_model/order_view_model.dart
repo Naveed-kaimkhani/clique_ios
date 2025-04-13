@@ -234,8 +234,6 @@ Future<OrderSummary?> submitOrderFromCart() async {
 
     final url = Uri.parse("https://cactisocial.com/api-clique/public/api/v1/topdawg/orders");
 
-    // final token = 'your_bearer_token';  // Replace with actual token
-
     final headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ${userController.token.value}',

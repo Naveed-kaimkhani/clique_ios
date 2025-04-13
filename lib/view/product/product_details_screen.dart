@@ -4,7 +4,6 @@ import 'package:clique/components/category_product_card.dart';
 import 'package:clique/components/gradient_text.dart';
 import 'package:clique/components/product_shimmer.dart';
 import 'package:clique/constants/index.dart';
-import 'package:clique/controller/fav_controller.dart';
 import 'package:clique/controller/size_selector.dart';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/utils/utils.dart';

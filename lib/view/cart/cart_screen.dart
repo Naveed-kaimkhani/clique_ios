@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clique/components/auth_button.dart';
-import 'package:clique/components/custom_appbar.dart';
 import 'package:clique/components/gradient_text.dart';
 import 'package:clique/components/summary_row.dart';
 import 'package:clique/constants/app_colors.dart';
@@ -17,24 +16,39 @@ import 'package:shimmer/shimmer.dart';
 
 
 
-class CartScreen extends StatelessWidget {
+class CartScreen extends StatefulWidget {
+
+  CartScreen({super.key});
+
+  @override
+  State<CartScreen> createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
   final CartQuantityController cartQuantityController =
   Get.put(CartQuantityController());
+
   final ProductViewModel _productViewModel = Get.isRegistered<ProductViewModel>()
     ? Get.find<ProductViewModel>()
     : Get.put(ProductViewModel());
+
 final OrderViewModel orderController =
     Get.isRegistered<OrderViewModel>()
         ? Get.find<OrderViewModel>()
         : Get.put(OrderViewModel());
+
 final AddressController controller = Get.isRegistered<AddressController>()
     ? Get.find<AddressController>()
     : Get.put(AddressController());
-       
+
   // final AddressController controller = Get.put(AddressController());
   final String uid = Get.arguments;
-  CartScreen({super.key});
-
+@override
+void dispose() {
+  
+    Get.delete<CartQuantityController>();
+  super.dispose();
+}
   @override
 Widget build(BuildContext context) {
   
@@ -213,5 +227,4 @@ Widget build(BuildContext context) {
     ),
   );
 }
-
 }

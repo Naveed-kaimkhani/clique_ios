@@ -16,4 +16,10 @@ class FavoriteService {
     // Store the list of strings directly
     await prefs.setStringList(_favoritesKey, ids);
   }
+
+  
+  Future<void> clearFavorites() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_favoritesKey);
+  }
 }
