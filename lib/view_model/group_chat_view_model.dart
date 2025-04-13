@@ -51,7 +51,7 @@ class GroupChatViewModel extends GetxController {
 
     try {
       final response = await ApiClient.getMessages(
-        url: "https://cactisocial.com/api-clique/public/api/v1/cometchat/groups/$groupId/messages?limit=20",
+        url: "https://cactisocial.com/api-clique/public/api/v1/cometchat/groups/$groupId/messages?limit=200",
         headers: {"Authorization": "Bearer $token"},
       );
       if (response.statusCode == 200) {

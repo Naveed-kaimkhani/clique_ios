@@ -5,7 +5,6 @@ import 'package:clique/controller/user_controller.dart';
 import 'package:clique/data/models/group_model.dart';
 import 'package:clique/utils/utils.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/api/api_client.dart';
 import '../../core/api/api_endpoints.dart';
 import 'package:http/http.dart' as http;
