@@ -91,12 +91,12 @@ Future<void> fetchProducts(String searchQuery) async {
             SizedBox(height: 16),
             // Show error message if any
             Obx(() {
-              if (errorMessage.isNotEmpty) {
-                return Text(
-                  errorMessage.value,
-                  style: TextStyle(color: Colors.red, fontSize: 16),
-                );
-              }
+              // if (errorMessage.isNotEmpty) {
+              //   return Text(
+              //     errorMessage.value,
+              //     style: TextStyle(color: Colors.red, fontSize: 16),
+              //   );
+              // }
               return SizedBox.shrink();
             }),
             SizedBox(height: 16),
