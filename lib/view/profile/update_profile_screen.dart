@@ -30,9 +30,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   TextEditingController phoneController = TextEditingController();
   File? profilePhoto;
   File? coverPhoto;
-
   final UserController userController = Get.find<UserController>();
   final RxBool isLoading = false.obs; // Create isLoading as an RxBool
+
+// final RxString _selectedRole = "user".obs;
+
 @override
 void initState() {
   super.initState();
@@ -71,6 +73,8 @@ void initState() {
         request.fields['name'] = nameController.text.isEmpty? userController.userName.value : nameController.text;
         // request.fields['email'] = emailController.text;
         request.fields['phone'] = phoneController.text.isEmpty? userController.phone.value : phoneController.text;
+        // request.fields['role'] = _selectedRole.value;
+    
       profilePhoto != null
             ? request.files.add(await http.MultipartFile.fromPath('profile_photo', profilePhoto!.path))
             : userController.profilePhoto.value;
@@ -236,6 +240,10 @@ void initState() {
     ),
   ],
 ),
+
+       SizedBox(height: Get.height * 0.02),
+  
+  
                   SizedBox(height: 50),
 
                   // Update Profile Button

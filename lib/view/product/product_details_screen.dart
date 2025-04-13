@@ -9,6 +9,7 @@ import 'package:clique/controller/size_selector.dart';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/utils/utils.dart';
 import 'package:clique/view/profile/update_profile_screen.dart';
+import 'package:clique/view_model/favorite_controller.dart';
 // import 'package:clique/view/profile/update_profile_screen.dart';
 import 'package:clique/view_model/product_details_controller.dart';
 import 'package:clique/view_model/product_view_model.dart';
@@ -19,12 +20,7 @@ import 'package:shimmer/shimmer.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
   final selectedImageIndex = 0.obs;
-  final List<String> productImages = [
-    'assets/png/blezer.png',
-    'assets/png/product.jpg',
-    'assets/png/product.jpg',
-  ];
-  // final Map<String, dynamic> productData = Get.arguments;
+  
 
   final ProductController controller = Get.put(ProductController());
   final FavoriteController favoriteController = Get.put(FavoriteController());
@@ -43,19 +39,19 @@ class ProductDetailsScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          _buildProductView(size),
+          _buildProductView(size, context),
         ],
       ),
     );
   }
 
-  Widget _buildProductView(Size size) {
+  Widget _buildProductView(Size size, context) {
     return SizedBox(
       height: size.height,
       child: Stack(
         children: [
           _buildHeroImage(size),
-          _buildTopBar(size),
+          _buildTopBar(size, context),
           _buildImageSelector(size),
           _buildProductDetails(size),
           // _buildDiscountTag(size),
@@ -68,58 +64,61 @@ Widget _buildHeroImage(Size size) {
   final TransformationController _transformationController = TransformationController();
   final _dragStartOffset = 0.0.obs;
 
-  return Obx(() => Hero(
-        tag: controller.productData['uid'],
-        child: GestureDetector(
-          onVerticalDragStart: (details) {
-            _dragStartOffset.value = details.localPosition.dy;
-          },
-          onVerticalDragUpdate: (details) {
-            if (details.localPosition.dy - _dragStartOffset.value > 100) {
-              Get.back();
-            }
-          },
-          child: InteractiveViewer(
-            transformationController: _transformationController,
-            minScale: 1.0,
-            maxScale: 4.0,
-            child: SizedBox(
-              width: size.width,
-              height: size.height * 0.6,
-              child: AnimatedSwitcher(
-                duration: Duration(milliseconds: 500),
-                transitionBuilder: (Widget child, Animation<double> animation) {
-                  return FadeTransition(
-                    opacity: animation,
-                    child: child,
-                  );
-                },
-                child: CachedNetworkImage(
-  key: ValueKey<int>(controller.selectedImageIndex.value),
-  imageUrl: controller.productImages[controller.selectedImageIndex.value],
-  fit: BoxFit.cover,
-  width: size.width,
-  placeholder: (context, url) => Shimmer.fromColors(
-    baseColor: Colors.grey[300]!,
-    highlightColor: Colors.grey[100]!,
-    child: Container(
-      width: size.width,
-      height: size.height * 0.4, // Adjust the height as needed
-      color: Colors.white,
+  return Padding(
+    padding: const EdgeInsets.only(top:25.0),
+    child: Obx(() => Hero(
+          tag: controller.productData['uid'],
+          child: GestureDetector(
+            onVerticalDragStart: (details) {
+              _dragStartOffset.value = details.localPosition.dy;
+            },
+            onVerticalDragUpdate: (details) {
+              if (details.localPosition.dy - _dragStartOffset.value > 100) {
+                Get.back();
+              }
+            },
+            child: InteractiveViewer(
+              transformationController: _transformationController,
+              minScale: 1.0,
+              maxScale: 4.0,
+              child: SizedBox(
+                width: size.width,
+                height: size.height * 0.6,
+                child: AnimatedSwitcher(
+                  duration: Duration(milliseconds: 500),
+                  transitionBuilder: (Widget child, Animation<double> animation) {
+                    return FadeTransition(
+                      opacity: animation,
+                      child: child,
+                    );
+                  },
+                  child: CachedNetworkImage(
+    key: ValueKey<int>(controller.selectedImageIndex.value),
+    imageUrl: controller.productImages[controller.selectedImageIndex.value],
+    fit: BoxFit.cover,
+    width: size.width,
+    placeholder: (context, url) => Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        width: size.width,
+        height: size.height * 0.4, // Adjust the height as needed
+        color: Colors.white,
+      ),
     ),
-  ),
-  errorWidget: (context, url, error) => Icon(Icons.error),
-),
-
+    errorWidget: (context, url, error) => Icon(Icons.error),
+    ),
+    
+                ),
               ),
             ),
           ),
-        ),
-      ));
+        )),
+  );
 }
 
 
-  Widget _buildTopBar(Size size) {
+  Widget _buildTopBar(Size size, context) {
     return Positioned(
       top: size.height * 0.05,
       left: size.width * 0.04,
@@ -130,30 +129,35 @@ Widget _buildHeroImage(Size size) {
           _iconButton(Icons.arrow_back, () => Get.back()),
           Row(
             children: [
+           
               Container(
-                padding: EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                ),
-                child: Center(
-                  child: LikeButton(
-                  size: size.width * 0.06,
-                  isLiked: favoriteController.isFavorite.value,
-                  onTap: (isLiked) async {
-                    favoriteController.toggleFavorite();
-                    return !isLiked;
-                  },
-                  likeBuilder: (bool isLiked) {
-                    return Icon(
-                      isLiked ? Icons.favorite : Icons.favorite_border,
-                      color: isLiked ? AppColors.appColor : Colors.black,
-                      size: size.width * 0.07,
-                    );
-                  },
-                ),
-                )
-              ),
+  padding: EdgeInsets.all(8),
+  decoration: BoxDecoration(
+    color: Colors.white,
+    shape: BoxShape.circle,
+  ),
+  child: Center(
+    child: Obx(() {
+      final isLiked = favoriteController.isFavorite(controller.productData['uid']);
+      return LikeButton(
+        size: size.width * 0.06,
+        isLiked: isLiked,
+        onTap: (bool liked) async {
+          favoriteController.toggleFavorite(controller.productData['uid']);
+          return !liked;
+        },
+        likeBuilder: (bool liked) {
+          return Icon(
+            liked ? Icons.favorite : Icons.favorite_border,
+            color: liked ? AppColors.appColor : Colors.black,
+            size: size.width * 0.07,
+          );
+        },
+      );
+    }),
+  ),
+),
+
               SizedBox(width: size.width * 0.02),
               Stack(
                 children: [
@@ -165,11 +169,19 @@ Widget _buildHeroImage(Size size) {
                     child: _iconButton(
                       Icons.shopping_cart_outlined,
                       () {
-                        isAnimating.value = true;
-                        cartItemCount.value++;
-                        Future.delayed(Duration(milliseconds: 300), () {
-                          isAnimating.value = false;
-                        });
+                       () {
+            if (userController.phone.value.isNotEmpty) {
+             Get.toNamed(RouteName.cartScreen, arguments:controller.productData['uid']);
+            }else{
+Utils.showCustomSnackBar("Warning", "Please enter your phone number to checkout", ContentType.warning);
+            //  Get.toNamed(RouteName.updateProfileScreen);
+            Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateProfileScreen()));
+
+            }
+          };
+
+
+
                       },
                     ),
                   )),
@@ -304,7 +316,9 @@ Widget _buildImageThumbnail(Size size, int index) {
     return DraggableScrollableSheet(
       initialChildSize: 0.45,
       minChildSize: 0.45,
-      maxChildSize: 0.95,
+      // maxChildSize: 0.95,
+      
+      maxChildSize: 1,
       builder: (context, scrollController) {
         return Container(
           width: size.width,
@@ -359,7 +373,7 @@ Widget _buildImageThumbnail(Size size, int index) {
                             SizedBox(height: size.height * 0.006),
                             _buildPriceSection(size),
                             SizedBox(height: size.height * 0.01),
-                            _buildRatingSection(size),
+                            // _buildRatingSection(size),
                             SizedBox(height: size.height * 0.01),
                             _buildDescriptionSection(size),
                             SizedBox(height: size.height * 0.015),
@@ -405,6 +419,8 @@ Widget _buildProductList(Size size) {
     if (_productViewModel.isLoading.value && _productViewModel.products.isEmpty) {
       return SizedBox(
         height: size.height * 0.32,
+        
+        // height: size.height * 0.5,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: 2,
@@ -463,12 +479,14 @@ Widget _buildProductList(Size size) {
 
 
   Widget _buildProductTitle(Size size) {
-    return Text(
+    return Obx(()=>
+      Text(
     controller.productData['productName'],
       style: TextStyle(
         fontSize: size.width * 0.06,
         fontWeight: FontWeight.bold,
       ),
+    )
     );
   }
   
@@ -476,7 +494,7 @@ Widget _buildProductList(Size size) {
 
 
   Widget _buildPriceSection(Size size) {
-    return Row(
+    return Obx(()=>Row(
       children: [
         GradientText(
         
@@ -486,7 +504,7 @@ Widget _buildProductList(Size size) {
         ),
         SizedBox(width: size.width * 0.02),
         Text(
-       controller.productData['oldPrice'].toString(),
+       "\$${controller.productData['oldPrice'].toString()}",
           style: TextStyle(
             fontSize: size.width * 0.05,
             color: Colors.grey,
@@ -494,31 +512,19 @@ Widget _buildProductList(Size size) {
           ),
         ),
       ],
-    );
+    ));
   }
 
-  Widget _buildRatingSection(Size size) {
-    return Row(
-      children: [
-        Icon(Icons.star, color: Colors.orange, size: size.width * 0.05),
-        SizedBox(width: size.width * 0.01),
-        Text(
-          "4.9 (321 Reviews)",
-          style: TextStyle(
-            fontSize: size.width * 0.04,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
-    );
-  }var isDescriptionExpanded = false.obs;
+ 
+  
+  var isDescriptionExpanded = false.obs;
 
 Widget _buildDescriptionSection(Size size) {
   return Obx(() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+  Obx(()=>      Text(
           removeHtmlTags(controller.productData['productDescription']),
           style: TextStyle(
             fontSize: size.width * 0.04,
@@ -526,7 +532,7 @@ Widget _buildDescriptionSection(Size size) {
           ),
           maxLines: isDescriptionExpanded.value ? null : 2,
           overflow: TextOverflow.fade,
-        ),
+        ),),
         SizedBox(height: size.height * 0.01),
         GestureDetector(
           onTap: () {

@@ -12,7 +12,7 @@ class ProductCategoryCard extends StatelessWidget {
   final String productName;
   final String productDescription;
    var price;
-  final double oldPrice;
+   var oldPrice;
   final String discount;
   final String categories;
   

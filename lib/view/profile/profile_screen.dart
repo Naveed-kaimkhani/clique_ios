@@ -1,5 +1,6 @@
 import 'package:clique/components/index.dart';
 import 'package:clique/components/product_section.dart';
+import 'package:clique/components/profile_appBar.dart';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/view/chat/chat_list.dart';
 import 'package:clique/view/profile/update_profile_screen.dart';
@@ -37,70 +38,70 @@ class ProfileScreenState extends State<ProfileScreen> with SingleTickerProviderS
       decoration: BoxDecoration(
         gradient: AppColors.appGradientColors,
       ),
-      child: SafeArea(
-        bottom: false,
-        child: Scaffold(
-          appBar:   CustomAppBar(title: 'Profile',isNotification: isUser=="influencer",),
-          backgroundColor: Colors.white,
-          body: SafeArea(
-            child: NestedScrollView(
-              headerSliverBuilder: (context, innerBoxIsScrolled) {
-                return [
-                  SliverToBoxAdapter(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                       
-                        // SizedBox(height: size.height * 0.02), // Responsive spacing
-                        Obx(() => UserProfileCard(
-                          profileImage: userController.profilePhoto.value,
-                          isInfluencer: false,
-                          posts: 1,
-                          followers: 1,
-                          following: 2,
-                          username: userController.userName.value,
-                        )),
-                        SizedBox(height: size.height * 0.02),
-                        Center(
-                          child: CustomButton(
-                            text: 'Edit Profile',
-                            onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateProfileScreen()));
+      child: Scaffold(
+        appBar:   ProfileSAppBar(title: 'Profile',isInfluencer: isUser=="influencer",),
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: NestedScrollView(
+            headerSliverBuilder: (context, innerBoxIsScrolled) {
+              return [
+                SliverToBoxAdapter(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                     
+                      // SizedBox(height: size.height * 0.02), // Responsive spacing
+                      Obx(() => UserProfileCard(
+                        profileImage: userController.profilePhoto.value,
+                        isInfluencer: false,
+                        posts: 1,
+                        followers: 1,
+                        following: 2,
+                        username: userController.userName.value.length > 20
+    ? userController.userName.value.substring(0, 20) + '...'
+    : userController.userName.value,
 
-                            },
-                          ),
+                      )),
+                      SizedBox(height: size.height * 0.02),
+                      Center(
+                        child: CustomButton(
+                          text: 'Edit Profile',
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateProfileScreen()));
+      
+                          },
                         ),
+                      ),
+                    ],
+                  ),
+                ),
+                SliverPersistentHeader(
+                  pinned: true,
+                  floating: true,
+                  delegate: _SliverTabBarDelegate(
+                    TabBar(
+                      controller: _tabController,
+                      indicatorColor: Colors.black,
+                      labelColor: Colors.black,
+                      unselectedLabelColor: Colors.grey,
+                      tabs: [
+                        Tab(text: "Cliques"),
+                        Tab(text: "Products"),
                       ],
                     ),
                   ),
-                  SliverPersistentHeader(
-                    pinned: true,
-                    floating: true,
-                    delegate: _SliverTabBarDelegate(
-                      TabBar(
-                        controller: _tabController,
-                        indicatorColor: Colors.black,
-                        labelColor: Colors.black,
-                        unselectedLabelColor: Colors.grey,
-                        tabs: [
-                          Tab(text: "Cliques"),
-                          Tab(text: "Products"),
-                        ],
-                      ),
-                    ),
-                  ),
-                ];
-              },
-              body: TabBarView(
-                controller: _tabController,
-                children: [
-                  // Cliques Tab Content
-                 ChatList(),
-                  
-                  // Products Tab Content
-                  ProductsSection(userEmail: userController.userEmail.value,),
-                ],
-              ),
+                ),
+              ];
+            },
+            body: TabBarView(
+              controller: _tabController,
+              children: [
+                // Cliques Tab Content
+               ChatList(),
+                
+                // Products Tab Content
+                ProductsSection(userEmail: userController.userEmail.value,),
+              ],
             ),
           ),
         ),

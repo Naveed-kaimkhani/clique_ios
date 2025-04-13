@@ -1,10 +1,13 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clique/constants/app_colors.dart';
 import 'package:clique/routes/routes_name.dart';
 import 'package:clique/utils/utils.dart';
+import 'package:clique/view_model/favorite_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:clique/constants/app_colors.dart';
 import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:like_button/like_button.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ProductCard extends StatelessWidget {
@@ -23,6 +26,7 @@ class ProductCard extends StatelessWidget {
   final String unit;
   final bool isShowDiscount;
 
+  final FavoriteController favoriteController = Get.put(FavoriteController());
    ProductCard({
     required this.weight,
     required this.categories,
@@ -39,6 +43,8 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final size = MediaQuery.of(context).size;
     // Get screen width and height using MediaQuery
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
@@ -51,10 +57,23 @@ class ProductCard extends StatelessWidget {
     final fontSizeDescription = screenWidth * 0.03; // 3% of screen width
     final fontSizePrice = screenWidth * 0.04; // 4% of screen width
     final fontSizeOldPrice = screenWidth * 0.035; // 3.5% of screen width
-    final fontSizeDiscount = screenWidth * 0.03; // 3% of screen width
+    // final fontSizeDiscount = screenWidth * 0.03; // 3% of screen width
 
-    return GestureDetector(
-   onTap: () {
+    return Container(
+      width: cardWidth,
+      height: cardHeight,
+      padding: EdgeInsets.only(bottom: padding),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Stack(
+        children: [
+    
+    
+    GestureDetector(
+   
+        onTap: (){
+       
   Get.toNamed(
     RouteName.productDetailsScreen,
     arguments: {
@@ -70,24 +89,14 @@ class ProductCard extends StatelessWidget {
       'size':weight,
     },
   );
-},
 
-      child: Container(
-        width: cardWidth,
-        height: cardHeight,
-        padding: EdgeInsets.only(left: padding,bottom: padding),
-        decoration: BoxDecoration(
+      },
+    
+      child: Hero(
+        tag: uid,
+        child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
-        ),
-        child: Stack(
-          children: [
-
-
-Hero(
-  tag: uid,
-  child: ClipRRect(
-    borderRadius: BorderRadius.circular(20),
-    child: Stack(
+          child: Stack(
       children: [
         CachedNetworkImage(
           imageUrl: backgroundImage.first,
@@ -112,111 +121,161 @@ Hero(
           ),
         ),
       ],
+          ),
+        ),
+      ),
     ),
-  ),
-),
-
-      
-            // Cart Icon (Top Right)
-            Positioned(
-              top: padding,
-              right: padding,
-              child: Container(
-                padding: EdgeInsets.all(padding * 0.5),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.8),
-                  shape: BoxShape.circle,
-                ),
-                // child: SvgPicture.asset(AppSvgIcons.bag, color: AppColors.black),
-                child: Icon(Icons.favorite_outline),
+    
+    
+          Positioned(
+            top: padding,
+            right: padding,
+            child: Container(
+              padding: EdgeInsets.all(padding * 0.5),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.8),
+                shape: BoxShape.circle,
               ),
+              // child: SvgPicture.asset(AppSvgIcons.bag, color: AppColors.black),
+              child: Obx(() {
+      final isLiked = favoriteController.isFavorite(uid);
+      return LikeButton(
+        size: size.width * 0.06,
+        isLiked: isLiked,
+        onTap: (bool liked) async {
+          favoriteController.toggleFavorite(uid);
+          return !liked;
+        },
+        likeBuilder: (bool liked) {
+          return Icon(
+            liked ? Icons.favorite : Icons.favorite_border,
+            color: liked ? AppColors.appColor : Colors.black,
+            size: size.width * 0.07,
+          );
+        },
+      );
+    }),
             ),
-      
-            // Product Details (Bottom)
-            Positioned(
-              bottom: 5,
-              left: 0,
-              right: 0,
+          ),
+//      Container(
+//   padding: EdgeInsets.all(8),
+//   decoration: BoxDecoration(
+//     color: Colors.white,
+//     shape: BoxShape.circle,
+//   ),
+//   child: Center(
+//     child: Obx(() {
+//       final isLiked = favoriteController.isFavorite(uid);
+//       return LikeButton(
+//         size: size.width * 0.06,
+//         isLiked: isLiked,
+//         onTap: (bool liked) async {
+//           favoriteController.toggleFavorite(uid);
+//           return !liked;
+//         },
+//         likeBuilder: (bool liked) {
+//           return Icon(
+//             liked ? Icons.favorite : Icons.favorite_border,
+//             color: liked ? AppColors.appColor : Colors.black,
+//             size: size.width * 0.07,
+//           );
+//         },
+//       );
+//     }),
+//   ),
+// ),
+          // Product Details (Bottom)
+          Positioned(
+            bottom: 5,
+            left: 0,
+            right: 0,
+            child: GestureDetector(
+              onTap: (){
+             
+              },
               child: Container(
                 padding: EdgeInsets.all(padding),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      productName,
-                      style: TextStyle(
-                        color: textColor,
-                        fontSize: fontSizeTitle,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    // SizedBox(height: padding * 0.5),
-                    Text(
-  Utils.removeHtmlTags(productDescription),
-  maxLines: 2,
-  overflow: TextOverflow.ellipsis,
-  style: TextStyle(
-    color: textColor.withOpacity(0.7),
-    fontSize: fontSizeDescription,
-  ),
-),
-
-                    SizedBox(height: screenWidth * 0.01),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        // Price
-                        Row(
-                          children: [
-                            Text(
-                              "\$${price.toStringAsFixed(2)}",
-                              style: TextStyle(
-                                color: textColor,
-                                fontSize: fontSizePrice,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(width: padding * 0.5),
-                            Text(
-                              "\$${oldPrice.toStringAsFixed(2)}",
-                              style: TextStyle(
-                                color: textColor.withOpacity(0.7),
-                                fontSize: fontSizeOldPrice,
-                                decoration: TextDecoration.lineThrough,
-                              ),
-                            ),
-                          ],
+                child: GestureDetector(
+                  
+                      onTap: (){
+                     
+                Get.toNamed(
+                  RouteName.productDetailsScreen,
+                  arguments: {
+                    'uid': uid,
+                    'backgroundImage': backgroundImage,
+                    'productName': productName,
+                    'productDescription': productDescription,
+                    'price': price,
+                    'oldPrice': oldPrice,
+                    'discount': discount,
+                    'unit': unit,
+                    'categories':categories,
+                    'size':weight,
+                  },
+                );
+              
+                    },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        productName,
+                        style: TextStyle(
+                          color: textColor,
+                          fontSize: fontSizeTitle,
+                          fontWeight: FontWeight.bold,
                         ),
-                        // Discount Badge
-                    // isShowDiscount?    Container(
-                    //       padding: EdgeInsets.symmetric(
-                    //         horizontal: padding * 0.5,
-                    //         vertical: padding * 0.25,
-                    //       ),
-                    //       decoration: BoxDecoration(
-                    //         gradient: AppColors.appGradientColors,
-                    //         borderRadius: BorderRadius.circular(8),
-                    //       ),
-                    //       child: Text(
-                    //         discount,
-                    //         style: TextStyle(
-                    //           color: Colors.white,
-                    //           fontSize: fontSizeDiscount,
-                    //           fontWeight: FontWeight.bold,
-                    //         ),
-                    //       ),
-                    //     ):Container()
-                      ],
-                    ),
-                  ],
+                      ),
+                      // SizedBox(height: padding * 0.5),
+                      Text(
+                        Utils.removeHtmlTags(productDescription),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: textColor.withOpacity(0.7),
+                          fontSize: fontSizeDescription,
+                        ),
+                      ),
+                      
+                      SizedBox(height: screenWidth * 0.01),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // Price
+                          Row(
+                            children: [
+                              Text(
+                                "\$${price.toStringAsFixed(2)}",
+                                style: TextStyle(
+                                  color: textColor,
+                                  fontSize: fontSizePrice,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(width: padding * 0.5),
+                              Text(
+                                "\$${oldPrice.toStringAsFixed(2)}",
+                                style: TextStyle(
+                                  color: textColor.withOpacity(0.7),
+                                  fontSize: fontSizeOldPrice,
+                                  decoration: TextDecoration.lineThrough,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

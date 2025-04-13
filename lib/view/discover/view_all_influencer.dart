@@ -1,6 +1,7 @@
 import 'package:clique/components/index.dart';
 import 'package:clique/constants/index.dart';
 import 'package:clique/data/models/influencer_model.dart';
+import 'package:clique/view/discover/appBar_backicon.dart';
 import 'package:clique/view_model/influencer_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,6 +12,7 @@ class ViewAllInfluencersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final InfluencerViewmodel influencerViewModel = Get.find<InfluencerViewmodel>();
+ influencerViewModel.updateSearchQuery('');
 
     return Container(
       decoration: BoxDecoration(
@@ -19,7 +21,10 @@ class ViewAllInfluencersScreen extends StatelessWidget {
       child: SafeArea(
         bottom: false,
         child: Scaffold(
-          appBar: CustomAppBar(title: "All Influencers", icon: Icons.arrow_back_ios),
+         appBar:   AppBarWithBackIcon(
+          title: "Influencers",
+          // icon: Icons.arrow_back_ios,
+        ),
           backgroundColor: Colors.white,
           body: _buildInfluencersGrid(context, influencerViewModel),
         ),

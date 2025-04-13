@@ -1,21 +1,24 @@
 import 'package:clique/constants/app_colors.dart';
+import 'package:clique/routes/routes_name.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class DiscoverScreenAppBar extends PreferredSize {
+class AppBarWithBackIcon extends PreferredSize {
   final String title;
   final IconData? icon;
   final bool isNotification;
   
   final IconData? logoutIcon;
-  DiscoverScreenAppBar({
+  AppBarWithBackIcon({
     super.key,
     required this.title,
     this.logoutIcon,
+    
     this.icon,
     this.isNotification = false,
   }) : super(
           preferredSize: const Size.fromHeight(kToolbarHeight * 1.2), // Increased height
-          child: _DiscoverScreenAppBarWidget(
+          child: _AppBarWithBackIconWidget(
             title: title,
             icon: icon,
             isNotification: isNotification,
@@ -23,12 +26,12 @@ class DiscoverScreenAppBar extends PreferredSize {
         );
 }
 
-class _DiscoverScreenAppBarWidget extends StatelessWidget {
+class _AppBarWithBackIconWidget extends StatelessWidget {
   final String title;
   final IconData? icon;
   final bool isNotification;
 
-   _DiscoverScreenAppBarWidget({
+   _AppBarWithBackIconWidget({
     required this.title,
     this.icon,
     this.isNotification = false,
@@ -54,9 +57,18 @@ class _DiscoverScreenAppBarWidget extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-             
+              IconButton(
+                icon: Icon(
+                 Icons.arrow_back_ios,
+                  color: Colors.white,
+                  size: iconSize,
+                ),
+                onPressed: () {
+                 Get.back() ;
+                },
+              ),
               Text(
                 title,
                 style: TextStyle(
@@ -66,8 +78,19 @@ class _DiscoverScreenAppBarWidget extends StatelessWidget {
                   fontFamily: 'SofiaPro'
                 ),
               ),
-          
-                
+              isNotification 
+                ? IconButton(
+                    icon: Icon(
+                      Icons.search,
+                      color: Colors.white,
+                      size: iconSize,
+                    ),
+                    onPressed: () {
+                      Get.toNamed(RouteName.productSearchScreen);
+                    },
+                  )
+               
+               : SizedBox(width: 52,)
             ],
           ),
         ),

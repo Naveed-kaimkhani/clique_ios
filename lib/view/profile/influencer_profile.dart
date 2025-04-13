@@ -5,6 +5,7 @@ import 'package:clique/constants/index.dart';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/data/models/influencer_model.dart';
 import 'package:clique/view/chat/influencer_chatlist.dart';
+import 'package:clique/view/discover/appBar_backicon.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../components/index.dart';
@@ -49,10 +50,10 @@ class InfluencerProfileState extends State<InfluencerProfile>
       child: SafeArea(
         bottom: false,
         child: Scaffold(
-          appBar: CustomAppBar(
-            title: 'Influencer Profile',
-            icon: Icons.arrow_back_ios,
-          ),
+          appBar: AppBarWithBackIcon(
+          title: "Influencers Profile",
+          // icon: Icons.arrow_back_ios,
+        ),
           backgroundColor: Colors.white,
           body: NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) {

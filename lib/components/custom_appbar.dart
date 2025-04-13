@@ -1,6 +1,5 @@
 import 'package:clique/constants/app_colors.dart';
 import 'package:clique/routes/routes_name.dart';
-import 'package:clique/view/profile/update_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,6 +13,7 @@ class CustomAppBar extends PreferredSize {
     super.key,
     required this.title,
     this.logoutIcon,
+    
     this.icon,
     this.isNotification = false,
   }) : super(
@@ -61,7 +61,7 @@ class _CustomAppBarWidget extends StatelessWidget {
             children: [
               IconButton(
                 icon: Icon(
-                  icon ?? Icons.search_outlined,
+                 Icons.search_outlined,
                   color: Colors.white,
                   size: iconSize,
                 ),
@@ -69,6 +69,7 @@ class _CustomAppBarWidget extends StatelessWidget {
                   icon != null ? Get.back() : Get.toNamed(RouteName.productSearchScreen);
                 },
               ),
+              SizedBox(width:iconSize ,),
               Text(
                 title,
                 style: TextStyle(
@@ -89,17 +90,17 @@ class _CustomAppBarWidget extends StatelessWidget {
                       Get.toNamed(RouteName.uploadVideo);
                     },
                   )
-                : GestureDetector(
-                    onTap: () {
-                       Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateProfileScreen()));
+                // : GestureDetector(
+                //     onTap: () {
+                //        Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateProfileScreen()));
 
-                    },
-                    child: Image.asset('assets/png/edit_profile.png',
-                      height: iconSize,
-                      width: iconSize,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+                //     },
+                //     child: Image.asset('assets/png/edit_profile.png',
+                //       height: iconSize,
+                //       width: iconSize,
+                //       fit: BoxFit.cover,
+                //     ),
+                //   ),
                 
                 // IconButton(
                 //     icon: Icon(
@@ -113,6 +114,7 @@ class _CustomAppBarWidget extends StatelessWidget {
 
                 //     },
                 //   ),
+               : SizedBox(width: 42,)
             ],
           ),
         ),

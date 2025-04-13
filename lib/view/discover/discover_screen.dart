@@ -43,7 +43,10 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
       child: SafeArea(
         bottom: false,
         child: Scaffold(
-          appBar: DiscoverScreenAppBar(title: 'Discover'),
+          appBar: DiscoverScreenAppBar(
+          title: "Discover",
+          // icon: Icons.arrow_back_ios,
+        ),
           backgroundColor: Colors.white,
           body: SingleChildScrollView(
               padding: EdgeInsets.only(bottom: kBottomNavigationBarHeight + 16),
@@ -178,14 +181,18 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
 Widget _buildProductList(Size size) {
   return Obx(() {
     if (_productViewModel.isLoading.value && _productViewModel.products.isEmpty) {
-      return SizedBox(
-        height: size.height * 0.32,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: 2,
-          itemBuilder: (context, index) {
-            return ShimmerProductCard();
-          },
+      return Padding(
+
+      padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.04),
+        child: SizedBox(
+          height: size.height * 0.32,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 2,
+            itemBuilder: (context, index) {
+              return ShimmerProductCard();
+            },
+          ),
         ),
       );
     }
@@ -203,34 +210,41 @@ Widget _buildProductList(Size size) {
       }
     }
 
-    return SizedBox(
-      height: size.height * 0.32,
-      child: ListView.builder(
-        controller: _productScrollController,
-        scrollDirection: Axis.horizontal,
-        itemCount: filteredProducts.length + 1,
-        itemBuilder: (context, index) {
-          if (index == filteredProducts.length) {
-            return _buildViewAllButton(size, RouteName.viewAllProductsScreen);
-          }
-
-          final product = filteredProducts[index];
-          final discount = ((product.msrp - product.cost) / product.msrp * 100).round();
-
-          return ProductCard(
-            weight: product.productWeight,
-            unit: product.unit,
-            isShowDiscount: discount > 0,
-            uid: product.id.toString(),
-            categories: product.categories??'',
-            backgroundImage: product.imageUrls.isNotEmpty ? product.imageUrls :List<String>.empty(),
-            productName: product.productTitle,
-            productDescription: product.productDesc,
-            price: product.cost,
-            oldPrice: product.msrp,
-            discount: "$discount% OFF",
-          );
-        },
+    return Padding(
+ 
+      padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.04),
+      child: SizedBox(
+        height: size.height * 0.32,
+        child: ListView.builder(
+          controller: _productScrollController,
+          scrollDirection: Axis.horizontal,
+          itemCount: filteredProducts.length + 1,
+          itemBuilder: (context, index) {
+            if (index == filteredProducts.length) {
+              return _buildViewAllButton(size, RouteName.viewAllProductsScreen);
+            }
+      
+            final product = filteredProducts[index];
+            final discount = ((product.msrp - product.cost) / product.msrp * 100).round();
+      
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 6),
+              child: ProductCard(
+                weight: product.productWeight,
+                unit: product.unit,
+                isShowDiscount: discount > 0,
+                uid: product.id.toString(),
+                categories: product.categories??'',
+                backgroundImage: product.imageUrls.isNotEmpty ? product.imageUrls :List<String>.empty(),
+                productName: product.productTitle,
+                productDescription: product.productDesc,
+                price: product.cost,
+                oldPrice: product.msrp,
+                discount: "$discount% OFF",
+              ),
+            );
+          },
+        ),
       ),
     );
   });

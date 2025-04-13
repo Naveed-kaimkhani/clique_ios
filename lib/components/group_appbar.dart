@@ -95,22 +95,20 @@ class GroupAppBar extends StatelessWidget {
           ),
 
           // Info Icon
-          Expanded(
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: Padding(
-                padding: EdgeInsets.only(right: size.width * 0.04), // 4% of screen width
-                child: IconButton(
-                  icon: Icon(
-                    Icons.info_outline,
-                    color: Colors.white,
-                    size: size.width * 0.07, // 7% of screen width
-                  ),
-                  onPressed: () {},
-                ),
-              ),
-            ),
-          ),
+         // Replace the Expanded widget containing the info icon with this:
+Expanded(
+  child: Align(
+    alignment: Alignment.centerRight,
+    child: Padding(
+      padding: EdgeInsets.only(right: size.width * 0.04),
+      child: Container(
+        width: size.width * 0.07, // Same width as the icon would have
+        height: size.width * 0.07, // Same height as the icon would have
+        // Empty container maintains the space
+      ),
+    ),
+  ),
+),
         ],
       ),
     );

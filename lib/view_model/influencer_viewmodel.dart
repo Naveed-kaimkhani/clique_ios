@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 class InfluencerViewmodel extends GetxController {
   final InfluencerRepository _userRepository = InfluencerRepository();
   
+
   final userController = Get.find<UserController>();
   var influencers = <InfluencerModel>[].obs;
   var isLoading = true.obs; // Add this line
@@ -14,6 +15,7 @@ class InfluencerViewmodel extends GetxController {
 
   @override
   void onInit() {
+    
     fetchUsers();
     super.onInit();
   }
@@ -26,34 +28,24 @@ class InfluencerViewmodel extends GetxController {
   void updateSearchQuery(String query) {
     searchQuery.value = query;
   }
+
   void fetchUsers() async {
     try {
       isLoading(true); // Set loading to true before fetching data
       var fetchedUsers = await _userRepository.fetchInfluencers();
-      influencers.assignAll(fetchedUsers);
+      
+      // Filter out your own user ID from the list
+      var filteredUsers = fetchedUsers.where((user) => user.id != userController.uid.value).toList();
+      
+      influencers.assignAll(filteredUsers);
     } catch (e) {
       error(e.toString()); // Set the error message if something goes wrong
       Get.snackbar('Error', e.toString());
     } finally {
-      isLoading(false); // Set loading to false after fetching data (whether successful or not)
+      isLoading(false); // Set loading to false after fetching data
     }
   }
 
 
-//   void fetchUsers() async {
-//   try {
-//     isLoading(true);
-//     var fetchedUsers = await _userRepository.fetchInfluencers();
-
-//     final filtered = fetchedUsers.where((user) => user.id != userController.uid.value).toList();
-
-//     influencers.assignAll(filtered);
-//   } catch (e) {
-//     error(e.toString());
-//     Get.snackbar('Error', e.toString());
-//   } finally {
-//     isLoading(false);
-//   }
-// }
 
 }

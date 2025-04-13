@@ -64,21 +64,22 @@ class _GroupCardState extends State<GroupCard> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
       ),
+      
       child: Stack(
         clipBehavior: Clip.none,
         children: [
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
-                child: Image.asset(
-                  widget.backgroundImage,
-                  height: cardHeight * 0.3,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-              ),
+           ClipRRect(
+  borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+  child: Container(
+    height: cardHeight * 0.3,
+    width: double.infinity,
+    color: Colors.grey[300], // light grey color
+  ),
+),
+
               Container(
                 padding: EdgeInsets.symmetric(
                   horizontal: size.width * 0.03,

@@ -1,34 +1,36 @@
 import 'package:clique/constants/app_colors.dart';
+import 'package:clique/routes/routes_name.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class DiscoverScreenAppBar extends PreferredSize {
+class ProfileSAppBar extends PreferredSize {
   final String title;
   final IconData? icon;
-  final bool isNotification;
+  final bool isInfluencer;
   
   final IconData? logoutIcon;
-  DiscoverScreenAppBar({
+  ProfileSAppBar({
     super.key,
     required this.title,
     this.logoutIcon,
+    
     this.icon,
-    this.isNotification = false,
+   this.isInfluencer = false,
   }) : super(
           preferredSize: const Size.fromHeight(kToolbarHeight * 1.2), // Increased height
-          child: _DiscoverScreenAppBarWidget(
+          child: _ProfileSAppBarWidget(
             title: title,
             icon: icon,
-            isNotification: isNotification,
+            isNotification: isInfluencer,
           ),
         );
 }
-
-class _DiscoverScreenAppBarWidget extends StatelessWidget {
+class _ProfileSAppBarWidget extends StatelessWidget {
   final String title;
   final IconData? icon;
   final bool isNotification;
 
-   _DiscoverScreenAppBarWidget({
+  _ProfileSAppBarWidget({
     required this.title,
     this.icon,
     this.isNotification = false,
@@ -42,7 +44,7 @@ class _DiscoverScreenAppBarWidget extends StatelessWidget {
     final horizontalPadding = screenWidth * 0.04;
 
     return Container(
-      height: kToolbarHeight * 1.5, // Increased height
+      height: kToolbarHeight * 1.5,
       decoration: BoxDecoration(
         gradient: AppColors.appGradientColors,
         borderRadius: const BorderRadius.only(
@@ -54,9 +56,14 @@ class _DiscoverScreenAppBarWidget extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-             
+              // Replace IconButton with Container to maintain space
+              Container(
+                width: iconSize + 16, // Icon size + padding
+                height: iconSize + 16,
+              ),
+              
               Text(
                 title,
                 style: TextStyle(
@@ -66,8 +73,19 @@ class _DiscoverScreenAppBarWidget extends StatelessWidget {
                   fontFamily: 'SofiaPro'
                 ),
               ),
-          
-                
+              
+              isNotification 
+                ? IconButton(
+                    icon: Icon(
+                      Icons.upload_outlined,
+                      color: Colors.white,
+                      size: iconSize,
+                    ),
+                    onPressed: () {
+                      Get.toNamed(RouteName.uploadVideo);
+                    },
+                  )
+                : SizedBox(width: 32,)
             ],
           ),
         ),

@@ -78,8 +78,8 @@ class _ProfileScreenAppbarWidget extends StatelessWidget {
                 ),
               ),
               isNotification 
-                ? SizedBox()
-                : SizedBox()
+                ? SizedBox(width: 12,)
+                : SizedBox(width: 12,)
             ],
           ),
         ),

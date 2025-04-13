@@ -1,6 +1,8 @@
 import 'package:clique/components/clique_tab_card.dart';
+import 'package:clique/components/discover_screen_appBar.dart';
 import 'package:clique/components/index.dart';
 import 'package:clique/controller/user_controller.dart';
+import 'package:clique/view/discover/appBar_backicon.dart';
 import 'package:clique/view_model/group_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,7 +23,10 @@ final UserController _userController = Get.find<UserController>();
       child: SafeArea(
         bottom: false,
         child: Scaffold(
-          appBar: CustomAppBar(title: "All Cliques", icon: Icons.arrow_back_ios),
+          appBar: AppBarWithBackIcon(
+          title: "Clique",
+          // icon: Icons.arrow_back_ios,
+        ),
           backgroundColor: Colors.white,
           body: AnimatedSwitcher(
             duration: const Duration(milliseconds: 300),
@@ -37,13 +42,13 @@ final UserController _userController = Get.find<UserController>();
                 authToken: _userController.token.value,
                 // memberCount:_viewModel.groups[index].membersCount ,
                 
-                memberCount:2,
+                memberCount: _viewModel.groups[index].membersCount,
                 backgroundImage: AppSvgIcons.cloth,
                 profileImage: _viewModel.groups[index].icon??"",
                 name: _viewModel.groups[index].name,
                 // followers: '${_viewModel.groups[index].membersCount} members',
                 
-                followers: '${2} members',
+                followers: '${_viewModel.groups[index].membersCount} members',
               ),
             )),
           ),
