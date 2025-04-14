@@ -15,7 +15,6 @@ class InfluencerViewmodel extends GetxController {
 
   @override
   void onInit() {
-    
     fetchUsers();
     super.onInit();
   }

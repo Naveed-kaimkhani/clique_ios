@@ -74,11 +74,10 @@ void initState() {
             ? request.files.add(await http.MultipartFile.fromPath('cover_photo', coverPhoto!.path))
             : userController.coverPhoto.value;
         var response = await request.send();
-        if(response.statusCode == 422){
-          Utils.showCustomSnackBar("Error", "Record Already Exist", ContentType.failure);
-    
-
-        }
+        log(response.toString());
+        // if(response.statusCode == 422){
+        //   Utils.showCustomSnackBar("Error", "Record Already Exist", ContentType.failure);
+        // }
         log(response.statusCode.toString());
         if (response.statusCode == 200) {
           final responseBody = await response.stream.bytesToString();
@@ -101,7 +100,7 @@ void initState() {
     Get.offAll(() => HomeScreen()); 
             } else {
           
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to update profile')));
+          // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to update profile')));
         }
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));

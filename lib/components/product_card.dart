@@ -143,6 +143,7 @@ class ProductCard extends StatelessWidget {
         size: size.width * 0.06,
         isLiked: isLiked,
         onTap: (bool liked) async {
+          
           favoriteController.toggleFavorite(uid);
           return !liked;
         },
@@ -157,49 +158,13 @@ class ProductCard extends StatelessWidget {
     }),
             ),
           ),
-//      Container(
-//   padding: EdgeInsets.all(8),
-//   decoration: BoxDecoration(
-//     color: Colors.white,
-//     shape: BoxShape.circle,
-//   ),
-//   child: Center(
-//     child: Obx(() {
-//       final isLiked = favoriteController.isFavorite(uid);
-//       return LikeButton(
-//         size: size.width * 0.06,
-//         isLiked: isLiked,
-//         onTap: (bool liked) async {
-//           favoriteController.toggleFavorite(uid);
-//           return !liked;
-//         },
-//         likeBuilder: (bool liked) {
-//           return Icon(
-//             liked ? Icons.favorite : Icons.favorite_border,
-//             color: liked ? AppColors.appColor : Colors.black,
-//             size: size.width * 0.07,
-//           );
-//         },
-//       );
-//     }),
-//   ),
-// ),
-          // Product Details (Bottom)
+// Product Details (Bottom)
           Positioned(
             bottom: 5,
             left: 0,
             right: 0,
             child: GestureDetector(
-              onTap: (){
              
-              },
-              child: Container(
-                padding: EdgeInsets.all(padding),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
-                ),
-                child: GestureDetector(
-                  
                       onTap: (){
                      
                 Get.toNamed(
@@ -219,58 +184,62 @@ class ProductCard extends StatelessWidget {
                 );
               
                     },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        productName,
-                        style: TextStyle(
-                          color: textColor,
-                          fontSize: fontSizeTitle,
-                          fontWeight: FontWeight.bold,
-                        ),
+              child: Container(
+                padding: EdgeInsets.all(padding),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      productName,
+                      style: TextStyle(
+                        color: textColor,
+                        fontSize: fontSizeTitle,
+                        fontWeight: FontWeight.bold,
                       ),
-                      // SizedBox(height: padding * 0.5),
-                      Text(
-                        Utils.removeHtmlTags(productDescription),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: textColor.withOpacity(0.7),
-                          fontSize: fontSizeDescription,
-                        ),
+                    ),
+                    // SizedBox(height: padding * 0.5),
+                    Text(
+                      Utils.removeHtmlTags(productDescription),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: textColor.withOpacity(0.7),
+                        fontSize: fontSizeDescription,
                       ),
-                      
-                      SizedBox(height: screenWidth * 0.01),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          // Price
-                          Row(
-                            children: [
-                              Text(
-                                "\$${price.toStringAsFixed(2)}",
-                                style: TextStyle(
-                                  color: textColor,
-                                  fontSize: fontSizePrice,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                    ),
+                    
+                    SizedBox(height: screenWidth * 0.01),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // Price
+                        Row(
+                          children: [
+                            Text(
+                              "\$${price.toStringAsFixed(2)}",
+                              style: TextStyle(
+                                color: textColor,
+                                fontSize: fontSizePrice,
+                                fontWeight: FontWeight.bold,
                               ),
-                              SizedBox(width: padding * 0.5),
-                              Text(
-                                "\$${oldPrice.toStringAsFixed(2)}",
-                                style: TextStyle(
-                                  color: textColor.withOpacity(0.7),
-                                  fontSize: fontSizeOldPrice,
-                                  decoration: TextDecoration.lineThrough,
-                                ),
+                            ),
+                            SizedBox(width: padding * 0.5),
+                            Text(
+                              "\$${oldPrice.toStringAsFixed(2)}",
+                              style: TextStyle(
+                                color: textColor.withOpacity(0.7),
+                                fontSize: fontSizeOldPrice,
+                                decoration: TextDecoration.lineThrough,
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ),

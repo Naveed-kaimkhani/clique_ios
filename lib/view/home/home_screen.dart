@@ -29,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 Widget build(BuildContext context) {
   log(userController.token.value);
   return Scaffold(
-    backgroundColor: Colors.black,
+    backgroundColor: Colors.transparent,
     body: Obx(() {
       if (discoverViewModel.popstreams.isEmpty) {
         return LoadingPlaceHolder();

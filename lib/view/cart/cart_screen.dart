@@ -5,7 +5,6 @@ import 'package:clique/components/gradient_text.dart';
 import 'package:clique/components/summary_row.dart';
 import 'package:clique/constants/app_colors.dart';
 import 'package:clique/routes/routes_name.dart';
-import 'package:clique/view/discover/appBar_backicon.dart';
 import 'package:clique/view_model/address_controller.dart';
 import 'package:clique/view_model/cart_quantity_controller.dart';
 import 'package:clique/view_model/order_view_model.dart';
@@ -46,9 +45,10 @@ final AddressController controller = Get.isRegistered<AddressController>()
 @override
 void dispose() {
   
-    Get.delete<CartQuantityController>();
+    // Get.delete<CartQuantityController>();
   super.dispose();
 }
+
   @override
 Widget build(BuildContext context) {
   
@@ -56,10 +56,14 @@ Widget build(BuildContext context) {
   return SafeArea(
     bottom: false,
     child: Scaffold(
-      appBar: AppBarWithBackIcon(
-        title: "My Cart",
-        // icon: Icons.arrow_back_ios,
-      ),
+      // appBar: AppBarWithBackIcon(
+      //   title: "My Cart",
+      //   // icon: Icons.arrow_back_ios,
+      // ),
+        appBar: AppBar(
+          leading: BackButton(),
+          title: Text("Cart"),
+        ),
       backgroundColor: Colors.white,
       body: Obx(() {
         // Wait until products are loaded
