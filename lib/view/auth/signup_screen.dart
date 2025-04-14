@@ -12,6 +12,7 @@ import 'package:get/get.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:clique/utils/utils.dart';
 import 'package:google_sign_in/google_sign_in.dart'; // Add this import
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import '../../view_model/auth_viewmodel.dart';
 
 class SignupScreen extends StatelessWidget {
@@ -191,7 +192,21 @@ RichText(
           ),
         ),
         const SizedBox(width: 10),
+SignInWithAppleButton(
+  onPressed: () async {
+    final credential = await SignInWithApple.getAppleIDCredential(
+      scopes: [
+        AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName,
+      ],
+    );
 
+    print(credential);
+
+    // Now send the credential (especially `credential.authorizationCode`) to your server to create a session
+    // after they have been validated with Apple (see `Integration` section for more information on how to do this)
+  },
+),
       ],
     );
   }
@@ -266,19 +281,6 @@ RichText(
 
   void _handleSignup() async{
     
-      // final SignupParams request = SignupParams(
-      //   name: "naveed kk",
-      //   email: "raahimkhan.orhan@gmail.com",
-      //   phone: "3103232527",
-      //   role: "influencer",
-      // );
-       
-      // // Get.toNamed(RouteName.oTPScreen, arguments: request);
-      // _authViewModel.registerUser(request, _nameController.text)
-      //   .then((_) => _authViewModel.isLoading.value = false)
-      //   .catchError((_) => _authViewModel.isLoading.value = false);
-
-
     if (_validateFields()) {
       _authViewModel.isLoading.value = true;
       final SignupParams request = SignupParams(
@@ -324,6 +326,7 @@ RichText(
                 isLoading: _authViewModel.isLoading,
                 onPressed: _handleSignup,
               ),
+          
               SizedBox(height: Get.height * 0.02),
               _buildLoginLink(),
               SizedBox(height: Get.height * 0.02),
