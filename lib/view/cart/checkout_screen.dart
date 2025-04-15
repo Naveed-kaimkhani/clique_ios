@@ -287,7 +287,7 @@ Obx(() {
               Row(
                 children: [
                 GradientText(
-  (_cartQuantityController.products.first.cost * _cartQuantityController.quantity.value)
+  (_cartQuantityController.products.first.cost)
       .toStringAsFixed(2),
   gradient: AppColors.appGradientColors,
   fontSize: 14,

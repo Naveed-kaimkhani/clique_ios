@@ -9,7 +9,6 @@ import 'package:clique/controller/user_controller.dart';
 import 'package:clique/utils/utils.dart';
 import 'package:clique/view/profile/update_profile_screen.dart';
 import 'package:clique/view_model/favorite_controller.dart';
-// import 'package:clique/view/profile/update_profile_screen.dart';
 import 'package:clique/view_model/product_details_controller.dart';
 import 'package:clique/view_model/product_view_model.dart';
 import 'package:flutter/material.dart';
@@ -17,17 +16,32 @@ import 'package:get/get.dart';
 import 'package:like_button/like_button.dart';
 import 'package:shimmer/shimmer.dart';
 
-class ProductDetailsScreen extends StatelessWidget {
+class ProductDetailsScreen extends StatefulWidget {
+  @override
+  State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
+}
+
+class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   final selectedImageIndex = 0.obs;
-  
 
   final ProductController controller = Get.put(ProductController());
+
   final FavoriteController favoriteController = Get.put(FavoriteController());
+
   final cartItemCount = 0.obs;
+
   final isAnimating = false.obs;
 
   final userController = Get.find<UserController>();
+
   final ProductViewModel _productViewModel = Get.find<ProductViewModel>();
+
+ @override
+ void initState() {
+   super.initState();
+   
+ }
+  
   @override
   Widget build(BuildContext context) {
     
@@ -117,7 +131,6 @@ Widget _buildHeroImage(Size size) {
   );
 }
 
-
   Widget _buildTopBar(Size size, context) {
     return Positioned(
       top: size.height * 0.05,
@@ -159,60 +172,14 @@ Widget _buildHeroImage(Size size) {
 ),
 
               SizedBox(width: size.width * 0.02),
-//               Stack(
-//                 children: [
-//                   Obx(() => AnimatedContainer(
-//                     duration: Duration(milliseconds: 300),
-//                     transform: isAnimating.value 
-//                         ? Matrix4.translationValues(0, -10, 0)
-//                         : Matrix4.translationValues(0, 0, 0),
-//                     child: _iconButton(
-//                       Icons.shopping_cart_outlined,
-//                       () {
-//                        () {
-//             if (userController.phone.value.isNotEmpty) {
-//              Get.toNamed(RouteName.cartScreen, arguments:controller.productData['uid']);
-//             }else{
-// Utils.showCustomSnackBar("Warning", "Please enter your phone number to checkout", ContentType.warning);
-//             //  Get.toNamed(RouteName.updateProfileScreen);
-//             Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateProfileScreen()));
 
-//             }
-//           };
-
-
-
-//                       },
-//                     ),
-//                   )),
-//                   if (cartItemCount.value > 0)
-//                     Positioned(
-//                       right: 0,
-//                       child: Obx(() => Container(
-//                         padding: EdgeInsets.all(4),
-//                         margin:  EdgeInsets.all(1),
-//                         decoration: BoxDecoration(
-//                           color: AppColors.appColor,
-//                           shape: BoxShape.circle,
-//                         ),
-//                         child: Text(
-//                           '${cartItemCount.value}',
-//                           style: TextStyle(
-//                             color: Colors.white,
-//                             fontSize: size.width * 0.03,
-//                           ),
-//                         ),
-//                       )),
-//                     ),
-//                 ],
-//               ),
             ],
           ),
         ],
       ),
     );
   }
-  
+
   Widget _buildImageSelector(Size size) {
     final isExpanded = false.obs;
     
@@ -270,7 +237,6 @@ Widget _buildHeroImage(Size size) {
       ),
     );
   }
-
 
 Widget _buildImageThumbnail(Size size, int index) {
   return GestureDetector(
@@ -398,6 +364,7 @@ Widget _buildImageThumbnail(Size size, int index) {
       },
     );
   }
+
   Widget _buildProductSection(Size size, double titleFontSize) {
     return Container(
       color: Color(0xFFF7F8FA),
@@ -410,7 +377,6 @@ Widget _buildImageThumbnail(Size size, int index) {
       ),
     );
   }
-
 
 Widget _buildProductList(Size size) {
   final ScrollController _productScrollController = ScrollController();
@@ -477,7 +443,6 @@ Widget _buildProductList(Size size) {
   });
 }
 
-
   Widget _buildProductTitle(Size size) {
     return Obx(()=>
       Text(
@@ -489,9 +454,6 @@ Widget _buildProductList(Size size) {
     )
     );
   }
-  
-
-
 
   Widget _buildPriceSection(Size size) {
     return Obx(()=>Row(
@@ -515,8 +477,6 @@ Widget _buildProductList(Size size) {
     ));
   }
 
- 
-  
   var isDescriptionExpanded = false.obs;
 
 Widget _buildDescriptionSection(Size size) {
@@ -548,11 +508,11 @@ Widget _buildDescriptionSection(Size size) {
     );
   });
 }
+
 String removeHtmlTags(String text) {
   final RegExp exp = RegExp(r'<[^>]*>', multiLine: true, caseSensitive: false);
   return text.replaceAll(exp, '');
 }
-
 
   Widget _buildAddToCartButton(Size size, context) {
     return Center(

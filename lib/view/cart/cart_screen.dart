@@ -37,7 +37,7 @@ class _CartScreenState extends State<CartScreen> {
 final OrderViewModel orderController =
     Get.isRegistered<OrderViewModel>()
         ? Get.find<OrderViewModel>()
-        : Get.put(OrderViewModel());
+        : Get.put(OrderViewModel(), permanent: true);
 
 final AddressController controller = Get.isRegistered<AddressController>()
     ? Get.find<AddressController>()
