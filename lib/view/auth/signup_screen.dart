@@ -102,9 +102,11 @@ class SignupScreen extends StatelessWidget {
         ),
         SizedBox(height: Get.height * 0.02),
         CustomTextField(
+          keyboardType: TextInputType.number,
           hintText: "Phone Number",
           controller: _phoneNumberController,
         ),
+     
         SizedBox(height: Get.height * 0.02),
         Align(
           alignment: Alignment.centerLeft,
