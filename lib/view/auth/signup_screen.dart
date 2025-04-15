@@ -12,8 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:clique/utils/utils.dart';
-import 'package:google_sign_in/google_sign_in.dart'; // Add this import
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart'; 
 import '../../view_model/auth_viewmodel.dart';
 
 class SignupScreen extends StatelessWidget {
@@ -181,28 +181,109 @@ class SignupScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSocialLoginButtons() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _socialButton(
-          icon: Image.asset("assets/png/google.png",
-              width: Get.width * 0.04, height: Get.width * 0.04),
-          label: "Google",
-          borderColor: Colors.red,
-          onPressed: _handleGoogleSignIn, // Call Google Sign-In
+//   Widget _buildSocialLoginButtons() {
+//     return Row(
+//       mainAxisAlignment: MainAxisAlignment.center,
+//       children: [
+//         _socialButton(
+//           icon: Image.asset("assets/png/google.png",
+//               width: Get.width * 0.04, height: Get.width * 0.04),
+//           label: "Google",
+//           borderColor: Colors.red,
+//           onPressed: _handleGoogleSignIn, // Call Google Sign-In
+//         ),
+//         const SizedBox(width: 10),
+//      SignInWithAppleButton(
+//   onPressed: () async {
+//   try {
+//       final credential = await SignInWithApple.getAppleIDCredential(
+//       scopes: [
+//         AppleIDAuthorizationScopes.email,
+//         AppleIDAuthorizationScopes.fullName,
+//       ],
+//     );
+
+//     Get.snackbar("error", credential.toString());
+
+//     // Now send the credential (especially `credential.authorizationCode`) to your server to create a session
+//     // after they have been validated with Apple (see `Integration` section for more information on how to do this)
+ 
+//   } catch (e) {
+//     Get.snackbar("error",e.toString());
+//   } },
+// ),
+       
+    
+       
+//       ],
+//     );
+//   }
+
+Widget _buildSocialLoginButtons() {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      _socialButton(
+        icon: Image.asset(
+          "assets/png/google.png",
+          width: Get.width * 0.04,
+          height: Get.width * 0.04,
         ),
-        const SizedBox(width: 10),
-        _socialButton(
-          icon: Image.asset("assets/png/google.png",
-              width: Get.width * 0.04, height: Get.width * 0.04),
-          label: "ios",
-          borderColor: Colors.red,
-          onPressed: _handleAppleSigin, // Call Google Sign-In
-        ),
-      ],
-    );
-  }
+        label: "Google",
+        borderColor: Colors.red,
+        onPressed: _handleGoogleSignIn,
+      ),
+      const SizedBox(width: 20),
+      
+      /// ✅ Wrap in Flexible or SizedBox to constrain width
+      // SizedBox(
+      //   width: 200,
+      //   child: SignInWithAppleButton(
+       
+      //     onPressed: () async {
+      //       try {
+      //         final credential = await SignInWithApple.getAppleIDCredential(
+      //           scopes: [
+      //             AppleIDAuthorizationScopes.email,
+      //             AppleIDAuthorizationScopes.fullName,
+      //           ],
+      //         );
+        
+      //         Get.snackbar("Apple Sign In", credential.toString());
+      //       } catch (e) {
+      //         Get.snackbar("Error", e.toString());
+      //       }
+      //     },
+      //   ),
+      // ),
+      SizedBox(
+  width: 155,
+  height: 43,
+  child: ClipRRect(
+    borderRadius: BorderRadius.circular(30), // ← your desired radius
+    child: SignInWithAppleButton(
+      text: "Apple",
+      onPressed: () async {
+        try {
+          final credential = await SignInWithApple.getAppleIDCredential(
+            scopes: [
+              AppleIDAuthorizationScopes.email,
+              AppleIDAuthorizationScopes.fullName,
+            ],
+          );
+          Get.snackbar("Apple Sign In", credential.toString());
+        } catch (e) {
+          Get.snackbar("Error", e.toString());
+        }
+      },
+    ),
+  ),
+)
+
+    ],
+  );
+}
+
 
   Widget _socialButton({
     required Widget icon,
@@ -297,17 +378,12 @@ class SignupScreen extends StatelessWidget {
           AppleIDAuthorizationScopes.fullName,
         ],
       );
-
-      print(credential);
       Get.snackbar("credentials", credential.toString());
     } catch (e) {
       log(e.toString());
       Utils.showCustomSnackBar("error", e.toString(), ContentType.failure);
     }
-
-    // Now send the credential (especially `credential.authorizationCode`) to your server to create a session
-    // after they have been validated with Apple (see `Integration` section for more information on how to do this)
-  }
+ }
 
   @override
   Widget build(BuildContext context) {
