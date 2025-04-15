@@ -8,26 +8,44 @@ import 'package:clique/components/address_list.dart';
 import 'package:clique/utils/utils.dart';
 import 'package:clique/view_model/address_controller.dart';
 import 'package:clique/view_model/order_view_model.dart';
+import 'package:clique/view_model/product_details_controller.dart';
 import 'package:drop_down_list/drop_down_list.dart';
 import 'package:drop_down_list/model/selected_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class AddressScreen extends StatelessWidget {
+class AddressScreen extends StatefulWidget {
+  @override
+  State<AddressScreen> createState() => _AddressScreenState();
+}
+  final ProductController _productViewModel = Get.find<ProductController>();
+   
+class _AddressScreenState extends State<AddressScreen> {
   final AddressController controller = Get.put(AddressController());
+
   final OrderViewModel orderViewModel = Get.put(OrderViewModel());
 
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController address1Controller = TextEditingController();
+
   final TextEditingController address2Controller = TextEditingController();
+
   final TextEditingController stateController = TextEditingController();
+
   final TextEditingController countryController = TextEditingController();
+
   final TextEditingController zipController = TextEditingController();
+
   final TextEditingController cityController = TextEditingController();
 
   final RxBool isLoading = false.obs;
-
+@override
+  void initState() {
+    // TODO: implement initState
+_productViewModel.setProductData(_productViewModel.productData);
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -131,37 +149,8 @@ class AddressScreen extends StatelessWidget {
       ),
     );
   }
-// Widget stateDropDown(BuildContext context) {
-//   return Obx(() => Padding(
-//         padding: const EdgeInsets.symmetric(vertical: 8.0),
-//         child: TextFormField(
-//           readOnly: true,
-//           controller: stateController
-//             ..text = controller.stateCode.value
-//             ..selection = TextSelection.fromPosition(
-//               TextPosition(offset: controller.stateCode.value.length),
-//             ),
-//           decoration: InputDecoration(
-//             labelText: "State Code",
-//             border: OutlineInputBorder(),
-//             focusedBorder: OutlineInputBorder(
-//               borderSide: BorderSide(color: Colors.grey),
-//             ),
-//             suffixIcon: IconButton(
-//               icon: Icon(Icons.arrow_drop_down),
-//               onPressed: () => _showStateDropdown(context),
-//             ),
-//           ),
-//           validator: (value) {
-//             if (value == null || value.isEmpty) {
-//               return "Please select a state";
-//             }
-//             return null;
-//           },
-//         ),
-//       ));
-// }
 
+// Widget stateDropDown(BuildContext context) {
 Widget stateDropDown(BuildContext context) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -188,8 +177,6 @@ Widget stateDropDown(BuildContext context) {
     ),
   );
 }
-
-
 
   Widget cityDropDown(BuildContext context) {
     return Padding(

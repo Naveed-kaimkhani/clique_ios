@@ -19,11 +19,11 @@ class ProductController extends GetxController {
 //   backgroundImageList.map((item) => item.toString()).toList()
 // );
 //   }
-void setProductData(Map<String, dynamic>? data) {
-  if (data == null) {
-   Get.offAllNamed(RouteName.homeScreen);
-   return;
-  }
+void setProductData(Map<String, dynamic> data) {
+  // if (data == null) {
+  //  Get.offAllNamed(RouteName.homeScreen);
+  //  return;
+  // }
 
   // Assign data with fallback defaults
   productData.value = {
