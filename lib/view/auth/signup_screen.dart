@@ -235,27 +235,6 @@ Widget _buildSocialLoginButtons() {
       ),
       const SizedBox(width: 20),
       
-      /// ✅ Wrap in Flexible or SizedBox to constrain width
-      // SizedBox(
-      //   width: 200,
-      //   child: SignInWithAppleButton(
-       
-      //     onPressed: () async {
-      //       try {
-      //         final credential = await SignInWithApple.getAppleIDCredential(
-      //           scopes: [
-      //             AppleIDAuthorizationScopes.email,
-      //             AppleIDAuthorizationScopes.fullName,
-      //           ],
-      //         );
-        
-      //         Get.snackbar("Apple Sign In", credential.toString());
-      //       } catch (e) {
-      //         Get.snackbar("Error", e.toString());
-      //       }
-      //     },
-      //   ),
-      // ),
       SizedBox(
   width: 155,
   height: 43,
@@ -263,19 +242,21 @@ Widget _buildSocialLoginButtons() {
     borderRadius: BorderRadius.circular(30), // ← your desired radius
     child: SignInWithAppleButton(
       text: "Apple",
-      onPressed: () async {
-        try {
-          final credential = await SignInWithApple.getAppleIDCredential(
-            scopes: [
-              AppleIDAuthorizationScopes.email,
-              AppleIDAuthorizationScopes.fullName,
-            ],
-          );
-          Get.snackbar("Apple Sign In", credential.toString());
-        } catch (e) {
-          Get.snackbar("Error", e.toString());
-        }
-      },
+      // onPressed: () async {
+      //   // try {
+      //   //   final credential = await SignInWithApple.getAppleIDCredential(
+      //   //     scopes: [
+      //   //       AppleIDAuthorizationScopes.email,
+      //   //       AppleIDAuthorizationScopes.fullName,
+      //   //     ],
+      //   //   );
+      //   //   Get.snackbar("Apple Sign In", credential.toString());
+      //   // } catch (e) {
+      //   //   Get.snackbar("Error", e.toString());
+      //   // }
+      //   _handleAppleSignIn
+      // },
+      onPressed: _handleAppleSignIn,
     ),
   ),
 )
@@ -311,6 +292,109 @@ Widget _buildSocialLoginButtons() {
       ),
     );
   }
+// Future<void> _handleAppleSignIn() async { 
+//   if (!_isChecked.value) {
+//     _showValidationError(
+//         "Terms & Conditions", "Please agree to the terms & conditions");
+//     return;
+//   }
+
+//   try {
+//     final appleCredential = await SignInWithApple.getAppleIDCredential(
+//       scopes: [
+//         AppleIDAuthorizationScopes.email,
+//         AppleIDAuthorizationScopes.fullName,
+//       ],
+//     );
+
+//     final String name =
+//         "${appleCredential.givenName ?? ''} ${appleCredential.familyName ?? ''}".trim();
+//     final String? email = appleCredential.email;
+
+//     // Check if email is null (second login)
+//     if (email == null) {
+//       _showValidationError(
+//         "Apple Sign-In Error",
+//         "Email not available. Try removing app from Apple ID settings and re-signing.",
+//       );
+//       return;
+//     }
+//               Get.snackbar("Apple Sign In", appleCredential.toString());
+//     // Populate fields
+//     _nameController.text = name;
+//     _emailController.text = email;
+
+//     final SignupParams request = SignupParams(
+//       name: name.isEmpty ? "Apple User" : name,
+//       email: email,
+//       phone: "",
+//       role: _selectedRole.value,
+//     );
+
+//     // _authViewModel
+//     //     .registerUser(request, name)
+//     //     .then((_) => _authViewModel.isLoading.value = false)
+//     //     .catchError((_) => _authViewModel.isLoading.value = false);
+//   } catch (e) {
+//     _showValidationError("Apple Sign-In Failed", e.toString());
+//   }
+// }
+
+Future<void> _handleAppleSignIn() async { 
+  if (!_isChecked.value) {
+    _showValidationError(
+        "Terms & Conditions", "Please agree to the terms & conditions");
+    return;
+  }
+
+  try {
+    final appleCredential = await SignInWithApple.getAppleIDCredential(
+      scopes: [
+        AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName,
+      ],
+    );
+
+    // Extract full name and email from the Apple Sign-In response
+    final String name =
+        "${appleCredential.givenName ?? ''} ${appleCredential.familyName ?? ''}".trim();
+    final String? email = appleCredential.email;
+
+    // Check if email is null (second login or user opted not to share email)
+    if (email == null) {
+      _showValidationError(
+        "Apple Sign-In Error",
+        "Email not available. Try removing app from Apple ID settings and re-signing.",
+      );
+      return;
+    }
+
+    // Populate fields
+    _nameController.text = name.isNotEmpty ? name : "Apple User";
+    _emailController.text = email;
+
+    // Prepare the request data to be sent to your backend
+    final SignupParams request = SignupParams(
+      name: name.isEmpty ? "Apple User" : name,
+      email: email,
+      phone: "", // Handle if needed
+      role: _selectedRole.value,
+    );
+
+    // Sending the request to your backend (uncomment and update according to your backend logic)
+    _authViewModel
+        .registerUser(request,name).then((_) {
+          _authViewModel.isLoading.value = false;
+          // Handle success response, maybe navigate to a different screen
+        })
+        .catchError((e) {
+          _authViewModel.isLoading.value = false;
+          _showValidationError("Signup Error", e.toString());
+        });
+  } catch (e) {
+    _showValidationError("Apple Sign-In Failed", e.toString());
+}
+}
 
   Future<void> _handleGoogleSignIn() async {
     if (!_isChecked.value) {
