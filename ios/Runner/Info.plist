@@ -72,5 +72,11 @@
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
+
+	<key>NSFaceIDUsageDescription</key>
+    <string>Used to authenticate with Sign in with Apple.</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>This is used for analytics and authentication.</string>
+
 </dict>
 </plist>

@@ -1,3 +1,4 @@
+import 'dart:developer';
 
 import 'package:clique/components/auth_button.dart';
 import 'package:clique/components/custom_textfield.dart';
@@ -11,20 +12,24 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:clique/utils/utils.dart';
-import 'package:google_sign_in/google_sign_in.dart'; // Add this import
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import '../../view_model/auth_viewmodel.dart';
 
 class SignupScreen extends StatelessWidget {
   final AuthViewModel _authViewModel = Get.put(AuthViewModel());
   final RxBool _isChecked = false.obs;
   final RxString _selectedRole = "user".obs; // Add this for role selection
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
-  );
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
 
-  static const List<String> _validEmailDomains = ['@gmail.com', '@yahoo.com', '@icloud.com'];
+  static const List<String> _validEmailDomains = [
+    '@gmail.com',
+    '@yahoo.com',
+    '@icloud.com'
+  ];
 
   final OTPViewModel otpViewModel = Get.put(OTPViewModel());
   @override
@@ -38,7 +43,8 @@ class SignupScreen extends StatelessWidget {
 
   bool _validateFields() {
     if (!_isChecked.value) {
-      _showValidationError("Terms & Conditions", "Please agree to the terms & conditions");
+      _showValidationError(
+          "Terms & Conditions", "Please agree to the terms & conditions");
       return false;
     }
     if (_nameController.text.isEmpty) {
@@ -50,13 +56,12 @@ class SignupScreen extends StatelessWidget {
       return false;
     }
     if (_phoneNumberController.text.isEmpty) {
-      _showValidationError("Phone number is required", "Please enter your phone number");
+      _showValidationError(
+          "Phone number is required", "Please enter your phone number");
       return false;
     }
     return true;
   }
-
-
 
   void _showValidationError(String title, String message) {
     Utils.showCustomSnackBar(title, message, ContentType.warning);
@@ -97,33 +102,37 @@ class SignupScreen extends StatelessWidget {
         ),
         SizedBox(height: Get.height * 0.02),
         CustomTextField(
+          keyboardType: TextInputType.number,
           hintText: "Phone Number",
           controller: _phoneNumberController,
         ),
+     
         SizedBox(height: Get.height * 0.02),
-    Align(
-      alignment: Alignment.centerLeft,
-      child:     Obx(() => Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Radio(
-              value: "user",
-              groupValue: _selectedRole.value,
-              onChanged: (value) => _selectedRole.value = value.toString(),
-              activeColor: AppColors.appColor,
-            ),
-            const Text("User"),
-            const SizedBox(width: 20),
-            Radio(
-              value: "influencer",
-              groupValue: _selectedRole.value,
-              onChanged: (value) => _selectedRole.value = value.toString(),
-              activeColor: AppColors.appColor,
-            ),
-            const Text("Influencer"),
-          ],
-        )),
-    )
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Obx(() => Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Radio(
+                    value: "user",
+                    groupValue: _selectedRole.value,
+                    onChanged: (value) =>
+                        _selectedRole.value = value.toString(),
+                    activeColor: AppColors.appColor,
+                  ),
+                  const Text("User"),
+                  const SizedBox(width: 20),
+                  Radio(
+                    value: "influencer",
+                    groupValue: _selectedRole.value,
+                    onChanged: (value) =>
+                        _selectedRole.value = value.toString(),
+                    activeColor: AppColors.appColor,
+                  ),
+                  const Text("Influencer"),
+                ],
+              )),
+        )
       ],
     );
   }
@@ -146,30 +155,30 @@ class SignupScreen extends StatelessWidget {
     return Row(
       children: [
         Obx(() => Checkbox(
-          activeColor: AppColors.black,
-          value: _isChecked.value,
-          onChanged: (value) => _isChecked.value = value ?? false,
-        )),
+              activeColor: AppColors.black,
+              value: _isChecked.value,
+              onChanged: (value) => _isChecked.value = value ?? false,
+            )),
         // const Text('I agree with the terms & conditions'),
-RichText(
-  text: TextSpan(
-    style: TextStyle(color: Colors.black, fontSize: 14), // base style
-    children: [
-      TextSpan(text: 'I agree with the '),
-      TextSpan(
-        text: 'terms & conditions',
-        style: TextStyle(
-          color: AppColors.appColor,
-          decoration: TextDecoration.underline,
-        ),
-        recognizer: TapGestureRecognizer()
-          ..onTap = () {
-            Get.toNamed(RouteName.termsAndConditionsScreen);
-          },
-      ),
-    ],
-  ),
-)
+        RichText(
+          text: TextSpan(
+            style: TextStyle(color: Colors.black, fontSize: 14), // base style
+            children: [
+              TextSpan(text: 'I agree with the '),
+              TextSpan(
+                text: 'terms & conditions',
+                style: TextStyle(
+                  color: AppColors.appColor,
+                  decoration: TextDecoration.underline,
+                ),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    Get.toNamed(RouteName.termsAndConditionsScreen);
+                  },
+              ),
+            ],
+          ),
+        )
       ],
     );
   }
@@ -178,20 +187,28 @@ RichText(
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Expanded(
-          child: _socialButton(
-            icon: Image.asset(
-              "assets/png/google.png",
-              width: Get.width * 0.04,
-              height: Get.width * 0.04
-            ),
-            label: "Google",
-            borderColor: Colors.red,
-            onPressed: _handleGoogleSignIn, // Call Google Sign-In
+        _socialButton(
+          icon: Image.asset(
+            "assets/png/google.png",
+            width: Get.width * 0.04,
+            height: Get.height * 0.04,
           ),
+          label: "Google",
+          borderColor: Colors.red,
+          onPressed: _handleGoogleSignIn,
         ),
-        const SizedBox(width: 10),
-
+        const SizedBox(width: 20),
+        SizedBox(
+          width: 155,
+          height: 43,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(30), // ← your desired radius
+            child: SignInWithAppleButton(
+              text: "Apple",
+              onPressed: _handleAppleSignIn,
+            ),
+          ),
+        )
       ],
     );
   }
@@ -215,70 +232,108 @@ RichText(
           icon,
           const SizedBox(width: 10),
           label == "Google"
-              ? GradientText(
-                  label,
-                  gradient: AppColors.appGradientColors,
-                  fontSize: 14
-                )
+              ? GradientText(label,
+                  gradient: AppColors.appGradientColors, fontSize: 14)
               : Text(label, style: TextStyle(color: textColor)),
         ],
       ),
     );
   }
-
-  Future<void> _handleGoogleSignIn() async {
-
-   if (!_isChecked.value) {
-      _showValidationError("Terms & Conditions", "Please agree to the terms & conditions");
-      return ;
-    } else {
-      try {
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
- 
-      if (googleUser != null) {
-        // Fetch user details
-        final String name = googleUser.displayName ?? "Unknown";
-        final String email = googleUser.email;
-
-
-        // Populate the form fields with Google details
-        _nameController.text = name;
-        _emailController.text = email;
-
-        // Optionally, you can send these details to your API
-        final SignupParams request = SignupParams(
-          name: name,
-          email: email,
-          phone: "", // You can leave this empty or ask the user to fill it
-          role: _selectedRole.value,
-        );
-        // Call your signup API
-        _authViewModel.registerUser(request, name)
-          .then((_) => _authViewModel.isLoading.value = false)
-          .catchError((_) => _authViewModel.isLoading.value = false);
-      }
-    } catch (e) {
-    
-      _showValidationError("Google Sign-In Failed", "An error occurred during Google Sign-In.");
+  Future<void> _handleAppleSignIn() async {
+    if (!_isChecked.value) {
+      _showValidationError(
+          "Terms & Conditions", "Please agree to the terms & conditions");
+      return;
     }
-   }
+
+    try {
+      final appleCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+
+      // Extract full name and email from the Apple Sign-In response
+      final String name =
+          "${appleCredential.givenName ?? ''} ${appleCredential.familyName ?? ''}"
+              .trim();
+      final String? email = appleCredential.email;
+
+      // Check if email is null (second login or user opted not to share email)
+      if (email == null) {
+        _showValidationError(
+          "Apple Sign-In Error",
+          "Email not available. Try removing app from Apple ID settings and re-signing.",
+        );
+        return;
+      }
+
+      // Populate fields
+      _nameController.text = name.isNotEmpty ? name : "Apple User";
+      _emailController.text = email;
+
+      // Prepare the request data to be sent to your backend
+      final SignupParams request = SignupParams(
+        name: name.isEmpty ? "Apple User" : name,
+        email: email,
+        phone: "", // Handle if needed
+        role: _selectedRole.value,
+      );
+
+      // Sending the request to your backend (uncomment and update according to your backend logic)
+      _authViewModel.registerUser(request, name).then((_) {
+        _authViewModel.isLoading.value = false;
+        // Handle success response, maybe navigate to a different screen
+      }).catchError((e) {
+        _authViewModel.isLoading.value = false;
+        _showValidationError("Signup Error", e.toString());
+      });
+    } catch (e) {
+      // _showValidationError("Apple Sign-In Failed", e.toString());
+      Get.snackbar("errr", e.toString());
+    }
   }
 
-  void _handleSignup() async{
-    
-      // final SignupParams request = SignupParams(
-      //   name: "naveed kk",
-      //   email: "raahimkhan.orhan@gmail.com",
-      //   phone: "3103232527",
-      //   role: "influencer",
-      // );
-       
-      // // Get.toNamed(RouteName.oTPScreen, arguments: request);
-      // _authViewModel.registerUser(request, _nameController.text)
-      //   .then((_) => _authViewModel.isLoading.value = false)
-      //   .catchError((_) => _authViewModel.isLoading.value = false);
+  Future<void> _handleGoogleSignIn() async {
+    if (!_isChecked.value) {
+      _showValidationError(
+          "Terms & Conditions", "Please agree to the terms & conditions");
+      return;
+    } else {
+      try {
+        final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
 
+        if (googleUser != null) {
+          // Fetch user details
+          final String name = googleUser.displayName ?? "Unknown";
+          final String email = googleUser.email;
 
+          // Populate the form fields with Google details
+          _nameController.text = name;
+          _emailController.text = email;
+
+          // Optionally, you can send these details to your API
+          final SignupParams request = SignupParams(
+            name: name,
+            email: email,
+            phone: "", // You can leave this empty or ask the user to fill it
+            role: _selectedRole.value,
+          );
+          // Call your signup API
+          _authViewModel
+              .registerUser(request, name)
+              .then((_) => _authViewModel.isLoading.value = false)
+              .catchError((_) => _authViewModel.isLoading.value = false);
+        }
+      } catch (e) {
+        _showValidationError("Google Sign-In Failed",
+            "An error occurred during Google Sign-In.");
+      }
+    }
+  }
+
+  void _handleSignup() async {
     if (_validateFields()) {
       _authViewModel.isLoading.value = true;
       final SignupParams request = SignupParams(
@@ -291,11 +346,25 @@ RichText(
       );
 
       // Get.toNamed(RouteName.oTPScreen, arguments: request);
-      _authViewModel.registerUser(request, _nameController.text)
-        .then((_) => _authViewModel.isLoading.value = false)
-        .catchError((_) => _authViewModel.isLoading.value = false);
+      _authViewModel
+          .registerUser(request, _nameController.text)
+          .then((_) => _authViewModel.isLoading.value = false)
+          .catchError((_) => _authViewModel.isLoading.value = false);
+    }
+  }
 
-
+  void _handleAppleSigin() async {
+    try {
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+      Get.snackbar("credentials", credential.toString());
+    } catch (e) {
+      log(e.toString());
+      Utils.showCustomSnackBar("error", e.toString(), ContentType.failure);
     }
   }
 
@@ -319,10 +388,12 @@ RichText(
               SizedBox(height: Get.height * 0.02),
               _buildSocialButtons(),
               SizedBox(height: Get.height * 0.02),
-              AuthButton(
-                buttonText: 'SignUp',
-                isLoading: _authViewModel.isLoading,
-                onPressed: _handleSignup,
+              Center(
+                child: AuthButton(
+                  buttonText: 'SignUp',
+                  isLoading: _authViewModel.isLoading,
+                  onPressed: _handleSignup,
+                ),
               ),
               SizedBox(height: Get.height * 0.02),
               _buildLoginLink(),
@@ -338,17 +409,12 @@ RichText(
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text(
-          "Already have an account? ",
-          style: TextStyle(color: Colors.black)
-        ),
+        const Text("Already have an account? ",
+            style: TextStyle(color: Colors.black)),
         GestureDetector(
           onTap: () => Get.toNamed(RouteName.loginScreen),
-          child: GradientText(
-            "Login",
-            gradient: AppColors.appGradientColors,
-            fontSize: 15
-          ),
+          child: GradientText("Login",
+              gradient: AppColors.appGradientColors, fontSize: 15),
         ),
       ],
     );
