@@ -274,7 +274,7 @@ Obx(() {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
+              SizedBox(
                 width: 200,
                 child: Text(
                   _cartQuantityController.products.first.productTitle,
@@ -284,10 +284,29 @@ Obx(() {
                   maxLines: 2,
                 ),
               ),
-              GradientText(
-                (_cartQuantityController.products.first.cost * _cartQuantityController.quantity.value).toString(),
-                gradient: AppColors.appGradientColors,
-                fontSize: 14,
+              Row(
+                children: [
+                GradientText(
+  (_cartQuantityController.products.first.cost * _cartQuantityController.quantity.value)
+      .toStringAsFixed(2),
+  gradient: AppColors.appGradientColors,
+  fontSize: 14,
+),
+
+                  SizedBox(width: 4,),
+  GradientText(
+                    "x",
+                    gradient: AppColors.appGradientColors,
+                    fontSize: 14,
+                  ),
+
+                  SizedBox(width: 4,),
+                    GradientText(
+                    ( _cartQuantityController.quantity.value).toString(),
+                    gradient: AppColors.appGradientColors,
+                    fontSize: 14,
+                  ),
+                ],
               ),
             ],
           ),

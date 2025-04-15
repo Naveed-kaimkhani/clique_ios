@@ -1,10 +1,13 @@
 import 'dart:developer';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clique/components/auth_button.dart';
 import 'package:clique/components/gradient_text.dart';
 import 'package:clique/components/summary_row.dart';
 import 'package:clique/constants/app_colors.dart';
 import 'package:clique/routes/routes_name.dart';
+import 'package:clique/utils/utils.dart';
+import 'package:clique/view/discover/appBar_backicon.dart';
 import 'package:clique/view_model/address_controller.dart';
 import 'package:clique/view_model/cart_quantity_controller.dart';
 import 'package:clique/view_model/order_view_model.dart';
@@ -56,14 +59,10 @@ Widget build(BuildContext context) {
   return SafeArea(
     bottom: false,
     child: Scaffold(
-      // appBar: AppBarWithBackIcon(
-      //   title: "My Cart",
-      //   // icon: Icons.arrow_back_ios,
-      // ),
-        appBar: AppBar(
-          leading: BackButton(),
-          title: Text("Cart"),
-        ),
+      appBar: AppBarWithBackIcon(
+        title: "My Cart",
+        // icon: Icons.arrow_back_ios,
+      ),
       backgroundColor: Colors.white,
       body: Obx(() {
         // Wait until products are loaded
@@ -195,28 +194,23 @@ Widget build(BuildContext context) {
                     buttonText:"Checkout" , 
                     onPressed:   () {
 
-                      log(controller.address1.value);
                       
-                      log(controller.address2.value);
-                      
-                      log(controller.city.value);
-                      
-                      log(controller.countryCode.value);
-                      
-                      log(controller.stateCode.value);
-                      log(controller.zipCode.value);
-                      
-                      if (controller.address1.value.isEmpty) {
+                      if (cartQuantityController.quantity.value>10) {
+                      Utils.showCustomSnackBar("Warning", "Product quantity should not be more than 10", ContentType.warning);
+                        return;
+                      }
+                       if (controller.address1.value.isEmpty) {
                       Get.toNamed(RouteName.checkoutScreen);
                         return;
-                      }else{
+                      }
+                      else{
                       
                           // Get.toNamed(RouteName.checkoutScreen);
                       orderController.submitOrderFromCart().then( (value) {
                         if (value != null) {
                           Get.toNamed(RouteName.checkoutScreen);
                         } else {
-                          Get.snackbar("Error", "Failed to submit order");
+                          // Get.snackbar("Error", "Failed to submit order");
                         }
                       });
                       }

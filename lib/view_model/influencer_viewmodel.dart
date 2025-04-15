@@ -5,8 +5,6 @@ import 'package:get/get.dart';
 
 class InfluencerViewmodel extends GetxController {
   final InfluencerRepository _userRepository = InfluencerRepository();
-  
-
   final userController = Get.find<UserController>();
   var influencers = <InfluencerModel>[].obs;
   var isLoading = true.obs; // Add this line

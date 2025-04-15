@@ -181,15 +181,103 @@ class OrderViewModel extends GetxController {
   var isLoading = false.obs;
   var errorMessage = ''.obs;
   Rx<OrderSummary?> orderSummary = Rx<OrderSummary?>(null); // Define the orderSummary field
-Future<OrderSummary?> submitOrderFromCart() async {
+// Future<OrderSummary?> submitOrderFromCart() async {
  
+//   try {
+//     isLoading.value = true;
+
+//     // Prepare the order data using the Address Controller
+//     if (addressController.address1.isEmpty) {
+//         Get.snackbar("Error", "Please enter address");
+//     }
+//     var address = Address(
+//       address1: addressController.address1.value,
+//       address2: addressController.address2.value,
+//       city: addressController.city.value,
+//       stateCode: addressController.stateCode.value,
+//       countryCode: 'US',
+//       zipCode: addressController.zipCode.value,
+//     );
+//     var order = Order(
+//       customerId: userController.uid.toString(), // Use the actual customer ID
+//       firstName: userController.userName.value, // Use the actual first name
+//       lastName: "", // Use the actual last name
+//       phone: userController.phone.value, // Use the actual phone number
+//       address: address,
+//       transactions: [
+//         Transaction(
+//           tdid: cartQuantityController.products.first.tdid ?? "",
+//           quantity: cartQuantityController.quantity.value,
+//         )
+//       ],
+//       productDetails: [
+//         ProductModel(
+//           id: cartQuantityController.products.first.id,
+//           productWeight: cartQuantityController.products.first.productWeight,
+//           productCode: cartQuantityController.products.first.productCode,
+//           unit: cartQuantityController.products.first.unit,
+//           productTitle: cartQuantityController.products.first.productTitle,
+//           productDesc: cartQuantityController.products.first.productDesc,
+//           imageUrls: cartQuantityController.products.first.imageUrls,
+//           cost: cartQuantityController.products.first.cost,
+//           brandName: "",
+//           msrp: 0,
+//           thumbnailUrl: "",
+//           categories: "",
+//           variantGroupId: "",
+//         )
+//       ],
+//     );
+
+//     // Send POST request to the API
+//     // final url = Uri.parse(ApiEndpoints.createOrderApi);
+
+//     final url = Uri.parse("https://cactisocial.com/api-clique/public/api/v1/topdawg/orders");
+
+//     final headers = {
+//       'Content-Type': 'application/json',
+//       'Authorization': 'Bearer ${userController.token.value}',
+//     };
+
+//     // Prepare the request body by converting the order object to a map
+//     final Map<String, dynamic> orderMap = order.toMap(); // Log the JSON string
+//     final response = await http.post(
+//       url,
+//       headers: headers,
+//       body: jsonEncode(orderMap),  // Encode the order map to JSON
+    
+//     );
+//     log(response.body);
+//     if (response.statusCode == 200) {
+//       // Success
+//     final parsedOrderSummary = OrderSummary.fromJson(jsonDecode(response.body));
+ 
+//         orderSummary.value = parsedOrderSummary;
+//         return parsedOrderSummary;
+//     } else {
+//       // Failure
+//       Utils.showCustomSnackBar("Error", "Failed to place order", ContentType.failure);
+ 
+//     }
+//   } catch (e) {
+//      Utils.showCustomSnackBar("Error", "Failed to place order $e", ContentType.failure);
+ 
+//   } finally {
+//     isLoading.value = false;
+//   }
+// }
+
+Future<OrderSummary?> submitOrderFromCart() async {
   try {
     isLoading.value = true;
 
-    // Prepare the order data using the Address Controller
+    // Check if address is empty
     if (addressController.address1.isEmpty) {
-        Get.snackbar("Error", "Please enter address");
+      Get.snackbar("Error", "Please enter address");
+      return null;
     }
+
+    // Prepare the address and order
     var address = Address(
       address1: addressController.address1.value,
       address2: addressController.address2.value,
@@ -198,11 +286,12 @@ Future<OrderSummary?> submitOrderFromCart() async {
       countryCode: 'US',
       zipCode: addressController.zipCode.value,
     );
+
     var order = Order(
-      customerId: userController.uid.toString(), // Use the actual customer ID
-      firstName: userController.userName.value, // Use the actual first name
-      lastName: "", // Use the actual last name
-      phone: userController.phone.value, // Use the actual phone number
+      customerId: userController.uid.toString(),
+      firstName: userController.userName.value,
+      lastName: "",
+      phone: userController.phone.value,
       address: address,
       transactions: [
         Transaction(
@@ -229,43 +318,56 @@ Future<OrderSummary?> submitOrderFromCart() async {
       ],
     );
 
-    // Send POST request to the API
-    // final url = Uri.parse(ApiEndpoints.createOrderApi);
-
     final url = Uri.parse("https://cactisocial.com/api-clique/public/api/v1/topdawg/orders");
-
     final headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ${userController.token.value}',
     };
 
-    // Prepare the request body by converting the order object to a map
-    final Map<String, dynamic> orderMap = order.toMap(); // Log the JSON string
+    final Map<String, dynamic> orderMap = order.toMap();
     final response = await http.post(
       url,
       headers: headers,
-      body: jsonEncode(orderMap),  // Encode the order map to JSON
-    
+      body: jsonEncode(orderMap),
     );
+
     log(response.body);
+
     if (response.statusCode == 200) {
-      // Success
-    final parsedOrderSummary = OrderSummary.fromJson(jsonDecode(response.body));
- 
-        orderSummary.value = parsedOrderSummary;
-        return parsedOrderSummary;
+      final parsedOrderSummary = OrderSummary.fromJson(jsonDecode(response.body));
+      orderSummary.value = parsedOrderSummary;
+      return parsedOrderSummary;
     } else {
-      // Failure
-      Utils.showCustomSnackBar("Error", "Failed to place order", ContentType.failure);
- 
+      // Decode error and extract meaningful message
+      final Map<String, dynamic> errorBody = jsonDecode(response.body);
+      String userErrorMessage = "Failed to place order";
+
+      if (errorBody.containsKey('response') && errorBody['response']['messages'] != null) {
+        final messages = errorBody['response']['messages'];
+        String allErrors = "";
+
+        messages.forEach((key, value) {
+          final errors = value['error'];
+          if (errors != null && errors.isNotEmpty) {
+            allErrors += "${errors[0]}\n";
+          }
+        });
+
+        userErrorMessage = allErrors.trim();
+      }
+
+      Utils.showCustomSnackBar("Error", userErrorMessage, ContentType.failure);
+      return null;
     }
   } catch (e) {
-     Utils.showCustomSnackBar("Error", "Failed to place order $e", ContentType.failure);
- 
+    Utils.showCustomSnackBar("Error", "Failed to place order: $e", ContentType.failure);
+    return null;
   } finally {
     isLoading.value = false;
   }
 }
+
+
 Future<OrderSummary?> submitOrder() async {
  
   try {
@@ -342,9 +444,26 @@ Future<OrderSummary?> submitOrder() async {
         orderSummary.value = parsedOrderSummary;
         return parsedOrderSummary;
     } else {
-      // Failure
-      Utils.showCustomSnackBar("Error", "Failed to place order", ContentType.failure);
- 
+      // Decode error and extract meaningful message
+      final Map<String, dynamic> errorBody = jsonDecode(response.body);
+      String userErrorMessage = "Failed to place order";
+
+      if (errorBody.containsKey('response') && errorBody['response']['messages'] != null) {
+        final messages = errorBody['response']['messages'];
+        String allErrors = "";
+
+        messages.forEach((key, value) {
+          final errors = value['error'];
+          if (errors != null && errors.isNotEmpty) {
+            allErrors += "${errors[0]}\n";
+          }
+        });
+
+        userErrorMessage = allErrors.trim();
+      }
+
+      Utils.showCustomSnackBar("Error", userErrorMessage, ContentType.failure);
+      return null;
     }
   } catch (e) {
      Utils.showCustomSnackBar("Error", "Failed to place order $e", ContentType.failure);
@@ -353,6 +472,10 @@ Future<OrderSummary?> submitOrder() async {
     isLoading.value = false;
   }
 }
+
+
+
+
 Future<void> processOrder(String orderId) async {
   try {
     isLoading.value = true;

@@ -6,7 +6,6 @@ import 'package:clique/utils/utils.dart';
 import 'package:clique/view_model/favorite_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:like_button/like_button.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -143,7 +142,7 @@ class ProductCard extends StatelessWidget {
         size: size.width * 0.06,
         isLiked: isLiked,
         onTap: (bool liked) async {
-          
+
           favoriteController.toggleFavorite(uid);
           return !liked;
         },

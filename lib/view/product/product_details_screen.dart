@@ -32,7 +32,8 @@ class ProductDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     
     controller.setProductData(Get.arguments);
-    
+
+   
     final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
@@ -158,53 +159,53 @@ Widget _buildHeroImage(Size size) {
 ),
 
               SizedBox(width: size.width * 0.02),
-              Stack(
-                children: [
-                  Obx(() => AnimatedContainer(
-                    duration: Duration(milliseconds: 300),
-                    transform: isAnimating.value 
-                        ? Matrix4.translationValues(0, -10, 0)
-                        : Matrix4.translationValues(0, 0, 0),
-                    child: _iconButton(
-                      Icons.shopping_cart_outlined,
-                      () {
-                       () {
-            if (userController.phone.value.isNotEmpty) {
-             Get.toNamed(RouteName.cartScreen, arguments:controller.productData['uid']);
-            }else{
-Utils.showCustomSnackBar("Warning", "Please enter your phone number to checkout", ContentType.warning);
-            //  Get.toNamed(RouteName.updateProfileScreen);
-            Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateProfileScreen()));
+//               Stack(
+//                 children: [
+//                   Obx(() => AnimatedContainer(
+//                     duration: Duration(milliseconds: 300),
+//                     transform: isAnimating.value 
+//                         ? Matrix4.translationValues(0, -10, 0)
+//                         : Matrix4.translationValues(0, 0, 0),
+//                     child: _iconButton(
+//                       Icons.shopping_cart_outlined,
+//                       () {
+//                        () {
+//             if (userController.phone.value.isNotEmpty) {
+//              Get.toNamed(RouteName.cartScreen, arguments:controller.productData['uid']);
+//             }else{
+// Utils.showCustomSnackBar("Warning", "Please enter your phone number to checkout", ContentType.warning);
+//             //  Get.toNamed(RouteName.updateProfileScreen);
+//             Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateProfileScreen()));
 
-            }
-          };
+//             }
+//           };
 
 
 
-                      },
-                    ),
-                  )),
-                  if (cartItemCount.value > 0)
-                    Positioned(
-                      right: 0,
-                      child: Obx(() => Container(
-                        padding: EdgeInsets.all(4),
-                        margin:  EdgeInsets.all(1),
-                        decoration: BoxDecoration(
-                          color: AppColors.appColor,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Text(
-                          '${cartItemCount.value}',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: size.width * 0.03,
-                          ),
-                        ),
-                      )),
-                    ),
-                ],
-              ),
+//                       },
+//                     ),
+//                   )),
+//                   if (cartItemCount.value > 0)
+//                     Positioned(
+//                       right: 0,
+//                       child: Obx(() => Container(
+//                         padding: EdgeInsets.all(4),
+//                         margin:  EdgeInsets.all(1),
+//                         decoration: BoxDecoration(
+//                           color: AppColors.appColor,
+//                           shape: BoxShape.circle,
+//                         ),
+//                         child: Text(
+//                           '${cartItemCount.value}',
+//                           style: TextStyle(
+//                             color: Colors.white,
+//                             fontSize: size.width * 0.03,
+//                           ),
+//                         ),
+//                       )),
+//                     ),
+//                 ],
+//               ),
             ],
           ),
         ],

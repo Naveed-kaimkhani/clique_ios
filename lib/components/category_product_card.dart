@@ -1,10 +1,12 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clique/utils/utils.dart';
+import 'package:clique/view_model/favorite_controller.dart';
 import 'package:clique/view_model/product_details_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:clique/constants/app_colors.dart';
 import 'package:get/get.dart';
+import 'package:like_button/like_button.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ProductCategoryCard extends StatelessWidget {
@@ -37,12 +39,14 @@ class ProductCategoryCard extends StatelessWidget {
     super.key, required this.uid, required this.isShowDiscount,
   });
 
+  final FavoriteController favoriteController = Get.put(FavoriteController());
   @override
   Widget build(BuildContext context) {
     // Get screen width and height using MediaQuery
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
+    final size = MediaQuery.of(context).size;
     // Responsive dimensions
     final cardWidth = screenWidth * 0.6; // 60% of screen width
     final cardHeight = screenHeight * 0.35; // 35% of screen height
@@ -54,10 +58,20 @@ class ProductCategoryCard extends StatelessWidget {
     final fontSizeDiscount = screenWidth * 0.03; // 3% of screen width
 
     final ProductController controller = Get.find<ProductController>();
-    return GestureDetector(
-   onTap: () {
- 
-    controller.setProductData( {
+    return Container(
+      width: cardWidth,
+      height: cardHeight,
+      padding: EdgeInsets.only(left: padding,bottom: padding),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Stack(
+        children: [
+    
+    
+    GestureDetector(
+      onTap: (){
+              controller.setProductData( {
       'uid': uid,
       'backgroundImage': backgroundImage,
       'productName': productName,
@@ -69,56 +83,11 @@ class ProductCategoryCard extends StatelessWidget {
       'categories':categories,
       'size':weight,
     },);
-
-
-  //    Get.toNamed(
-  //   RouteName.productDetailsScreen,
-  //   arguments: {
-  //     'uid': uid,
-  //     'backgroundImage': backgroundImage,
-  //     'productName': productName,
-  //     'productDescription': productDescription,
-  //     'price': price,
-  //     'oldPrice': oldPrice,
-  //     'discount': discount,
-  //     'unit': unit,
-  //     'categories':categories,
-  //     'size':weight,
-  //   },
-  // );
-  // Get.toNamed(
-  //   RouteName.productDetailsScreen,
-  //   arguments: {
-  //     'uid': uid,
-  //     'backgroundImage': backgroundImage,
-  //     'productName': productName,
-
-  //     'productDescription': productDescription,
-  //     'price': price,
-  //     'oldPrice': oldPrice,
-  //     'discount': discount,
-  //     'unit': unit,
-  //     'categories':categories,
-  //     'size':weight,
-  //   },
-  // );
-},
-
-      child: Container(
-        width: cardWidth,
-        height: cardHeight,
-        padding: EdgeInsets.only(left: padding,bottom: padding),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-        ),
+      },
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
         child: Stack(
           children: [
-
-
-ClipRRect(
-  borderRadius: BorderRadius.circular(20),
-  child: Stack(
-    children: [
       CachedNetworkImage(
         imageUrl: backgroundImage.first,
         width: double.infinity,
@@ -141,31 +110,64 @@ ClipRRect(
           ),
         ),
       ),
-    ],
-  ),
-),
-
-      
-            // Cart Icon (Top Right)
-            Positioned(
-              top: padding,
-              right: padding,
-              child: Container(
-                padding: EdgeInsets.all(padding * 0.5),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.8),
-                  shape: BoxShape.circle,
-                ),
-                // child: SvgPicture.asset(AppSvgIcons.bag, color: AppColors.black),
-                child: Icon(Icons.favorite_outline),
-              ),
+          ],
+        ),
+      ),
+    ),
+    
+          // Cart Icon (Top Right)
+          Positioned(
+            top: padding,
+            right: padding,
+            child:  Container(
+            padding: EdgeInsets.all(padding * 0.5),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.8),
+              shape: BoxShape.circle,
             ),
-      
-            // Product Details (Bottom)
-            Positioned(
-              bottom: 5,
-              left: 0,
-              right: 0,
+            // child: SvgPicture.asset(AppSvgIcons.bag, color: AppColors.black),
+            child: Obx(() {
+    final isLiked = favoriteController.isFavorite(uid);
+    return LikeButton(
+      size: size.width * 0.06,
+      isLiked: isLiked,
+      onTap: (bool liked) async {
+    
+        favoriteController.toggleFavorite(uid);
+        return !liked;
+      },
+      likeBuilder: (bool liked) {
+        return Icon(
+          liked ? Icons.favorite : Icons.favorite_border,
+          color: liked ? AppColors.appColor : Colors.black,
+          size: size.width * 0.07,
+        );
+      },
+    );
+        }),
+          ),
+          ),
+    
+          // Product Details (Bottom)
+          Positioned(
+            bottom: 5,
+            left: 0,
+            right: 0,
+            child: GestureDetector(
+              onTap: (){
+                    controller.setProductData( {
+      'uid': uid,
+      'backgroundImage': backgroundImage,
+      'productName': productName,
+      'productDescription': productDescription,
+      'price': price,
+      'oldPrice': oldPrice,
+      'discount': discount,
+      'unit': unit,
+      'categories':categories,
+      'size':weight,
+    },);
+              },
               child: Container(
                 padding: EdgeInsets.all(padding),
                 decoration: BoxDecoration(
@@ -184,15 +186,15 @@ ClipRRect(
                     ),
                     // SizedBox(height: padding * 0.5),
                     Text(
-  Utils.removeHtmlTags(productDescription),
-  maxLines: 2,
-  overflow: TextOverflow.ellipsis,
-  style: TextStyle(
-    color: textColor.withOpacity(0.7),
-    fontSize: fontSizeDescription,
-  ),
-),
-
+                    Utils.removeHtmlTags(productDescription),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: textColor.withOpacity(0.7),
+                      fontSize: fontSizeDescription,
+                    ),
+                  ),
+                  
                     SizedBox(height: screenWidth * 0.01),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -244,8 +246,8 @@ ClipRRect(
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

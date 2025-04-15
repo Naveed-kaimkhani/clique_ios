@@ -9,7 +9,6 @@ import 'package:clique/view_model/otp_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -209,9 +208,9 @@ class LoginScreen extends StatelessWidget {
                     try {
                       final SignupParams request = SignupParams(
                         name: "",
-                        email: "naveedkaimkhani87@gmail.com",
+                        // email: "naveedkaimkhani87@gmail.com",
                         
-                        // email: emailController.text,
+                        email: emailController.text,
                         phone: "",
                         role: "",
                       );
