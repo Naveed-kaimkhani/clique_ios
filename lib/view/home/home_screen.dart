@@ -1,6 +1,4 @@
 import 'dart:developer';
-
-import 'package:clique/constants/app_colors.dart';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/view/home/video_scroll_screen.dart';
 import 'package:clique/view/splash/loading_placeholder.dart';

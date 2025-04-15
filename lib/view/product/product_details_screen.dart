@@ -46,8 +46,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   Widget build(BuildContext context) {
     
     controller.setProductData(Get.arguments);
-
-   
+  
     final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,

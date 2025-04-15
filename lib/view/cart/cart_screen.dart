@@ -48,7 +48,7 @@ final AddressController controller = Get.isRegistered<AddressController>()
 @override
 void dispose() {
   
-    // Get.delete<CartQuantityController>();
+    Get.delete<CartQuantityController>();
   super.dispose();
 }
 
