@@ -286,6 +286,7 @@ Future<void> _handleAppleSignIn() async {
       return;
     }
 
+  _authViewModel.isLoading.value = true;
     // Populate fields for consistency
     _nameController.text = name;
     _emailController.text = email;

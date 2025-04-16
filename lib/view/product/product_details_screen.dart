@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clique/components/category_product_card.dart';
@@ -35,17 +37,27 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   final userController = Get.find<UserController>();
 
   final ProductViewModel _productViewModel = Get.find<ProductViewModel>();
+// Wrap in Future.delayed to avoid calling Get.arguments too early
+@override
+void initState() {
+  super.initState();
+  if (Get.arguments == null) {
 
- @override
- void initState() {
-   super.initState();
-   
- }
+    log("arguemnts are null");
+  Get.back(); // or show an error
+}
+  Future.delayed(Duration.zero, () {
+    if (Get.arguments != null) {
+      controller.setProductData(Get.arguments);
+    }
+  });
+}
+
   
   @override
   Widget build(BuildContext context) {
     
-    controller.setProductData(Get.arguments);
+    // controller.setProductData(Get.arguments);
   
     final size = MediaQuery.of(context).size;
     return Scaffold(

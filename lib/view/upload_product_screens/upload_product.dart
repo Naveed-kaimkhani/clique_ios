@@ -170,25 +170,6 @@ Widget _buildMediaSection(String label, VoidCallback onTap, Rxn<File> file) {
   );
 }
 
-// Widget _buildMediaSection(String label, VoidCallback onTap, Rxn<File> file) {
-//   return Column(
-//     crossAxisAlignment: CrossAxisAlignment.start,
-//     children: [
-//       Text(label, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-//       SizedBox(height: 10),
-//       Obx(() {
-//         if (file.value == null) {
-//           return GestureDetector(
-//             onTap: onTap,
-//             child: _uploadContainer(),
-//           );
-//         } else {
-//           return _buildVideoPlayer(file.value!);
-//         }
-//       }),
-//     ],
-//   );
-// }
 Widget _buildVideoPlayer(File videoFile) {
   final controller = VideoPlayerController.file(videoFile);
   _videoController = controller;
