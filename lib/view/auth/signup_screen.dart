@@ -331,15 +331,6 @@ class SignupScreen extends StatelessWidget {
       }
     }
   }
-Future<String> _getStoredAppleEmail() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  return prefs.getString('apple_email') ?? "";
-}
-
-Future<String> _getStoredAppleName() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  return prefs.getString('apple_name') ?? "Apple User";
-}
 
   void _handleSignup() async {
     if (_validateFields()) {
@@ -361,20 +352,7 @@ Future<String> _getStoredAppleName() async {
     }
   }
 
-  void _handleAppleSigin() async {
-    try {
-      final credential = await SignInWithApple.getAppleIDCredential(
-        scopes: [
-          AppleIDAuthorizationScopes.email,
-          AppleIDAuthorizationScopes.fullName,
-        ],
-      );
-      Get.snackbar("credentials", credential.toString());
-    } catch (e) {
-      log(e.toString());
-      Utils.showCustomSnackBar("error", e.toString(), ContentType.failure);
-    }
-  }
+  
 
   @override
   Widget build(BuildContext context) {
