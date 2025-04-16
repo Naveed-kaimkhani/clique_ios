@@ -55,11 +55,6 @@ class SignupScreen extends StatelessWidget {
       _showValidationError("Email is required", "Please enter your email");
       return false;
     }
-    if (_phoneNumberController.text.isEmpty) {
-      _showValidationError(
-          "Phone number is required", "Please enter your phone number");
-      return false;
-    }
     return true;
   }
 
@@ -101,11 +96,11 @@ class SignupScreen extends StatelessWidget {
           controller: _emailController,
         ),
         SizedBox(height: Get.height * 0.02),
-        CustomTextField(
-          keyboardType: TextInputType.number,
-          hintText: "Phone Number",
-          controller: _phoneNumberController,
-        ),
+        // CustomTextField(
+        //   keyboardType: TextInputType.number,
+        //   hintText: "Phone Number",
+        //   controller: _phoneNumberController,
+        // ),
      
         SizedBox(height: Get.height * 0.02),
         Align(
@@ -340,7 +335,7 @@ class SignupScreen extends StatelessWidget {
         name: _nameController.text,
         email: _emailController.text,
         // password:"",
-        phone: _phoneNumberController.text,
+        phone: "",
         // confirmPassword:"",
         role: _selectedRole.value,
       );

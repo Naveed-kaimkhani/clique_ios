@@ -2,7 +2,7 @@ class InfluencerModel {
   final int id;
   final String name;
   final String email;
-  final String phone;
+  final String? phone;
   final String role;
   final String? profilePhoto;
   final String? coverPhoto;

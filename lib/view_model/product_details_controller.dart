@@ -1,4 +1,4 @@
-import 'package:clique/constants/index.dart';
+
 import 'package:get/get.dart';
 
 class ProductController extends GetxController {

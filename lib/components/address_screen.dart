@@ -43,7 +43,6 @@ class _AddressScreenState extends State<AddressScreen> {
 @override
   void initState() {
     // TODO: implement initState
-_productViewModel.setProductData(_productViewModel.productData);
     super.initState();
   }
   @override
@@ -125,6 +124,7 @@ _productViewModel.setProductData(_productViewModel.productData);
 
                             isLoading.value = true;
 
+_productViewModel.setProductData(_productViewModel.productData);
                             await controller.saveAddressToPrefs(orderViewModel.stateCode.value,orderViewModel.city.value);
                             await orderViewModel.submitOrder();
 

@@ -170,7 +170,7 @@ class InfluencerCard extends StatelessWidget {
 //   );
 // }),
 Obx(() => Container(
-  height: cardHeight * 0.14,
+  height: cardHeight * 0.15,
   width: double.infinity,
   decoration: BoxDecoration(
     gradient: AppColors.appGradientColors,

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/core/api/api_client.dart';
@@ -78,6 +79,8 @@ class InfluencerRepository {
     final response = await apiClient.getInfluencersApi( url:url, authToken: userController.token.value , params: {
         "role": "influencer",
       }, );
+      log("fetchingggg influencerss");
+    log(response.body);
     if (response.statusCode == 200) {
       List<dynamic> body = jsonDecode(response.body);
       List<InfluencerModel> users = body.map((dynamic item) => InfluencerModel.fromJson(item)).toList();
