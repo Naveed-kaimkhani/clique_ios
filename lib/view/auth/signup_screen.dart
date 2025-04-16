@@ -13,6 +13,7 @@ import 'package:get/get.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:clique/utils/utils.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import '../../view_model/auth_viewmodel.dart';
 
@@ -234,7 +235,7 @@ class SignupScreen extends StatelessWidget {
       ),
     );
   }
-  Future<void> _handleAppleSignIn() async {
+ Future<void> _handleAppleSignIn() async {
     if (!_isChecked.value) {
       _showValidationError(
           "Terms & Conditions", "Please agree to the terms & conditions");
@@ -257,10 +258,12 @@ class SignupScreen extends StatelessWidget {
 
       // Check if email is null (second login or user opted not to share email)
       if (email == null) {
-        _showValidationError(
-          "Apple Sign-In Error",
-          "Email not available. Try removing app from Apple ID settings and re-signing.",
-        );
+ _showValidationError(
+  "Account Exists",
+  "Apple ID already registered. Please sign in or clear app data.",
+);
+
+
         return;
       }
 
@@ -288,7 +291,8 @@ class SignupScreen extends StatelessWidget {
       // _showValidationError("Apple Sign-In Failed", e.toString());
       Get.snackbar("errr", e.toString());
     }
-  }
+  } 
+    
 
   Future<void> _handleGoogleSignIn() async {
     if (!_isChecked.value) {
@@ -327,6 +331,15 @@ class SignupScreen extends StatelessWidget {
       }
     }
   }
+Future<String> _getStoredAppleEmail() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.getString('apple_email') ?? "";
+}
+
+Future<String> _getStoredAppleName() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.getString('apple_name') ?? "Apple User";
+}
 
   void _handleSignup() async {
     if (_validateFields()) {

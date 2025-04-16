@@ -51,7 +51,7 @@ class InfluencerProfileState extends State<InfluencerProfile>
         bottom: false,
         child: Scaffold(
           appBar: AppBarWithBackIcon(
-          title: "Influencers Profile",
+          title: "Influencer Profile",
           // icon: Icons.arrow_back_ios,
         ),
           backgroundColor: Colors.white,

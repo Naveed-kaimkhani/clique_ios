@@ -134,6 +134,7 @@ Future<http.Response> getInfluencersApi({
                   Utils.showCustomSnackBar("Success", " You’ve signed up successfully", ContentType.success);
                         Get.offAllNamed(RouteName.loginScreen);               
     }
+    log(response.body);
     return _handleResponse(response);
   }
 
@@ -151,11 +152,11 @@ Future<http.Response> getInfluencersApi({
     return _handleResponse(response);
   }
 
-  Future<dynamic> delete(String endpoint,
+  Future<http.Response> delete(String endpoint,
       {Map<String, String>? headers}) async {
     final response =
-        await http.delete(Uri.parse('$baseUrl$endpoint'), headers: headers);
-    return _handleResponse(response);
+        await http.delete(Uri.parse(endpoint), headers: headers);
+    return response;
   }
 
   dynamic _handleResponse(http.Response response) async {

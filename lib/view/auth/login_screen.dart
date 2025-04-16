@@ -203,27 +203,24 @@ class LoginScreen extends StatelessWidget {
                 buttonText: 'Login',
                 isLoading: authViewModel.isLoading,
                 onPressed: () async {
-                  if (validateFields()) {
+                  if (true) {
                     authViewModel.isLoading.value = true;
                     try {
                       final SignupParams request = SignupParams(
                         name: "",
-                        // email: "naveedkaimkhani87@gmail.com",
-                        
-                        email: emailController.text,
+                        email: "naveedkaimkhami@gmail.com",
+                        // email: emailController.text,
                         phone: "",
                         role: "",
                       );
-
                       int statusCode = await otpViewModel
                           .sendOTP(request.email);
-
                       authViewModel.isLoading.value = false;
                       if (statusCode == 200) {
                         Get.toNamed(RouteName.oTPScreen, arguments: request);
                       } else {
                         Utils.showCustomSnackBar(
-                            "Error", "Failed to send OTP", ContentType.failure);
+                            "Error", "User not found", ContentType.failure);
                       }
                     } catch (error) {
                       Utils.showCustomSnackBar(

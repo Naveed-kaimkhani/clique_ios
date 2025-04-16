@@ -15,6 +15,43 @@ class AuthRepository {
   final ApiClient apiClient = Get.find<ApiClient>();
 
   final UserController userController = Get.put(UserController());
+
+  Future<bool> deleteUser(int userId) async {
+  try {
+    final response = await apiClient.delete(
+      'https://cactisocial.com/api-clique/public/api/v1/user/delete/$userId',
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${userController.token.value}",
+
+      },
+    );
+  log(response.body);
+    if (response.statusCode == 200) {
+      Utils.showCustomSnackBar(
+        "Success",
+        "Account deleted successfully.",
+        ContentType.success,
+      );
+      return true;
+    } else {
+      Utils.showCustomSnackBar(
+        "Failed",
+        "Account deletion failed.",
+        ContentType.failure,
+      );
+      return false;
+    }
+  } catch (e) {
+    Utils.showCustomSnackBar(
+      "Error",
+      "An error occurred: ${e.toString()}",
+      ContentType.failure,
+    );
+    return false;
+  }
+}
+
   Future<void> registerUser(SignupParams request) async {
     try {
       await apiClient.signUpApi(
@@ -84,6 +121,7 @@ class AuthRepository {
           body: jsonEncode({
             "email": email,
           }));
+          log(response.body);
       return response.statusCode;
     } catch (e) {
       //  Utils.showCustomSnackBar("Error","Failed to send OTP: $e ", ContentType.failure);
