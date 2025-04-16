@@ -286,7 +286,7 @@ class SignupScreen extends StatelessWidget {
       });
     } catch (e) {
       // _showValidationError("Apple Sign-In Failed", e.toString());
-      Get.snackbar("errr", e.toString());
+      //Get.snackbar("errr", e.toString());
     }
   }
 
