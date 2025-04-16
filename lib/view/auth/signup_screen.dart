@@ -9,11 +9,11 @@ import 'package:clique/routes/routes_name.dart';
 import 'package:clique/view_model/otp_controller.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:clique/utils/utils.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import '../../view_model/auth_viewmodel.dart';
 
@@ -26,6 +26,8 @@ class SignupScreen extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
 
+
+  final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
   static const List<String> _validEmailDomains = [
     '@gmail.com',
     '@yahoo.com',
@@ -235,63 +237,135 @@ class SignupScreen extends StatelessWidget {
       ),
     );
   }
- Future<void> _handleAppleSignIn() async {
-    if (!_isChecked.value) {
+
+
+
+Future<void> _handleAppleSignIn() async {
+  if (!_isChecked.value) {
+    _showValidationError(
+        "Terms & Conditions", "Please agree to the terms & conditions");
+    return;
+  }
+
+  _authViewModel.isLoading.value = true;
+
+  try {
+    final appleCredential = await SignInWithApple.getAppleIDCredential(
+      scopes: [
+        AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName,
+      ],
+    );
+
+    // Try to get from Apple
+    String? email = appleCredential.email;
+    String? name =
+        "${appleCredential.givenName ?? ''} ${appleCredential.familyName ?? ''}".trim();
+
+    // If email is available, save it
+    if (email != null) {
+      await _secureStorage.write(key: 'email', value: email);
+    } else {
+      // Otherwise, retrieve from local storage
+      email = await _secureStorage.read(key: 'email');
+    }
+
+    if (name.isNotEmpty) {
+      await _secureStorage.write(key: 'fullName', value: name);
+    } else {
+      name = await _secureStorage.read(key: 'fullName') ?? "Apple User";
+    }
+
+    // If still no email, show error and exit
+    if (email == null) {
+      _authViewModel.isLoading.value = false;
       _showValidationError(
-          "Terms & Conditions", "Please agree to the terms & conditions");
+        "Account Exists",
+        "Apple ID already registered. Please sign in or clear app data.",
+      );
       return;
     }
 
-    try {
-      final appleCredential = await SignInWithApple.getAppleIDCredential(
-        scopes: [
-          AppleIDAuthorizationScopes.email,
-          AppleIDAuthorizationScopes.fullName,
-        ],
-      );
+    // Populate fields for consistency
+    _nameController.text = name;
+    _emailController.text = email;
 
-      // Extract full name and email from the Apple Sign-In response
-      final String name =
-          "${appleCredential.givenName ?? ''} ${appleCredential.familyName ?? ''}"
-              .trim();
-      final String? email = appleCredential.email;
+    final SignupParams request = SignupParams(
+      name: name,
+      email: email,
+      phone: "", // Optional
+      role: _selectedRole.value,
+    );
 
-      // Check if email is null (second login or user opted not to share email)
-      if (email == null) {
- _showValidationError(
-  "Account Exists",
-  "Apple ID already registered. Please sign in or clear app data.",
-);
+    _authViewModel.registerUser(request, name).then((_) {
+      _authViewModel.isLoading.value = false;
+    }).catchError((e) {
+      _authViewModel.isLoading.value = false;
+      _showValidationError("Signup Error", e.toString());
+    });
+  } catch (e) {
+    _authViewModel.isLoading.value = false;
+    Get.snackbar("Error", e.toString());
+  }
+}
+
+//  Future<void> _handleAppleSignIn() async {
+//     if (!_isChecked.value) {
+//       _showValidationError(
+//           "Terms & Conditions", "Please agree to the terms & conditions");
+//       return;
+//     }
+
+//     try {
+//       final appleCredential = await SignInWithApple.getAppleIDCredential(
+//         scopes: [
+//           AppleIDAuthorizationScopes.email,
+//           AppleIDAuthorizationScopes.fullName,
+//         ],
+//       );
+
+//       // Extract full name and email from the Apple Sign-In response
+//       final String name =
+//           "${appleCredential.givenName ?? ''} ${appleCredential.familyName ?? ''}"
+//               .trim();
+//       final String? email = appleCredential.email;
+
+//       // Check if email is null (second login or user opted not to share email)
+//       if (email == null) {
+//  _showValidationError(
+//   "Account Exists",
+//   "Apple ID already registered. Please sign in or clear app data.",
+// );
 
 
-        return;
-      }
+//         return;
+//       }
 
-      // Populate fields
-      _nameController.text = name.isNotEmpty ? name : "Apple User";
-      _emailController.text = email;
+//       // Populate fields
+//       _nameController.text = name.isNotEmpty ? name : "Apple User";
+//       _emailController.text = email;
 
-      // Prepare the request data to be sent to your backend
-      final SignupParams request = SignupParams(
-        name: name.isEmpty ? "Apple User" : name,
-        email: email,
-        phone: "", // Handle if needed
-        role: _selectedRole.value,
-      );
+//       // Prepare the request data to be sent to your backend
+//       final SignupParams request = SignupParams(
+//         name: name.isEmpty ? "Apple User" : name,
+//         email: email,
+//         phone: "", // Handle if needed
+//         role: _selectedRole.value,
+//       );
 
-      // Sending the request to your backend (uncomment and update according to your backend logic)
-      _authViewModel.registerUser(request, name).then((_) {
-        _authViewModel.isLoading.value = false;
-        // Handle success response, maybe navigate to a different screen
-      }).catchError((e) {
-        _authViewModel.isLoading.value = false;
-        _showValidationError("Signup Error", e.toString());
-      });
-    } catch (e) {
-      // _showValidationError("Apple Sign-In Failed", e.toString());
-      Get.snackbar("errr", e.toString());
-    }
-  } 
+//       // Sending the request to your backend (uncomment and update according to your backend logic)
+//       _authViewModel.registerUser(request, name).then((_) {
+//         _authViewModel.isLoading.value = false;
+//         // Handle success response, maybe navigate to a different screen
+//       }).catchError((e) {
+//         _authViewModel.isLoading.value = false;
+//         _showValidationError("Signup Error", e.toString());
+//       });
+//     } catch (e) {
+//       // _showValidationError("Apple Sign-In Failed", e.toString());
+//       Get.snackbar("errr", e.toString());
+//     }
+//   } 
     
 
   Future<void> _handleGoogleSignIn() async {
