@@ -16,6 +16,20 @@ class GroupViewModel extends GetxController {
     super.onInit();
     fetchGroups();
   }
+Future<void> leaveGroup(String guid, int uid) async {
+  isLoading.value = true;
+  try {
+    final success = await groupRepository.leaveGroup(guid, uid);
+    if (success) {
+      // Optionally refresh group list or remove group locally
+      fetchGroups(); // or remove from `groups` list directly
+    }
+  } catch (e) {
+    error.value = e.toString();
+  } finally {
+    isLoading.value = false;
+  }
+}
 
   Future<void> fetchGroups() async {
     isLoading.value = true;

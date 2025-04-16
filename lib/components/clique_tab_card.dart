@@ -164,6 +164,7 @@ final GroupController groupController = Get.find<GroupController>();
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => GroupChatScreen(
+                                        uid: uid,
                                         profileImage: profileImage,
                                         guid: guid,
                                         groupName: groupName,
@@ -179,6 +180,7 @@ final GroupController groupController = Get.find<GroupController>();
                                       builder: (context) => GroupChatScreen(
                                         profileImage: profileImage,
                                         guid: guid,
+                                        uid: uid,
                                         groupName:groupName,
                                         memberCount: memberCount,
                                       ),

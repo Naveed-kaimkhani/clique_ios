@@ -14,11 +14,13 @@ class GroupChatScreen extends StatefulWidget {
   final int memberCount;
   final String guid;
   final String? profileImage;
+final int uid;
 
   GroupChatScreen({
     super.key,
     required this.groupName,
     this.profileImage,
+    required this.uid,
     required this.memberCount,
     required this.guid,
   });
@@ -98,6 +100,8 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
             profile: widget.profileImage,
             title: widget.groupName,
             memberCount: widget.memberCount,
+            guid: widget.guid,
+            uid:widget.uid,
           ),
           Expanded(
             child: StreamBuilder<List<MessageModel>>(

@@ -3,6 +3,7 @@
 import 'package:avatar_stack/animated_avatar_stack.dart';
 import 'package:clique/constants/app_colors.dart';
 import 'package:clique/controller/group_controler.dart';
+import 'package:clique/controller/user_controller.dart';
 import 'package:clique/view/chat/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -39,6 +40,7 @@ class GroupCard extends StatefulWidget {
 
 class _GroupCardState extends State<GroupCard> {
   final GroupController groupController = Get.put(GroupController());
+final UserController userController = Get.find<UserController>();
 
   @override
   void initState() {
@@ -147,6 +149,7 @@ class _GroupCardState extends State<GroupCard> {
                                     MaterialPageRoute(
                                       builder: (context) => GroupChatScreen(
                                         profileImage: widget.profileImage,
+                                        uid:userController.uid.value,
                                         guid: widget.guid,
                                         groupName: widget.groupName,
                                         memberCount: widget.memberCount,
@@ -160,6 +163,7 @@ class _GroupCardState extends State<GroupCard> {
                                     MaterialPageRoute(
                                       builder: (context) => GroupChatScreen(
                                         profileImage: widget.profileImage,
+                                        uid:userController.uid.value,
                                         guid: widget.guid,
                                         groupName: widget.groupName,
                                         memberCount: widget.memberCount,

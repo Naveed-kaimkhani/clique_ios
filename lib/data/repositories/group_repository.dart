@@ -75,6 +75,39 @@ static  Future<Map<String, dynamic>> fetchGroupMembers(String authToken, String 
   }
 
 
+Future<bool> leaveGroup(String guid, int uid) async {
+  final String apiUrl =
+      "https://269435d754e8fd97.api-US.cometchat.io/v3/groups/$guid/members/$uid";
+
+  try {
+    final response = await http.delete(
+      Uri.parse(apiUrl),
+      headers: {
+        "apiKey": "f6985bc6a317824cc687e82794955efded6bf2b1",
+        "Content-Type": "application/json",
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      if (data['data']['success'] == true) {
+        Utils.showCustomSnackBar(
+          "Group Left",
+          data['data']['message'],
+          ContentType.success,
+        );
+        return true;
+      } else {
+        throw Exception(data['data']['message']);
+      }
+    } else {
+      throw Exception("Failed to leave group. Status: ${response.statusCode}");
+    }
+  } catch (e) {
+    Utils.showCustomSnackBar("Error", e.toString(), ContentType.failure);
+    return false;
+  }
+}
 
 
       /// **Fetch Groups from API**

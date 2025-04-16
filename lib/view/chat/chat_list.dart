@@ -1,15 +1,18 @@
 
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clique/controller/user_controller.dart';
 import 'package:clique/view/chat/chat_screen.dart';
 import 'package:clique/view_model/group_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ChatList extends StatelessWidget {final GroupViewModel _viewModel = Get.isRegistered<GroupViewModel>()
+class ChatList extends StatelessWidget {
+  final GroupViewModel _viewModel = Get.isRegistered<GroupViewModel>()
     ? Get.find<GroupViewModel>()
     : Get.put(GroupViewModel());
 
+  final UserController _userViewModel = Get.find<UserController>();
 
   @override
   Widget build(BuildContext context) {
@@ -101,6 +104,7 @@ class ChatList extends StatelessWidget {final GroupViewModel _viewModel = Get.is
                   context,
                   MaterialPageRoute(
                     builder: (context) => GroupChatScreen(
+                    uid:_userViewModel.uid.value ,
                       profileImage: group.icon,
                       guid: group.guid,
                       groupName: group.name,
