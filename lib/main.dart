@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
           bodySmall: TextStyle(fontFamily: 'SofiaPro'),
         ),
       ),
-      home:SignupScreen(),
+      home:SplashScreen(),
       // initialRoute: RouteName.homeScreen,
       getPages: AppRoutes.getAppRoutes(),
     );
