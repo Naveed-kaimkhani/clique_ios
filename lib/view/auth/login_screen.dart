@@ -208,8 +208,7 @@ class LoginScreen extends StatelessWidget {
                     try {
                       final SignupParams request = SignupParams(
                         name: "",
-                        email: "naveedkaimkhami@gmail.com",
-                        // email: emailController.text,
+                        email: emailController.text,
                         phone: "",
                         role: "",
                       );
