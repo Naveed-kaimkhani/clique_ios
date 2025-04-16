@@ -17,9 +17,6 @@ class GroupRepository {
   /// **Join Group API Call**
   Future<bool> joinGroup(String guid, int uid ) async {
     try {
-      // if (guid.isEmpty || userController.token.value == null) {
-      //   throw Exception("User token not found. Please log in again.");
-      // }
 
       final Map<String, dynamic> body = {
         "guid": guid,
@@ -123,8 +120,6 @@ Future<bool> leaveGroup(String guid, int uid) async {
       );
 
    
-log("fetching gruopss");
-    log(response.body);
       final decodedResponse = jsonDecode(response.body);
       return (decodedResponse['data'] as List)
           .map((group) => Group.fromJson(group))
@@ -147,8 +142,6 @@ log("fetching gruopss");
       );
 
    
-log("fetching gruopss");
-    log(response.body);
       final decodedResponse = jsonDecode(response.body);
       return (decodedResponse['data'] as List)
           .map((group) => Group.fromJson(group))

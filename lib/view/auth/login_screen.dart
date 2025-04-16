@@ -55,7 +55,7 @@ class LoginScreen extends StatelessWidget {
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         const Text(
-          'Enter your personal details to access an account.',
+          'Enter the same email to verify OTP.',
           textAlign: TextAlign.center,
           style: TextStyle(color: Colors.grey),
         ),
@@ -203,7 +203,7 @@ class LoginScreen extends StatelessWidget {
                 buttonText: 'Login',
                 isLoading: authViewModel.isLoading,
                 onPressed: () async {
-                  if (true) {
+                  if (validateFields()) {
                     authViewModel.isLoading.value = true;
                     try {
                       final SignupParams request = SignupParams(

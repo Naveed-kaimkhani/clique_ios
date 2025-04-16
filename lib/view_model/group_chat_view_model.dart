@@ -197,7 +197,6 @@ Future<void> _fetchMessages(bool loadMore) async {
           "receiverType": "group",
         }),
       );
-      log(response.body);
       if (response.statusCode == 200) {
         _fetchMessages(true); // Refresh messages after sending a new one
       }

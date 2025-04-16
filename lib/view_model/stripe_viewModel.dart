@@ -43,7 +43,6 @@ if (summary?.orderId != null) {
       // Get.snackbar('Success', 'Payment completed');
     } catch (e) {
       if (e is StripeException) {
-        log(e.toString());
         Get.snackbar('Error', e.error.message ?? 'Stripe error');
       } else {
         Get.snackbar('Error', e.toString());

@@ -56,7 +56,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
   void _onScroll() {
     if (_scrollController.position.pixels ==
         _scrollController.position.minScrollExtent) {
-      log("Reached at top");
+     
       setState(() {
         _isLoadingOlderMessages =
             true; // Set flag to true when loading older messages

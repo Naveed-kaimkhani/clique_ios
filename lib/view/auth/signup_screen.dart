@@ -306,7 +306,7 @@ Future<void> _handleAppleSignIn() async {
     });
   } catch (e) {
     _authViewModel.isLoading.value = false;
-    Get.snackbar("Error", e.toString());
+    // Get.snackbar("Error", e.toString());
   }
 }
 

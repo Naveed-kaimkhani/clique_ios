@@ -169,17 +169,16 @@ Widget _buildMediaSection(String label, VoidCallback onTap, Rxn<File> file) {
     ],
   );
 }
-
 Widget _buildVideoPlayer(File videoFile) {
-  final controller = VideoPlayerController.file(videoFile);
-  _videoController = controller;
-
+  _videoController?.dispose(); // Dispose previous controller if exists
+  _videoController = VideoPlayerController.file(videoFile);
+  final controller = _videoController!;
+  
   return FutureBuilder(
     future: controller.initialize(),
     builder: (context, snapshot) {
       if (snapshot.connectionState == ConnectionState.done) {
         controller.play();
-
         final isPortrait = controller.value.aspectRatio < 1;
 
         return ClipRRect(
@@ -199,6 +198,36 @@ Widget _buildVideoPlayer(File videoFile) {
     },
   );
 }
+
+// Widget _buildVideoPlayer(File videoFile) {
+//   final controller = VideoPlayerController.file(videoFile);
+//   _videoController = controller;
+
+//   return FutureBuilder(
+//     future: controller.initialize(),
+//     builder: (context, snapshot) {
+//       if (snapshot.connectionState == ConnectionState.done) {
+//         controller.play();
+
+//         final isPortrait = controller.value.aspectRatio < 1;
+
+//         return ClipRRect(
+//           borderRadius: BorderRadius.circular(10),
+//           child: SizedBox(
+//             width: double.infinity,
+//             height: isPortrait ? 300 : 200,
+//             child: AspectRatio(
+//               aspectRatio: controller.value.aspectRatio,
+//               child: VideoPlayer(controller),
+//             ),
+//           ),
+//         );
+//       } else {
+//         return Center(child: CircularProgressIndicator());
+//       }
+//     },
+//   );
+// }
 
 
   Widget _uploadContainer() {

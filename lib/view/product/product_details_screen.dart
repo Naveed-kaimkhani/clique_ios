@@ -42,9 +42,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 void initState() {
   super.initState();
   if (Get.arguments == null) {
-
-    log("arguemnts are null");
-  Get.back(); // or show an error
+  Get.back(); 
 }
   Future.delayed(Duration.zero, () {
     if (Get.arguments != null) {

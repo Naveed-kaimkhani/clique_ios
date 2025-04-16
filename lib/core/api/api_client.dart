@@ -117,9 +117,6 @@ Future<http.Response> getInfluencersApi({
       await prefs.setString('email', email);
        await prefs.setString('phone', phone);
     
-    final storedToken = prefs.getString('token');
-    log("token fetchedddd$storedToken");
-    // await  UserController().loadUserSession();
       await  userController.loadUserSession();
  Get.toNamed(RouteName.homeScreen,);
       return responseData;
@@ -131,7 +128,7 @@ Future<http.Response> getInfluencersApi({
     final response = await http.post(Uri.parse(endpoint),
         headers: headers, body: jsonEncode(body));
                  if (response.statusCode == 201 || response.statusCode==200) {
-                  Utils.showCustomSnackBar("Success", " You’ve signed up successfully", ContentType.success);
+                  Utils.showSignupSnackBar("Success", "Pleae login with the same email to verify OTP", ContentType.success);
                         Get.offAllNamed(RouteName.loginScreen);               
     }
     log(response.body);

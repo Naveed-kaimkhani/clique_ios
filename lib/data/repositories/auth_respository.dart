@@ -26,7 +26,6 @@ class AuthRepository {
 
       },
     );
-  log(response.body);
     if (response.statusCode == 200) {
       Utils.showCustomSnackBar(
         "Success",
@@ -72,7 +71,7 @@ class AuthRepository {
           url: ApiEndpoints.verifyOtp,
           headers: {"Content-Type": "application/json"},
           body: jsonEncode(otpRequest.toJson()));
-    log(response.body);
+
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
         final String token = responseData["auth_token"];
@@ -108,7 +107,6 @@ class AuthRepository {
             success: false, message: "OTP verification failed.");
       }
     } catch (e) {
-      log(e.toString());
       return OTPResponseModel(success: false, message: "Network error.");
     }
   }
@@ -121,7 +119,6 @@ class AuthRepository {
           body: jsonEncode({
             "email": email,
           }));
-          log(response.body);
       return response.statusCode;
     } catch (e) {
       //  Utils.showCustomSnackBar("Error","Failed to send OTP: $e ", ContentType.failure);

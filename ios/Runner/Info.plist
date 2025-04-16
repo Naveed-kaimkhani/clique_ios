@@ -51,9 +51,9 @@
 	</dict>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>clique uses access to you photos roll to do things like help you to share photos and videos to clique.</string>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<key>NSCameraUsageDescription</key>
 	<string>Clique needs access to your camera to let you take photos and videos for sharing.</string>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

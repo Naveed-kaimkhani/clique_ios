@@ -26,7 +26,6 @@ class UploadVideoService {
   required String authToken,
 }) async {
   try {
-    log(product.productTitle);
     var request = http.MultipartRequest('POST', Uri.parse(baseUrl));
     request.headers['Authorization'] = 'Bearer $authToken';
     request.headers['Content-Type'] = 'multipart/form-data';
@@ -36,7 +35,6 @@ class UploadVideoService {
       contentType: MediaType('image', 'jpeg'), // Adjust type
     ));
 
-    log("video pathh $video.path");
     request.files.add(await http.MultipartFile.fromPath(
       'video_file', video.path,
       contentType: MediaType('video', 'mp4'), // Adjust type
@@ -52,8 +50,6 @@ class UploadVideoService {
     var response = await request.send();
     var responseBody = await response.stream.bytesToString();
 
-log(responseBody);
-// log(response)
     if (response.statusCode == 202) {
       var decoded = jsonDecode(responseBody);
       

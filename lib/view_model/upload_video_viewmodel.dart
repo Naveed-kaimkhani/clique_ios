@@ -53,7 +53,11 @@ Future<void> pickVideo() async {
 
   Future<void> uploadVideo() async {
     if (thumbnailFile.value == null || videoFile.value == null) {
-      Utils.showCustomSnackBar("Error", "Please select a thumbnail and video", ContentType.warning);
+      Utils.showCustomSnackBar("Warning", "Please select a thumbnail and video", ContentType.warning);
+      return;
+    }
+     if (titleController.text.isEmpty) {
+      Utils.showCustomSnackBar("Warning", "Please select a thumbnail and video", ContentType.warning);
       return;
     }
 

@@ -25,7 +25,6 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   @override
 Widget build(BuildContext context) {
-  log(userController.token.value);
   return Scaffold(
     backgroundColor: Colors.transparent,
     body: Obx(() {

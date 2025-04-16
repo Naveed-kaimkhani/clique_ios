@@ -34,7 +34,28 @@ static Future<List<String>> getJoinedGroups() async {
   final prefs = await SharedPreferences.getInstance();
   return prefs.getStringList('joined_groups') ?? [];
 }
-
+static void showSignupSnackBar(String title, String message, ContentType contentType) {
+    final snackBar = SnackBar(
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      dismissDirection: DismissDirection.up,
+    duration: const Duration(seconds: 7), 
+      animation: CurvedAnimation(
+        parent: AnimationController(
+          vsync: Navigator.of(Get.context!),
+          duration: const Duration(milliseconds: 500),
+        )..forward(),
+        curve: Curves.easeInOut,
+      ),
+      content: AwesomeSnackbarContent(
+        title: title,
+        message: message,
+        contentType: contentType,
+      ),
+    );
+    ScaffoldMessenger.of(Get.context!).showSnackBar(snackBar);
+  }
  static void showCustomSnackBar(String title, String message, ContentType contentType) {
     final snackBar = SnackBar(
       elevation: 0,
