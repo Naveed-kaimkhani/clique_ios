@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:clique/components/discover_screen_appBar.dart';
 import 'package:clique/components/index.dart';
 import 'package:clique/components/product_shimmer.dart';
@@ -21,13 +23,10 @@ class DiscoverScreen extends StatefulWidget {
 
 class _DiscoverScreenState extends State<DiscoverScreen> {
   final DiscoverViewModel _viewModel = Get.find<DiscoverViewModel>();
-  
-  // final DiscoverViewModel _viewModel =     Get.put(DiscoverViewModel());
   final PageController controller = PageController(viewportFraction: 0.8, keepPage: true);
   final ScrollController _productScrollController = ScrollController();
   final ScrollController _influencerScrollController = ScrollController();
   final InfluencerViewmodel _influencerViewModel = Get.put((InfluencerViewmodel()));
-// final ProductViewModel _productViewModel = Get.put(ProductViewModel());
   final ProductViewModel _productViewModel = Get.isRegistered<ProductViewModel>()
     ? Get.find<ProductViewModel>()
     : Get.put(ProductViewModel());
@@ -223,8 +222,12 @@ Widget _buildProductList(Size size) {
             if (index == filteredProducts.length) {
               return _buildViewAllButton(size, RouteName.viewAllProductsScreen);
             }
-      
+
             final product = filteredProducts[index];
+            log("product id${product.id} ");
+             log("product id${product.productTitle} ");
+              log("product id${product.cost} ");
+               log("product id${product.imageUrls} ");
             final discount = ((product.msrp - product.cost) / product.msrp * 100).round();
       
             return Padding(

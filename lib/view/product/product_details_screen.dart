@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clique/components/category_product_card.dart';
@@ -51,12 +49,8 @@ void initState() {
   });
 }
 
-  
   @override
   Widget build(BuildContext context) {
-    
-    // controller.setProductData(Get.arguments);
-  
     final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
@@ -75,68 +69,122 @@ void initState() {
         children: [
           _buildHeroImage(size),
           _buildTopBar(size, context),
-          _buildImageSelector(size),
+          // _buildImageSelector(size),
           _buildProductDetails(size),
           // _buildDiscountTag(size),
         ],
       ),
     );
   }
+// Widget _buildHeroImage(Size size) {
+//   final TransformationController _transformationController = TransformationController();
+//   final _dragStartOffset = 0.0.obs;
 
+//   return Padding(
+//     padding: const EdgeInsets.only(top:25.0),
+//     child: Obx(() => Hero(
+//           tag: controller.productData['uid'],
+//           child: GestureDetector(
+//             onVerticalDragStart: (details) {
+//               _dragStartOffset.value = details.localPosition.dy;
+//             },
+//             onVerticalDragUpdate: (details) {
+//               if (details.localPosition.dy - _dragStartOffset.value > 100) {
+//                 Get.back();
+//               }
+//             },
+//             child: InteractiveViewer(
+//               transformationController: _transformationController,
+//               minScale: 1.0,
+//               maxScale: 4.0,
+//               child: SizedBox(
+//                 width: size.width,
+//                 height: size.height * 0.6,
+//                 child: AnimatedSwitcher(
+//                   duration: Duration(milliseconds: 500),
+//                   transitionBuilder: (Widget child, Animation<double> animation) {
+//                     return FadeTransition(
+//                       opacity: animation,
+//                       child: child,
+//                     );
+//                   },
+//                   child: CachedNetworkImage(
+//     key: ValueKey<int>(controller.selectedImageIndex.value),
+//     imageUrl: controller.productImages[controller.selectedImageIndex.value],
+//     fit: BoxFit.cover,
+//     width: size.width,
+//     placeholder: (context, url) => Shimmer.fromColors(
+//       baseColor: Colors.grey[300]!,
+//       highlightColor: Colors.grey[100]!,
+//       child: Container(
+//         width: size.width,
+//         height: size.height * 0.4, // Adjust the height as needed
+//         color: Colors.white,
+//       ),
+//     ),
+//     errorWidget: (context, url, error) => Icon(Icons.error),
+//     ),
+    
+//                 ),
+//               ),
+//             ),
+//           ),
+//         )),
+//   );
+// }
 Widget _buildHeroImage(Size size) {
   final TransformationController _transformationController = TransformationController();
   final _dragStartOffset = 0.0.obs;
 
   return Padding(
     padding: const EdgeInsets.only(top:25.0),
-    child: Obx(() => Hero(
-          tag: controller.productData['uid'],
-          child: GestureDetector(
-            onVerticalDragStart: (details) {
-              _dragStartOffset.value = details.localPosition.dy;
+    child: Obx(() => GestureDetector(
+      onVerticalDragStart: (details) {
+        _dragStartOffset.value = details.localPosition.dy;
+      },
+      onVerticalDragUpdate: (details) {
+        if (details.localPosition.dy - _dragStartOffset.value > 100) {
+          Get.back();
+        }
+      },
+      child: InteractiveViewer(
+        transformationController: _transformationController,
+        minScale: 1.0,
+        maxScale: 4.0,
+        child: SizedBox(
+          width: size.width,
+          height: size.height * 0.6,
+          child: AnimatedSwitcher(
+            duration: Duration(milliseconds: 500),
+            transitionBuilder: (Widget child, Animation<double> animation) {
+              return FadeTransition(
+                opacity: animation,
+                child: child,
+              );
             },
-            onVerticalDragUpdate: (details) {
-              if (details.localPosition.dy - _dragStartOffset.value > 100) {
-                Get.back();
-              }
-            },
-            child: InteractiveViewer(
-              transformationController: _transformationController,
-              minScale: 1.0,
-              maxScale: 4.0,
-              child: SizedBox(
-                width: size.width,
-                height: size.height * 0.6,
-                child: AnimatedSwitcher(
-                  duration: Duration(milliseconds: 500),
-                  transitionBuilder: (Widget child, Animation<double> animation) {
-                    return FadeTransition(
-                      opacity: animation,
-                      child: child,
-                    );
-                  },
-                  child: CachedNetworkImage(
-    key: ValueKey<int>(controller.selectedImageIndex.value),
-    imageUrl: controller.productImages[controller.selectedImageIndex.value],
-    fit: BoxFit.cover,
-    width: size.width,
-    placeholder: (context, url) => Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
-      child: Container(
+            child: CachedNetworkImage(
+        key: ValueKey<int>(controller.selectedImageIndex.value),
+        // imageUrl: controller.productImages[controller.selectedImageIndex.value],
+        
+        imageUrl: controller.productImages[0],
+        fit: BoxFit.cover,
         width: size.width,
-        height: size.height * 0.4, // Adjust the height as needed
-        color: Colors.white,
-      ),
-    ),
-    errorWidget: (context, url, error) => Icon(Icons.error),
-    ),
-    
-                ),
-              ),
-            ),
+        placeholder: (context, url) => Shimmer.fromColors(
+          baseColor: Colors.grey[300]!,
+          highlightColor: Colors.grey[100]!,
+          child: Container(
+            width: size.width,
+            height: size.height * 0.4, // Adjust the height as needed
+            color: Colors.white,
           ),
-        )),
+        ),
+        errorWidget: (context, url, error) => Icon(Icons.error),
+        ),
+        
+          ),
+        ),
+      ),
+    )),
   );
 }
 
@@ -358,7 +406,7 @@ Widget _buildImageThumbnail(Size size, int index) {
                               // Center(child: Text("Scroll to See More Products")),
                             SizedBox(height: size.height * 0.02),
                             _buildAddToCartButton(size,context),
-                            _buildProductSection(size, size.width * 0.06),
+                            // _buildProductSection(size, size.width * 0.06),
                                
                           ],
                         ),

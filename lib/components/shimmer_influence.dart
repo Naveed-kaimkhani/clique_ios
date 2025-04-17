@@ -8,7 +8,7 @@ class ShimmerInfluencerCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final double cardWidth = size.width * 0.35;
-    final double cardHeight = size.height * 0.26;
+    final double cardHeight = size.height * 0.22;
     final double profileImageSize = size.width * 0.12;
 
     return Container(
