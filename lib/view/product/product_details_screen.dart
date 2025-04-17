@@ -4,7 +4,6 @@ import 'package:clique/components/category_product_card.dart';
 import 'package:clique/components/gradient_text.dart';
 import 'package:clique/components/product_shimmer.dart';
 import 'package:clique/constants/index.dart';
-import 'package:clique/controller/size_selector.dart';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/utils/utils.dart';
 import 'package:clique/view/profile/update_profile_screen.dart';
@@ -13,7 +12,6 @@ import 'package:clique/view_model/product_details_controller.dart';
 import 'package:clique/view_model/product_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:like_button/like_button.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -35,22 +33,18 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   final userController = Get.find<UserController>();
 
   final ProductViewModel _productViewModel = Get.find<ProductViewModel>();
-// Wrap in Future.delayed to avoid calling Get.arguments too early
-@override
-void initState() {
-  super.initState();
-  if (Get.arguments == null) {
-  Get.back(); 
-}
-  Future.delayed(Duration.zero, () {
-    if (Get.arguments != null) {
-      controller.setProductData(Get.arguments);
-    }
-  });
-}
 
+ @override
+ void initState() {
+   super.initState();
+   
+ }
+  
   @override
   Widget build(BuildContext context) {
+    
+    controller.setProductData(Get.arguments);
+  
     final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
@@ -69,122 +63,68 @@ void initState() {
         children: [
           _buildHeroImage(size),
           _buildTopBar(size, context),
-          // _buildImageSelector(size),
+          _buildImageSelector(size),
           _buildProductDetails(size),
           // _buildDiscountTag(size),
         ],
       ),
     );
   }
-// Widget _buildHeroImage(Size size) {
-//   final TransformationController _transformationController = TransformationController();
-//   final _dragStartOffset = 0.0.obs;
 
-//   return Padding(
-//     padding: const EdgeInsets.only(top:25.0),
-//     child: Obx(() => Hero(
-//           tag: controller.productData['uid'],
-//           child: GestureDetector(
-//             onVerticalDragStart: (details) {
-//               _dragStartOffset.value = details.localPosition.dy;
-//             },
-//             onVerticalDragUpdate: (details) {
-//               if (details.localPosition.dy - _dragStartOffset.value > 100) {
-//                 Get.back();
-//               }
-//             },
-//             child: InteractiveViewer(
-//               transformationController: _transformationController,
-//               minScale: 1.0,
-//               maxScale: 4.0,
-//               child: SizedBox(
-//                 width: size.width,
-//                 height: size.height * 0.6,
-//                 child: AnimatedSwitcher(
-//                   duration: Duration(milliseconds: 500),
-//                   transitionBuilder: (Widget child, Animation<double> animation) {
-//                     return FadeTransition(
-//                       opacity: animation,
-//                       child: child,
-//                     );
-//                   },
-//                   child: CachedNetworkImage(
-//     key: ValueKey<int>(controller.selectedImageIndex.value),
-//     imageUrl: controller.productImages[controller.selectedImageIndex.value],
-//     fit: BoxFit.cover,
-//     width: size.width,
-//     placeholder: (context, url) => Shimmer.fromColors(
-//       baseColor: Colors.grey[300]!,
-//       highlightColor: Colors.grey[100]!,
-//       child: Container(
-//         width: size.width,
-//         height: size.height * 0.4, // Adjust the height as needed
-//         color: Colors.white,
-//       ),
-//     ),
-//     errorWidget: (context, url, error) => Icon(Icons.error),
-//     ),
-    
-//                 ),
-//               ),
-//             ),
-//           ),
-//         )),
-//   );
-// }
 Widget _buildHeroImage(Size size) {
   final TransformationController _transformationController = TransformationController();
   final _dragStartOffset = 0.0.obs;
 
   return Padding(
     padding: const EdgeInsets.only(top:25.0),
-    child: Obx(() => GestureDetector(
-      onVerticalDragStart: (details) {
-        _dragStartOffset.value = details.localPosition.dy;
-      },
-      onVerticalDragUpdate: (details) {
-        if (details.localPosition.dy - _dragStartOffset.value > 100) {
-          Get.back();
-        }
-      },
-      child: InteractiveViewer(
-        transformationController: _transformationController,
-        minScale: 1.0,
-        maxScale: 4.0,
-        child: SizedBox(
-          width: size.width,
-          height: size.height * 0.6,
-          child: AnimatedSwitcher(
-            duration: Duration(milliseconds: 500),
-            transitionBuilder: (Widget child, Animation<double> animation) {
-              return FadeTransition(
-                opacity: animation,
-                child: child,
-              );
+    child: Obx(() => Hero(
+          tag: controller.productData['uid'],
+          child: GestureDetector(
+            onVerticalDragStart: (details) {
+              _dragStartOffset.value = details.localPosition.dy;
             },
-            child: CachedNetworkImage(
-        key: ValueKey<int>(controller.selectedImageIndex.value),
-        // imageUrl: controller.productImages[controller.selectedImageIndex.value],
-        
-        imageUrl: controller.productImages[0],
-        fit: BoxFit.cover,
+            onVerticalDragUpdate: (details) {
+              if (details.localPosition.dy - _dragStartOffset.value > 100) {
+                Get.back();
+              }
+            },
+            child: InteractiveViewer(
+              transformationController: _transformationController,
+              minScale: 1.0,
+              maxScale: 4.0,
+              child: SizedBox(
+                width: size.width,
+                height: size.height * 0.6,
+                child: AnimatedSwitcher(
+                  duration: Duration(milliseconds: 500),
+                  transitionBuilder: (Widget child, Animation<double> animation) {
+                    return FadeTransition(
+                      opacity: animation,
+                      child: child,
+                    );
+                  },
+                  child: CachedNetworkImage(
+    key: ValueKey<int>(controller.selectedImageIndex.value),
+    imageUrl: controller.productImages[controller.selectedImageIndex.value],
+    fit: BoxFit.cover,
+    width: size.width,
+    placeholder: (context, url) => Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
         width: size.width,
-        placeholder: (context, url) => Shimmer.fromColors(
-          baseColor: Colors.grey[300]!,
-          highlightColor: Colors.grey[100]!,
-          child: Container(
-            width: size.width,
-            height: size.height * 0.4, // Adjust the height as needed
-            color: Colors.white,
-          ),
-        ),
-        errorWidget: (context, url, error) => Icon(Icons.error),
-        ),
-        
-          ),
-        ),
+        height: size.height * 0.4, // Adjust the height as needed
+        color: Colors.white,
       ),
-    )),
+    ),
+    errorWidget: (context, url, error) => Icon(Icons.error),
+    ),
+    
+                ),
+              ),
+            ),
+          ),
+        )),
   );
 }
 
@@ -197,41 +137,7 @@ Widget _buildHeroImage(Size size) {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _iconButton(Icons.arrow_back, () => Get.back()),
-          Row(
-            children: [
-           
-              Container(
-  padding: EdgeInsets.all(8),
-  decoration: BoxDecoration(
-    color: Colors.white,
-    shape: BoxShape.circle,
-  ),
-  child: Center(
-    child: Obx(() {
-      final isLiked = favoriteController.isFavorite(controller.productData['uid']);
-      return LikeButton(
-        size: size.width * 0.06,
-        isLiked: isLiked,
-        onTap: (bool liked) async {
-          favoriteController.toggleFavorite(controller.productData['uid']);
-          return !liked;
-        },
-        likeBuilder: (bool liked) {
-          return Icon(
-            liked ? Icons.favorite : Icons.favorite_border,
-            color: liked ? AppColors.appColor : Colors.black,
-            size: size.width * 0.07,
-          );
-        },
-      );
-    }),
-  ),
-),
 
-              SizedBox(width: size.width * 0.02),
-
-            ],
-          ),
         ],
       ),
     );
@@ -400,13 +306,13 @@ Widget _buildImageThumbnail(Size size, int index) {
                             SizedBox(height: size.height * 0.01),
                             _buildDescriptionSection(size),
                             SizedBox(height: size.height * 0.015),
-                            SizeSelector(
-                              unit: controller.productData['unit'],
-                              weight: controller.productData['size'], ),
+                            // SizeSelector(
+                            //   unit: controller.productData['unit'],
+                            //   weight: controller.productData['size'], ),
                               // Center(child: Text("Scroll to See More Products")),
                             SizedBox(height: size.height * 0.02),
                             _buildAddToCartButton(size,context),
-                            // _buildProductSection(size, size.width * 0.06),
+                            _buildProductSection(size, size.width * 0.06),
                                
                           ],
                         ),

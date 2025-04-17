@@ -59,12 +59,15 @@ class UserProfileCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               profileImage == null
-                  ? Image.asset(
-                      AppSvgIcons.profile,
-                      width: screenWidth * 0.3,
-                      height: screenWidth * 0.3,
-                      fit: BoxFit.cover,
-                    )
+                  ? CircleAvatar(
+  radius: screenWidth * 0.14,
+  backgroundColor: Colors.grey[300], // light background for the icon
+  child: Icon(
+    Icons.person,
+    size: screenWidth * 0.15,
+    color: Colors.grey[700], // darker shade for contrast
+  ),
+)
                   : ClipOval(
                       child: CachedNetworkImage(
                         imageUrl: profileImage ?? '',
@@ -77,9 +80,9 @@ class UserProfileCard extends StatelessWidget {
                     ),
               SizedBox(height: screenHeight * 0.015),
             Text(
-  username.length > 10 ? '${username.substring(0, 10)}...' : username,
+  username.length > 10 ? '${username.substring(0, 20)}...' : username,
   style: TextStyle(
-    fontSize: screenHeight * 0.035,
+    fontSize: screenHeight * 0.028,
     fontWeight: FontWeight.bold,
   ),
 ),

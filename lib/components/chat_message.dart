@@ -1,6 +1,8 @@
 
-// widgets/chat_message_widget.dart
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../models/message_model.dart';
 import '../constants/app_colors.dart'; // Assuming you have this file for colors
 
@@ -8,16 +10,22 @@ class ChatMessageWidget extends StatelessWidget {
   final MessageModel message;
 
   const ChatMessageWidget({super.key, required this.message});
+String convertTimestampTo24HourUTC(int timestamp) {
+  final dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000, isUtc: true);
+  final formatter = DateFormat('HH:mm');
+  return formatter.format(dateTime.toUtc());
+}
 
-  String _formatTimestamp(int timestamp) {
-    DateTime date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
-    return "${date.hour}:${date.minute.toString().padLeft(2, '0')} ${date.hour >= 12 ? 'PM' : 'AM'}";
-  }
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
+    final utc = DateTime.fromMillisecondsSinceEpoch(message.time * 1000, isUtc: true).toUtc();
+final local = DateTime.fromMillisecondsSinceEpoch(message.time * 1000, isUtc: true).toLocal();
 
+log('UTC Time: ${utc.toString()}');
+log('Local Time: ${local.toString()}');
+    final screenWidth = MediaQuery.of(context).size.width;
+// log(message.time.toString());
     return Align(
       alignment: message.isMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Column(
@@ -62,29 +70,17 @@ class ChatMessageWidget extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    
+                    Text(message.time.toString()),
                     Text(
-                      _formatTimestamp(message.time),
+                      convertTimestampTo24HourUTC(message.time)
+                      ,
                       style: TextStyle(
                           fontSize: screenWidth * 0.03,
                           color: message.isMe ? Colors.white : Colors.black),
                     ),
                   ],
                 ),
-                // Uncomment this if you want to show seen avatars
-                // if (message.isMe && message.seenBy.isNotEmpty)
-                //   Padding(
-                //     padding: const EdgeInsets.only(top: 5, right: 5),
-                //     child: SizedBox(
-                //       width: 80,
-                //       child: AnimatedAvatarStack(
-                //         height: 24,
-                //         avatars: [
-                //           for (var n = 0; n < message.seenBy.length; n++)
-                //             NetworkImage(message.seenBy[n]),
-                //         ],
-                //       ),
-                //     ),
-                //   ),
               ],
             ),
           ),

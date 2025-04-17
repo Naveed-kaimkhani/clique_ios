@@ -7,12 +7,10 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import '../utils/utils.dart';
-
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+
 class UploadVideoViewModel extends GetxController {
   final UploadVideoService _uploadService = UploadVideoService();
-
-  // final userController = Get.find<UserController>();
   final userController = Get.find<UserController>();
   final titleController = TextEditingController();
   final hashtagsController = TextEditingController();
@@ -25,7 +23,6 @@ class UploadVideoViewModel extends GetxController {
 
  var thumbnailFile = Rxn<File>(); // Store as File
   var videoFile = Rxn<File>();
-  // var videoFile = Rxn<File>();  // Store the selected file
   var videoBytes = Rxn<Uint8List>(); // Store Uint8List for UI preview
 
   final RxBool isLoading = false.obs;

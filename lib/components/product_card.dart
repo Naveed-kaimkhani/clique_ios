@@ -76,19 +76,16 @@ class ProductCard extends StatelessWidget {
   Get.toNamed(
     RouteName.productDetailsScreen,
     arguments: {
-      'uid': 201581.toString(),
-      'backgroundImage':[
-        'https://images.topdawg.com/3-850011460009.2.td_size_1.png',
-        'https://images.topdawg.com/3-850011460009.2.td_size_1.png'
-      ],
-      'productName': "productName",
-      'productDescription': "productDescription",
-      'price': 434,
-      'oldPrice': 434,
-      'discount': 33,
-      'unit': "unit",
-      'categories':"Dog Treats",
-      'size':"323",
+      'uid':uid,
+      'backgroundImage':backgroundImage,
+      'productName': productName,
+      'productDescription':productDescription,
+      'price':price,
+      'oldPrice': oldPrice,
+      'discount': discount,
+      'unit': weight,
+      'categories':categories,
+      'size':size,
     },
   );
 
@@ -169,21 +166,21 @@ class ProductCard extends StatelessWidget {
              
                       onTap: (){
                      
-                // Get.toNamed(
-                //   RouteName.productDetailsScreen,
-                //   arguments: {
-                //     'uid': uid,
-                //     'backgroundImage': backgroundImage,
-                //     'productName': productName,
-                //     'productDescription': productDescription,
-                //     'price': price,
-                //     'oldPrice': oldPrice,
-                //     'discount': discount,
-                //     'unit': unit,
-                //     'categories':categories,
-                //     'size':weight,
-                //   },
-                // );
+                Get.toNamed(
+                  RouteName.productDetailsScreen,
+                  arguments: {
+                    'uid': uid,
+                    'backgroundImage': backgroundImage,
+                    'productName': productName,
+                    'productDescription': productDescription,
+                    'price': price,
+                    'oldPrice': oldPrice,
+                    'discount': discount,
+                    'unit': unit,
+                    'categories':categories,
+                    'size':weight,
+                  },
+                );
               
                     },
               child: Container(

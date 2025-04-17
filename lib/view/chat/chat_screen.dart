@@ -1,12 +1,14 @@
+
 import 'dart:developer';
+
 import 'package:clique/components/chat_input.dart';
 import 'package:clique/components/chat_message.dart';
 import 'package:clique/components/group_appbar.dart';
+import 'package:clique/components/load_message_shimmer.dart';
 import 'package:clique/models/message_model.dart';
 import 'package:clique/view_model/group_chat_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 import '../../controller/user_controller.dart';
 
 class GroupChatScreen extends StatefulWidget {
@@ -91,6 +93,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    log( widget.guid);
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
@@ -146,25 +149,4 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
   }
 }
 
-class LoadMessageAnimation extends StatelessWidget {
-  const LoadMessageAnimation({
-    super.key,
-  });
 
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Lottie.asset('assets/lottie/chat_loading.json', width: 100),
-          SizedBox(height: 16),
-          Text(
-            "Fetching hot gossip...",
-            style: TextStyle(fontSize: 16, color: Colors.grey),
-          )
-        ],
-      ),
-    );
-  }
-}
