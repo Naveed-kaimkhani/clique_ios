@@ -34,7 +34,7 @@ class GroupChatViewModel extends GetxController {
   void onInit() {
     super.onInit();
     _fetchInitialMessages(); // Fetch initial 20 messages
-    _timer = Timer.periodic(Duration(milliseconds: 800), (timer) => _fetchMessages(false));
+    // _timer = Timer.periodic(Duration(milliseconds: 800), (timer) => _fetchInitialMessages());
   }
 
   @override
@@ -50,6 +50,7 @@ class GroupChatViewModel extends GetxController {
     _isLoading = true;
 
     try {
+
       final response = await ApiClient.getMessages(
         url: "https://cactisocial.com/api-clique/public/api/v1/cometchat/groups/$groupId/messages?limit=200",
         headers: {"Authorization": "Bearer $token"},
@@ -66,7 +67,8 @@ class GroupChatViewModel extends GetxController {
                 .toList()
                 .reversed
                 .toList(); // Reverse to show latest messages first
-
+           log("msg lenght");
+              log(_messages.length.toString());
             _messageController.add(_messages);
           }
         }
@@ -79,100 +81,101 @@ class GroupChatViewModel extends GetxController {
   }
 
 
-Future<void> _loadMoreMessages() async {
+// Future<void> _loadMoreMessages() async {
 
-  try {
-     int lastMessageTimestamp = _messages.first.time; // Timestamp of the oldest message
-      // apiUrl += "?limit=200&timeStamp=$lastMessageTimestamp-${8000}";
-    String apiUrl = "https://cactisocial.com/api-clique/public/api/v1/cometchat/groups/$groupId/messages?limit=200&timeStamp=$lastMessageTimestamp-${8000}";
+//   try {
+//      int lastMessageTimestamp = _messages.first.time; // Timestamp of the oldest message
+//       // apiUrl += "?limit=200&timeStamp=$lastMessageTimestamp-${8000}";
+//     String apiUrl = "https://cactisocial.com/api-clique/public/api/v1/cometchat/groups/$groupId/messages?limit=200&timeStamp=$lastMessageTimestamp-${8000}";
 
 
-    final response = await ApiClient.getMessages(
-      url: apiUrl,
-      headers: {"Authorization": "Bearer $token"},
-    );
-    if (response.statusCode == 200) {
-      final dynamic responseData = jsonDecode(response.body);
+//     final response = await ApiClient.getMessages(
+//       url: apiUrl,
+//       headers: {"Authorization": "Bearer $token"},
+//     );
+//     if (response.statusCode == 200) {
+//       log(response.body);
+//       final dynamic responseData = jsonDecode(response.body);
 
-      if (responseData is Map<String, dynamic> && responseData.containsKey("messages")) {
-        final messagesData = responseData["messages"];
+//       if (responseData is Map<String, dynamic> && responseData.containsKey("messages")) {
+//         final messagesData = responseData["messages"];
 
-        if (messagesData is List && messagesData.isNotEmpty) {
-          final List<MessageModel> newMessages = messagesData
-              .map((msg) => MessageModel.fromJson({...msg, 'userId': userId}))
-              .toList();
+//         if (messagesData is List && messagesData.isNotEmpty) {
+//           final List<MessageModel> newMessages = messagesData
+//               .map((msg) => MessageModel.fromJson({...msg, 'userId': userId}))
+//               .toList();
 
               
-_messageController.add(newMessages);
-            _messages.insertAll(0, newMessages); // Add new messages at the beginning
-            // messagesStream.add(List.from(_messages)); // Update stream
-        } else {
-          hasMoreMessages = false; // No more messages to load
-        }
-      }
-    }
-  } catch (e) {
-    debugPrint("Error fetching messages: $e");
-  } finally {
-    _isLoading = false;
-  }
-}
+// _messageController.add(newMessages);
+//             _messages.insertAll(0, newMessages); // Add new messages at the beginning
+//             // messagesStream.add(List.from(_messages)); // Update stream
+//         } else {
+//           hasMoreMessages = false; // No more messages to load
+//         }
+//       }
+//     }
+//   } catch (e) {
+//     debugPrint("Error fetching messages: $e");
+//   } finally {
+//     _isLoading = false;
+//   }
+// }
 
-Future<void> _fetchMessages(bool loadMore) async {
-  if (_isLoading || (loadMore && !hasMoreMessages)) return;
-  _isLoading = true;
-    if (loadMore) {
-    }
-  try {
-    String apiUrl = "https://cactisocial.com/api-clique/public/api/v1/cometchat/groups/$groupId/messages";
+// Future<void> _fetchMessages(bool loadMore) async {
+//   if (_isLoading || (loadMore && !hasMoreMessages)) return;
+//   _isLoading = true;
+//     if (loadMore) {
+//     }
+//   try {
+//     String apiUrl = "https://cactisocial.com/api-clique/public/api/v1/cometchat/groups/$groupId/messages";
 
-    if (loadMore && _messages.isNotEmpty) {
-      // Fetch older messages with timestamp parameter and limit of 200
-      int lastMessageTimestamp = _messages.first.time; // Timestamp of the oldest message
-      apiUrl += "?limit=200&timeStamp=$lastMessageTimestamp-${8000}"; // Use limit=200 for older messages
+//     if (loadMore && _messages.isNotEmpty) {
+//       // Fetch older messages with timestamp parameter and limit of 200
+//       int lastMessageTimestamp = _messages.first.time; // Timestamp of the oldest message
+//       apiUrl += "?limit=200&timeStamp=$lastMessageTimestamp-${8000}"; // Use limit=200 for older messages
 
-    } else {
-      // Fetch initial messages with limit of 20
-      apiUrl += "?limit=10";
-    }
+//     } else {
+//       // Fetch initial messages with limit of 20
+//       apiUrl += "?limit=10";
+//     }
 
-    final response = await ApiClient.getMessages(
-      url: apiUrl,
-      headers: {"Authorization": "Bearer $token"},
-    );
+//     final response = await ApiClient.getMessages(
+//       url: apiUrl,
+//       headers: {"Authorization": "Bearer $token"},
+//     );
 
-    if (response.statusCode == 200) {
-      final dynamic responseData = jsonDecode(response.body);
+//     if (response.statusCode == 200) {
+//       final dynamic responseData = jsonDecode(response.body);
 
-      if (responseData is Map<String, dynamic> && responseData.containsKey("messages")) {
-        final messagesData = responseData["messages"];
+//       if (responseData is Map<String, dynamic> && responseData.containsKey("messages")) {
+//         final messagesData = responseData["messages"];
 
-        if (messagesData is List && messagesData.isNotEmpty) {
-          final List<MessageModel> newMessages = messagesData
-              .map((msg) => MessageModel.fromJson({...msg, 'userId': userId}))
-              .toList();
+//         if (messagesData is List && messagesData.isNotEmpty) {
+//           final List<MessageModel> newMessages = messagesData
+//               .map((msg) => MessageModel.fromJson({...msg, 'userId': userId}))
+//               .toList();
 
-          if (loadMore) {
-            _messages.insertAll(0, newMessages); // Add older messages at the start
-          } else {
-            _messages = newMessages.reversed.toList(); // Show latest messages first
-          }
+//           if (loadMore) {
+//             _messages.insertAll(0, newMessages); // Add older messages at the start
+//           } else {
+//             _messages = newMessages.reversed.toList(); // Show latest messages first
+//           }
 
-          _messageController.add(_messages);
-        } else {
-          hasMoreMessages = false; // No more messages to load
-        }
-      }
-    }
-  } catch (e) {
-    debugPrint("Error fetching messages: $e");
-  } finally {
-    _isLoading = false;
-  }
-}
+//           _messageController.add(_messages);
+//         } else {
+//           hasMoreMessages = false; // No more messages to load
+//         }
+//       }
+//     }
+//   } catch (e) {
+//     debugPrint("Error fetching messages: $e");
+//   } finally {
+//     _isLoading = false;
+//   }
+// }
   Future<void> loadMoreMessages() async {
    
-      await _loadMoreMessages(); 
+      // await _loadMoreMessages(); 
   }
 
   Future<void> sendMessage(String message) async {
@@ -198,7 +201,7 @@ Future<void> _fetchMessages(bool loadMore) async {
         }),
       );
       if (response.statusCode == 200) {
-        _fetchMessages(true); // Refresh messages after sending a new one
+        _fetchInitialMessages(); // Refresh messages after sending a new one
       }
     } catch (e) {
       Get.snackbar("Error", "Failed to send message: $e");

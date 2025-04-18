@@ -1,4 +1,6 @@
 
+import 'dart:async';
+
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/data/models/product_model.dart';
 import 'package:clique/routes/routes_name.dart';
@@ -19,6 +21,7 @@ class _ProductSearchScreenState extends State<ProductSearchScreen> {
   RxBool isLoading = false.obs;
   RxList<dynamic> products = <dynamic>[].obs;
   RxString errorMessage = ''.obs;
+Timer? _debounce;
 
   final userController = Get.find<UserController>();
 
@@ -31,7 +34,7 @@ Future<void> fetchProducts(String searchQuery) async {
   try {
     final response = await http.get(
       Uri.parse(
-          'https://cactisocial.com/api-clique/public/api/v1/topdawg/products?page=1&per_page50&search=$searchQuery'),
+          'https://cactisocial.com/api-clique/public/api/v1/topdawg/products?page=1&search=$searchQuery'),
       headers: {
         'Authorization': 'Bearer ${userController.token.value}',  // Pass the token in the Authorization header
       },
@@ -53,6 +56,12 @@ Future<void> fetchProducts(String searchQuery) async {
   } finally {
     isLoading(false);
   }
+}
+@override
+void dispose() {
+  _debounce?.cancel();
+  _searchController.dispose();
+  super.dispose();
 }
   @override
   Widget build(BuildContext context) {
@@ -82,11 +91,17 @@ Future<void> fetchProducts(String searchQuery) async {
       borderSide: BorderSide(color: Colors.grey, width: 1), // Set focus border color to grey
     ),
   ),
-  onChanged: (value) {
+onChanged: (value) {
+  if (_debounce?.isActive ?? false) _debounce!.cancel();
+  _debounce = Timer(const Duration(milliseconds: 600), () {
     if (value.isNotEmpty) {
       fetchProducts(value);
+    } else {
+      products.clear(); // clear the list when search is empty
     }
-  },
+  });
+},
+
 ),
          
             SizedBox(height: 16),
@@ -200,14 +215,15 @@ Future<void> fetchProducts(String searchQuery) async {
 ),
 
                               Positioned(
-                                    bottom: 5,
+                                    bottom: 8,
                 left: 0,
                 right: 0,
                                 child: Padding(
                                   padding: const EdgeInsets.all(4.0),
                                   child: Text(
-                                     product.productTitle.substring(0, 30) + '...'  // Show first 10 characters and ellipsis
-                                        ,  // If title is less than or equal to 10 characters, show the whole title
+                                    //  '${product.productTitle.substring(0, 15)}...'  // Show first 10 characters and ellipsis
+                                      // If title is less than or equal to 10 characters, show the whole title
+                                     product.productTitle,
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: Colors.white,

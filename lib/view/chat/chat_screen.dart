@@ -1,6 +1,7 @@
 
-import 'dart:developer';
 
+import 'dart:async';
+import 'dart:developer';
 import 'package:clique/components/chat_input.dart';
 import 'package:clique/components/chat_message.dart';
 import 'package:clique/components/group_appbar.dart';
@@ -16,7 +17,7 @@ class GroupChatScreen extends StatefulWidget {
   final int memberCount;
   final String guid;
   final String? profileImage;
-final int uid;
+  final int uid;
 
   GroupChatScreen({
     super.key,
@@ -34,7 +35,9 @@ final int uid;
 class _GroupChatScreenState extends State<GroupChatScreen> {
   late GroupChatViewModel viewModel;
   final ScrollController _scrollController = ScrollController();
-  bool _isLoadingOlderMessages = false; // Flag to track loading older messages
+  bool _isLoadingOlderMessages = false;
+  StreamSubscription<List<MessageModel>>? _messagesSubscription;
+  bool _shouldScrollToBottom = true;
 
   @override
   void initState() {
@@ -49,51 +52,72 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
 
     _scrollController.addListener(_onScroll);
 
-    // Scroll to bottom after the first frame is rendered
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _scrollToBottom();
+    // Subscribe to messages stream
+    _messagesSubscription = viewModel.messagesStream.listen((messages) {
+      if (_shouldScrollToBottom && messages.isNotEmpty) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (_scrollController.hasClients) {
+            _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+          }
+        });
+      }
     });
   }
 
-  void _onScroll() {
-    if (_scrollController.position.pixels ==
-        _scrollController.position.minScrollExtent) {
-     
-      setState(() {
-        _isLoadingOlderMessages =
-            true; // Set flag to true when loading older messages
-      });
-      viewModel.loadMoreMessages().then((_) {
-        setState(() {
-          _isLoadingOlderMessages =
-              false; // Reset flag after loading is complete
-        });
-      });
-    }
-  }
+void _onScroll() async {
+  if (_scrollController.position.pixels == _scrollController.position.minScrollExtent &&
+      !_isLoadingOlderMessages) {
+    setState(() {
+      _isLoadingOlderMessages = true;
+      _shouldScrollToBottom = false;
+    });
 
-  void _scrollToBottom() {
+    final double offsetBefore = _scrollController.position.maxScrollExtent;
+
+    // await viewModel.loadMoreMessages();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scrollController.hasClients) {
-        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+        final double offsetAfter = _scrollController.position.maxScrollExtent;
+        final double scrollOffsetDelta = offsetAfter - offsetBefore;
+
+        _scrollController.jumpTo(_scrollController.position.pixels + scrollOffsetDelta);
+      }
+    });
+
+    setState(() {
+      _isLoadingOlderMessages = false;
+    });
+  }
+}
+
+
+  void _scrollToBottom() {
+    setState(() {
+      _shouldScrollToBottom = true;
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
       }
     });
   }
 
   @override
   void dispose() {
-    // Dispose the ScrollController
+    _messagesSubscription?.cancel();
     _scrollController.dispose();
-
-    // Dispose the ViewModel
-    Get.delete<GroupChatViewModel>(); // Dispose the ViewModel
-
+    Get.delete<GroupChatViewModel>();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    log( widget.guid);
+    // log(widget.guid);
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
@@ -104,43 +128,69 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
             title: widget.groupName,
             memberCount: widget.memberCount,
             guid: widget.guid,
-            uid:widget.uid,
+            uid: widget.uid,
           ),
           Expanded(
             child: StreamBuilder<List<MessageModel>>(
               stream: viewModel.messagesStream,
               builder: (context, snapshot) {
-                    if (snapshot.hasError ) {
-                  return  Center(child: Text(snapshot.error.toString()));
-
+                if (snapshot.hasError) {
+                  return Center(child: Text(snapshot.error.toString()));
                 }
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return LoadMessageAnimation();
-
                 }
-
-               if (!snapshot.hasData || snapshot.data!.isEmpty) {
-  return const Center(child: Text("No messages found"));
-}
+                if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Center(child: Text("No messages found"));
+                }
+                
                 final messages = snapshot.data!;
+                // return ListView.builder(
+                //   controller: _scrollController,
+                //   padding: EdgeInsets.all(16),
+                //   reverse: false,
+                //   itemCount: messages.length + (_isLoadingOlderMessages ? 1 : 0),
+                //   itemBuilder: (context, index) {
+                //     if (_isLoadingOlderMessages && index == 0) {
+                //       return Center(child: CircularProgressIndicator());
+                //     }
+                //     final messageIndex = index - (_isLoadingOlderMessages ? 1 : 0);
+                //     return ChatMessageWidget(message: messages[messageIndex]);
+                //   },
+                // );
                 return ListView.builder(
-                  controller: _scrollController,
-                  padding: EdgeInsets.all(16),
-                  reverse:
-                      false, // Set to false to show latest messages at the bottom
-                  itemCount: messages.length,
-                  itemBuilder: (context, index) {
-                    return ChatMessageWidget(message: messages[index]);
-                  },
-                );
+  controller: _scrollController,
+  padding: EdgeInsets.all(16),
+  itemCount: (_isLoadingOlderMessages ? 1 : 0) + messages.length,
+  itemBuilder: (context, index) {
+    if (_isLoadingOlderMessages && index == 0) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    final messageIndex = index - (_isLoadingOlderMessages ? 1 : 0);
+
+    // ✅ Safety check
+    if (messageIndex < 0 || messageIndex >= messages.length) {
+      return const SizedBox.shrink();
+    }
+
+    return ChatMessageWidget(message: messages[messageIndex]);
+  },
+);
+
               },
             ),
           ),
           ChatInputWidget(
             onSend: (message) {
-              viewModel.sendMessage(message).then((_) {
-                _scrollToBottom(); // Scroll to bottom after sending a new message
+             if (message.isEmpty) {
+               return;
+             } else {
+                viewModel.sendMessage(message).then((_) {
+                _scrollToBottom();
+            
               });
+             }
             },
           ),
         ],
@@ -148,5 +198,3 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
     );
   }
 }
-
-

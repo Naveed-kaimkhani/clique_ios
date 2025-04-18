@@ -83,9 +83,9 @@ class ProductCard extends StatelessWidget {
       'price':price,
       'oldPrice': oldPrice,
       'discount': discount,
-      'unit': weight,
+      'unit': unit,
       'categories':categories,
-      'size':size,
+      'size':weight,
     },
   );
 
@@ -226,14 +226,17 @@ class ProductCard extends StatelessWidget {
                               ),
                             ),
                             SizedBox(width: padding * 0.5),
-                            Text(
-                              "\$${oldPrice.toStringAsFixed(2)}",
-                              style: TextStyle(
-                                color: textColor.withOpacity(0.7),
-                                fontSize: fontSizeOldPrice,
-                                decoration: TextDecoration.lineThrough,
-                              ),
-                            ),
+                       oldPrice > 1
+  ? Text(
+      "\$${oldPrice.toStringAsFixed(2)}",
+      style: TextStyle(
+        color: textColor.withOpacity(0.7),
+        fontSize: fontSizeOldPrice,
+        decoration: TextDecoration.lineThrough,
+      ),
+    )
+  : SizedBox.shrink(), // Won't render anything
+
                           ],
                         ),
                       ],

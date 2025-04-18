@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 import 'package:clique/data/models/product_model.dart';
 import 'package:clique/models/upload_video_response.dart';
@@ -11,8 +10,6 @@ import 'package:http_parser/http_parser.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 class UploadVideoService {
   static const String baseUrl = "https://cactisocial.com/api-clique/public/api/v1/popstream/create";
-
- 
 
   Future<UploadVideoResponse> uploadVideo({
   required File thumbnail,
@@ -49,10 +46,8 @@ class UploadVideoService {
     request.fields['product_image'] = product.imageUrls.first;
     var response = await request.send();
     var responseBody = await response.stream.bytesToString();
-
     if (response.statusCode == 202) {
       var decoded = jsonDecode(responseBody);
-      
  Utils.showCustomSnackBar("Success", "PopStream request is pending approval", ContentType.success);
  Get.back();
       return UploadVideoResponse.fromJson(decoded);

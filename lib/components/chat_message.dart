@@ -1,6 +1,4 @@
 
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../models/message_model.dart';
@@ -19,11 +17,11 @@ String convertTimestampTo24HourUTC(int timestamp) {
 
   @override
   Widget build(BuildContext context) {
-    final utc = DateTime.fromMillisecondsSinceEpoch(message.time * 1000, isUtc: true).toUtc();
-final local = DateTime.fromMillisecondsSinceEpoch(message.time * 1000, isUtc: true).toLocal();
+//     final utc = DateTime.fromMillisecondsSinceEpoch(message.time * 1000, isUtc: true).toUtc();
+// final local = DateTime.fromMillisecondsSinceEpoch(message.time * 1000, isUtc: true).toLocal();
 
-log('UTC Time: ${utc.toString()}');
-log('Local Time: ${local.toString()}');
+// log('UTC Time: ${utc.toString()}');
+// log('Local Time: ${local.toString()}');
     final screenWidth = MediaQuery.of(context).size.width;
 // log(message.time.toString());
     return Align(
@@ -64,14 +62,14 @@ log('Local Time: ${local.toString()}');
                 Text(
                   message.message,
                   style: TextStyle(
-                      color: message.isMe ? Colors.white : Colors.black),
+                      color: message.isMe ? const Color.fromRGBO(255, 255, 255, 1) : Colors.black),
                 ),
                 SizedBox(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     
-                    Text(message.time.toString()),
+                    // Text(message.time.toString()),
                     Text(
                       convertTimestampTo24HourUTC(message.time)
                       ,

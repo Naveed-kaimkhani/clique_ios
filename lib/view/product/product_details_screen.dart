@@ -14,6 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../controller/size_selector.dart';
+
 class ProductDetailsScreen extends StatefulWidget {
   @override
   State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
@@ -42,8 +44,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   
   @override
   Widget build(BuildContext context) {
-    
+    if (Get.arguments==null) {
+      Get.back();
+    }else{
+      
     controller.setProductData(Get.arguments);
+    }
   
     final size = MediaQuery.of(context).size;
     return Scaffold(
@@ -131,7 +137,7 @@ Widget _buildHeroImage(Size size) {
   Widget _buildTopBar(Size size, context) {
     return Positioned(
       top: size.height * 0.05,
-      left: size.width * 0.04,
+      left: size.width * 0.015,
       right: size.width * 0.04,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -306,10 +312,9 @@ Widget _buildImageThumbnail(Size size, int index) {
                             SizedBox(height: size.height * 0.01),
                             _buildDescriptionSection(size),
                             SizedBox(height: size.height * 0.015),
-                            // SizeSelector(
-                            //   unit: controller.productData['unit'],
-                            //   weight: controller.productData['size'], ),
-                              // Center(child: Text("Scroll to See More Products")),
+                            SizeSelector(
+                              unit: controller.productData['unit'],
+                              weight: controller.productData['size'], ),
                             SizedBox(height: size.height * 0.02),
                             _buildAddToCartButton(size,context),
                             _buildProductSection(size, size.width * 0.06),
@@ -397,7 +402,8 @@ Widget _buildProductList(Size size) {
             discount: "$discount% OFF",
             weight: product.productWeight,
             unit: product.unit,
-            isShowDiscount: discount > 0,
+            isShowDiscount: false,
+        
             categories: product.categories??"",
           );
         },

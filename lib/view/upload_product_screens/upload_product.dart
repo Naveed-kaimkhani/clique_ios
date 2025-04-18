@@ -198,38 +198,6 @@ Widget _buildVideoPlayer(File videoFile) {
     },
   );
 }
-
-// Widget _buildVideoPlayer(File videoFile) {
-//   final controller = VideoPlayerController.file(videoFile);
-//   _videoController = controller;
-
-//   return FutureBuilder(
-//     future: controller.initialize(),
-//     builder: (context, snapshot) {
-//       if (snapshot.connectionState == ConnectionState.done) {
-//         controller.play();
-
-//         final isPortrait = controller.value.aspectRatio < 1;
-
-//         return ClipRRect(
-//           borderRadius: BorderRadius.circular(10),
-//           child: SizedBox(
-//             width: double.infinity,
-//             height: isPortrait ? 300 : 200,
-//             child: AspectRatio(
-//               aspectRatio: controller.value.aspectRatio,
-//               child: VideoPlayer(controller),
-//             ),
-//           ),
-//         );
-//       } else {
-//         return Center(child: CircularProgressIndicator());
-//       }
-//     },
-//   );
-// }
-
-
   Widget _uploadContainer() {
     return Container(
       width: double.infinity,
@@ -239,60 +207,100 @@ Widget _buildVideoPlayer(File videoFile) {
     );
   }
 
-  // Widget _buildCheckoutOptions() {
-  void _openProductPickerBottomSheet() {
-    Get.bottomSheet(
-      Container(
-        color: Colors.white,
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Text(
-              "Select Product", 
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: _productViewModel.products.length,
-                itemBuilder: (context, index) {
-                  final product = _productViewModel.products[index];
-                  return Obx(() {
-                    bool isSelected = viewModel.selectedProduct.value?.id == product.id;
-                    return ListTile(
-                      leading: SizedBox(
-                        width: 60,
-                        height: 60,
-                        child: CachedNetworkImage(
-                          imageUrl: product.imageUrls.first,
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) => Center(child: CircularProgressIndicator()),
-                          errorWidget: (context, url, error) => Icon(Icons.error),
-                        ),
-                      ),
-                      title: Text(product.productTitle),
-                      trailing: Radio<ProductModel>(
-                        value: product,
-                        groupValue: viewModel.selectedProduct.value,
-                        onChanged: (ProductModel? value) {
-                          viewModel.selectedProduct.value = value;
-                          Get.back(); // Close the bottom sheet after selection
-                        },
-                      ),
-                      tileColor: isSelected ? Colors.green.withOpacity(0.1) : null,
-                      onTap: () {
-                        viewModel.selectedProduct.value = product;
-                        Get.back(); // Close the bottom sheet after selection
-                      },
-                    );
-                  });
-                },
+void _openProductPickerBottomSheet() {
+  final RxString searchQuery = ''.obs;
+
+  Get.bottomSheet(
+    Container(
+      height: 400, // Fixed height for the bottom sheet
+      color: Colors.white,
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          Text(
+            "Select Product", 
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 10),
+          // Search TextField
+          TextField(
+            onChanged: (value) => searchQuery.value = value.toLowerCase(),
+            decoration: InputDecoration(
+              hintText: 'Search products...',
+              prefixIcon: Icon(Icons.search),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
               ),
             ),
-          ],
-        ),
+          ),
+          SizedBox(height: 10),
+          // Product List
+          Expanded(
+            child: Obx(() {
+              final filteredProducts = _productViewModel.products.where((product) {
+                return product.productTitle.toLowerCase().contains(searchQuery.value);
+              }).toList();
+
+              if (filteredProducts.isEmpty) {
+                return Center(child: Text("No products found."));
+              }
+
+              return ListView.builder(
+                itemCount: filteredProducts.length,
+                itemBuilder: (context, index) {
+                  final product = filteredProducts[index];
+                  bool isSelected = viewModel.selectedProduct.value?.id == product.id;
+
+                  return ListTile(
+                    leading: SizedBox(
+                      width: 60,
+                      height: 60,
+                      child: CachedNetworkImage(
+                        imageUrl: product.imageUrls.first,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                      ),
+                    ),
+                    title: Text(product.productTitle),
+                    trailing: Radio<ProductModel>(
+                      value: product,
+                      groupValue: viewModel.selectedProduct.value,
+                      onChanged: (ProductModel? value) {
+                        viewModel.selectedProduct.value = value;
+                        Get.back(); // Close the bottom sheet after selection
+                      },
+                    ),
+                    tileColor: isSelected ? Colors.green.withOpacity(0.1) : null,
+             onTap: () {
+  viewModel.selectedProduct.value = product;
+
+  // Show a confirmation message first
+  Get.snackbar(
+    "Product Selected", // Title
+    "${product.productTitle} has been selected.", // Message
+    snackPosition: SnackPosition.BOTTOM, // Position of the snackbar
+    backgroundColor: Colors.green.withOpacity(0.8), // Background color
+    colorText: Colors.black, // Text color
+    duration: Duration(seconds: 2), // Duration of the message
+  );
+
+  // Close the bottom sheet after selection
+  // Get.back();
+},
+
+                  );
+                },
+              );
+            }),
+          ),
+        ],
       ),
-    );
-  }
+    ),
+    isScrollControlled: true, // This ensures the bottom sheet doesn't cover the full screen
+  );
+}
+
 
   Widget _buildAddProductsButton() {
     return ElevatedButton(

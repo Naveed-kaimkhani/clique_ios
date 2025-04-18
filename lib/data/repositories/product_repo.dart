@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:clique/controller/user_controller.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -14,10 +13,7 @@ class ProductRepository {
     int perPage = 10,
   }) async {
     final response = await http.get(
-      // Uri.parse('$baseUrl?page=$page$per_page=800'),
-      Uri.parse('https://cactisocial.com/api-clique/public/api/v1/topdawg/products?page=$page&per_page=2'),
-       
-      // Uri.parse('https://cactisocial.com/api-clique/public/api/v1/topdawg/products?page=$page&per_page=800'),
+      Uri.parse('https://cactisocial.com/api-clique/public/api/v1/topdawg/products?page=$page'),
       headers: {
         'Authorization': 'Bearer ${userController.token.value}',
         'Accept': 'application/json',

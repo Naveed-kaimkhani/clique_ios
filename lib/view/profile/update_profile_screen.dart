@@ -55,6 +55,7 @@ void initState() {
   }
 
   Future<void> updateUserProfile() async {
+  
     if (true) {
       isLoading.value = true; // Set isLoading to true when the API call starts
 

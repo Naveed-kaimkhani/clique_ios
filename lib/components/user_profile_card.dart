@@ -80,7 +80,7 @@ class UserProfileCard extends StatelessWidget {
                     ),
               SizedBox(height: screenHeight * 0.015),
             Text(
-  username.length > 10 ? '${username.substring(0, 20)}...' : username,
+  username.length > 15 ? '${username.substring(0, 15)}...' : username,
   style: TextStyle(
     fontSize: screenHeight * 0.028,
     fontWeight: FontWeight.bold,

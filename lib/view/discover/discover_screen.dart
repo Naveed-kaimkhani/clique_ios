@@ -224,10 +224,6 @@ Widget _buildProductList(Size size) {
             }
 
             final product = filteredProducts[index];
-            log("product id${product.id} ");
-             log("product id${product.productTitle} ");
-              log("product id${product.cost} ");
-               log("product id${product.imageUrls} ");
             final discount = ((product.msrp - product.cost) / product.msrp * 100).round();
       
             return Padding(

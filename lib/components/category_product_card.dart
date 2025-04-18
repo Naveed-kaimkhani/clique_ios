@@ -211,35 +211,19 @@ class ProductCategoryCard extends StatelessWidget {
                               ),
                             ),
                             SizedBox(width: padding * 0.5),
-                            Text(
-                              "\$${oldPrice.toStringAsFixed(2)}",
-                              style: TextStyle(
-                                color: textColor.withOpacity(0.7),
-                                fontSize: fontSizeOldPrice,
-                                decoration: TextDecoration.lineThrough,
-                              ),
-                            ),
+                      oldPrice > 1
+  ? Text(
+      "\$${oldPrice.toStringAsFixed(2)}",
+      style: TextStyle(
+        color: textColor.withOpacity(0.7),
+        fontSize: fontSizeOldPrice,
+        decoration: TextDecoration.lineThrough,
+      ),
+    )
+  : SizedBox.shrink(), // Won't render anything if oldPrice is 1 or less
+
                           ],
                         ),
-                        // Discount Badge
-                    isShowDiscount?    Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: padding * 0.5,
-                            vertical: padding * 0.25,
-                          ),
-                          decoration: BoxDecoration(
-                            gradient: AppColors.appGradientColors,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            discount,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: fontSizeDiscount,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ):Container()
                       ],
                     ),
                   ],
