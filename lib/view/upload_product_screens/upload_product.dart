@@ -9,6 +9,7 @@ import 'package:clique/view_model/product_details_controller.dart';
 import 'package:clique/view_model/product_view_model.dart';
 import 'package:clique/view_model/upload_video_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
 
@@ -268,6 +269,15 @@ void _openProductPickerBottomSheet() {
                       groupValue: viewModel.selectedProduct.value,
                       onChanged: (ProductModel? value) {
                         viewModel.selectedProduct.value = value;
+                        Fluttertoast.showToast(
+  msg: "${product.productTitle} has been selected.", // Message
+  toastLength: Toast.LENGTH_SHORT,
+  gravity: ToastGravity.BOTTOM, // You can use CENTER, TOP, etc.
+  timeInSecForIosWeb: 2,
+  backgroundColor: Colors.green.withOpacity(0.8),
+  textColor: Colors.white,
+  fontSize: 16.0,
+);
                         Get.back(); // Close the bottom sheet after selection
                       },
                     ),
@@ -276,14 +286,16 @@ void _openProductPickerBottomSheet() {
   viewModel.selectedProduct.value = product;
 
   // Show a confirmation message first
-  Get.snackbar(
-    "Product Selected", // Title
-    "${product.productTitle} has been selected.", // Message
-    snackPosition: SnackPosition.BOTTOM, // Position of the snackbar
-    backgroundColor: Colors.green.withOpacity(0.8), // Background color
-    colorText: Colors.black, // Text color
-    duration: Duration(seconds: 2), // Duration of the message
-  );
+// Call this when the product is selected
+Fluttertoast.showToast(
+  msg: "${product.productTitle} has been selected.", // Message
+  toastLength: Toast.LENGTH_SHORT,
+  gravity: ToastGravity.BOTTOM, // You can use CENTER, TOP, etc.
+  timeInSecForIosWeb: 2,
+  backgroundColor: Colors.green.withOpacity(0.8),
+  textColor: Colors.black,
+  fontSize: 16.0,
+);
 
   // Close the bottom sheet after selection
   // Get.back();

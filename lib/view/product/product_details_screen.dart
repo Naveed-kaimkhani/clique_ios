@@ -36,20 +36,27 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   final ProductViewModel _productViewModel = Get.find<ProductViewModel>();
 
- @override
- void initState() {
-   super.initState();
-   
- }
+@override
+void initState() {
+  super.initState();
+
+  if (controller.productData.isEmpty) {
+    if (Get.arguments != null) {
+      controller.setProductData(Get.arguments);
+    } else {
+       // Navigate back since there's no valid data to show
+      Future.microtask(() => Get.back()); // Use Future.microtask to avoid setState during build
+    }
+  }
+}
+
   
   @override
   Widget build(BuildContext context) {
-    if (Get.arguments==null) {
-      Get.back();
-    }else{
+  
       
-    controller.setProductData(Get.arguments);
-    }
+    // controller.setProductData(Get.arguments);
+  
   
     final size = MediaQuery.of(context).size;
     return Scaffold(
