@@ -14,10 +14,9 @@ import 'package:google_sign_in/google_sign_in.dart';
 class LoginScreen extends StatelessWidget {
   final RxBool isChecked = false.obs;
   final TextEditingController emailController = TextEditingController();
-  final AuthViewModel authViewModel = Get.put(AuthViewModel());RegExp emailRegex = RegExp(
-  r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-);
-
+  final AuthViewModel authViewModel = Get.put(AuthViewModel());
+  RegExp emailRegex =
+      RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
 
   final OTPViewModel otpViewModel = Get.put(OTPViewModel());
   final GoogleSignIn _googleSignIn = GoogleSignIn(
@@ -184,7 +183,6 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -197,23 +195,24 @@ class LoginScreen extends StatelessWidget {
               _buildHeader(context),
               SizedBox(height: Get.height * 0.03),
               _buildTextFields(),
-        
               SizedBox(height: Get.height * 0.02),
-              AuthButton( 
+              AuthButton(
                 buttonText: 'Login',
                 isLoading: authViewModel.isLoading,
                 onPressed: () async {
-                  if (validateFields()) {
+                  if (true) {
                     authViewModel.isLoading.value = true;
                     try {
                       final SignupParams request = SignupParams(
                         name: "",
-                        email: emailController.text,
+                        // email: emailController.text,
+
+                        email: "naveedkaimkhami@gmail.com",
                         phone: "",
                         role: "",
                       );
-                      int statusCode = await otpViewModel
-                          .sendOTP(request.email);
+                      int statusCode =
+                          await otpViewModel.sendOTP(request.email);
                       authViewModel.isLoading.value = false;
                       if (statusCode == 200) {
                         Get.toNamed(RouteName.oTPScreen, arguments: request);

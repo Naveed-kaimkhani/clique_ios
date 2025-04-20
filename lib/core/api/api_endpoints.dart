@@ -20,6 +20,10 @@ class ApiEndpoints {
   static final String getAllPopstreamUrl =
       "https://clique.revovideo.net/api/popstream/get-all-popstream?language=en";
 
+
+  static final String addReaction =
+      "https://269435d754e8fd97.api-us.cometchat.io/v3/messages/{id}/reactions/{reaction}";
+
   static final String getRevoAccessApi =
       'https://clique.revovideo.net/api/auth/token';
 

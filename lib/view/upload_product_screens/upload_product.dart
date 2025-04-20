@@ -15,9 +15,7 @@ import 'package:video_player/video_player.dart';
 
 import '../../constants/index.dart';
 
-
 class UploadVideo extends StatefulWidget {
-
   UploadVideo({Key? key}) : super(key: key);
 
   @override
@@ -28,15 +26,15 @@ class _UploadVideoState extends State<UploadVideo> {
   final UploadVideoViewModel viewModel = Get.put(UploadVideoViewModel());
 
   // final ProductController _productViewModel = Get.find<ProductController>();
-final ProductViewModel _productViewModel = Get.put(ProductViewModel());
+  final ProductViewModel _productViewModel = Get.put(ProductViewModel());
   VideoPlayerController? _videoController;
 
-@override
-void dispose() {
-      _videoController?.dispose();
+  @override
+  void dispose() {
+    _videoController?.dispose();
 
-  super.dispose();
-}
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +45,6 @@ void dispose() {
       backgroundColor: Colors.white,
       appBar: _buildAppBar(),
       body: SingleChildScrollView(
-    
         padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,10 +71,11 @@ void dispose() {
   }
 
   PreferredSizeWidget _buildAppBar() => AppBar(
-    backgroundColor: Colors.white,
-        // backgroundColor: Colors.white,
-    elevation: 0,
-    leading: IconButton(onPressed: ()=> Get.back(),icon: Icon( Icons.arrow_back)) );
+      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
+      elevation: 0,
+      leading: IconButton(
+          onPressed: () => Get.back(), icon: Icon(Icons.arrow_back)));
 
   Widget _buildHeader() {
     return Text(
@@ -85,7 +83,9 @@ void dispose() {
       style: TextStyle(
         fontSize: 26,
         fontWeight: FontWeight.bold,
-        foreground: Paint()..shader = AppColors.appGradientColors.createShader(Rect.fromLTWH(0, 0, 200, 70)),
+        foreground: Paint()
+          ..shader = AppColors.appGradientColors
+              .createShader(Rect.fromLTWH(0, 0, 200, 70)),
       ),
     );
   }
@@ -95,224 +95,252 @@ void dispose() {
       children: [
         // CustomTextField(hintText: "Enter Title", controller: viewModel.titleController),
         // SizedBox(height: screenHeight * 0.015),
-        CustomTextField(hintText: "Enter Hashtags", controller: viewModel.hashtagsController),
+        CustomTextField(
+            hintText: "Enter Hashtags",
+            controller: viewModel.hashtagsController),
         SizedBox(height: screenHeight * 0.015),
-        _buildDropdownField("Select Layout", viewModel.layout, ['Portrait', 'Landscape']),
+        _buildDropdownField(
+            "Select Layout", viewModel.layout, ['Portrait', 'Landscape']),
       ],
     );
   }
 
-  Widget _buildDropdownField(String label, RxString selectedValue, List<String> options) {
+  Widget _buildDropdownField(
+      String label, RxString selectedValue, List<String> options) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+        Text(label,
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
         SizedBox(height: 5),
         Obx(() => DropdownButtonFormField<String>(
               value: selectedValue.value,
               decoration: InputDecoration(border: OutlineInputBorder()),
-              items: options.map((option) => DropdownMenuItem(value: option, child: Text(option))).toList(),
+              items: options
+                  .map((option) =>
+                      DropdownMenuItem(value: option, child: Text(option)))
+                  .toList(),
               onChanged: (value) => selectedValue.value = value!,
             )),
       ],
     );
   }
 
-Widget _buildThumbnailSection(double screenHeight) {
-  return _buildThumnailSection(
-    "Upload Thumbnail", 
-    () => viewModel.pickImage(true),
-    viewModel.thumbnailBytes, // Use Uint8List directly
-  );
-}
+  Widget _buildThumbnailSection(double screenHeight) {
+    return _buildThumnailSection(
+      "Upload Thumbnail",
+      () => viewModel.pickImage(true),
+      viewModel.thumbnailBytes, // Use Uint8List directly
+    );
+  }
 
-Widget _buildVideoSection(double screenHeight) {
-  return _buildMediaSection(
-    "Upload Video",
-    viewModel.pickVideo,
-    viewModel.videoFile, // Directly pass Rxn<Uint8List>
-  );
-}
+  Widget _buildVideoSection(double screenHeight) {
+    return _buildMediaSection(
+      "Upload Video",
+      viewModel.pickVideo,
+      viewModel.videoFile, // Directly pass Rxn<Uint8List>
+    );
+  }
 
-Widget _buildThumnailSection(String label, VoidCallback onTap, Rxn<Uint8List> file) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(label, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-      SizedBox(height: 10),
-      Obx(() => GestureDetector(
-            onTap: onTap,
+  Widget _buildThumnailSection(
+      String label, VoidCallback onTap, Rxn<Uint8List> file) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label,
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+        SizedBox(height: 10),
+        Obx(() => GestureDetector(
+              onTap: onTap,
+              child: file.value == null
+                  ? _uploadContainer()
+                  : ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.memory(file.value!,
+                          width: double.infinity,
+                          height: 200,
+                          fit: BoxFit.cover),
+                    ),
+            )),
+      ],
+    );
+  }
+
+  Widget _buildMediaSection(String label, VoidCallback onTap, Rxn<File> file) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label,
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+        SizedBox(height: 10),
+        Obx(() {
+          return GestureDetector(
+            onTap: onTap, // 👈 Allow selecting new video on tap
             child: file.value == null
                 ? _uploadContainer()
-                : ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.memory(file.value!,     width: double.infinity,
-      height: 200, fit: BoxFit.cover),
-                  ),
-          )),
-    ],
-  );
-}
-Widget _buildMediaSection(String label, VoidCallback onTap, Rxn<File> file) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(label, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-      SizedBox(height: 10),
-      Obx(() {
-        return GestureDetector(
-          onTap: onTap, // 👈 Allow selecting new video on tap
-          child: file.value == null
-              ? _uploadContainer()
-              : _buildVideoPlayer(file.value!),
-        );
-      }),
-    ],
-  );
-}
-Widget _buildVideoPlayer(File videoFile) {
-  _videoController?.dispose(); // Dispose previous controller if exists
-  _videoController = VideoPlayerController.file(videoFile);
-  final controller = _videoController!;
-  
-  return FutureBuilder(
-    future: controller.initialize(),
-    builder: (context, snapshot) {
-      if (snapshot.connectionState == ConnectionState.done) {
-        controller.play();
-        final isPortrait = controller.value.aspectRatio < 1;
+                : _buildVideoPlayer(file.value!),
+          );
+        }),
+      ],
+    );
+  }
 
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: SizedBox(
-            width: double.infinity,
-            height: isPortrait ? 300 : 200,
-            child: AspectRatio(
-              aspectRatio: controller.value.aspectRatio,
-              child: VideoPlayer(controller),
+  Widget _buildVideoPlayer(File videoFile) {
+    _videoController?.dispose(); // Dispose previous controller if exists
+    _videoController = VideoPlayerController.file(videoFile);
+    final controller = _videoController!;
+
+    return FutureBuilder(
+      future: controller.initialize(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          controller.play();
+          final isPortrait = controller.value.aspectRatio < 1;
+
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: SizedBox(
+              width: double.infinity,
+              height: isPortrait ? 300 : 200,
+              child: AspectRatio(
+                aspectRatio: controller.value.aspectRatio,
+                child: VideoPlayer(controller),
+              ),
             ),
-          ),
-        );
-      } else {
-        return Center(child: CircularProgressIndicator());
-      }
-    },
-  );
-}
+          );
+        } else {
+          return Center(child: CircularProgressIndicator());
+        }
+      },
+    );
+  }
+
   Widget _uploadContainer() {
     return Container(
       width: double.infinity,
       height: 150,
-      decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.circular(10)),
+      decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey),
+          borderRadius: BorderRadius.circular(10)),
       child: Center(child: Icon(Icons.upload, size: 40)),
     );
   }
 
-void _openProductPickerBottomSheet() {
-  final RxString searchQuery = ''.obs;
+  void _openProductPickerBottomSheet() {
+    final RxString searchQuery = ''.obs;
 
-  Get.bottomSheet(
-    Container(
-      height: 400, // Fixed height for the bottom sheet
-      color: Colors.white,
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        children: [
-          Text(
-            "Select Product", 
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 10),
-          // Search TextField
-          TextField(
-            onChanged: (value) => searchQuery.value = value.toLowerCase(),
-            decoration: InputDecoration(
-              hintText: 'Search products...',
-              prefixIcon: Icon(Icons.search),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+    Get.bottomSheet(
+      Container(
+        height: 400, // Fixed height for the bottom sheet
+        color: Colors.white,
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Text(
+              "Select Product",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10),
+            // Search TextField
+            TextField(
+              onChanged: (value) => searchQuery.value = value.toLowerCase(),
+              decoration: InputDecoration(
+                hintText: 'Search products...',
+                prefixIcon: Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
             ),
-          ),
-          SizedBox(height: 10),
-          // Product List
-          Expanded(
-            child: Obx(() {
-              final filteredProducts = _productViewModel.products.where((product) {
-                return product.productTitle.toLowerCase().contains(searchQuery.value);
-              }).toList();
+            SizedBox(height: 10),
+            // Product List
+            Expanded(
+              child: Obx(() {
+                final filteredProducts =
+                    _productViewModel.products.where((product) {
+                  return product.productTitle
+                      .toLowerCase()
+                      .contains(searchQuery.value);
+                }).toList();
 
-              if (filteredProducts.isEmpty) {
-                return Center(child: Text("No products found."));
-              }
+                if (filteredProducts.isEmpty) {
+                  return Center(child: Text("No products found."));
+                }
 
-              return ListView.builder(
-                itemCount: filteredProducts.length,
-                itemBuilder: (context, index) {
-                  final product = filteredProducts[index];
-                  bool isSelected = viewModel.selectedProduct.value?.id == product.id;
+                return ListView.builder(
+                  itemCount: filteredProducts.length,
+                  itemBuilder: (context, index) {
+                    final product = filteredProducts[index];
+                    bool isSelected =
+                        viewModel.selectedProduct.value?.id == product.id;
 
-                  return ListTile(
-                    leading: SizedBox(
-                      width: 60,
-                      height: 60,
-                      child: CachedNetworkImage(
-                        imageUrl: product.imageUrls.first,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => Center(child: CircularProgressIndicator()),
-                        errorWidget: (context, url, error) => Icon(Icons.error),
+                    return ListTile(
+                      leading: SizedBox(
+                        width: 60,
+                        height: 60,
+                        child: CachedNetworkImage(
+                          imageUrl: product.imageUrls.first,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) =>
+                              Center(child: CircularProgressIndicator()),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
+                        ),
                       ),
-                    ),
-                    title: Text(product.productTitle),
-                    trailing: Radio<ProductModel>(
-                      value: product,
-                      groupValue: viewModel.selectedProduct.value,
-                      onChanged: (ProductModel? value) {
-                        viewModel.selectedProduct.value = value;
-                        Fluttertoast.showToast(
-  msg: "${product.productTitle} has been selected.", // Message
-  toastLength: Toast.LENGTH_SHORT,
-  gravity: ToastGravity.BOTTOM, // You can use CENTER, TOP, etc.
-  timeInSecForIosWeb: 2,
-  backgroundColor: Colors.green.withOpacity(0.8),
-  textColor: Colors.white,
-  fontSize: 16.0,
-);
-                        Get.back(); // Close the bottom sheet after selection
+                      title: Text(product.productTitle),
+                      trailing: Radio<ProductModel>(
+                        value: product,
+                        groupValue: viewModel.selectedProduct.value,
+                        onChanged: (ProductModel? value) {
+                          viewModel.selectedProduct.value = value;
+                          // Fluttertoast.showToast(
+                          //   msg:
+                          //       "${product.productTitle} has been selected.", // Message
+                          //   toastLength: Toast.LENGTH_SHORT,
+                          //   gravity: ToastGravity
+                          //       .BOTTOM, // You can use CENTER, TOP, etc.
+                          //   timeInSecForIosWeb: 2,
+                          //   backgroundColor: Colors.green.withOpacity(0.8),
+                          //   textColor: Colors.white,
+                          //   fontSize: 16.0,
+                          // );
+                          // Get.back(); // Close the bottom sheet after selection
+                        },
+                      ),
+                      tileColor:
+                          isSelected ? Colors.green.withOpacity(0.1) : null,
+                      onTap: () {
+                        viewModel.selectedProduct.value = product;
+
+//   // Show a confirmation message first
+// // Call this when the product is selected
+                        // Fluttertoast.showToast(
+                        //   msg:
+                        //       "${product.productTitle} has been selected.", // Message
+                        //   toastLength: Toast.LENGTH_SHORT,
+                        //   gravity: ToastGravity
+                        //       .BOTTOM, // You can use CENTER, TOP, etc.
+                        //   timeInSecForIosWeb: 2,
+                        //   backgroundColor: Colors.green.withOpacity(0.8),
+                        //   textColor: Colors.black,
+                        //   fontSize: 16.0,
+                        // );
+
+                        // Close the bottom sheet after selection
+                        // Get.back();
                       },
-                    ),
-                    tileColor: isSelected ? Colors.green.withOpacity(0.1) : null,
-             onTap: () {
-  viewModel.selectedProduct.value = product;
-
-  // Show a confirmation message first
-// Call this when the product is selected
-Fluttertoast.showToast(
-  msg: "${product.productTitle} has been selected.", // Message
-  toastLength: Toast.LENGTH_SHORT,
-  gravity: ToastGravity.BOTTOM, // You can use CENTER, TOP, etc.
-  timeInSecForIosWeb: 2,
-  backgroundColor: Colors.green.withOpacity(0.8),
-  textColor: Colors.black,
-  fontSize: 16.0,
-);
-
-  // Close the bottom sheet after selection
-  // Get.back();
-},
-
-                  );
-                },
-              );
-            }),
-          ),
-        ],
+                    );
+                  },
+                );
+              }),
+            ),
+          ],
+        ),
       ),
-    ),
-    isScrollControlled: true, // This ensures the bottom sheet doesn't cover the full screen
-  );
-}
-
+      isScrollControlled:
+          true, // This ensures the bottom sheet doesn't cover the full screen
+    );
+  }
 
   Widget _buildAddProductsButton() {
     return ElevatedButton(
@@ -326,52 +354,23 @@ Fluttertoast.showToast(
   //   return AuthButton(buttonText: 'Upload Video', isLoading: viewModel.isLoading, onPressed: viewModel.uploadVideo);
   // }
   Widget _buildUploadButton() {
-  return AuthButton(
-    buttonText: 'Upload Video',
-    isLoading: viewModel.isLoading,
-    onPressed: () {
-      if (viewModel.selectedProduct.value == null) {
-        Get.snackbar(
-          "Product Required",
-          "Please select a product before uploading the video.",
-          backgroundColor: Colors.red.withOpacity(0.8),
-          colorText: Colors.white,
-          snackPosition: SnackPosition.BOTTOM,
-          margin: const EdgeInsets.all(12),
-        );
-      } else {
-        viewModel.uploadVideo();
-      }
-    },
-  );
+    return AuthButton(
+      buttonText: 'Upload Video',
+      isLoading: viewModel.isLoading,
+      onPressed: () {
+        if (viewModel.selectedProduct.value == null) {
+          Get.snackbar(
+            "Product Required",
+            "Please select a product before uploading the video.",
+            backgroundColor: Colors.red.withOpacity(0.8),
+            colorText: Colors.white,
+            snackPosition: SnackPosition.BOTTOM,
+            margin: const EdgeInsets.all(12),
+          );
+        } else {
+          viewModel.uploadVideo();
+        }
+      },
+    );
+  }
 }
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
