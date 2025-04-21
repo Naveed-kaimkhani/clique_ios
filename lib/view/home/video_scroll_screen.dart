@@ -136,7 +136,8 @@ void _loadVideo(int index) {
     return Obx(() {
       switch (_navigationController.selectedIndex.value) {
         case 0:
-          return VideoView(
+          return  
+           VideoView(
             // tabController: _tabController,
             pageController: _pageController,
             videoUrls: widget.popstreams.map((p) => p.videoUrl).toList(),
