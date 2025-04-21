@@ -86,16 +86,12 @@ class ChatMessageWidget extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return GestureDetector(
-      // onLongPressStart: (details) {
-      //   // Use global position of long press
-      //   final position = details.globalPosition;
-      //   showReactionsOverlay(context, position);
+    
+      // onLongPress: () {
+      //   final RenderBox renderBox = context.findRenderObject() as RenderBox;
+      //   final position = renderBox.localToGlobal(Offset.zero);
+      //   showReactionsOverlay(context, position); // ✅ pass local context
       // },
-      onLongPress: () {
-        final RenderBox renderBox = context.findRenderObject() as RenderBox;
-        final position = renderBox.localToGlobal(Offset.zero);
-        showReactionsOverlay(context, position); // ✅ pass local context
-      },
       child: Align(
         alignment: message.isMe ? Alignment.centerRight : Alignment.centerLeft,
         child: Column(

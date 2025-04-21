@@ -1,16 +1,20 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clique/components/auth_button.dart';
 import 'package:clique/components/custom_textfield.dart';
+import 'package:clique/controller/user_controller.dart';
 import 'package:clique/data/models/product_model.dart';
-import 'package:clique/view_model/product_details_controller.dart';
 import 'package:clique/view_model/product_view_model.dart';
 import 'package:clique/view_model/upload_video_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../constants/index.dart';
@@ -185,35 +189,78 @@ class _UploadVideoState extends State<UploadVideo> {
     );
   }
 
-  Widget _buildVideoPlayer(File videoFile) {
-    _videoController?.dispose(); // Dispose previous controller if exists
-    _videoController = VideoPlayerController.file(videoFile);
-    final controller = _videoController!;
+  // Widget _buildVideoPlayer(File videoFile) {
+  //   _videoController?.dispose(); // Dispose previous controller if exists
+  //   _videoController = VideoPlayerController.file(videoFile);
+  //   final controller = _videoController!;
 
-    return FutureBuilder(
-      future: controller.initialize(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          controller.play();
-          final isPortrait = controller.value.aspectRatio < 1;
+  //   return FutureBuilder(
+  //     future: controller.initialize(),
+  //     builder: (context, snapshot) {
+  //       if (snapshot.connectionState == ConnectionState.done) {
+  //         controller.play();
+  //         final isPortrait = controller.value.aspectRatio < 1;
 
-          return ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: SizedBox(
-              width: double.infinity,
-              height: isPortrait ? 300 : 200,
-              child: AspectRatio(
-                aspectRatio: controller.value.aspectRatio,
-                child: VideoPlayer(controller),
+  //         return ClipRRect(
+  //           borderRadius: BorderRadius.circular(10),
+  //           child: SizedBox(
+  //             width: double.infinity,
+  //             height: isPortrait ? 300 : 200,
+  //             child: AspectRatio(
+  //               aspectRatio: controller.value.aspectRatio,
+  //               child: VideoPlayer(controller),
+  //             ),
+  //           ),
+  //         );
+  //       } else {
+  //         return Center(child: CircularProgressIndicator());
+  //       }
+  //     },
+  //   );
+  // }
+Widget _buildVideoPlayer(File videoFile) {
+  _videoController?.dispose();
+  _videoController = VideoPlayerController.file(videoFile);
+  final controller = _videoController!;
+
+  return FutureBuilder(
+    future: controller.initialize(),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.done) {
+        controller.play();
+        final aspectRatio = controller.value.aspectRatio;
+
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            double maxHeight = 300;
+            double calculatedWidth = maxHeight * aspectRatio;
+
+            // Cap the width if it overflows the screen
+            double finalWidth = calculatedWidth > constraints.maxWidth
+                ? constraints.maxWidth
+                : calculatedWidth;
+
+            double finalHeight = finalWidth / aspectRatio;
+
+            return Center(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12), // 🎯 Rounded corners here
+                child: SizedBox(
+                  width: finalWidth,
+                  height: finalHeight,
+                  child: VideoPlayer(controller),
+                ),
               ),
-            ),
-          );
-        } else {
-          return Center(child: CircularProgressIndicator());
-        }
-      },
-    );
-  }
+            );
+          },
+        );
+      } else {
+        return const Center(child: CircularProgressIndicator());
+      }
+    },
+  );
+}
+
 
   Widget _uploadContainer() {
     return Container(
@@ -225,52 +272,112 @@ class _UploadVideoState extends State<UploadVideo> {
       child: Center(child: Icon(Icons.upload, size: 40)),
     );
   }
+void _openProductPickerBottomSheet() {
+  final userController = Get.find<UserController>();
+  final RxString searchQuery = ''.obs;
+  final RxList<ProductModel> searchResults = <ProductModel>[].obs;
+  final RxBool isLoading = false.obs;
+  Timer? _debounce;
 
-  void _openProductPickerBottomSheet() {
-    final RxString searchQuery = ''.obs;
+  Future<void> fetchProducts(String query) async {
+    isLoading(true);
+    try {
+      final response = await http.get(
+        Uri.parse(
+            'https://cactisocial.com/api-clique/public/api/v1/topdawg/products?search=$query'),
+        headers: {
+          'Authorization': 'Bearer ${userController.token.value}',
+        },
+      );
 
-    Get.bottomSheet(
-      Container(
-        height: 400, // Fixed height for the bottom sheet
-        color: Colors.white,
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Text(
-              "Select Product",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            // Search TextField
-            TextField(
-              onChanged: (value) => searchQuery.value = value.toLowerCase(),
-              decoration: InputDecoration(
-                hintText: 'Search products...',
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final List<dynamic> productList = data['products'];
+        searchResults.value =
+            productList.map((json) => ProductModel.fromJson(json)).toList();
+      } else {
+        searchResults.clear();
+      }
+    } catch (e) {
+      searchResults.clear();
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  Get.bottomSheet(
+    Container(
+      height: 400,
+      color: Colors.white,
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          Text("Select Product",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          SizedBox(height: 10),
+
+          // Search Field
+          TextField(
+            onChanged: (value) {
+              searchQuery.value = value;
+
+              if (_debounce?.isActive ?? false) _debounce!.cancel();
+              _debounce = Timer(Duration(milliseconds: 600), () {
+                if (value.isNotEmpty) {
+                  fetchProducts(value);
+                } else {
+                  searchResults.clear(); // fallback to controller list
+                }
+              });
+            },
+            decoration: InputDecoration(
+              hintText: 'Search products...',
+              prefixIcon: Icon(Icons.search),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
               ),
             ),
-            SizedBox(height: 10),
-            // Product List
-            Expanded(
-              child: Obx(() {
-                final filteredProducts =
-                    _productViewModel.products.where((product) {
-                  return product.productTitle
-                      .toLowerCase()
-                      .contains(searchQuery.value);
-                }).toList();
+          ),
+          SizedBox(height: 10),
 
-                if (filteredProducts.isEmpty) {
-                  return Center(child: Text("No products found."));
-                }
+          // Product List
+          Expanded(
+            child: Obx(() {
+              final productsToShow = searchQuery.value.isEmpty
+                  ? _productViewModel.products
+                  : searchResults;
 
+              if (isLoading.value && searchQuery.value.isNotEmpty) {
                 return ListView.builder(
-                  itemCount: filteredProducts.length,
+                  itemCount: 6,
+                  itemBuilder: (_, __) => ListTile(
+                    leading: Shimmer.fromColors(
+                      baseColor: Colors.grey[300]!,
+                      highlightColor: Colors.grey[100]!,
+                      child: Container(
+                        width: 60,
+                        height: 60,
+                        color: Colors.white,
+                      ),
+                    ),
+                    title: Shimmer.fromColors(
+                      baseColor: Colors.grey[300]!,
+                      highlightColor: Colors.grey[100]!,
+                      child: Container(
+                        height: 12,
+                        width: 100,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                );
+              } else if (productsToShow.isEmpty) {
+                return Center(child: Text("No products found."));
+              } else {
+                return ListView.builder(
+                  itemCount: productsToShow.length,
                   itemBuilder: (context, index) {
-                    final product = filteredProducts[index];
+                    final product = productsToShow[index];
                     bool isSelected =
                         viewModel.selectedProduct.value?.id == product.id;
 
@@ -281,10 +388,9 @@ class _UploadVideoState extends State<UploadVideo> {
                         child: CachedNetworkImage(
                           imageUrl: product.imageUrls.first,
                           fit: BoxFit.cover,
-                          placeholder: (context, url) =>
+                          placeholder: (_, __) =>
                               Center(child: CircularProgressIndicator()),
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
+                          errorWidget: (_, __, ___) => Icon(Icons.error),
                         ),
                       ),
                       title: Text(product.productTitle),
@@ -293,54 +399,44 @@ class _UploadVideoState extends State<UploadVideo> {
                         groupValue: viewModel.selectedProduct.value,
                         onChanged: (ProductModel? value) {
                           viewModel.selectedProduct.value = value;
-                          // Fluttertoast.showToast(
-                          //   msg:
-                          //       "${product.productTitle} has been selected.", // Message
-                          //   toastLength: Toast.LENGTH_SHORT,
-                          //   gravity: ToastGravity
-                          //       .BOTTOM, // You can use CENTER, TOP, etc.
-                          //   timeInSecForIosWeb: 2,
-                          //   backgroundColor: Colors.green.withOpacity(0.8),
-                          //   textColor: Colors.white,
-                          //   fontSize: 16.0,
-                          // );
-                          // Get.back(); // Close the bottom sheet after selection
+                          Fluttertoast.showToast(
+                            msg: "${product.productTitle} has been selected.",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            backgroundColor: Colors.green.withOpacity(0.8),
+                            textColor: Colors.white,
+                            fontSize: 16.0,
+                          );
+                          Get.back();
                         },
                       ),
                       tileColor:
                           isSelected ? Colors.green.withOpacity(0.1) : null,
                       onTap: () {
                         viewModel.selectedProduct.value = product;
-
-//   // Show a confirmation message first
-// // Call this when the product is selected
-                        // Fluttertoast.showToast(
-                        //   msg:
-                        //       "${product.productTitle} has been selected.", // Message
-                        //   toastLength: Toast.LENGTH_SHORT,
-                        //   gravity: ToastGravity
-                        //       .BOTTOM, // You can use CENTER, TOP, etc.
-                        //   timeInSecForIosWeb: 2,
-                        //   backgroundColor: Colors.green.withOpacity(0.8),
-                        //   textColor: Colors.black,
-                        //   fontSize: 16.0,
-                        // );
-
-                        // Close the bottom sheet after selection
-                        // Get.back();
+                        Fluttertoast.showToast(
+                          msg: "${product.productTitle} has been selected.",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          backgroundColor: Colors.green.withOpacity(0.8),
+                          textColor: Colors.black,
+                          fontSize: 16.0,
+                        );
+                        Get.back();
                       },
                     );
                   },
                 );
-              }),
-            ),
-          ],
-        ),
+              }
+            }),
+          ),
+        ],
       ),
-      isScrollControlled:
-          true, // This ensures the bottom sheet doesn't cover the full screen
-    );
-  }
+    ),
+    isScrollControlled: true,
+  );
+}
+
 
   Widget _buildAddProductsButton() {
     return ElevatedButton(

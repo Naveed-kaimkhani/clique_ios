@@ -5,7 +5,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:clique/constants/app_colors.dart';
 import 'package:clique/constants/app_svg_icons.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ProfileProductCard extends StatelessWidget {
@@ -53,7 +52,7 @@ class ProfileProductCard extends StatelessWidget {
     final fontSizeDescription = screenWidth * 0.03; // 3% of screen width
     final fontSizePrice = screenWidth * 0.04; // 4% of screen width
     final fontSizeOldPrice = screenWidth * 0.035; // 3.5% of screen width
-    final fontSizeDiscount = screenWidth * 0.03; // 3% of screen width
+    // final fontSizeDiscount = screenWidth * 0.03; // 3% of screen width
 
     return GestureDetector(
       onTap:  () =>  Get.toNamed(
@@ -218,24 +217,24 @@ Hero(
                           ],
                         ),
                         // Discount Badge
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: padding * 0.5,
-                            vertical: padding * 0.25,
-                          ),
-                          decoration: BoxDecoration(
-                            gradient: AppColors.appGradientColors,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            discount,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: fontSizeDiscount,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
+                        // Container(
+                        //   padding: EdgeInsets.symmetric(
+                        //     horizontal: padding * 0.5,
+                        //     vertical: padding * 0.25,
+                        //   ),
+                        //   decoration: BoxDecoration(
+                        //     gradient: AppColors.appGradientColors,
+                        //     borderRadius: BorderRadius.circular(8),
+                        //   ),
+                        //   child: Text(
+                        //     discount,
+                        //     style: TextStyle(
+                        //       color: Colors.white,
+                        //       fontSize: fontSizeDiscount,
+                        //       fontWeight: FontWeight.bold,
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ],

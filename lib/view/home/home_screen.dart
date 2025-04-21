@@ -32,7 +32,10 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       if (discoverViewModel.popstreams.isEmpty) {
         return LoadingPlaceHolder();
       }
-      return VideoScrollScreen(popstreams: discoverViewModel.popstreams);
+      return VideoScrollScreen(popstreams: discoverViewModel.popstreams,   onRefresh: () async {
+    await discoverViewModel.fetchPopstreams();
+  },
+);
     }),
   );
 }

@@ -200,14 +200,14 @@ class LoginScreen extends StatelessWidget {
                 buttonText: 'Login',
                 isLoading: authViewModel.isLoading,
                 onPressed: () async {
-                  if (true) {
+                  if (validateFields()) {
                     authViewModel.isLoading.value = true;
                     try {
                       final SignupParams request = SignupParams(
                         name: "",
-                        // email: emailController.text,
+                        email: emailController.text,
 
-                        email: "naveedkaimkhami@gmail.com",
+                        // email: "cliqueforappledemo@gmail.com",
                         phone: "",
                         role: "",
                       );
@@ -233,7 +233,7 @@ class LoginScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Already have an account? ",
+                  Text("Dont't have an account? ",
                       style: TextStyle(color: Colors.black)),
                   GestureDetector(
                     onTap: () => Get.toNamed(RouteName.signupScreen),

@@ -17,7 +17,7 @@ class ProfileSAppBar extends PreferredSize {
     this.icon,
    this.isInfluencer = false,
   }) : super(
-          preferredSize: const Size.fromHeight(kToolbarHeight * 1.2), // Increased height
+          preferredSize: const Size.fromHeight(kToolbarHeight * 1.8), // Increased height
           child: _ProfileSAppBarWidget(
             title: title,
             icon: icon,
@@ -44,7 +44,7 @@ class _ProfileSAppBarWidget extends StatelessWidget {
     final horizontalPadding = screenWidth * 0.04;
 
     return Container(
-      height: kToolbarHeight * 1.5,
+      height: kToolbarHeight * 1.8,
       decoration: BoxDecoration(
         gradient: AppColors.appGradientColors,
         borderRadius: const BorderRadius.only(

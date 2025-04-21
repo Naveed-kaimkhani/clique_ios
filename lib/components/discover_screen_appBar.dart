@@ -14,7 +14,7 @@ class DiscoverScreenAppBar extends PreferredSize {
     this.icon,
     this.isNotification = false,
   }) : super(
-          preferredSize: const Size.fromHeight(kToolbarHeight * 1.2), // Increased height
+          preferredSize: const Size.fromHeight(kToolbarHeight * 0.8), // Increased height
           child: _DiscoverScreenAppBarWidget(
             title: title,
             icon: icon,

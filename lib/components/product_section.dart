@@ -8,7 +8,6 @@ import 'package:get/get.dart';
 
 class ProductsSection extends StatelessWidget {
   final String userEmail;
-  // final UserController userController = Get.find<UserController>();
    ProductsSection({super.key, required this.userEmail});
 
   @override

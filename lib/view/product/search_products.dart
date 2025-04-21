@@ -34,7 +34,7 @@ Future<void> fetchProducts(String searchQuery) async {
   try {
     final response = await http.get(
       Uri.parse(
-          'https://cactisocial.com/api-clique/public/api/v1/topdawg/products?page=1&search=$searchQuery'),
+          'https://cactisocial.com/api-clique/public/api/v1/topdawg/products?search=$searchQuery'),
       headers: {
         'Authorization': 'Bearer ${userController.token.value}',  // Pass the token in the Authorization header
       },

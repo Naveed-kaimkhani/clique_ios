@@ -10,11 +10,13 @@ import 'package:video_player/video_player.dart';
 import 'package:get/get.dart';
 
 class VideoScrollScreen extends StatefulWidget {
-   final List<PopstreamModel> popstreams; // Changed from List<String> videoUrls
-
+  final RxList<PopstreamModel> popstreams;
+  final Future<void> Function()? onRefresh; // 🔥 New
 
   const VideoScrollScreen({
     super.key,
+        this.onRefresh,
+
     required this.popstreams,
   });
 
@@ -85,12 +87,21 @@ void _loadVideo(int index) {
 }
 
   /// Dispose of videos that are off-screen
-  void _disposeVideo(int index) {
-    if (_controllers.containsKey(index)) {
-      _controllers[index]!.dispose();
-      _controllers.remove(index);
-    }
+  // void _disposeVideo(int index) {
+  //   if (_controllers.containsKey(index)) {
+  //     _controllers[index]!.dispose();
+  //     _controllers.remove(index);
+  //   }
+  // }
+
+void _disposeVideo(int index) {
+  if (_controllers.containsKey(index)) {
+    _controllers[index]!
+      ..setVolume(0) // Mute before disposing
+      ..dispose();
+    _controllers.remove(index);
   }
+}
 
   /// Handles page changes for lazy loading
  
@@ -103,6 +114,7 @@ void _loadVideo(int index) {
     _loadVideo(_currentIndex.value);
     _loadVideo(_currentIndex.value + 1);
   }
+  
   @override
   void dispose() {
     _pageController.dispose();
@@ -111,23 +123,44 @@ void _loadVideo(int index) {
     super.dispose();
   }
 
+
+//   @override
+// void dispose() {
+//   _pageController.dispose();
+//   _tabController.dispose();
+
+//   // Dispose current video controller explicitly
+//   if (_controllers.containsKey(_currentIndex.value)) {
+//     _controllers[_currentIndex.value]!
+//       ..setVolume(0)
+//       ..dispose();
+//     _controllers.remove(_currentIndex.value);
+//   }
+
+//   // Dispose any remaining controllers just in case
+//   _controllers.forEach((_, controller) {
+//     controller.setVolume(0);
+//     controller.dispose();
+//   });
+//   _controllers.clear();
+
+//   super.dispose(); 
+// }
+
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
 
-    return SafeArea(
-      child: Scaffold(
-        body: Stack(
-          children: [
-            // Obx(() => _buildMainContent(screenSize)),
-            
-           _buildMainContent(screenSize),
-            // Obx(() => _buildShoppingWidget(screenSize)),
-            
-            _buildShoppingWidget(screenSize),
-            Obx(() => _buildBottomNavBar()),
-          ],
-        ),
+    return Scaffold(
+      body: Stack(
+        children: [
+          // Obx(() => _buildMainContent(screenSize)),
+          
+         _buildMainContent(screenSize),
+          _buildShoppingWidget(screenSize),
+          Obx(() => _buildBottomNavBar()),
+        ],
       ),
     );
   }
@@ -137,16 +170,30 @@ void _loadVideo(int index) {
       switch (_navigationController.selectedIndex.value) {
         case 0:
           return  
-           VideoView(
-            // tabController: _tabController,
-            pageController: _pageController,
-            videoUrls: widget.popstreams.map((p) => p.videoUrl).toList(),
-            controllers: _controllers,
-            onPageChanged: _onPageChanged,
-            screenHeight: screenSize.height,
-            screenWidth: screenSize.width,
-            currentIndex: _currentIndex.value, // Pass current index
-          );
+          //  VideoView(
+          //   // tabController: _tabController,
+          //   pageController: _pageController,
+          //   videoUrls: widget.popstreams.map((p) => p.videoUrl).toList(),
+          //   controllers: _controllers,
+          //   onPageChanged: _onPageChanged,
+          //   screenHeight: screenSize.height,
+          //   screenWidth: screenSize.width,
+          //         onRefresh: widget.onRefresh, // ✅ pass it down
+
+          //   currentIndex: _currentIndex.value, // Pass current index
+          // );
+          Obx(() {
+  return VideoView(
+    pageController: _pageController,
+    videoUrls: widget.popstreams.map((p) => p.videoUrl).toList(),
+    controllers: _controllers,
+    onPageChanged: _onPageChanged,
+    screenHeight: screenSize.height,
+    screenWidth: screenSize.width,
+    onRefresh: widget.onRefresh,
+    currentIndex: _currentIndex.value,
+  );
+});
         case 1:
           return const DiscoverScreen();
         case 3:
