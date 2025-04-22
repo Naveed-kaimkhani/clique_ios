@@ -44,7 +44,7 @@ class _ProfileSAppBarWidget extends StatelessWidget {
     final horizontalPadding = screenWidth * 0.04;
 
     return Container(
-      height: kToolbarHeight * 1.8,
+      height: kToolbarHeight * 1.7,
       decoration: BoxDecoration(
         gradient: AppColors.appGradientColors,
         borderRadius: const BorderRadius.only(

@@ -24,7 +24,7 @@ final UserController _userController = Get.find<UserController>();
         bottom: false,
         child: Scaffold(
           appBar: AppBarWithBackIcon(
-          title: "Clique",
+          title: "Cliques",
           // icon: Icons.arrow_back_ios,
         ),
           backgroundColor: Colors.white,

@@ -11,6 +11,7 @@ import 'package:clique/view/home/home_screen.dart';
 import 'package:clique/view_model/auth_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -53,10 +54,20 @@ void initState() {
       });
     }
   }
+  
+  bool _validateFields() {
+  
+    if (phoneController.text.isNotEmpty && phoneController.text.length>10) {
+      // _showValidationError("Name is required", "Please enter your name");
+      Utils.showCustomSnackBar("Warning", "Phone Number must be 10 digits", ContentType.warning);
+      return false;
+    }
+    return true;
+  }
 
   Future<void> updateUserProfile() async {
   
-    if (true) {
+    if (_validateFields()) {
       isLoading.value = true; // Set isLoading to true when the API call starts
 
       try {
@@ -232,12 +243,11 @@ void initState() {
     ),
     SizedBox(height: 8),
     CustomTextField(
-      hintText: "Phone",
+      hintText:phoneController.text.isEmpty? "(123) 456-7890" :phoneController.text,
       controller: phoneController,
     ),
   ],
 ),
-
        SizedBox(height: Get.height * 0.02),
   
   

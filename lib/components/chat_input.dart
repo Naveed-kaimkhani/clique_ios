@@ -33,7 +33,7 @@ class ChatInputWidget extends StatelessWidget {
                     child: TextField(
                       controller: _textController,
                       decoration: InputDecoration(
-                        hintText: 'Message...',
+                        hintText: 'Type here...',
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.only(left: 14),
                       ),

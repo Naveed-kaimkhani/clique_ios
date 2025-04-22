@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:clique/controller/user_controller.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -18,8 +19,9 @@ class ProductRepository {
         'Authorization': 'Bearer ${userController.token.value}',
         'Accept': 'application/json',
       },
+    
     );
-
+log(response.body);
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);

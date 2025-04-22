@@ -103,7 +103,7 @@ final List<String> usCities = [
   'Ojai', 'Ontario', 'Orange', 'Oroville', 'Oxnard',
   'Pacific Grove', 'Palm Springs', 'Palmdale', 'Palo Alto', 'Pasadena',
   'Petaluma', 'Pomona', 'Port Hueneme', 'Rancho Cucamonga', 'Red Bluff',
-  'Redding', 'Redlands', 'Redondo Beach', 'Redwood City', 'Richmond',
+  'Redding', 'Redlands', 'Redondo Beach', 'Redwood City',
   'Riverside', 'Roseville', 'Sacramento', 'Salinas', 'San Bernardino',
   'San Clemente', 'San Diego', 'San Fernando', 'San Francisco', 'San Gabriel',
   'San Jose', 'San Juan Capistrano', 'San Leandro', 'San Luis Obispo', 'San Marino',
@@ -207,7 +207,7 @@ final List<String> usCities = [
   'Indianapolis', 'Jeffersonville', 'Kokomo', 'Lafayette', 'Madison',
   'Marion', 'Michigan City', 'Mishawaka', 'Muncie', 'Nappanee',
   'Nashville', 'New Albany', 'New Castle', 'New Harmony', 'Peru',
-  'Plymouth', 'Richmond', 'Santa Claus', 'Shelbyville', 'South Bend',
+  'Plymouth', 'Santa Claus', 'Shelbyville', 'South Bend',
   'Terre Haute', 'Valparaiso', 'Vincennes', 'Wabash', 'West Lafayette',
 
   // Iowa
@@ -526,7 +526,7 @@ final List<String> usCities = [
   'Danville', 'Fairfax', 'Falls Church', 'Fredericksburg', 'Hampton',
   'Hanover', 'Hopewell', 'Jacksonville', 'Lexington', 'Lynchburg',
   'Manassas', 'Martinsville', 'New Market', 'Newport News', 'Norfolk',
-  'Petersburg', 'Portsmouth', 'Reston', 'Richmond', 'Roanoke',
+  'Petersburg', 'Portsmouth', 'Reston','Roanoke',
   'Staunton', 'Suffolk', 'Virginia Beach', 'Waynesboro', 'Williamsburg',
   'Winchester',
 

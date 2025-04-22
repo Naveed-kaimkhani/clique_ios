@@ -1,6 +1,6 @@
-// models/message_model.dart
 class MessageModel {
   final String sender;
+  final String id;
   final String message;
   final bool isMe;
   final int time;
@@ -10,6 +10,7 @@ class MessageModel {
     required this.sender,
     required this.message,
     required this.isMe,
+    required this.id,
     required this.time,
     this.seenBy = const [],
   });
@@ -18,6 +19,7 @@ class MessageModel {
     return MessageModel(
       sender: json['name'],
       message: json['message'],
+      id: json['id'],
       isMe: json['uid'] == json['userId'], // Compare with logged-in user ID
       time: json['sentAt'],
       seenBy: List<String>.from(json['seenBy'] ?? []),

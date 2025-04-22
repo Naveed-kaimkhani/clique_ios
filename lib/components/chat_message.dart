@@ -43,7 +43,7 @@ class ChatMessageWidget extends StatelessWidget {
           color: Colors.transparent,
           child: ReactionSheet(
             onReactionSelected: (reaction) {
-              chatViewModel.addReactionToMessage("message.id", reaction);
+              chatViewModel.addReactionToMessage(message.id, reaction);
               chatViewModel.hideReactionSheet();
             },
           ),
@@ -87,11 +87,11 @@ class ChatMessageWidget extends StatelessWidget {
 
     return GestureDetector(
     
-      // onLongPress: () {
-      //   final RenderBox renderBox = context.findRenderObject() as RenderBox;
-      //   final position = renderBox.localToGlobal(Offset.zero);
-      //   showReactionsOverlay(context, position); // ✅ pass local context
-      // },
+      onLongPress: () {
+        final RenderBox renderBox = context.findRenderObject() as RenderBox;
+        final position = renderBox.localToGlobal(Offset.zero);
+        showReactionsOverlay(context, position); // ✅ pass local context
+      },
       child: Align(
         alignment: message.isMe ? Alignment.centerRight : Alignment.centerLeft,
         child: Column(

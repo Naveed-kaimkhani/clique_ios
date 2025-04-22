@@ -25,6 +25,7 @@ class UploadVideoViewModel extends GetxController {
   var thumbnailFile = Rxn<File>(); // Store as File
   var videoFile = Rxn<File>();
   var videoBytes = Rxn<Uint8List>(); // Store Uint8List for UI preview
+final RxDouble uploadProgress = 0.0.obs;
 
   final RxBool isLoading = false.obs;
 
@@ -59,7 +60,11 @@ class UploadVideoViewModel extends GetxController {
           ContentType.warning);
       return;
     }
-
+  if (hashtagsController.text.isEmpty) {
+      Utils.showCustomSnackBar("Warning", "Please add hashtags",
+          ContentType.warning);
+      return;
+    }
     isLoading.value = true;
     if (selectedProduct.value == null) {
       Utils.showCustomSnackBar(

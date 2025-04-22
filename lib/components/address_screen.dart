@@ -83,6 +83,15 @@ class _AddressScreenState extends State<AddressScreen> {
                     onPressed: isLoading.value
                         ? null
                         : () async {
+                            if (address1Controller.text.isEmpty) {
+                              Utils.showCustomSnackBar(
+                                "Warning",
+                                "Address Required.",
+                                ContentType.warning,
+                              );
+                              return;
+                            }
+                            
                             if (zipController.text.isEmpty || zipController.text.length != 5) {
                               Utils.showCustomSnackBar(
                                 "Warning",
@@ -91,6 +100,7 @@ class _AddressScreenState extends State<AddressScreen> {
                               );
                               return;
                             }
+                            
                              if (orderViewModel.stateCode.isEmpty ) {
                               Utils.showCustomSnackBar(
                                 "Warning",

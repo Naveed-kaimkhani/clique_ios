@@ -88,15 +88,18 @@ final GroupController groupController = Get.find<GroupController>();
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
-                    child: Image.asset(
-                      backgroundImage,
-                      height: cardHeight * 0.3,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+                ClipRRect(
+  borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+  child: Container(
+    height: cardHeight * 0.3,
+    width: double.infinity,
+    color: Colors.grey[300], // Light grey background
+    child: Center(
+      child: Icon(Icons.image, size: 40, color: Colors.grey[600]), // Optional placeholder icon
+    ),
+  ),
+),
+
                   Container(
                     padding: EdgeInsets.symmetric(
                       horizontal: size.width * 0.03,

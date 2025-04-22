@@ -89,8 +89,8 @@ Future<bool> leaveGroup(String guid, int uid) async {
       final data = jsonDecode(response.body);
       if (data['data']['success'] == true) {
         Utils.showCustomSnackBar(
-          "Group Left",
-          data['data']['message'],
+          "Success",
+          "Group left successfully",
           ContentType.success,
         );
         return true;

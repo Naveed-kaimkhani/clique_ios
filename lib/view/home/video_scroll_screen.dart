@@ -223,7 +223,26 @@ void _disposeVideo(int index) {
     );
   }
 
+  // void _onNavItemTapped(int index) {
+  //   _navigationController.changeIndex(index, 0);
+  // }
   void _onNavItemTapped(int index) {
-    _navigationController.changeIndex(index, 0);
+  if (index != 0) {
+    // We're leaving the video screen, pause all videos
+    _controllers.forEach((_, controller) {
+      controller.pause();
+      controller.setVolume(0);
+    });
+  } else {
+    // Coming back to video screen, play the current one
+    if (_controllers.containsKey(_currentIndex.value)) {
+      _controllers[_currentIndex.value]!
+        ..play()
+        ..setVolume(1);
+    }
   }
+
+  _navigationController.changeIndex(index, 0);
+}
+
 }

@@ -58,6 +58,10 @@ class SignupScreen extends StatelessWidget {
       _showValidationError("Email is required", "Please enter your email");
       return false;
     }
+        if (_phoneNumberController.text.isNotEmpty && _phoneNumberController.text.length>10) {
+      _showValidationError("Warning", "Phone Number must be 10 digits");
+      return false;
+    }
     return true;
   }
 
