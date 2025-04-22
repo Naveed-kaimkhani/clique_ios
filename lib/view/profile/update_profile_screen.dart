@@ -11,7 +11,6 @@ import 'package:clique/view/home/home_screen.dart';
 import 'package:clique/view_model/auth_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -124,7 +123,7 @@ void initState() {
         isLoading.value = false; // Set isLoading to false when the API call completes
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Please complete all fields')));
+      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Please complete all fields')));
     }
   }
 

@@ -9,7 +9,8 @@ import '../constants/app_colors.dart'; // Assuming you have this file for colors
 class ChatMessageWidget extends StatelessWidget {
   final MessageModel message;
 
-  const ChatMessageWidget({super.key, required this.message});
+   ChatMessageWidget({super.key, required this.message});
+final isUploading = false.obs;
 
   String convertTimestampTo24HourUTC(int timestamp) {
     final dateTime =

@@ -5,6 +5,7 @@ import 'package:clique/data/repositories/upload_video_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:video_compress/video_compress.dart';
 import 'dart:io';
 import '../utils/utils.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
@@ -44,15 +45,74 @@ final RxDouble uploadProgress = 0.0.obs;
     }
   }
 
-  Future<void> pickVideo() async {
-    final pickedFile =
-        await ImagePicker().pickVideo(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      File file = File(pickedFile.path);
-      videoFile.value = file;
-      videoBytes.value = await file.readAsBytes(); // Convert File to Uint8List
+  // Future<void> pickVideo() async {
+  //   final pickedFile =
+  //       await ImagePicker().pickVideo(source: ImageSource.gallery);
+  //   if (pickedFile != null) {
+  //     File file = File(pickedFile.path);
+  //     videoFile.value = file;
+  //     videoBytes.value = await file.readAsBytes(); // Convert File to Uint8List
+  //   }
+  // }
+
+
+Future<void> pickVideo() async {
+  final pickedFile = await ImagePicker().pickVideo(source: ImageSource.gallery);
+
+  if (pickedFile != null) {
+    File file = File(pickedFile.path);
+    int sizeInBytes = await file.length();
+    double sizeInMB = sizeInBytes / (1024 * 1024);
+
+    if (sizeInMB > 500) {
+      Utils.showCustomSnackBar(
+        "Warning",
+        "Selected video exceeds the 500MB limit",
+        ContentType.warning,
+      );
+      return;
     }
+
+    videoFile.value = file;
+    videoBytes.value = await file.readAsBytes(); // Convert File to Uint8List
   }
+}
+
+// Future<void> pickVideo() async {
+//   final pickedFile = await ImagePicker().pickVideo(source: ImageSource.gallery);
+
+//   if (pickedFile != null) {
+//     File originalFile = File(pickedFile.path);
+//     int sizeInBytes = await originalFile.length();
+//     double sizeInMB = sizeInBytes / (1024 * 1024);
+
+//     if (sizeInMB > 500) {
+//       Utils.showCustomSnackBar(
+//         "Warning",
+//         "Selected video exceeds the 500MB limit",
+//         ContentType.warning,
+//       );
+//       return;
+//     }
+
+//     // Compress video
+//     Utils.showCustomSnackBar("Compressing", "Video compression started", ContentType.help); // optional
+//     final info = await VideoCompress.compressVideo(
+//       pickedFile.path,
+//       quality: VideoQuality.MediumQuality, // or LowQuality, HighQuality
+//       deleteOrigin: false, // set true to delete original video
+//     );
+
+//     if (info == null || info.file == null) {
+//       Utils.showCustomSnackBar("Error", "Video compression failed", ContentType.failure);
+//       return;
+//     }
+
+//     File compressedFile = info.file!;
+//     videoFile.value = compressedFile;
+//     videoBytes.value = await compressedFile.readAsBytes(); // for preview
+//   }
+// }
 
   Future<void> uploadVideo() async {
     if (thumbnailFile.value == null || videoFile.value == null) {

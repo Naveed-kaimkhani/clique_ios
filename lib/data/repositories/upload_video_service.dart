@@ -21,7 +21,7 @@ class UploadVideoService {
   required ProductModel product,
   required String createdBy,
   required String authToken,
-    required Function(double) onProgress, // 👈 add this
+    // required Function(double) onProgress, // 👈 add this
 
 }) async {
   try {

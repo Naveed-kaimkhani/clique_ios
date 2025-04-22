@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clique/components/auth_button.dart';
@@ -48,28 +49,50 @@ class _UploadVideoState extends State<UploadVideo> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: _buildAppBar(),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: screenHeight * 0.02),
-            _buildHeader(),
-            SizedBox(height: screenHeight * 0.02),
-            _buildTextFields(screenHeight),
-            SizedBox(height: screenHeight * 0.015),
-            _buildThumbnailSection(screenHeight),
-            SizedBox(height: screenHeight * 0.015),
-            _buildVideoSection(screenHeight),
-            SizedBox(height: screenHeight * 0.02),
-            // _buildCheckoutOptions(),
-            SizedBox(height: screenHeight * 0.02),
-            _buildAddProductsButton(),
-            SizedBox(height: screenHeight * 0.01),
-            _buildUploadButton(),
-            SizedBox(height: screenHeight * 0.02),
-          ],
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: screenHeight * 0.02),
+                _buildHeader(),
+                SizedBox(height: screenHeight * 0.02),
+                _buildTextFields(screenHeight),
+                SizedBox(height: screenHeight * 0.015),
+                _buildThumbnailSection(screenHeight),
+                SizedBox(height: screenHeight * 0.015),
+                _buildVideoSection(screenHeight),
+                SizedBox(height: screenHeight * 0.02),
+                // _buildCheckoutOptions(),
+                SizedBox(height: screenHeight * 0.02),
+                _buildAddProductsButton(),
+                SizedBox(height: screenHeight * 0.01),
+                _buildUploadButton(),
+                SizedBox(height: screenHeight * 0.02),
+              ],
+            ),
+          ),
+       Obx(() {
+  if (viewModel.isLoading.value) {
+    return AbsorbPointer( // 👈 Prevents user interaction
+      absorbing: true,
+      child: Container(
+        color: Colors.black.withOpacity(0.4), // 👈 Semi-transparent overlay
+        alignment: Alignment.center,
+        child: SpinKitFadingCircle(
+          color: Colors.white,
+          size: 50.0,
         ),
+      ),
+    );
+  } else {
+    return SizedBox.shrink();
+  }
+}),
+
+        ],
       ),
     );
   }
