@@ -79,6 +79,8 @@ class UserProfileCard extends StatelessWidget {
                       ),
                     ),
               SizedBox(height: screenHeight * 0.015),
+
+              
             Text(
   username.length > 15 ? '${username.substring(0, 15)}...' : username,
   style: TextStyle(

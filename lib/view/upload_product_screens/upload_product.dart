@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
@@ -65,10 +64,12 @@ class _UploadVideoState extends State<UploadVideo> {
                 SizedBox(height: screenHeight * 0.015),
                 _buildVideoSection(screenHeight),
                 SizedBox(height: screenHeight * 0.02),
-                // _buildCheckoutOptions(),
+                
                 SizedBox(height: screenHeight * 0.02),
                 _buildAddProductsButton(),
                 SizedBox(height: screenHeight * 0.01),
+                
+                SizedBox(height: screenHeight * 0.02),
                 _buildUploadButton(),
                 SizedBox(height: screenHeight * 0.02),
               ],
@@ -118,40 +119,31 @@ class _UploadVideoState extends State<UploadVideo> {
   }
 
   Widget _buildTextFields(double screenHeight) {
-    return Column(
-      children: [
-        // CustomTextField(hintText: "Enter Title", controller: viewModel.titleController),
-        // SizedBox(height: screenHeight * 0.015),
-        CustomTextField(
-            hintText: "Enter Hashtags",
-            controller: viewModel.hashtagsController),
-        SizedBox(height: screenHeight * 0.015),
-        _buildDropdownField(
-            "Select Layout", viewModel.layout, ['Portrait', 'Landscape']),
-      ],
-    );
+    return CustomTextField(
+        hintText: "Enter Hashtags",
+        controller: viewModel.hashtagsController);
   }
 
-  Widget _buildDropdownField(
-      String label, RxString selectedValue, List<String> options) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-        SizedBox(height: 5),
-        Obx(() => DropdownButtonFormField<String>(
-              value: selectedValue.value,
-              decoration: InputDecoration(border: OutlineInputBorder()),
-              items: options
-                  .map((option) =>
-                      DropdownMenuItem(value: option, child: Text(option)))
-                  .toList(),
-              onChanged: (value) => selectedValue.value = value!,
-            )),
-      ],
-    );
-  }
+  // Widget _buildDropdownField(
+  //     String label, RxString selectedValue, List<String> options) {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       Text(label,
+  //           style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+  //       SizedBox(height: 5),
+  //       Obx(() => DropdownButtonFormField<String>(
+  //             value: selectedValue.value,
+  //             decoration: InputDecoration(border: OutlineInputBorder()),
+  //             items: options
+  //                 .map((option) =>
+  //                     DropdownMenuItem(value: option, child: Text(option)))
+  //                 .toList(),
+  //             onChanged: (value) => selectedValue.value = value!,
+  //           )),
+  //     ],
+  //   );
+  // }
 
   Widget _buildThumbnailSection(double screenHeight) {
     return _buildThumnailSection(
@@ -435,7 +427,7 @@ void _openProductPickerBottomSheet() {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
       onPressed: _openProductPickerBottomSheet,
-      child: Text("Add Products", style: TextStyle(color: Colors.white)),
+      child: Text("Add Product", style: TextStyle(color: Colors.white)),
     );
   }
 

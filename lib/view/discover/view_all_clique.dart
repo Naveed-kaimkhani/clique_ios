@@ -1,6 +1,4 @@
 import 'package:clique/components/clique_tab_card.dart';
-import 'package:clique/components/discover_screen_appBar.dart';
-import 'package:clique/components/index.dart';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/view/discover/appBar_backicon.dart';
 import 'package:clique/view_model/group_view_model.dart';

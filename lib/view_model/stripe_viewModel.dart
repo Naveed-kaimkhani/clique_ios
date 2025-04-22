@@ -4,7 +4,6 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/data/repositories/payment_service.dart';
 import 'package:clique/utils/utils.dart';
-import 'package:clique/view/home/home_screen.dart';
 import 'package:clique/view_model/order_view_model.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
@@ -33,7 +32,7 @@ final OrderViewModel orderController =Get.find<OrderViewModel>();
       // orderController.processOrder(orderController.orderSummary.value.orderId.toString());
       final summary = orderController.orderSummary.value;
 if (summary?.orderId != null) {
-  orderController.processOrder(summary!.orderId.toString());
+ await orderController.processOrder(summary!.orderId.toString());
 } else {
   Utils.showCustomSnackBar("Error", "Order not submitted or ID missing", ContentType.failure);
 }

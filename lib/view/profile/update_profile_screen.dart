@@ -242,6 +242,7 @@ void initState() {
     ),
     SizedBox(height: 8),
     CustomTextField(
+      keyboardType: TextInputType.number,
       hintText:phoneController.text.isEmpty? "(123) 456-7890" :phoneController.text,
       controller: phoneController,
     ),

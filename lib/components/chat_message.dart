@@ -1,4 +1,5 @@
 import 'package:clique/components/reaction_sheet.dart';
+import 'package:clique/controller/user_controller.dart';
 import 'package:clique/view/chat/chat_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,6 +10,8 @@ import '../constants/app_colors.dart'; // Assuming you have this file for colors
 class ChatMessageWidget extends StatelessWidget {
   final MessageModel message;
 
+    final chatViewModel = Get.find<ChatViewModel>();
+  final userController = Get.find<UserController>();
    ChatMessageWidget({super.key, required this.message});
 final isUploading = false.obs;
 
@@ -20,7 +23,6 @@ final isUploading = false.obs;
   }
 
   void showReactionsOverlay(BuildContext context, Offset position) {
-    final chatViewModel = Get.find<ChatViewModel>();
     final overlay = Overlay.of(context); // ✅ Use passed context
 
     if (overlay == null) {
@@ -43,10 +45,14 @@ final isUploading = false.obs;
         child: Material(
           color: Colors.transparent,
           child: ReactionSheet(
+            // onReactionSelected: (reaction) {
+            //   chatViewModel.addReactionToMessage(message.id, reaction, userController.uid.value);
+            //   chatViewModel.hideReactionSheet();
+            // },
             onReactionSelected: (reaction) {
-              chatViewModel.addReactionToMessage(message.id, reaction);
-              chatViewModel.hideReactionSheet();
-            },
+  chatViewModel.toggleReaction(message.id, reaction, userController.uid.value);
+  chatViewModel.hideReactionSheet();
+},
           ),
         ),
       ),
@@ -54,37 +60,10 @@ final isUploading = false.obs;
 
     chatViewModel.showReactionSheet(overlayEntry, context); // 🔧 pass overlay
   }
-// void showReactionsOverlay(BuildContext context, Offset position) {
-//   final chatViewModel = Get.find<ChatViewModel>();
-//   final screenWidth = MediaQuery.of(context).size.width;
-
-//   double left = position.dx;
-//   if (!message.isMe) {
-//     left = position.dx - screenWidth * 0.2;
-//     if (left < 10) left = 10;
-//   }
-
-//   final overlayEntry = OverlayEntry(
-//     builder: (_) => Positioned(
-//       left: left,
-//       top: position.dy - 80,
-//       child: Material(
-//         color: Colors.transparent,
-//         child: ReactionSheet(
-//           onReactionSelected: (reaction) {
-//             chatViewModel.addReactionToMessage("message.id", reaction);
-//             chatViewModel.hideReactionSheet(); // ✅ remove after selection
-//           },
-//         ),
-//       ),
-//     ),
-//   );
-
-//   chatViewModel.showReactionSheet(overlayEntry); // ✅ insert + track it
-// }
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+final reactionStream = chatViewModel.getReactionsStream(message.id);
 
     return GestureDetector(
     
@@ -150,7 +129,126 @@ final isUploading = false.obs;
                       ),
                     ],
                   ),
-                ],
+
+             
+            
+//                   if (message.reactions.isNotEmpty)
+// Wrap(
+//       spacing: 6,
+//       runSpacing: 4,
+//       children: message.reactions.map((entry) {
+//         return Container(
+//           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+//           decoration: BoxDecoration(
+//             color: message.isMe ? Colors.white24 : Colors.grey[300],
+//             borderRadius: BorderRadius.circular(12),
+//           ),
+//           child: Row(
+//             mainAxisSize: MainAxisSize.min,
+//             children: [
+//               Text(entry.reaction), // Emoji
+//               const SizedBox(width: 4),
+//               Text(
+//                 entry.count.toString(), // Count
+//                 style: TextStyle(
+//                   fontSize: 12,
+//                   fontWeight: FontWeight.bold,
+//                   color: message.isMe ? Colors.white : Colors.black,
+//                 ),
+//               ),
+//             ],
+//           ),
+//         );
+//       }).toList(),
+//     ),
+  
+
+
+  // final chatViewModel = Get.find<ChatViewModel>();
+
+// StreamBuilder<Map<String, int>>(
+//   stream: chatViewModel.getReactionsStream(message.id),
+//   builder: (context, snapshot) {
+//     if (!snapshot.hasData || snapshot.data!.isEmpty) {
+//       return const SizedBox();
+//     }
+
+//     final reactions = snapshot.data!;
+//     return Wrap(
+//       spacing: 6,
+//       runSpacing: 4,
+//       children: reactions.entries.map((entry) {
+//         return Container(
+//           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+//           decoration: BoxDecoration(
+//             color: message.isMe ? Colors.white24 : Colors.grey[300],
+//             borderRadius: BorderRadius.circular(12),
+//           ),
+//           child: Row(
+//             mainAxisSize: MainAxisSize.min,
+//             children: [
+//               Text(entry.key), // 🙂 emoji
+//               const SizedBox(width: 4),
+//               Text(
+//                 entry.value.toString(), // 1
+//                 style: TextStyle(
+//                   fontSize: 12,
+//                   fontWeight: FontWeight.bold,
+//                   color: message.isMe ? Colors.white : Colors.black,
+//                 ),
+//               ),
+//             ],
+//           ),
+//         );
+//       }).toList(),
+//     );
+//   },
+// ),
+
+
+// final chatViewModel = Get.find<ChatViewModel>();
+
+StreamBuilder<Map<String, int>>(
+  stream: reactionStream,
+  builder: (context, snapshot) {
+    if (!snapshot.hasData || snapshot.data!.isEmpty) {
+      return const SizedBox();
+    }
+
+    final reactions = snapshot.data!;
+    return Wrap(
+      spacing: 6,
+      runSpacing: 4,
+      children: reactions.entries.map((entry) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+          decoration: BoxDecoration(
+            color: message.isMe ? Colors.white24 : Colors.grey[300],
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(entry.key),
+              const SizedBox(width: 4),
+              Text(
+                entry.value.toString(),
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: message.isMe ? Colors.white : Colors.black,
+                ),
+              ),
+            ],
+          ),
+        );
+      }).toList(),
+    );
+  },
+),
+
+    ],
+                   
               ),
             ),
           ],

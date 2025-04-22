@@ -4,7 +4,6 @@ import 'package:clique/core/api/api_endpoints.dart';
 import 'package:clique/data/models/pop_stream_model.dart';
 import 'package:get/get.dart';
 import 'package:clique/controller/user_controller.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DiscoverViewModel extends GetxController {

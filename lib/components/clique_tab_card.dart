@@ -94,9 +94,9 @@ final GroupController groupController = Get.find<GroupController>();
     height: cardHeight * 0.3,
     width: double.infinity,
     color: Colors.grey[300], // Light grey background
-    child: Center(
-      child: Icon(Icons.image, size: 40, color: Colors.grey[600]), // Optional placeholder icon
-    ),
+    // child: Center(
+    //   child: Icon(Icons.image, size: 40, color: Colors.grey[600]), // Optional placeholder icon
+    // ),
   ),
 ),
 
