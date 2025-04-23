@@ -17,19 +17,11 @@ class PopstreamModel {
     required this.eventCover,
     required this.name,
     required this.showType,
-    
     required this.createdBy,
-    // required this.videoDurationInSeconds,
     required this.hashtags,
-    // required this.url,
     required this.partyId,
     required this.partyName,
-    // required this.isTemplate,
     required this.videoUrl,
-    // required this.storeProduct,
-    // required this.playerCountdownAt,
-    // required this.context,
-    // required this.videofiles,
     required this.consultantIds,
   });
 

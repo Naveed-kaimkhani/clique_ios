@@ -37,7 +37,7 @@ if (summary?.orderId != null) {
   Utils.showCustomSnackBar("Error", "Order not submitted or ID missing", ContentType.failure);
 }
 
-      Utils.showCustomSnackBar("Success", "Payment completed", ContentType.success);
+      Utils.showCustomSnackBar("Success", "Payment completed with order id ${summary!.orderId.toString()}", ContentType.success);
     
       // Get.snackbar('Success', 'Payment completed');
     } catch (e) {
