@@ -1,5 +1,4 @@
 
-// widgets/chat_input_widget.dart
 import 'package:clique/components/send_button.dart';
 import 'package:flutter/material.dart';
 

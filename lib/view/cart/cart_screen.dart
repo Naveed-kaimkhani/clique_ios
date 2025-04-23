@@ -142,10 +142,6 @@ Widget build(BuildContext context) {
                                         ),
                                       ],
                                     ),
-                                //  IconButton(
-                                //               icon: const Icon(Icons.edit),
-                                //               onPressed: () =>controller.clearAddress() ,
-                                //             ),
                                     Obx(() => Row(
                                           children: [
                                             IconButton(

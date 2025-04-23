@@ -10,16 +10,20 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ShoppingWidget extends StatelessWidget {
-   ShoppingWidget({
+  ShoppingWidget({
     super.key,
     required this.screenHeight,
     required this.screenWidth,
     required this.popstream,
+    required this.onTap, // 👈 Add this line
+    required this.resumeVideo,
   });
+
+  final VoidCallback onTap; // 👈 Add this line
+  final VoidCallback resumeVideo; // 👈 New
 
   final double screenHeight;
   final double screenWidth;
-  
   final PopstreamModel popstream;
 
   final userController = Get.find<UserController>();
@@ -33,9 +37,9 @@ class ShoppingWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           GestureDetector(
-            onTap: (){
-              
-            Get.toNamed(RouteName.viewAllProductsScreen);
+            onTap: () {
+              onTap();
+              Get.toNamed(RouteName.viewAllProductsScreen);
             },
             child: Container(
               height: screenHeight * 0.14,
@@ -60,18 +64,27 @@ class ShoppingWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 10)],
               ),
-              child: OrganicTreatsWidget(popstream:popstream ,),
+              child: OrganicTreatsWidget(
+                popstream: popstream,
+              ),
             ),
-            onTap: (){
-               if (userController.phone.value.isNotEmpty) {
-                
-              Get.toNamed(RouteName.cartScreen, arguments: popstream.partyId);
-            }else{
-              Utils.showCustomSnackBar("Warning", "Please enter phone number to checkout", ContentType.warning);
-            //  Get.toNamed(RouteName.updateProfileScreen);
-            Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateProfileScreen()));
-
-            }
+            onTap: () {
+              onTap();
+              if (userController.phone.value.isNotEmpty) {
+                Get.toNamed(RouteName.cartScreen, arguments: popstream.partyId);
+                // resumeVideo(); // 👈 Resume again
+              } else {
+                onTap();
+                Utils.showCustomSnackBar(
+                    "Warning",
+                    "Please enter phone number to checkout",
+                    ContentType.warning);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => UpdateProfileScreen()));
+                // resumeVideo(); //
+              }
             },
           ),
         ],
@@ -79,5 +92,3 @@ class ShoppingWidget extends StatelessWidget {
     );
   }
 }
-
-
