@@ -18,9 +18,6 @@ class OrderViewModel extends GetxController {
   final AddressController addressController = 
     Get.find<AddressController>();
     
-
-
-
   var stateCode = ''.obs;
   
   var city = ''.obs;

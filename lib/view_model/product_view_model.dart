@@ -26,20 +26,22 @@ class ProductViewModel extends GetxController {
       final data = await _productRepository.fetchProducts(
         page: currentPage.value,
       );
-  
+
       // Extract the products and pagination details
       final List<ProductModel> fetchedProducts = (data['products'] as List)
           .map((json) => ProductModel.fromJson(json))
           .toList();
+      log("products length");
+      log(fetchedProducts.length.toString());
       if (currentPage.value == 1) {
-        products.assignAll(fetchedProducts); 
+        products.assignAll(fetchedProducts);
       } else {
-        products.addAll(fetchedProducts); 
+        products.addAll(fetchedProducts);
       }
 
       // Update pagination details
-      totalPages.value = data['pagination']['total_pages']; // Assuming the API provides this info
-    
+      totalPages.value = data['pagination']
+          ['total_pages']; // Assuming the API provides this info
     } catch (e) {
       Get.snackbar('Error', e.toString());
     } finally {

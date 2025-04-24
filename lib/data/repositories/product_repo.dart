@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class ProductRepository {
-  final String baseUrl = 'https://cactisocial.com/api-clique/public/api/v1/topdawg/products';
+  
 
   final userController = Get.find<UserController>();
 

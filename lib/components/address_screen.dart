@@ -2,13 +2,11 @@
 
 
 import 'dart:developer';
-
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:clique/components/address_list.dart';
 import 'package:clique/utils/utils.dart';
 import 'package:clique/view_model/address_controller.dart';
 import 'package:clique/view_model/order_view_model.dart';
-import 'package:clique/view_model/product_details_controller.dart';
 import 'package:drop_down_list/drop_down_list.dart';
 import 'package:drop_down_list/model/selected_list_item.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +16,7 @@ class AddressScreen extends StatefulWidget {
   @override
   State<AddressScreen> createState() => _AddressScreenState();
 }
-  final ProductController _productViewModel = Get.find<ProductController>();
+  // final ProductController _productViewModel = Get.find<ProductController>();
    
 class _AddressScreenState extends State<AddressScreen> {
   final AddressController controller = Get.put(AddressController());
@@ -65,11 +63,9 @@ class _AddressScreenState extends State<AddressScreen> {
             children: [
               customTextField("Address 1", address1Controller, TextInputType.text),
               customTextField("Address 2", address2Controller, TextInputType.text),
-              // // cityDropDown(context),
               cityDropDown(context),
               
               stateDropDown(context),
-              // customTextField("state Code", stat, TextInputType.number),
               customTextField("ZIP Code", zipController, TextInputType.number),
               SizedBox(height: 20),
               Obx(() {
@@ -134,7 +130,7 @@ class _AddressScreenState extends State<AddressScreen> {
 
                             isLoading.value = true;
 
-_productViewModel.setProductData(_productViewModel.productData);
+// _productViewModel.setProductData(_productViewModel.productData);
                             await controller.saveAddressToPrefs(orderViewModel.stateCode.value,orderViewModel.city.value);
                             await orderViewModel.submitOrder();
 

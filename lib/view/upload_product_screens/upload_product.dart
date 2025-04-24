@@ -29,7 +29,6 @@ class UploadVideo extends StatefulWidget {
 class _UploadVideoState extends State<UploadVideo> {
   final UploadVideoViewModel viewModel = Get.put(UploadVideoViewModel());
 
-  // final ProductController _productViewModel = Get.find<ProductController>();
   final ProductViewModel _productViewModel = Get.put(ProductViewModel());
   VideoPlayerController? _videoController;
 

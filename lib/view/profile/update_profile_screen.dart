@@ -98,9 +98,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
             : userController.coverPhoto.value;
         var response = await request.send();
         log(response.stream.toString());
-        // if(response.statusCode == 422){
-        //   Utils.showCustomSnackBar("Error", "Record Already Exist", ContentType.failure);
-        // }
+  
         log(response.statusCode.toString());
         if (response.statusCode == 200) {
           final responseBody = await response.stream.bytesToString();
@@ -159,31 +157,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     children: [
                       Column(
                         children: [
-                          // GestureDetector(
-                          //   onTap: () => pickImage(true),
-                          //   child: ClipOval(
-                          //     child: Container(
-                          //       width: 100, // Same size as cover photo
-                          //       height: 100, // Same size as cover photo
-                          //       decoration: BoxDecoration(
-                          //         color: Colors.grey[300], // Background color
-                          //         image: profilePhoto != null
-                          //             ? DecorationImage(
-                          //                 image: FileImage(profilePhoto!),
-                          //                 fit: BoxFit.cover, // Ensure the image covers the circular area
-                          //               )
-                          //             : null,
-                          //       ),
-                          //       child: profilePhoto == null
-                          //           ? Icon(
-                          //               Icons.camera_alt,
-                          //               size: 50, // Icon size
-                          //               color: Colors.grey[600], // Icon color
-                          //             )
-                          //           : null,
-                          //     ),
-                          //   ),
-                          // ),
                           GestureDetector(
                             onTap: () => pickImage(true),
                             child: ClipOval(
