@@ -62,6 +62,7 @@ class DiscoverViewModel extends GetxController {
       return storedToken;
     }
   }
+
   Future<void> fetchPopstreams() async {
     final String lamdaToken = userController.revoLamdaToken.value;
 
@@ -88,6 +89,7 @@ class DiscoverViewModel extends GetxController {
           "Content-Type": "application/json",
         },
       );
+      log(response.statusCode.toString());
       if (response.statusCode == 200) {
         List<dynamic> popstreamList = response.body['popstreams'];
 

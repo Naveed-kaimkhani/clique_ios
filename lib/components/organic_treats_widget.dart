@@ -8,12 +8,9 @@ import 'package:shimmer/shimmer.dart';
 import '../constants/app_svg_icons.dart';
 
 class OrganicTreatsWidget extends StatelessWidget {
-  
   final PopstreamModel popstream;
 
-  const OrganicTreatsWidget({
-    required this.popstream,    
-    super.key});
+  const OrganicTreatsWidget({required this.popstream, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,20 +20,23 @@ class OrganicTreatsWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-  
-        ProductImageWidget(popstream: popstream, screenHeight: screenHeight, screenWidth: screenWidth),
+        ProductImageWidget(
+            popstream: popstream,
+            screenHeight: screenHeight,
+            screenWidth: screenWidth),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-       
- SizedBox(
-        width: screenWidth * 0.3, // Fixed width
-        height: screenHeight * 0.04, // Fixed height
-        child: _buildMarqueeText( popstream.name, screenWidth),
-      ),
+            SizedBox(
+              width: screenWidth * 0.3, // Fixed width
+              height: screenHeight * 0.04, // Fixed height
+              child: _buildMarqueeText(popstream.name, screenWidth),
+            ),
             LabelText(
-              text: " \$${popstream.partyName}",
+              // text: " \$${popstream.partyName}",
+
+              text: " \$${popstream.partyId}",
               weight: FontWeight.bold,
               fontSize: screenWidth * 0.042, // Responsive font size
             ),
@@ -62,19 +62,20 @@ class OrganicTreatsWidget extends StatelessWidget {
       ],
     );
   }
-  Widget _buildMarqueeText(String text , double screenWidth) {
-  return Marquee(
-    text: text,
-    style: TextStyle(
-      fontWeight: FontWeight.bold,
-      fontSize: screenWidth * 0.038,
-    ),
-    blankSpace: 30.0,
-    velocity: 50.0,
-    pauseAfterRound: Duration(seconds: 1),
-    startPadding: 10.0,
-  );
-}
+
+  Widget _buildMarqueeText(String text, double screenWidth) {
+    return Marquee(
+      text: text,
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: screenWidth * 0.038,
+      ),
+      blankSpace: 30.0,
+      velocity: 50.0,
+      pauseAfterRound: Duration(seconds: 1),
+      startPadding: 10.0,
+    );
+  }
 }
 
 class ProductImageWidget extends StatelessWidget {
@@ -92,24 +93,24 @@ class ProductImageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
-      imageUrl: popstream.consultantIds , // Handle null case
-      height: screenHeight * 0.06,  // Same height
-      width: screenWidth * 0.12,    // Same width
-      fit: BoxFit.cover,            // Same fit
-      placeholder: (context, url) =>  Shimmer.fromColors(
+      imageUrl: popstream.consultantIds, // Handle null case
+      height: screenHeight * 0.06, // Same height
+      width: screenWidth * 0.12, // Same width
+      fit: BoxFit.cover, // Same fit
+      placeholder: (context, url) => Shimmer.fromColors(
         baseColor: Colors.grey[300]!,
         highlightColor: Colors.grey[100]!,
         child: Container(
           height: screenHeight * 0.06,
           width: screenWidth * 0.12,
           decoration: BoxDecoration(
-    color: Colors.white,
-    borderRadius: BorderRadius.circular(4), // Adjust as needed
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(4), // Adjust as needed
           ),
         ),
       ),
       errorWidget: (context, url, error) => Icon(
-        Icons.image, 
+        Icons.image,
         size: screenHeight * 0.06,
         color: Colors.grey[400],
       ),
