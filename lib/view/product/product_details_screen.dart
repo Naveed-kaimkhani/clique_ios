@@ -5,6 +5,7 @@ import 'package:clique/components/gradient_text.dart';
 import 'package:clique/components/product_shimmer.dart';
 import 'package:clique/constants/index.dart';
 import 'package:clique/controller/user_controller.dart';
+import 'package:clique/data/models/product_model.dart';
 import 'package:clique/utils/utils.dart';
 import 'package:clique/view/profile/update_profile_screen.dart';
 import 'package:clique/view_model/favorite_controller.dart';
@@ -498,7 +499,22 @@ String removeHtmlTags(String text) {
         child: ElevatedButton.icon(
           onPressed: () {
             if (userController.phone.value.isNotEmpty) {
-             Get.toNamed(RouteName.cartScreen, arguments:controller.productData['uid']);
+              final product=ProductModel(id: 
+              int.parse(controller.productData['uid'])
+              , productWeight: controller.productData['size'], 
+              productTitle: controller.productData['productName'], 
+              productDesc: controller.productData['productDescription'], 
+               brandName: controller.productData['productName'], 
+                unit:controller.productData['unit'], 
+                cost: controller.productData['price'], 
+                msrp: controller.productData['oldPrice'], 
+                 imageUrls:controller.productData['backgroundImage'], 
+                  thumbnailUrl: controller.productData['backgroundImage'][0], 
+                   categories:controller.productData['categories'], 
+     
+                     );
+             Get.toNamed(RouteName.
+            cartScreen, arguments:product);
             }else{
 Utils.showCustomSnackBar("Warning", "Please enter your phone number to checkout", ContentType.warning);
             //  Get.toNamed(RouteName.updateProfileScreen);

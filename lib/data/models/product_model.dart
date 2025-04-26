@@ -26,7 +26,7 @@ class ProductModel {
     required this.imageUrls,
     required this.thumbnailUrl,
     required this.categories, // Initialize categories in constructor
-    required this.variantGroupId,
+     this.variantGroupId,
     this.tdid, // Optional field for tdid
     this.productCode, // Optional field for product_code
   });

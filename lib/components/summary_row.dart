@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 class SummaryRow extends StatelessWidget {
   final String title;
-  final double amount;
+   var amount;
   final bool isBold;
 
-  const SummaryRow({
+   SummaryRow({
     super.key,
     required this.title,
     required this.amount,

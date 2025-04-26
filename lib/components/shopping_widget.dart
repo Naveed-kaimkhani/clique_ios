@@ -3,13 +3,18 @@ import 'package:clique/components/organic_treats_widget.dart';
 import 'package:clique/components/shop_all_widget.dart';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/data/models/pop_stream_model.dart';
+import 'package:clique/data/models/product_model.dart';
 import 'package:clique/routes/routes_name.dart';
 import 'package:clique/utils/utils.dart';
 import 'package:clique/view/profile/update_profile_screen.dart';
+import 'package:clique/view_model/product_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ShoppingWidget extends StatelessWidget {
+   final ProductViewModel _productViewModel = Get.isRegistered<ProductViewModel>()
+    ? Get.find<ProductViewModel>()
+    : Get.put(ProductViewModel());
   ShoppingWidget({
     super.key,
     required this.screenHeight,
@@ -68,12 +73,42 @@ class ShoppingWidget extends StatelessWidget {
                 popstream: popstream,
               ),
             ),
-            onTap: () {
+            onTap: () async{
               onTap();
-              if (userController.phone.value.isNotEmpty) {
-                Get.toNamed(RouteName.cartScreen, arguments: popstream.partyId);
-                // resumeVideo(); // 👈 Resume again
-              } else {
+//               if (userController.phone.value.isNotEmpty) {
+
+
+// ProductModel? matchingProduct = _productViewModel.products.firstWhereOrNull(
+//   (product) => product.id.toString() == popstream.partyId,
+// );
+//   if (matchingProduct != null) {
+//     Get.toNamed(RouteName.cartScreen, arguments: matchingProduct);
+//   } else {
+//     Get.snackbar('Not Found', 'Product not found for this party.');
+//   }
+// }
+
+if (userController.phone.value.isNotEmpty) {
+  ProductModel? matchingProduct = _productViewModel.products.firstWhereOrNull(
+    (product) => product.id.toString() == popstream.partyId,
+  );
+
+  if (matchingProduct != null) {
+    Get.toNamed(RouteName.productDetailsScreen, arguments: matchingProduct);
+  } else {
+    // Try to fetch from API
+    final fetchedProduct = await _productViewModel.fetchProductById(
+      int.tryParse(popstream.partyId) ?? -1,
+    );
+    if (fetchedProduct != null) {
+      Get.toNamed(RouteName.productDetailsScreen, arguments: fetchedProduct);
+    } else {
+      Get.snackbar('Not Found', 'Product not found for this id.');
+    }
+  }
+}
+
+               else {
                 onTap();
                 Utils.showCustomSnackBar(
                     "Warning",
