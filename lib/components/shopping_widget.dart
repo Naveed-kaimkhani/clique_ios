@@ -1,4 +1,3 @@
-
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:clique/components/organic_treats_widget.dart';
 import 'package:clique/components/shop_all_widget.dart';
@@ -36,7 +35,7 @@ class _ShoppingWidgetState extends State<ShoppingWidget> {
   final ProductViewModel _productViewModel = Get.put(ProductViewModel());
   final userController = Get.find<UserController>();
 
-  // bool _isLoading = false;
+  bool _isLoading = false;
 
   void _navigateToAllProducts() {
     widget.onTap();
@@ -45,7 +44,6 @@ class _ShoppingWidgetState extends State<ShoppingWidget> {
 
   Future<void> _navigateToProductDetails() async {
     widget.onTap();
-  
 
     try {
       final ProductModel? matchingProduct =
@@ -54,9 +52,11 @@ class _ShoppingWidgetState extends State<ShoppingWidget> {
       );
 
       ProductModel? product = matchingProduct;
-      
+      setState(() {
+        _isLoading = true;
+      });
       // If not found locally, fetch from API
-      product ??= await _productViewModel.fetchProductById(int.parse(widget.popstream.partyId));
+      product ??= await _productViewModel.fetchProductById(int.parse("10739"));
 
       if (product != null) {
         Get.toNamed(
@@ -66,14 +66,15 @@ class _ShoppingWidgetState extends State<ShoppingWidget> {
       } else {
         Utils.showCustomSnackBar(
             'Not Found', 'Product not found for this id.', ContentType.failure);
+        //  Get.showSnackbar()
       }
     } catch (e) {
       Utils.showCustomSnackBar(
           'Not Found', 'Product not found for this id.', ContentType.failure);
     } finally {
-      // setState(() {
-      //   _isLoading = false;
-      // });
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -116,6 +117,7 @@ class _ShoppingWidgetState extends State<ShoppingWidget> {
             ],
           ),
         ),
+        if (_isLoading) _buildLoadingOverlay(),
       ],
     );
   }
