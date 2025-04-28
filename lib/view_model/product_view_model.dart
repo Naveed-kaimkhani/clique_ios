@@ -19,15 +19,19 @@ class ProductViewModel extends GetxController {
     fetchProducts();
     super.onInit();
   }
+// final isLoading = false.obs;
 
+void setLoading(bool value) {
+  isLoading.value = value;
+}
   Future<ProductModel?> fetchProductById(int productId) async {
     try {
       final response = await _productRepository.fetchProductsById(productId);
-
-      if (response['data'] != null &&
-          response['data'] is List &&
-          response['data'].isNotEmpty) {
-        final product = ProductModel.fromJson(response['data'][0]);
+      if (response['products'] != null &&
+          response['products'] is List &&
+          response['products'].isNotEmpty) {
+        final product = ProductModel.fromJson(response['products'][0]);
+        log("product kya hy $product");
         products.add(product); // Add to local list
         return product;
       } else {

@@ -37,28 +37,25 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   final ProductViewModel _productViewModel = Get.find<ProductViewModel>();
 
-@override
-void initState() {
-  super.initState();
+  @override
+  void initState() {
+    super.initState();
 
-  if (controller.productData.isEmpty) {
-    if (Get.arguments != null) {
-      controller.setProductData(Get.arguments);
-    } else {
-       // Navigate back since there's no valid data to show
-      Future.microtask(() => Get.back()); // Use Future.microtask to avoid setState during build
+    if (controller.productData.isEmpty) {
+      if (Get.arguments != null) {
+        controller.setProductData(Get.arguments);
+      } else {
+        // Navigate back since there's no valid data to show
+        Future.microtask(() =>
+            Get.back()); // Use Future.microtask to avoid setState during build
+      }
     }
   }
-}
 
-  
   @override
   Widget build(BuildContext context) {
-  
-      
     // controller.setProductData(Get.arguments);
-  
-  
+
     final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
@@ -85,62 +82,65 @@ void initState() {
     );
   }
 
-Widget _buildHeroImage(Size size) {
-  final TransformationController _transformationController = TransformationController();
-  final _dragStartOffset = 0.0.obs;
+  Widget _buildHeroImage(Size size) {
+    final TransformationController _transformationController =
+        TransformationController();
+    final _dragStartOffset = 0.0.obs;
 
-  return Padding(
-    padding: const EdgeInsets.only(top:25.0),
-    child: Obx(() => Hero(
-          tag: controller.productData['uid'],
-          child: GestureDetector(
-            onVerticalDragStart: (details) {
-              _dragStartOffset.value = details.localPosition.dy;
-            },
-            onVerticalDragUpdate: (details) {
-              if (details.localPosition.dy - _dragStartOffset.value > 100) {
-                Get.back();
-              }
-            },
-            child: InteractiveViewer(
-              transformationController: _transformationController,
-              minScale: 1.0,
-              maxScale: 4.0,
-              child: SizedBox(
-                width: size.width,
-                height: size.height * 0.6,
-                child: AnimatedSwitcher(
-                  duration: Duration(milliseconds: 500),
-                  transitionBuilder: (Widget child, Animation<double> animation) {
-                    return FadeTransition(
-                      opacity: animation,
-                      child: child,
-                    );
-                  },
-                  child: CachedNetworkImage(
-    key: ValueKey<int>(controller.selectedImageIndex.value),
-    imageUrl: controller.productImages[controller.selectedImageIndex.value],
-    fit: BoxFit.cover,
-    width: size.width,
-    placeholder: (context, url) => Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
-      child: Container(
-        width: size.width,
-        height: size.height * 0.4, // Adjust the height as needed
-        color: Colors.white,
-      ),
-    ),
-    errorWidget: (context, url, error) => Icon(Icons.error),
-    ),
-    
+    return Padding(
+      padding: const EdgeInsets.only(top: 25.0),
+      child: Obx(() => Hero(
+            tag: controller.productData['uid'],
+            child: GestureDetector(
+              onVerticalDragStart: (details) {
+                _dragStartOffset.value = details.localPosition.dy;
+              },
+              onVerticalDragUpdate: (details) {
+                if (details.localPosition.dy - _dragStartOffset.value > 100) {
+                  Get.back();
+                }
+              },
+              child: InteractiveViewer(
+                transformationController: _transformationController,
+                minScale: 1.0,
+                maxScale: 4.0,
+                child: SizedBox(
+                  width: size.width,
+                  height: size.height * 0.6,
+                  child: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 500),
+                    transitionBuilder:
+                        (Widget child, Animation<double> animation) {
+                      return FadeTransition(
+                        opacity: animation,
+                        child: child,
+                      );
+                    },
+                    child: CachedNetworkImage(
+                      key: ValueKey<int>(controller.selectedImageIndex.value),
+                      imageUrl: controller
+                          .productImages[controller.selectedImageIndex.value],
+                      fit: BoxFit.cover,
+                      width: size.width,
+                      placeholder: (context, url) => Shimmer.fromColors(
+                        baseColor: Colors.grey[300]!,
+                        highlightColor: Colors.grey[100]!,
+                        child: Container(
+                          width: size.width,
+                          height:
+                              size.height * 0.4, // Adjust the height as needed
+                          color: Colors.white,
+                        ),
+                      ),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
-        )),
-  );
-}
+          )),
+    );
+  }
 
   Widget _buildTopBar(Size size, context) {
     return Positioned(
@@ -151,7 +151,6 @@ Widget _buildHeroImage(Size size) {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _iconButton(Icons.arrow_back, () => Get.back()),
-
         ],
       ),
     );
@@ -159,7 +158,7 @@ Widget _buildHeroImage(Size size) {
 
   Widget _buildImageSelector(Size size) {
     final isExpanded = false.obs;
-    
+
     return Positioned(
       top: size.height * 0.11,
       right: size.width * 0.04,
@@ -180,87 +179,86 @@ Widget _buildHeroImage(Size size) {
           ],
         ),
         child: Obx(() => Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (isExpanded.value)
-              ...List.generate(
-               controller.productImages.length,
-                (index) => _buildImageThumbnail(size, index),
-              ).map((widget) => Padding(
-                padding: EdgeInsets.only(bottom: size.height * 0.005),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: widget,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (isExpanded.value)
+                  ...List.generate(
+                    controller.productImages.length,
+                    (index) => _buildImageThumbnail(size, index),
+                  ).map((widget) => Padding(
+                        padding: EdgeInsets.only(bottom: size.height * 0.005),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: widget,
+                        ),
+                      ))
+                else
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: _buildImageThumbnail(
+                        size, controller.selectedImageIndex.value),
+                  ),
+                IconButton(
+                  padding: EdgeInsets.zero,
+                  constraints: BoxConstraints(),
+                  onPressed: () => isExpanded.toggle(),
+                  icon: Icon(
+                      isExpanded.value
+                          ? Icons.keyboard_arrow_up
+                          : Icons.keyboard_arrow_down,
+                      color: Colors.black54),
                 ),
-              ))
-            else
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: _buildImageThumbnail(size, controller.selectedImageIndex.value),
-              ),
-            IconButton(
-              padding: EdgeInsets.zero,
-              constraints: BoxConstraints(),
-              onPressed: () => isExpanded.toggle(),
-              icon: Icon(
-                isExpanded.value 
-                  ? Icons.keyboard_arrow_up 
-                  : Icons.keyboard_arrow_down,
-                color: Colors.black54
-              ),
-            ),
-          ],
-        )),
+              ],
+            )),
       ),
     );
   }
 
-Widget _buildImageThumbnail(Size size, int index) {
-  return GestureDetector(
-    onTap: () => controller.selectedImageIndex.value = index,
-    child: Obx(() => Container(
-      margin: EdgeInsets.only(bottom: size.height * 0.01),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: selectedImageIndex.value == index
-              ? AppColors.appColor
-              : Colors.transparent,
-          width: 2,
-        ),
-        borderRadius: BorderRadius.circular(10),
-        color: Colors.white,
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(10),
-        child:CachedNetworkImage(
-  imageUrl: controller.productImages[index],
-  width: size.width * 0.11,
-  height: size.height * 0.07,
-  fit: BoxFit.cover,
-  placeholder: (context, url) => Shimmer.fromColors(
-    baseColor: Colors.grey[300]!,
-    highlightColor: Colors.grey[100]!,
-    child: Container(
-      width: size.width * 0.11,
-      height: size.height * 0.07,
-      color: Colors.white,
-    ),
-  ),
-  errorWidget: (context, url, error) => Icon(Icons.error, size: 20),
-),
-
-      ),
-    )),
-  );
-}
+  Widget _buildImageThumbnail(Size size, int index) {
+    return GestureDetector(
+      onTap: () => controller.selectedImageIndex.value = index,
+      child: Obx(() => Container(
+            margin: EdgeInsets.only(bottom: size.height * 0.01),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: selectedImageIndex.value == index
+                    ? AppColors.appColor
+                    : Colors.transparent,
+                width: 2,
+              ),
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.white,
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: CachedNetworkImage(
+                imageUrl: controller.productImages[index],
+                width: size.width * 0.11,
+                height: size.height * 0.07,
+                fit: BoxFit.cover,
+                placeholder: (context, url) => Shimmer.fromColors(
+                  baseColor: Colors.grey[300]!,
+                  highlightColor: Colors.grey[100]!,
+                  child: Container(
+                    width: size.width * 0.11,
+                    height: size.height * 0.07,
+                    color: Colors.white,
+                  ),
+                ),
+                errorWidget: (context, url, error) =>
+                    Icon(Icons.error, size: 20),
+              ),
+            ),
+          )),
+    );
+  }
 
   Widget _buildProductDetails(Size size) {
-
     return DraggableScrollableSheet(
       initialChildSize: 0.45,
       minChildSize: 0.45,
       // maxChildSize: 0.95,
-      
+
       maxChildSize: 1,
       builder: (context, scrollController) {
         return Container(
@@ -310,9 +308,8 @@ Widget _buildImageThumbnail(Size size, int index) {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            
-                                _buildProductTitle(size),
-                        
+                            _buildProductTitle(size),
+
                             SizedBox(height: size.height * 0.006),
                             _buildPriceSection(size),
                             SizedBox(height: size.height * 0.01),
@@ -320,13 +317,12 @@ Widget _buildImageThumbnail(Size size, int index) {
                             SizedBox(height: size.height * 0.01),
                             _buildDescriptionSection(size),
                             SizedBox(height: size.height * 0.015),
-                            SizeSelector(
-                              unit: controller.productData['unit'],
-                              weight: controller.productData['size'], ),
+                            // SizeSelector(
+                            //   unit: controller.productData['unit'],
+                            //   weight: controller.productData['size'], ),
                             SizedBox(height: size.height * 0.02),
-                            _buildAddToCartButton(size,context),
+                            _buildAddToCartButton(size, context),
                             _buildProductSection(size, size.width * 0.06),
-                               
                           ],
                         ),
                       ),
@@ -354,142 +350,148 @@ Widget _buildImageThumbnail(Size size, int index) {
     );
   }
 
-Widget _buildProductList(Size size) {
-  final ScrollController _productScrollController = ScrollController();
+  Widget _buildProductList(Size size) {
+    final ScrollController _productScrollController = ScrollController();
 
-  return Obx(() {
-    if (_productViewModel.isLoading.value && _productViewModel.products.isEmpty) {
+    return Obx(() {
+      if (_productViewModel.isLoading.value &&
+          _productViewModel.products.isEmpty) {
+        return SizedBox(
+          height: size.height * 0.32,
+
+          // height: size.height * 0.5,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 2,
+            itemBuilder: (context, index) {
+              return ShimmerProductCard();
+            },
+          ),
+        );
+      }
+
+      if (_productViewModel.error.value.isNotEmpty) {
+        return Center(child: Text(_productViewModel.error.value));
+      }
+
+      if (_productViewModel.products.isEmpty) {
+        return Center(child: Text('No products available'));
+      }
+
+      // ✅ Filter only products where category == "pet food"
+      final filteredProducts = _productViewModel.products
+          .where((product) =>
+              (product.categories) == controller.productData['categories'])
+          .toList();
+
+      if (filteredProducts.isEmpty) {
+        return Center(
+            child: Text(
+                'No products in "${controller.productData['categories']}" category'));
+      }
+
       return SizedBox(
         height: size.height * 0.32,
-        
-        // height: size.height * 0.5,
         child: ListView.builder(
+          controller: _productScrollController,
           scrollDirection: Axis.horizontal,
-          itemCount: 2,
+          itemCount: filteredProducts.length,
           itemBuilder: (context, index) {
-            return ShimmerProductCard();
+            final product = filteredProducts[index];
+            final discount =
+                ((product.msrp - product.cost) / product.msrp * 100).round();
+
+            return ProductCategoryCard(
+              uid: product.id.toString(),
+              backgroundImage: product.imageUrls.isNotEmpty
+                  ? product.imageUrls
+                  : List<String>.empty(),
+              productName: product.productTitle,
+              productDescription: product.productDesc,
+              price: product.cost,
+              oldPrice: product.msrp,
+              discount: "$discount% OFF",
+              weight: product.productWeight,
+              unit: product.unit,
+              isShowDiscount: false,
+              categories: product.categories ?? "",
+            );
           },
         ),
       );
-    }
-
-    if (_productViewModel.error.value.isNotEmpty) {
-      return Center(child: Text(_productViewModel.error.value));
-    }
-
-    if (_productViewModel.products.isEmpty) {
-      return Center(child: Text('No products available'));
-    }
-
-    // ✅ Filter only products where category == "pet food"
-    final filteredProducts = _productViewModel.products
-        .where((product) => (product.categories) ==  controller.productData['categories'])
-        .toList();
-
-    if (filteredProducts.isEmpty) {
-      return Center(child: Text('No products in "${controller.productData['categories']}" category'));
-    }
-
-    return SizedBox(
-      height: size.height * 0.32,
-      child: ListView.builder(
-        controller: _productScrollController,
-        scrollDirection: Axis.horizontal,
-        itemCount: filteredProducts.length,
-        itemBuilder: (context, index) {
-          final product = filteredProducts[index];
-          final discount = ((product.msrp - product.cost) / product.msrp * 100).round();
-
-          return ProductCategoryCard(
-            uid: product.id.toString(),
-            backgroundImage: product.imageUrls.isNotEmpty ? product.imageUrls :List<String>.empty(),
-            productName: product.productTitle,
-            productDescription: product.productDesc,
-            price: product.cost,
-            oldPrice: product.msrp,
-            discount: "$discount% OFF",
-            weight: product.productWeight,
-            unit: product.unit,
-            isShowDiscount: false,
-        
-            categories: product.categories??"",
-          );
-        },
-      ),
-    );
-  });
-}
+    });
+  }
 
   Widget _buildProductTitle(Size size) {
-    return Obx(()=>
-      Text(
-    controller.productData['productName'],
-      style: TextStyle(
-        fontSize: size.width * 0.06,
-        fontWeight: FontWeight.bold,
-      ),
-    )
-    );
+    return Obx(() => Text(
+          controller.productData['productName'],
+          style: TextStyle(
+            fontSize: size.width * 0.06,
+            fontWeight: FontWeight.bold,
+          ),
+        ));
   }
 
   Widget _buildPriceSection(Size size) {
-    return Obx(()=>Row(
-      children: [
-        GradientText(
-        
-    "\$${controller.productData['price'].toString()}",
-          gradient: AppColors.appGradientColors,
-          fontSize: size.width * 0.06,
-        ),
-        SizedBox(width: size.width * 0.02),
-        Text(
-       "\$${controller.productData['oldPrice'].toString()}",
-          style: TextStyle(
-            fontSize: size.width * 0.05,
-            color: Colors.grey,
-            decoration: TextDecoration.lineThrough,
-          ),
-        ),
-      ],
-    ));
+    return Obx(() => Row(
+          children: [
+            GradientText(
+              "\$${controller.productData['price'].toString()}",
+              gradient: AppColors.appGradientColors,
+              fontSize: size.width * 0.06,
+            ),
+            SizedBox(width: size.width * 0.02),
+            Text(
+              "\$${controller.productData['oldPrice'].toString()}",
+              style: TextStyle(
+                fontSize: size.width * 0.05,
+                color: Colors.grey,
+                decoration: TextDecoration.lineThrough,
+              ),
+            ),
+          ],
+        ));
   }
 
   var isDescriptionExpanded = false.obs;
 
-Widget _buildDescriptionSection(Size size) {
-  return Obx(() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-  Obx(()=>      Text(
-          removeHtmlTags(controller.productData['productDescription']),
-          style: TextStyle(
-            fontSize: size.width * 0.04,
-            color: Colors.grey,
+  Widget _buildDescriptionSection(Size size) {
+    return Obx(() {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Obx(
+            () => Text(
+              removeHtmlTags(controller.productData['productDescription']),
+              style: TextStyle(
+                fontSize: size.width * 0.04,
+                color: Colors.grey,
+              ),
+              maxLines: isDescriptionExpanded.value ? null : 2,
+              overflow: TextOverflow.fade,
+            ),
           ),
-          maxLines: isDescriptionExpanded.value ? null : 2,
-          overflow: TextOverflow.fade,
-        ),),
-        SizedBox(height: size.height * 0.01),
-        GestureDetector(
-          onTap: () {
-        isDescriptionExpanded.toggle();
-          },
-          child: GradientText(
-          isDescriptionExpanded.value ? "Read Less <<" : "Read More >>",
-            gradient: AppColors.appGradientColors,
-            fontSize: size.width * 0.04,
+          SizedBox(height: size.height * 0.01),
+          GestureDetector(
+            onTap: () {
+              isDescriptionExpanded.toggle();
+            },
+            child: GradientText(
+              isDescriptionExpanded.value ? "Read Less <<" : "Read More >>",
+              gradient: AppColors.appGradientColors,
+              fontSize: size.width * 0.04,
+            ),
           ),
-        ),
-      ],
-    );
-  });
-}
+        ],
+      );
+    });
+  }
 
-String removeHtmlTags(String text) {
-  final RegExp exp = RegExp(r'<[^>]*>', multiLine: true, caseSensitive: false);
-  return text.replaceAll(exp, '');
-}
+  String removeHtmlTags(String text) {
+    final RegExp exp =
+        RegExp(r'<[^>]*>', multiLine: true, caseSensitive: false);
+    return text.replaceAll(exp, '');
+  }
 
   Widget _buildAddToCartButton(Size size, context) {
     return Center(
@@ -499,27 +501,30 @@ String removeHtmlTags(String text) {
         child: ElevatedButton.icon(
           onPressed: () {
             if (userController.phone.value.isNotEmpty) {
-              final product=ProductModel(id: 
-              int.parse(controller.productData['uid'])
-              , productWeight: controller.productData['size'], 
-              productTitle: controller.productData['productName'], 
-              productDesc: controller.productData['productDescription'], 
-               brandName: controller.productData['productName'], 
-                unit:controller.productData['unit'], 
-                cost: controller.productData['price'], 
-                msrp: controller.productData['oldPrice'], 
-                 imageUrls:controller.productData['backgroundImage'], 
-                  thumbnailUrl: controller.productData['backgroundImage'][0], 
-                   categories:controller.productData['categories'], 
-     
-                     );
-             Get.toNamed(RouteName.
-            cartScreen, arguments:product);
-            }else{
-Utils.showCustomSnackBar("Warning", "Please enter your phone number to checkout", ContentType.warning);
-            //  Get.toNamed(RouteName.updateProfileScreen);
-            Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateProfileScreen()));
-
+              final product = ProductModel(
+                id: int.parse(controller.productData['uid']),
+                productWeight: controller.productData['size'],
+                productTitle: controller.productData['productName'],
+                productDesc: controller.productData['productDescription'],
+                brandName: controller.productData['productName'],
+                unit: controller.productData['unit'],
+                cost: controller.productData['price'],
+                msrp: controller.productData['oldPrice'],
+                imageUrls: controller.productData['backgroundImage'],
+                thumbnailUrl: controller.productData['backgroundImage'][0],
+                categories: controller.productData['categories'],
+              );
+              Get.toNamed(RouteName.cartScreen, arguments: product);
+            } else {
+              Utils.showCustomSnackBar(
+                  "Warning",
+                  "Please enter your phone number to checkout",
+                  ContentType.warning);
+              //  Get.toNamed(RouteName.updateProfileScreen);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => UpdateProfileScreen()));
             }
           },
           icon: Icon(Icons.shopping_cart, color: Colors.white),
@@ -540,7 +545,6 @@ Utils.showCustomSnackBar("Warning", "Please enter your phone number to checkout"
         ),
       ),
     );
-  
   }
 
   Widget _buildDiscountTag(Size size) {
@@ -557,7 +561,7 @@ Utils.showCustomSnackBar("Warning", "Please enter your phone number to checkout"
           borderRadius: BorderRadius.circular(20),
         ),
         child: Text(
-         controller.productData['discount'] ,
+          controller.productData['discount'],
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
