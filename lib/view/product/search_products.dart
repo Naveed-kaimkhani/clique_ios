@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
-
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/data/models/product_model.dart';
 import 'package:clique/routes/routes_name.dart';
@@ -144,25 +142,7 @@ class _ProductSearchScreenState extends State<ProductSearchScreen> {
                       itemBuilder: (context, index) {
                         ProductModel product = products[index];
                         return GestureDetector(
-                          // onTap: () {
-                          //     FocusScope.of(context).unfocus(); // 👈 Close keyboard
-
-                          //   Get.toNamed(
-                          //     RouteName.productDetailsScreen,
-                          //     arguments: {
-                          //       'uid': product.id.toString(),
-                          //       'backgroundImage': product.imageUrls,
-                          //       'productName': product.productTitle,
-                          //       'productDescription': product.productDesc,
-                          //       'price': product.cost,
-                          //       'oldPrice': product.msrp,
-                          //       'discount': 0.0,
-                          //       'unit': product.unit,
-                          //       'categories': product.categories,
-                          //       'size': product.productWeight,
-                          //     },
-                          //   );
-                          // },
+                        
                           onTap: () {
                             FocusScope.of(context).unfocus(); // Close keyboard
 
