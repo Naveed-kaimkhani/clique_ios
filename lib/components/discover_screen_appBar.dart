@@ -1,11 +1,14 @@
 import 'package:clique/constants/app_colors.dart';
+import 'package:clique/constants/index.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 class DiscoverScreenAppBar extends PreferredSize {
   final String title;
   final IconData? icon;
   final bool isNotification;
-  
+
   final IconData? logoutIcon;
   DiscoverScreenAppBar({
     super.key,
@@ -14,7 +17,8 @@ class DiscoverScreenAppBar extends PreferredSize {
     this.icon,
     this.isNotification = false,
   }) : super(
-          preferredSize: const Size.fromHeight(kToolbarHeight * 0.8), // Increased height
+          preferredSize:
+              const Size.fromHeight(kToolbarHeight * 0.8), // Increased height
           child: _DiscoverScreenAppBarWidget(
             title: title,
             icon: icon,
@@ -28,7 +32,7 @@ class _DiscoverScreenAppBarWidget extends StatelessWidget {
   final IconData? icon;
   final bool isNotification;
 
-   _DiscoverScreenAppBarWidget({
+  _DiscoverScreenAppBarWidget({
     required this.title,
     this.icon,
     this.isNotification = false,
@@ -56,18 +60,17 @@ class _DiscoverScreenAppBarWidget extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-             
               Text(
                 title,
                 style: TextStyle(
-                  color: Colors.white,
-                  fontSize: titleFontSize,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: 'SofiaPro'
-                ),
+                    color: Colors.white,
+                    fontSize: titleFontSize,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'SofiaPro'),
               ),
-          
-                
+              IconButton(
+                  onPressed: () => Get.toNamed(RouteName.cartScreen),
+                  icon: Icon(Icons.card_travel))
             ],
           ),
         ),

@@ -49,9 +49,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     // Get the screen size
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    double subTotal = (_cartQuantityController.products.first.cost *
-        _cartQuantityController.quantity.value);
-
+    // double subTotal = (_cartQuantityController.products.first.cost *
+    //     _cartQuantityController.quantity.value);
+    double subTotal = _cartQuantityController.getSubTotal();
     // Define responsive padding and font sizes
     final double horizontalPadding = screenWidth * 0.06; // 6% of screen width
     final double verticalPadding = screenHeight * 0.02; // 2% of screen height
@@ -115,7 +115,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   final address = addressController.address1.value;
 
                   return Text(
-                    '${addressController.address2 ?? "Address not found"} ${addressController.city ?? ""} ${addressController.stateCode ?? ""} ${addressController.zipCode ?? ""}',
+                    '${addressController.address2} ${addressController.city } ${addressController.stateCode} ${addressController.zipCode ?? ""}',
                     style: TextStyle(fontSize: subtitleFontSize),
                   );
                 }),
@@ -320,11 +320,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     SizedBox(
                       width: 4,
                     ),
-                    GradientText(
-                      (_cartQuantityController.quantity.value).toString(),
-                      gradient: AppColors.appGradientColors,
-                      fontSize: 14,
-                    ),
+                    // GradientText(
+                    //   (_cartQuantityController.getQuantity()).toString(),
+                    //   gradient: AppColors.appGradientColors,
+                    //   fontSize: 14,
+                    // ),
                   ],
                 ),
               ],

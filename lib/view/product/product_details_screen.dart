@@ -8,6 +8,7 @@ import 'package:clique/controller/user_controller.dart';
 import 'package:clique/data/models/product_model.dart';
 import 'package:clique/utils/utils.dart';
 import 'package:clique/view/profile/update_profile_screen.dart';
+import 'package:clique/view_model/cart_quantity_controller.dart';
 import 'package:clique/view_model/favorite_controller.dart';
 import 'package:clique/view_model/product_details_controller.dart';
 import 'package:clique/view_model/product_view_model.dart';
@@ -37,6 +38,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   final ProductViewModel _productViewModel = Get.find<ProductViewModel>();
 
+  final cartQuantityController = Get.find<CartQuantityController>();
   @override
   void initState() {
     super.initState();
@@ -514,7 +516,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 thumbnailUrl: controller.productData['backgroundImage'][0],
                 categories: controller.productData['categories'],
               );
-              Get.toNamed(RouteName.cartScreen, arguments: product);
+              // Get.toNamed(RouteName.cartScreen, arguments: product);lklk
+
+              cartQuantityController.addProduct(product);
+              cartQuantityController.saveCart();
             } else {
               Utils.showCustomSnackBar(
                   "Warning",

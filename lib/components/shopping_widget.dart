@@ -55,8 +55,8 @@ class _ShoppingWidgetState extends State<ShoppingWidget> {
       setState(() {
         _isLoading = true;
       });
+      product ??= await _productViewModel.fetchProductById(int.parse("11241"));
       // If not found locally, fetch from API
-      product ??= await _productViewModel.fetchProductById(int.parse(widget.popstream.partyId));
 
       if (product != null) {
         Get.toNamed(

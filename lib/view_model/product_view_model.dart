@@ -21,11 +21,13 @@ class ProductViewModel extends GetxController {
   }
 // final isLoading = false.obs;
 
-void setLoading(bool value) {
-  isLoading.value = value;
-}
+  void setLoading(bool value) {
+    isLoading.value = value;
+  }
+
   Future<ProductModel?> fetchProductById(int productId) async {
     try {
+      log("searching for product");
       final response = await _productRepository.fetchProductsById(productId);
       if (response['products'] != null &&
           response['products'] is List &&
