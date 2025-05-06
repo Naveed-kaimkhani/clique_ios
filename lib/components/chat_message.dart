@@ -1,6 +1,7 @@
 import 'package:clique/components/reaction_sheet.dart';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/view/chat/chat_view_model.dart';
+import 'package:clique/view_model/group_chat_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -62,11 +63,14 @@ final isUploading = false.obs;
   }
   @override
   Widget build(BuildContext context) {
+        final controller = Get.find<GroupChatViewModel>();
+
     final screenWidth = MediaQuery.of(context).size.width;
 final reactionStream = chatViewModel.getReactionsStream(message.id);
 
     return GestureDetector(
-    
+          onHorizontalDragEnd: (_) => controller.setReplyToMessage(message),
+
       onLongPress: () {
         final RenderBox renderBox = context.findRenderObject() as RenderBox;
         final position = renderBox.localToGlobal(Offset.zero);

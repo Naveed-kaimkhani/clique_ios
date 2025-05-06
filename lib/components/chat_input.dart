@@ -1,11 +1,17 @@
 
 import 'package:clique/components/send_button.dart';
+import 'package:clique/models/message_model.dart';
 import 'package:flutter/material.dart';
 
 class ChatInputWidget extends StatelessWidget {
   final Function(String) onSend;
-
-  const ChatInputWidget({super.key, required this.onSend});
+  final MessageModel? replyingTo;
+  final VoidCallback? onCancelReply;
+    ChatInputWidget({
+    required this.onSend,
+    this.replyingTo,
+    this.onCancelReply,
+  });
 
   @override
   Widget build(BuildContext context) {

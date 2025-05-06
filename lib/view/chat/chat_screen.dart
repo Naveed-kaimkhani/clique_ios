@@ -42,7 +42,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
     super.initState();
     final UserController userController = Get.find<UserController>();
 
-    final ChatViewModel controller = Get.put(ChatViewModel());
+    // final ChatViewModel controller = Get.put(ChatViewModel());
     viewModel = Get.put(GroupChatViewModel(
       groupId: widget.guid,
       token: userController.token.value,
@@ -178,17 +178,31 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                 },
               ),
             ),
-            ChatInputWidget(
-              onSend: (message) {
-                if (message.isEmpty) {
-                  return;
-                } else {
-                  viewModel.sendMessage(message).then((_) {
-                    _scrollToBottom();
-                  });
-                }
-              },
-            ),
+            // ChatInputWidget(
+            //   onSend: (message) {
+            //     if (message.isEmpty) {
+            //       return;
+            //     } else {
+            //       viewModel.sendMessage(message).then((_) {
+            //         _scrollToBottom();
+            //       });
+            //     }
+            //   },
+            // ),
+   Obx(() => ChatInputWidget(
+  replyingTo: viewModel.replyingTo.value,
+  onCancelReply: viewModel.cancelReply,
+  onSend: (message) {
+    if (message.isEmpty) return;
+
+    viewModel.sendMessage(message).then((_) {
+      _scrollToBottom();
+      viewModel.cancelReply();
+    });
+  },
+)),
+
+
           ],
         ),
       ),

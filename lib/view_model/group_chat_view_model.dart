@@ -19,6 +19,7 @@ class GroupChatViewModel extends GetxController {
     required this.token,
     required this.userId,
   });
+final Rx<MessageModel?> replyingTo = Rx<MessageModel?>(null);
 
   final StreamController<List<MessageModel>> _messageController =
       StreamController<List<MessageModel>>.broadcast();
@@ -44,6 +45,13 @@ class GroupChatViewModel extends GetxController {
     super.onClose();
   }
 
+void setReplyToMessage(MessageModel message) {
+  replyingTo.value = message;
+}
+
+void cancelReply() {
+  replyingTo.value = null;
+}
   // Fetch initial 20 messages
   Future<void> _fetchInitialMessages() async {
     if (_isLoading) return;
@@ -80,105 +88,14 @@ class GroupChatViewModel extends GetxController {
     }
   }
 
-
-// Future<void> _loadMoreMessages() async {
-
-//   try {
-//      int lastMessageTimestamp = _messages.first.time; // Timestamp of the oldest message
-//       // apiUrl += "?limit=200&timeStamp=$lastMessageTimestamp-${8000}";
-//     String apiUrl = "https://cactisocial.com/api-clique/public/api/v1/cometchat/groups/$groupId/messages?limit=200&timeStamp=$lastMessageTimestamp-${8000}";
-
-
-//     final response = await ApiClient.getMessages(
-//       url: apiUrl,
-//       headers: {"Authorization": "Bearer $token"},
-//     );
-//     if (response.statusCode == 200) {
-//       log(response.body);
-//       final dynamic responseData = jsonDecode(response.body);
-
-//       if (responseData is Map<String, dynamic> && responseData.containsKey("messages")) {
-//         final messagesData = responseData["messages"];
-
-//         if (messagesData is List && messagesData.isNotEmpty) {
-//           final List<MessageModel> newMessages = messagesData
-//               .map((msg) => MessageModel.fromJson({...msg, 'userId': userId}))
-//               .toList();
-
-              
-// _messageController.add(newMessages);
-//             _messages.insertAll(0, newMessages); // Add new messages at the beginning
-//             // messagesStream.add(List.from(_messages)); // Update stream
-//         } else {
-//           hasMoreMessages = false; // No more messages to load
-//         }
-//       }
-//     }
-//   } catch (e) {
-//     debugPrint("Error fetching messages: $e");
-//   } finally {
-//     _isLoading = false;
-//   }
-// }
-
-// Future<void> _fetchMessages(bool loadMore) async {
-//   if (_isLoading || (loadMore && !hasMoreMessages)) return;
-//   _isLoading = true;
-//     if (loadMore) {
-//     }
-//   try {
-//     String apiUrl = "https://cactisocial.com/api-clique/public/api/v1/cometchat/groups/$groupId/messages";
-
-//     if (loadMore && _messages.isNotEmpty) {
-//       // Fetch older messages with timestamp parameter and limit of 200
-//       int lastMessageTimestamp = _messages.first.time; // Timestamp of the oldest message
-//       apiUrl += "?limit=200&timeStamp=$lastMessageTimestamp-${8000}"; // Use limit=200 for older messages
-
-//     } else {
-//       // Fetch initial messages with limit of 20
-//       apiUrl += "?limit=10";
-//     }
-
-//     final response = await ApiClient.getMessages(
-//       url: apiUrl,
-//       headers: {"Authorization": "Bearer $token"},
-//     );
-
-//     if (response.statusCode == 200) {
-//       final dynamic responseData = jsonDecode(response.body);
-
-//       if (responseData is Map<String, dynamic> && responseData.containsKey("messages")) {
-//         final messagesData = responseData["messages"];
-
-//         if (messagesData is List && messagesData.isNotEmpty) {
-//           final List<MessageModel> newMessages = messagesData
-//               .map((msg) => MessageModel.fromJson({...msg, 'userId': userId}))
-//               .toList();
-
-//           if (loadMore) {
-//             _messages.insertAll(0, newMessages); // Add older messages at the start
-//           } else {
-//             _messages = newMessages.reversed.toList(); // Show latest messages first
-//           }
-
-//           _messageController.add(_messages);
-//         } else {
-//           hasMoreMessages = false; // No more messages to load
-//         }
-//       }
-//     }
-//   } catch (e) {
-//     debugPrint("Error fetching messages: $e");
-//   } finally {
-//     _isLoading = false;
-//   }
-// }
   Future<void> loadMoreMessages() async {
    
       // await _loadMoreMessages(); 
   }
 
   Future<void> sendMessage(String message) async {
+      final replyMessage = replyingTo.value;
+
     if (message.isEmpty) return;
 
     try {
