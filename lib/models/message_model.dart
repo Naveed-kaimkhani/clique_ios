@@ -7,6 +7,8 @@ class MessageModel {
   final int time;
   final List<String> seenBy;
   final List<ReactionModel> reactions;
+    // final int time; // 👈 This will hold sentAt from JSON
+
   final MessageModel? replyTo; // 👈 new field
 
 

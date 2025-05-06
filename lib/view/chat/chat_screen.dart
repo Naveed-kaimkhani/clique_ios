@@ -42,7 +42,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
     super.initState();
     final UserController userController = Get.find<UserController>();
 
-    // final ChatViewModel controller = Get.put(ChatViewModel());
+    final ChatViewModel controller = Get.put(ChatViewModel());
     viewModel = Get.put(GroupChatViewModel(
       groupId: widget.guid,
       token: userController.token.value,
@@ -155,6 +155,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                   final messages = snapshot.data!;
 
                   return ListView.builder(
+                    reverse: true,
                     controller: _scrollController,
                     padding: EdgeInsets.all(16),
                     itemCount:

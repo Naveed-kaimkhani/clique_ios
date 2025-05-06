@@ -18,7 +18,7 @@ class ChatViewModel extends GetxController {
     _reactionOverlay?.remove();
     _reactionOverlay = entry;
     isReactionSheetVisible.value = true;
-    Overlay.of(context, rootOverlay: true)?.insert(entry);
+    Overlay.of(context, rootOverlay: true).insert(entry);
   }
 
   void hideReactionSheet() {

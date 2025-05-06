@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:clique/components/reaction_sheet.dart';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/view/chat/chat_view_model.dart';
@@ -50,26 +52,26 @@ final isUploading = false.obs;
               chatViewModel.addReactionToMessage(message.id, reaction, userController.uid.value);
               chatViewModel.hideReactionSheet();
             },
-//             onReactionSelected: (reaction) {
-//   chatViewModel.toggleReaction(message.id, reaction, userController.uid.value);
-//   chatViewModel.hideReactionSheet();
-// },
+
           ),
         ),
       ),
     );
 
-    // chatViewModel.showReactionSheet(overlayEntry, context); // 🔧 pass overlay
   }
   @override
   Widget build(BuildContext context) {
-        final controller = Get.find<GroupChatViewModel>();
+        // final controller = Get.find<GroupChatViewModel>();
 
     final screenWidth = MediaQuery.of(context).size.width;
 final reactionStream = chatViewModel.getReactionsStream(message.id);
 
     return GestureDetector(
-          onHorizontalDragEnd: (_) => controller.setReplyToMessage(message),
+          // onHorizontalDragEnd: (_) => chatViewModel.setReplyToMessage(message),
+          
+          onHorizontalDragEnd: (_) =>(){
+            log("message id: ${message.id}");
+          },
 
       onLongPress: () {
         final RenderBox renderBox = context.findRenderObject() as RenderBox;
