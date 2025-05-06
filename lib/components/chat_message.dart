@@ -3,20 +3,21 @@ import 'dart:developer';
 import 'package:clique/components/reaction_sheet.dart';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/view/chat/chat_view_model.dart';
-import 'package:clique/view_model/group_chat_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../models/message_model.dart';
-import '../constants/app_colors.dart'; // Assuming you have this file for colors
+import '../constants/app_colors.dart';
 
 class ChatMessageWidget extends StatelessWidget {
   final MessageModel message;
 
-    final chatViewModel = Get.find<ChatViewModel>();
+  final chatViewModel = Get.find<ChatViewModel>();
   final userController = Get.find<UserController>();
-   ChatMessageWidget({super.key, required this.message});
-final isUploading = false.obs;
+
+  ChatMessageWidget({super.key, required this.message});
+
+  final isUploading = false.obs;
 
   String convertTimestampTo24HourUTC(int timestamp) {
     final dateTime =
@@ -26,15 +27,13 @@ final isUploading = false.obs;
   }
 
   void showReactionsOverlay(BuildContext context, Offset position) {
-    final overlay = Overlay.of(context); // ✅ Use passed context
-
+    final overlay = Overlay.of(context);
     if (overlay == null) {
       print("Overlay not found");
       return;
     }
 
     final screenWidth = MediaQuery.of(context).size.width;
-
     double left = position.dx;
     if (!message.isMe) {
       left = position.dx - screenWidth * 0.2;
@@ -49,34 +48,43 @@ final isUploading = false.obs;
           color: Colors.transparent,
           child: ReactionSheet(
             onReactionSelected: (reaction) {
-              chatViewModel.addReactionToMessage(message.id, reaction, userController.uid.value);
+              chatViewModel.addReactionToMessage(
+                message.id,
+                reaction,
+                userController.uid.value,
+              );
               chatViewModel.hideReactionSheet();
             },
-
           ),
         ),
       ),
     );
-
+    overlay.insert(overlayEntry);
   }
+
   @override
   Widget build(BuildContext context) {
-        // final controller = Get.find<GroupChatViewModel>();
-
     final screenWidth = MediaQuery.of(context).size.width;
-final reactionStream = chatViewModel.getReactionsStream(message.id);
+    final reactionStream = chatViewModel.getReactionsStream(message.id);
 
     return GestureDetector(
-          // onHorizontalDragEnd: (_) => chatViewModel.setReplyToMessage(message),
-          
-          onHorizontalDragEnd: (_) =>(){
-            log("message id: ${message.id}");
-          },
+      onHorizontalDragUpdate: (details) {
+        // Customize this logic based on your swipe threshold
+        if (details.primaryDelta != null && details.primaryDelta! > 15) {
+          log("Swiped right on message: ${message.id}");
 
+          // Call your reply handling method here
+          // chatViewModel.setReplyMessage(message);
+        } else if (details.primaryDelta != null &&
+            details.primaryDelta! < -15) {
+          log("Swiped left on message: ${message.id}");
+          // Optional: handle left swipe
+        }
+      },
       onLongPress: () {
         final RenderBox renderBox = context.findRenderObject() as RenderBox;
         final position = renderBox.localToGlobal(Offset.zero);
-        showReactionsOverlay(context, position); // ✅ pass local context
+        showReactionsOverlay(context, position);
       },
       child: Align(
         alignment: message.isMe ? Alignment.centerRight : Alignment.centerLeft,
@@ -84,7 +92,6 @@ final reactionStream = chatViewModel.getReactionsStream(message.id);
           crossAxisAlignment:
               message.isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           children: [
-            // Chat Bubble
             Container(
               width: screenWidth * 0.7,
               margin: const EdgeInsets.symmetric(vertical: 10),
@@ -114,15 +121,48 @@ final reactionStream = chatViewModel.getReactionsStream(message.id);
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
+
+                  // 🔁 Reply Preview
+                  if (message.parentId != null && message.parentMessage != null)
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 8),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 6, horizontal: 10),
+                      decoration: BoxDecoration(
+                        color: message.isMe
+                            ? Colors.white24
+                            : Colors.grey.shade200,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: message.isMe
+                              ? Colors.white38
+                              : Colors.grey.shade400,
+                        ),
+                      ),
+                      child: message.parentMessage == null
+                          ? SizedBox()
+                          : Text(
+                              message.parentMessage!.message,
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontStyle: FontStyle.italic,
+                                color: message.isMe
+                                    ? Colors.white
+                                    : Colors.black87,
+                              ),
+                            ),
+                    ),
+
+                  // 💬 Message Text
                   Text(
                     message.message,
                     style: TextStyle(
-                      color: message.isMe
-                          ? const Color.fromRGBO(255, 255, 255, 1)
-                          : Colors.black,
+                      color: message.isMe ? Colors.white : Colors.black,
                     ),
                   ),
                   const SizedBox(height: 8),
+
+                  // ⏰ Timestamp
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -130,56 +170,57 @@ final reactionStream = chatViewModel.getReactionsStream(message.id);
                         convertTimestampTo24HourUTC(message.time),
                         style: TextStyle(
                           fontSize: screenWidth * 0.03,
-                          color: message.isMe ? Colors.white : Colors.black,
+                          color: message.isMe ? Colors.white70 : Colors.black54,
                         ),
                       ),
                     ],
                   ),
 
-             
-            
+                  // 💬 Reactions
+                  StreamBuilder<Map<String, int>>(
+                    stream: reactionStream,
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return const SizedBox();
+                      }
 
-StreamBuilder<Map<String, int>>(
-  stream: reactionStream,
-  builder: (context, snapshot) {
-    if (!snapshot.hasData || snapshot.data!.isEmpty) {
-      return const SizedBox();
-    }
-
-    final reactions = snapshot.data!;
-    return Wrap(
-      spacing: 6,
-      runSpacing: 4,
-      children: reactions.entries.map((entry) {
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-          decoration: BoxDecoration(
-            color: message.isMe ? Colors.white24 : Colors.grey[300],
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(entry.key),
-              const SizedBox(width: 4),
-              Text(
-                entry.value.toString(),
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  color: message.isMe ? Colors.white : Colors.black,
-                ),
-              ),
-            ],
-          ),
-        );
-      }).toList(),
-    );
-  },
-),
-
-    ],
-                   
+                      final reactions = snapshot.data!;
+                      return Wrap(
+                        spacing: 6,
+                        runSpacing: 4,
+                        children: reactions.entries.map((entry) {
+                          return Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 6, vertical: 3),
+                            decoration: BoxDecoration(
+                              color: message.isMe
+                                  ? Colors.white24
+                                  : Colors.grey[300],
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(entry.key),
+                                const SizedBox(width: 4),
+                                Text(
+                                  entry.value.toString(),
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    color: message.isMe
+                                        ? Colors.white
+                                        : Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
           ],

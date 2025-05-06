@@ -26,110 +26,6 @@ class OrderViewModel extends GetxController {
   Rx<OrderSummary?> orderSummary =
       Rx<OrderSummary?>(null); // Define the orderSummary field
 
-  // Future<OrderSummary?> submitOrderFromCart() async {
-  //   try {
-  //     isLoading.value = true;
-
-  //     // Check if address is empty
-  //     if (addressController.address1.isEmpty) {
-  //       Get.snackbar("Error", "Please enter address");
-  //       return null;
-  //     }
-
-  //     // Prepare the address and order
-  //     var address = Address(
-  //       address1: addressController.address1.value,
-  //       address2: addressController.address2.value,
-  //       city: addressController.city.value,
-  //       stateCode: addressController.stateCode.value,
-  //       countryCode: 'US',
-  //       zipCode: addressController.zipCode.value,
-  //     );
-
-  //     var order = Order(
-  //       customerId: userController.uid.toString(),
-  //       firstName: userController.userName.value,
-  //       lastName: "",
-  //       phone: userController.phone.value,
-  //       address: address,
-  //       transactions: [
-  //         Transaction(
-  //           tdid: cartQuantityController.products.first.tdid ?? "",
-  //           quantity: cartQuantityController.quantity.value,
-  //         )
-  //       ],
-  //       productDetails: [
-  //         ProductModel(
-  //           id: cartQuantityController.products.first.id,
-  //           productWeight: cartQuantityController.products.first.productWeight,
-  //           productCode: cartQuantityController.products.first.productCode,
-  //           unit: cartQuantityController.products.first.unit,
-  //           productTitle: cartQuantityController.products.first.productTitle,
-  //           productDesc: cartQuantityController.products.first.productDesc,
-  //           imageUrls: cartQuantityController.products.first.imageUrls,
-  //           cost: cartQuantityController.products.first.cost,
-  //           brandName: "",
-  //           msrp: 0,
-  //           thumbnailUrl: "",
-  //           categories: "",
-  //           variantGroupId: "",
-  //         )
-  //       ],
-  //     );
-
-  //     final url = Uri.parse(
-  //         "https://cactisocial.com/api-clique/public/api/v1/topdawg/orders");
-  //     final headers = {
-  //       'Content-Type': 'application/json',
-  //       'Authorization': 'Bearer ${userController.token.value}',
-  //     };
-
-  //     final Map<String, dynamic> orderMap = order.toMap();
-  //     final response = await http.post(
-  //       url,
-  //       headers: headers,
-  //       body: jsonEncode(orderMap),
-  //     );
-
-  //     log(response.body);
-  //     log(response.statusCode.toString());
-  //     if (response.statusCode == 200) {
-  //       final parsedOrderSummary =
-  //           OrderSummary.fromJson(jsonDecode(response.body));
-  //       orderSummary.value = parsedOrderSummary;
-  //       return parsedOrderSummary;
-  //     } else {
-  //       // Decode error and extract meaningful message
-  //       final Map<String, dynamic> errorBody = jsonDecode(response.body);
-  //       String userErrorMessage = "Failed to place order";
-
-  //       if (errorBody.containsKey('response') &&
-  //           errorBody['response']['messages'] != null) {
-  //         final messages = errorBody['response']['messages'];
-  //         String allErrors = "";
-
-  //         messages.forEach((key, value) {
-  //           final errors = value['error'];
-  //           if (errors != null && errors.isNotEmpty) {
-  //             allErrors += "${errors[0]}\n";
-  //           }
-  //         });
-
-  //         userErrorMessage = allErrors.trim();
-  //       }
-
-  //       Utils.showCustomSnackBar(
-  //           "Error", userErrorMessage, ContentType.failure);
-  //       return null;
-  //     }
-  //   } catch (e) {
-  //     Utils.showCustomSnackBar(
-  //         "Error", "Failed to place order: $e", ContentType.failure);
-  //     return null;
-  //   } finally {
-  //     isLoading.value = false;
-  //   }
-  // }
   Future<OrderSummary?> submitOrderFromCart() async {
     try {
       isLoading.value = true;
@@ -201,8 +97,6 @@ class OrderViewModel extends GetxController {
         body: jsonEncode(orderMap),
       );
 
-      log(response.body);
-      log(response.statusCode.toString());
 
       if (response.statusCode == 200) {
         final parsedOrderSummary =
@@ -313,9 +207,7 @@ class OrderViewModel extends GetxController {
         headers: headers,
         body: jsonEncode(orderMap), // Encode the order map to JSON
       );
-      log(response.body);
-
-      log(response.statusCode.toString());
+   
       if (response.statusCode == 200) {
         // Success
         final parsedOrderSummary =

@@ -27,20 +27,18 @@ class ProductViewModel extends GetxController {
 
   Future<ProductModel?> fetchProductById(int productId) async {
     try {
-      log("searching for product");
       final response = await _productRepository.fetchProductsById(productId);
       if (response['products'] != null &&
           response['products'] is List &&
           response['products'].isNotEmpty) {
         final product = ProductModel.fromJson(response['products'][0]);
-        log("product kya hy $product");
+      
         products.add(product); // Add to local list
         return product;
       } else {
         return null;
       }
     } catch (e) {
-      log("Failed to fetch product: $e");
       return null;
     }
   }

@@ -40,8 +40,6 @@ class ProductRepository {
         'Accept': 'application/json',
       },
     );
-    // log(response.body);
-    // log("status code ${response.statusCode}");
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);

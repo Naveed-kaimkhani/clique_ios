@@ -45,7 +45,6 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log(backgroundImage.toString());
     final size = MediaQuery.of(context).size;
     // Get screen width and height using MediaQuery
     final screenWidth = MediaQuery.of(context).size.width;

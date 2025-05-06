@@ -1,3 +1,4 @@
+import 'dart:developer';
 
 class MessageModel {
   final String sender;
@@ -7,10 +8,11 @@ class MessageModel {
   final int time;
   final List<String> seenBy;
   final List<ReactionModel> reactions;
-    // final int time; // 👈 This will hold sentAt from JSON
+  // final int time; // 👈 This will hold sentAt from JSON
+  MessageModel? parentMessage; // Resolved later after parsing all messages
+  final String? parentId;
 
   final MessageModel? replyTo; // 👈 new field
-
 
   MessageModel({
     required this.sender,
@@ -18,7 +20,9 @@ class MessageModel {
     required this.isMe,
     required this.id,
     required this.time,
-     this.replyTo,
+    this.replyTo,
+    this.parentId,
+    this.parentMessage,
     this.seenBy = const [],
     this.reactions = const [],
   });
@@ -37,8 +41,8 @@ class MessageModel {
       sender: json['name'],
       message: json['message'],
       id: json['id'],
-      
-    replyTo: json['replyto'],
+      parentId: json['parentId'],
+      replyTo: json['replyto'],
       isMe: json['uid'] == json['userId'],
       time: json['sentAt'],
       seenBy: List<String>.from(json['seenBy'] ?? []),
@@ -46,7 +50,6 @@ class MessageModel {
     );
   }
 }
-
 
 class ReactionModel {
   final String reaction;
@@ -65,21 +68,22 @@ class ReactionModel {
   }
 }
 
-// class MessageModel {
-//   final String id;
-//   final String sender;
-//   final String content;
-//   final DateTime timestamp;
-//   final MessageModel? replyTo; // 👈 new field
+List<MessageModel> parseMessages(List<dynamic> jsonList) {
+  log("parsed called");
+  final messages = jsonList.map((json) => MessageModel.fromJson(json)).toList();
 
-//   MessageModel({
-//     required this.id,
-//     required this.sender,
-//     required this.content,
-//     required this.timestamp,
-//     this.replyTo,
-//   });
+  final messageMap = {for (var msg in messages) msg.id: msg};
+  log(messageMap.toString());
+  for (var msg in messages) {
+    if (msg.parentId != null) {
+      if (msg.parentMessage != null) {
+        log(
+            "↳ Replied to: ${msg.parentMessage!.message} (from ${msg.parentMessage!.sender})");
+      }
 
+      msg.parentMessage = messageMap[msg.parentId!];
+    }
+  }
 
-  
-
+  return messages;
+}
