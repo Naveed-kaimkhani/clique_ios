@@ -32,7 +32,9 @@ class ProductModel {
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
-    final imageUrls = (json['image_url'] as String).split(',');
+    // final imageUrls = (json['image_url'] as String).split(',');
+    final imageUrls = (json['image_url'] as String?)?.split(',') ?? [];
+
     final thumbnails = (json['thumbnail_url'] as String).split(',');
     final categories = json['categories'];
 

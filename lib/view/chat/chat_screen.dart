@@ -189,19 +189,22 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
             //     }
             //   },
             // ),
-   Obx(() => ChatInputWidget(
+            ChatInputWidget(
   replyingTo: viewModel.replyingTo.value,
-  onCancelReply: viewModel.cancelReply,
-  onSend: (message) {
-    if (message.isEmpty) return;
-
-    viewModel.sendMessage(message).then((_) {
-      _scrollToBottom();
-      viewModel.cancelReply();
+  onCancelReply: () {
+    setState(() {
+    viewModel.replyingTo.value = null;
     });
   },
-)),
-
+  onSend: (message, replyingTo) {
+    viewModel.sendMessage(message, ).then((_) {
+      _scrollToBottom();
+      setState(() {
+      viewModel.replyingTo.value= null;
+      });
+    });
+  },
+),
 
           ],
         ),

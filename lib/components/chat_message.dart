@@ -46,20 +46,20 @@ final isUploading = false.obs;
         child: Material(
           color: Colors.transparent,
           child: ReactionSheet(
-            // onReactionSelected: (reaction) {
-            //   chatViewModel.addReactionToMessage(message.id, reaction, userController.uid.value);
-            //   chatViewModel.hideReactionSheet();
-            // },
             onReactionSelected: (reaction) {
-  chatViewModel.toggleReaction(message.id, reaction, userController.uid.value);
-  chatViewModel.hideReactionSheet();
-},
+              chatViewModel.addReactionToMessage(message.id, reaction, userController.uid.value);
+              chatViewModel.hideReactionSheet();
+            },
+//             onReactionSelected: (reaction) {
+//   chatViewModel.toggleReaction(message.id, reaction, userController.uid.value);
+//   chatViewModel.hideReactionSheet();
+// },
           ),
         ),
       ),
     );
 
-    chatViewModel.showReactionSheet(overlayEntry, context); // 🔧 pass overlay
+    // chatViewModel.showReactionSheet(overlayEntry, context); // 🔧 pass overlay
   }
   @override
   Widget build(BuildContext context) {
@@ -136,81 +136,6 @@ final reactionStream = chatViewModel.getReactionsStream(message.id);
 
              
             
-//                   if (message.reactions.isNotEmpty)
-// Wrap(
-//       spacing: 6,
-//       runSpacing: 4,
-//       children: message.reactions.map((entry) {
-//         return Container(
-//           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-//           decoration: BoxDecoration(
-//             color: message.isMe ? Colors.white24 : Colors.grey[300],
-//             borderRadius: BorderRadius.circular(12),
-//           ),
-//           child: Row(
-//             mainAxisSize: MainAxisSize.min,
-//             children: [
-//               Text(entry.reaction), // Emoji
-//               const SizedBox(width: 4),
-//               Text(
-//                 entry.count.toString(), // Count
-//                 style: TextStyle(
-//                   fontSize: 12,
-//                   fontWeight: FontWeight.bold,
-//                   color: message.isMe ? Colors.white : Colors.black,
-//                 ),
-//               ),
-//             ],
-//           ),
-//         );
-//       }).toList(),
-//     ),
-  
-
-
-  // final chatViewModel = Get.find<ChatViewModel>();
-
-// StreamBuilder<Map<String, int>>(
-//   stream: chatViewModel.getReactionsStream(message.id),
-//   builder: (context, snapshot) {
-//     if (!snapshot.hasData || snapshot.data!.isEmpty) {
-//       return const SizedBox();
-//     }
-
-//     final reactions = snapshot.data!;
-//     return Wrap(
-//       spacing: 6,
-//       runSpacing: 4,
-//       children: reactions.entries.map((entry) {
-//         return Container(
-//           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-//           decoration: BoxDecoration(
-//             color: message.isMe ? Colors.white24 : Colors.grey[300],
-//             borderRadius: BorderRadius.circular(12),
-//           ),
-//           child: Row(
-//             mainAxisSize: MainAxisSize.min,
-//             children: [
-//               Text(entry.key), // 🙂 emoji
-//               const SizedBox(width: 4),
-//               Text(
-//                 entry.value.toString(), // 1
-//                 style: TextStyle(
-//                   fontSize: 12,
-//                   fontWeight: FontWeight.bold,
-//                   color: message.isMe ? Colors.white : Colors.black,
-//                 ),
-//               ),
-//             ],
-//           ),
-//         );
-//       }).toList(),
-//     );
-//   },
-// ),
-
-
-// final chatViewModel = Get.find<ChatViewModel>();
 
 StreamBuilder<Map<String, int>>(
   stream: reactionStream,
