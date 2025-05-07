@@ -505,6 +505,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             if (userController.phone.value.isNotEmpty) {
               final product = ProductModel(
                 id: int.parse(controller.productData['uid']),
+                tdid: controller.productData['tdid'],
                 productWeight: controller.productData['size'],
                 productTitle: controller.productData['productName'],
                 productDesc: controller.productData['productDescription'],
@@ -551,7 +552,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       ),
     );
   }
-
 
   Widget _iconButton(IconData icon, VoidCallback onTap) {
     return GestureDetector(

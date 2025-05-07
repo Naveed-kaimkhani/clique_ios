@@ -164,13 +164,7 @@ class _CartScreenState extends State<CartScreen> {
                   AuthButton(
                     buttonText: "Checkout",
                     onPressed: () {
-                      // if (cartQuantityController.quantity.value > 10) {
-                      //   Utils.showCustomSnackBar(
-                      //       "Warning",
-                      //       "Product quantity should not be more than 10",
-                      //       ContentType.warning);
-                      //   return;
-                      // }
+                  
                       if (controller.address1.value.isEmpty) {
                         Get.toNamed(RouteName.checkoutScreen);
                         return;

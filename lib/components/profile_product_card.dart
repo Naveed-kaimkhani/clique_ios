@@ -12,22 +12,22 @@ class ProfileProductCard extends StatelessWidget {
   final List<String> backgroundImage;
   final String productName;
   final String productDescription;
-   var price;
-   var oldPrice;
+  var price;
+  var oldPrice;
   final String discount;
-  
+  final String tdid;
   final String size;
-  
+
   final String categories;
-  
+
   final String unit;
   final Color textColor;
 
-   ProfileProductCard({
+  ProfileProductCard({
     required this.size,
     required this.backgroundImage,
     required this.productName,
-    
+    required this.tdid,
     required this.categories,
     required this.unit,
     required this.productDescription,
@@ -35,7 +35,8 @@ class ProfileProductCard extends StatelessWidget {
     required this.oldPrice,
     required this.discount,
     this.textColor = Colors.white,
-    super.key, required this.uid,
+    super.key,
+    required this.uid,
   });
 
   @override
@@ -55,74 +56,75 @@ class ProfileProductCard extends StatelessWidget {
     // final fontSizeDiscount = screenWidth * 0.03; // 3% of screen width
 
     return GestureDetector(
-      onTap:  () =>  Get.toNamed(
-    RouteName.productDetailsScreen,
-    arguments: {
-      'uid': uid,
-      'backgroundImage': backgroundImage,
-      'productName': productName,
-      'productDescription': productDescription,
-      'price': price,
-      'oldPrice': oldPrice,
-      'discount': discount,
-      'unit': unit, 
-      'categories':categories,
-      'size': size,
-
-    },
-  ),
+      onTap: () => Get.toNamed(
+        RouteName.productDetailsScreen,
+        arguments: {
+          'uid': uid,
+          'backgroundImage': backgroundImage,
+          'productName': productName,
+          'productDescription': productDescription,
+          'price': price,
+          'oldPrice': oldPrice,
+          'discount': discount,
+          'unit': unit,
+          'categories': categories,
+          'size': size,
+          'tdid': tdid,
+        },
+      ),
       child: Container(
         width: cardWidth,
         height: cardHeight,
-        padding: EdgeInsets.only(left: padding, right: padding, bottom: padding),
+        padding:
+            EdgeInsets.only(left: padding, right: padding, bottom: padding),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
         ),
         child: Stack(
           children: [
-         
-            
-Hero(
-  tag: uid,
-  child: ClipRRect(
-    borderRadius: BorderRadius.circular(20),
-    child: Stack(
-      children: [
-       CachedNetworkImage(
-  imageUrl: backgroundImage.first,
-  width: double.infinity,
-  height: double.infinity,
-  fit: BoxFit.cover,
-  placeholder: (context, url) => Shimmer.fromColors(
-    baseColor: Colors.grey.shade300,
-    highlightColor: Colors.grey.shade100,
-    child: Container(
-      width: double.infinity,
-      height: double.infinity,
-      color: Colors.grey, // or Colors.black if you want a dark shimmer
-    ),
-  ),
-  errorWidget: (context, url, error) => const Icon(Icons.error),
-),
-            Container(
-          width: double.infinity,
-          height: cardWidth * 2,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.bottomCenter,
-              end: Alignment.topCenter,
-              colors: [
-                Colors.black.withOpacity(0.6),
-                Colors.transparent,
-              ],
+            Hero(
+              tag: uid,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Stack(
+                  children: [
+                    CachedNetworkImage(
+                      imageUrl: backgroundImage.first,
+                      width: double.infinity,
+                      height: double.infinity,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Shimmer.fromColors(
+                        baseColor: Colors.grey.shade300,
+                        highlightColor: Colors.grey.shade100,
+                        child: Container(
+                          width: double.infinity,
+                          height: double.infinity,
+                          color: Colors
+                              .grey, // or Colors.black if you want a dark shimmer
+                        ),
+                      ),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      height: cardWidth * 2,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
+                          colors: [
+                            Colors.black.withOpacity(0.6),
+                            Colors.transparent,
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
-        ),
-      ],
-    ),
-  ),
-),
-      
+
             // Cart Icon (Top Right)
             Positioned(
               top: padding,
@@ -133,10 +135,11 @@ Hero(
                   color: Colors.white.withOpacity(0.8),
                   shape: BoxShape.circle,
                 ),
-                child: SvgPicture.asset(AppSvgIcons.bag, color: AppColors.black),
+                child:
+                    SvgPicture.asset(AppSvgIcons.bag, color: AppColors.black),
               ),
             ),
-      
+
             // Product Details (Bottom)
             Positioned(
               bottom: 0,
@@ -145,7 +148,8 @@ Hero(
               child: Container(
                 padding: EdgeInsets.all(padding),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+                  borderRadius:
+                      BorderRadius.vertical(bottom: Radius.circular(20)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,17 +163,15 @@ Hero(
                       ),
                     ),
                     SizedBox(height: padding * 0.5),
-                   
-
-                                Text(
-  productDescription,
-  maxLines: 2,
-  overflow: TextOverflow.ellipsis,
-  style: TextStyle(
-    color: textColor.withOpacity(0.7),
-    fontSize: fontSizeDescription,
-  ),
-),
+                    Text(
+                      productDescription,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: textColor.withOpacity(0.7),
+                        fontSize: fontSizeDescription,
+                      ),
+                    ),
                     SizedBox(height: padding),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -195,25 +197,27 @@ Hero(
                             //   ),
                             // ),
                             Stack(
-  children: [
-    Text(
-      "\$${oldPrice.toStringAsFixed(2)}",
-      style: TextStyle(
-        color: textColor.withOpacity(0.7),
-        fontSize: fontSizeOldPrice,
-      ),
-    ),
-    Positioned(
-      top: fontSizeOldPrice * 0.8, // Positioning the line at the center of text
-      left: 0,
-      right: 0,
-      child: Container(
-        height: 1, // Thickness of line
-        color: Colors.white, // Custom color for line
-      ),
-    ),
-  ],
-)
+                              children: [
+                                Text(
+                                  "\$${oldPrice.toStringAsFixed(2)}",
+                                  style: TextStyle(
+                                    color: textColor.withOpacity(0.7),
+                                    fontSize: fontSizeOldPrice,
+                                  ),
+                                ),
+                                Positioned(
+                                  top: fontSizeOldPrice *
+                                      0.8, // Positioning the line at the center of text
+                                  left: 0,
+                                  right: 0,
+                                  child: Container(
+                                    height: 1, // Thickness of line
+                                    color:
+                                        Colors.white, // Custom color for line
+                                  ),
+                                ),
+                              ],
+                            )
                           ],
                         ),
                         // Discount Badge

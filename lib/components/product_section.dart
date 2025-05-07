@@ -59,6 +59,7 @@ class ProductsSection extends StatelessWidget {
             productDescription: product.productDesc ,
             price: product.cost,
             oldPrice: product.msrp,
+            tdid: product.tdid??"",
             discount:  "$discount % OFF",
           );
         },

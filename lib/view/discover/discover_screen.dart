@@ -231,7 +231,9 @@ Widget _buildProductList(Size size) {
               child: ProductCard(
                 weight: product.productWeight,
                 unit: product.unit,
+                tdid: product.tdid??"",
                 isShowDiscount: discount > 0,
+                
                 uid: product.id.toString(),
                 categories: product.categories??'',
                 backgroundImage: product.imageUrls.isNotEmpty ? product.imageUrls :List<String>.empty(),

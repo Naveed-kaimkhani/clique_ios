@@ -53,7 +53,6 @@ class OrderViewModel extends GetxController {
               product.id.toString()), // ensure quantity is tracked per product
         );
       }).toList();
-      log("transaction:$transactions");
       List<ProductModel> productDetails =
           cartQuantityController.products.map((product) {
         return ProductModel(

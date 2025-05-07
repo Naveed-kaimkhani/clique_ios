@@ -90,6 +90,7 @@ class _ShoppingWidgetState extends State<ShoppingWidget> {
       'unit': product.unit,
       'categories': product.categories,
       'size': product.productWeight,
+      'tdid':product.tdid,
     };
   }
 

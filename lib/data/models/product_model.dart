@@ -62,6 +62,7 @@ class ProductModel {
     return {
       'pid': id,
       'product_title': productTitle,
+      'tdid': tdid,
       'product_desc': productDesc,
       'price': cost,
       'product_image': imageUrls.join(','),

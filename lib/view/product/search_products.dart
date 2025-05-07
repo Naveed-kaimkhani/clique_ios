@@ -162,6 +162,7 @@ class _ProductSearchScreenState extends State<ProductSearchScreen> {
                                   'unit': product.unit,
                                   'categories': product.categories,
                                   'size': product.productWeight,
+                                  'tdid':product.tdid,
                                 },
                               );
                             });

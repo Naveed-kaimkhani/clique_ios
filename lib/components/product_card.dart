@@ -22,7 +22,7 @@ class ProductCard extends StatelessWidget {
   final String weight;
   final Color textColor;
   final String uid;
-
+  final String tdid;
   final String unit;
   final bool isShowDiscount;
 
@@ -34,6 +34,7 @@ class ProductCard extends StatelessWidget {
     required this.backgroundImage,
     required this.productName,
     required this.productDescription,
+    required this.tdid,
     required this.price,
     required this.oldPrice,
     required this.discount,
@@ -84,6 +85,7 @@ class ProductCard extends StatelessWidget {
                   'unit': unit,
                   'categories': categories,
                   'size': weight,
+                  'tdid': tdid,
                 },
               );
             },
@@ -174,6 +176,7 @@ class ProductCard extends StatelessWidget {
                     'unit': unit,
                     'categories': categories,
                     'size': weight,
+                    'tdid':tdid,
                   },
                 );
               },

@@ -10,6 +10,7 @@ class ProductController extends GetxController {
 
 void setProductData(Map<String, dynamic> data) {
   productData.value = {
+    'tdid':data['tdid'],
     'uid': data['uid'] ?? '',
     'backgroundImage': data['backgroundImage'] ?? [],
     'productName': data['productName'] ?? 'Unknown Product',
