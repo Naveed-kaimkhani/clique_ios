@@ -23,13 +23,16 @@ class DiscoverScreen extends StatefulWidget {
 
 class _DiscoverScreenState extends State<DiscoverScreen> {
   final DiscoverViewModel _viewModel = Get.find<DiscoverViewModel>();
-  final PageController controller = PageController(viewportFraction: 0.8, keepPage: true);
+  final PageController controller =
+      PageController(viewportFraction: 0.8, keepPage: true);
   final ScrollController _productScrollController = ScrollController();
   final ScrollController _influencerScrollController = ScrollController();
-  final InfluencerViewmodel _influencerViewModel = Get.put((InfluencerViewmodel()));
-  final ProductViewModel _productViewModel = Get.isRegistered<ProductViewModel>()
-    ? Get.find<ProductViewModel>()
-    : Get.put(ProductViewModel());
+  final InfluencerViewmodel _influencerViewModel =
+      Get.put((InfluencerViewmodel()));
+  final ProductViewModel _productViewModel =
+      Get.isRegistered<ProductViewModel>()
+          ? Get.find<ProductViewModel>()
+          : Get.put(ProductViewModel());
   final GroupViewModel _groupViewModel = Get.put(GroupViewModel());
 
   @override
@@ -37,28 +40,24 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
     final size = MediaQuery.of(context).size;
     final double titleFontSize = size.width * 0.05;
 
-    return Container(
-      decoration: BoxDecoration(gradient: AppColors.appGradientColors),
-      child: SafeArea(
-        bottom: false,
-        child: Scaffold(
-          appBar: DiscoverScreenAppBar(
+    return SafeArea(
+      bottom: false,
+      child: Scaffold(
+        appBar: DiscoverScreenAppBar(
           title: "Discover",
           // icon: Icons.arrow_back_ios,
         ),
-          backgroundColor: Colors.white,
-          body: SingleChildScrollView(
-              padding: EdgeInsets.only(bottom: kBottomNavigationBarHeight + 16),
-
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildGroupSection(size, titleFontSize),
-                _buildProductSection(size, titleFontSize),
-                SizedBox(height: size.height * 0.02),
-                _buildInfluencerSection(size, titleFontSize),
-              ],
-            ),
+        backgroundColor: Colors.white,
+        body: SingleChildScrollView(
+          padding: EdgeInsets.only(bottom: kBottomNavigationBarHeight + 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildGroupSection(size, titleFontSize),
+              _buildProductSection(size, titleFontSize),
+              SizedBox(height: size.height * 0.02),
+              _buildInfluencerSection(size, titleFontSize),
+            ],
           ),
         ),
       ),
@@ -73,7 +72,8 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _buildSectionHeader('Cliques', RouteName.viewAllCliquesScreen, titleFontSize),
+          _buildSectionHeader(
+              'Cliques', RouteName.viewAllCliquesScreen, titleFontSize),
           SizedBox(height: size.height * 0.015),
           _buildGroupList(size),
         ],
@@ -86,7 +86,8 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
       color: Color(0xFFF7F8FA),
       child: Column(
         children: [
-          _buildSectionHeader('Products', RouteName.viewAllProductsScreen, titleFontSize),
+          _buildSectionHeader(
+              'Products', RouteName.viewAllProductsScreen, titleFontSize),
           SizedBox(height: size.height * 0.015),
           _buildProductList(size),
         ],
@@ -97,7 +98,8 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   Widget _buildInfluencerSection(Size size, double titleFontSize) {
     return Column(
       children: [
-        _buildSectionHeader('Influencers', RouteName.viewAllInfluencersScreen, titleFontSize),
+        _buildSectionHeader(
+            'Influencers', RouteName.viewAllInfluencersScreen, titleFontSize),
         SizedBox(height: size.height * 0.015),
         _buildInfluencerList(size),
       ],
@@ -106,11 +108,14 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
 
   Widget _buildSectionHeader(String title, String route, double fontSize) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.04),
+      padding: EdgeInsets.symmetric(
+          horizontal: MediaQuery.of(context).size.width * 0.04),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(title, style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold)),
+          Text(title,
+              style:
+                  TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold)),
           TextButton(
             onPressed: () => Get.toNamed(route),
             child: GradientText(
@@ -125,131 +130,141 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   }
 
   Widget _buildInfluencerList(Size size) {
-  return Obx(() {
-    if (_influencerViewModel.isLoading.value) {
-      // return _buildInfluencerShimmer(size); // Show shimmer effect while loading
+    return Obx(() {
+      if (_influencerViewModel.isLoading.value) {
+        // return _buildInfluencerShimmer(size); // Show shimmer effect while loading
+        return SizedBox(
+          height: size.height * 0.26,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 3,
+            itemBuilder: (context, index) {
+              return ShimmerInfluencerCard(); // Show shimmer effect for influencer cards
+            },
+          ),
+        );
+      }
+
+      if (_influencerViewModel.error.value.isNotEmpty) {
+        return Center(
+            child: Text(_viewModel.error.value)); // Show error message if any
+      }
+
+      if (_influencerViewModel.influencers.isEmpty) {
+        return Center(
+            child: Text(
+                'No influencers available')); // Show message if no influencers
+      }
+
       return SizedBox(
         height: size.height * 0.26,
         child: ListView.builder(
+          controller: _influencerScrollController,
           scrollDirection: Axis.horizontal,
-          itemCount: 3,
+          itemCount: _influencerViewModel.influencers.length +
+              1, // +1 for the "View All" button
           itemBuilder: (context, index) {
-            return ShimmerInfluencerCard(); // Show shimmer effect for influencer cards
+            if (index == _influencerViewModel.influencers.length) {
+              return _buildViewAllButton(size,
+                  RouteName.viewAllInfluencersScreen); // "View All" button
+            }
+
+            var influencer = _influencerViewModel.influencers[index];
+            return InfluencerCard(
+              isFollowing: influencer.isFollowing,
+              id: influencer.id,
+              influencerModel: influencer,
+              backgroundImage: influencer
+                  .coverPhoto, // Replace with actual image from influencer data if available
+              profileImage: influencer
+                  .profilePhoto, // Replace with actual profile image from influencer data if available
+              name: influencer.name,
+              followers:
+                  '${influencer.followersCount} Followers', // Replace with actual followers count
+            );
           },
         ),
-
       );
-    }
+    });
+  }
 
-    if (_influencerViewModel.error.value.isNotEmpty) {
-      return Center(child: Text(_viewModel.error.value)); // Show error message if any
-    }
+  Widget _buildProductList(Size size) {
+    return Obx(() {
+      if (_productViewModel.isLoading.value &&
+          _productViewModel.products.isEmpty) {
+        return Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.04),
+          child: SizedBox(
+            height: size.height * 0.32,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: 2,
+              itemBuilder: (context, index) {
+                return ShimmerProductCard();
+              },
+            ),
+          ),
+        );
+      }
+      if (_productViewModel.products.isEmpty) {
+        return Center(child: Text('No products available'));
+      }
+      List<ProductModel> filteredProducts = [];
+      Set<String> displayedCategories = Set<String>();
 
-    if (_influencerViewModel.influencers.isEmpty) {
-      return Center(child: Text('No influencers available')); // Show message if no influencers
-    }
+      for (var product in _productViewModel.products) {
+        String category = product.categories ?? '';
+        if (!displayedCategories.contains(category)) {
+          filteredProducts.add(product);
+          displayedCategories.add(category);
+        }
+      }
 
-    return 
-    SizedBox(
-      height: size.height * 0.26,
-      child: ListView.builder(
-        controller: _influencerScrollController,
-        scrollDirection: Axis.horizontal,
-        itemCount: _influencerViewModel.influencers.length + 1, // +1 for the "View All" button
-        itemBuilder: (context, index) {
-          if (index == _influencerViewModel.influencers.length) {
-            return _buildViewAllButton(size, RouteName.viewAllInfluencersScreen); // "View All" button
-          }
-
-          var influencer = _influencerViewModel.influencers[index];
-          return InfluencerCard(
-            isFollowing: influencer.isFollowing,
-            id: influencer.id,
-              influencerModel: influencer,
-            backgroundImage:influencer.coverPhoto, // Replace with actual image from influencer data if available
-            profileImage:influencer.profilePhoto, // Replace with actual profile image from influencer data if available
-            name: influencer.name,
-            followers: '${influencer.followersCount} Followers', // Replace with actual followers count
-          );
-        },
-      ),
-    );
-  });
-}
-
-Widget _buildProductList(Size size) {
-  return Obx(() {
-    if (_productViewModel.isLoading.value && _productViewModel.products.isEmpty) {
       return Padding(
-
-      padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.04),
+        padding: EdgeInsets.symmetric(
+            horizontal: MediaQuery.of(context).size.width * 0.04),
         child: SizedBox(
           height: size.height * 0.32,
           child: ListView.builder(
+            controller: _productScrollController,
             scrollDirection: Axis.horizontal,
-            itemCount: 2,
+            itemCount: filteredProducts.length + 1,
             itemBuilder: (context, index) {
-              return ShimmerProductCard();
+              if (index == filteredProducts.length) {
+                return _buildViewAllButton(
+                    size, RouteName.viewAllProductsScreen);
+              }
+
+              final product = filteredProducts[index];
+              final discount =
+                  ((product.msrp - product.cost) / product.msrp * 100).round();
+
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 6),
+                child: ProductCard(
+                  weight: product.productWeight,
+                  unit: product.unit,
+                  tdid: product.tdid ?? "",
+                  isShowDiscount: discount > 0,
+                  uid: product.id.toString(),
+                  categories: product.categories ?? '',
+                  backgroundImage: product.imageUrls.isNotEmpty
+                      ? product.imageUrls
+                      : List<String>.empty(),
+                  productName: product.productTitle,
+                  productDescription: product.productDesc,
+                  price: product.cost,
+                  oldPrice: product.msrp,
+                  discount: "$discount% OFF",
+                ),
+              );
             },
           ),
         ),
       );
-    }
-    if (_productViewModel.products.isEmpty) {
-      return Center(child: Text('No products available'));
-    }
-    List<ProductModel> filteredProducts = [];
-    Set<String> displayedCategories = Set<String>();
-
-    for (var product in _productViewModel.products) {
-      String category = product.categories ?? '';
-      if (!displayedCategories.contains(category)) {
-        filteredProducts.add(product);
-        displayedCategories.add(category);
-      }
-    }
-
-    return Padding(
- 
-      padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.04),
-      child: SizedBox(
-        height: size.height * 0.32,
-        child: ListView.builder(
-          controller: _productScrollController,
-          scrollDirection: Axis.horizontal,
-          itemCount: filteredProducts.length + 1,
-          itemBuilder: (context, index) {
-            if (index == filteredProducts.length) {
-              return _buildViewAllButton(size, RouteName.viewAllProductsScreen);
-            }
-
-            final product = filteredProducts[index];
-            final discount = ((product.msrp - product.cost) / product.msrp * 100).round();
-      
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 6),
-              child: ProductCard(
-                weight: product.productWeight,
-                unit: product.unit,
-                tdid: product.tdid??"",
-                isShowDiscount: discount > 0,
-                
-                uid: product.id.toString(),
-                categories: product.categories??'',
-                backgroundImage: product.imageUrls.isNotEmpty ? product.imageUrls :List<String>.empty(),
-                productName: product.productTitle,
-                productDescription: product.productDesc,
-                price: product.cost,
-                oldPrice: product.msrp,
-                discount: "$discount% OFF",
-              ),
-            );
-          },
-        ),
-      ),
-    );
-  });
-}
+    });
+  }
 
   Widget _buildViewAllButton(Size size, String route) {
     return Center(
@@ -273,7 +288,7 @@ Widget _buildProductList(Size size) {
       if (_groupViewModel.isLoading.value) {
         return _buildGroupShimmer(size);
       }
-      
+
       if (_groupViewModel.error.value.isNotEmpty) {
         return Center(child: Text(_viewModel.error.value));
       }
@@ -287,23 +302,22 @@ Widget _buildProductList(Size size) {
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: _groupViewModel.groups.length + 1,
-          itemBuilder: (context, index) => index == _groupViewModel.groups.length
-            ? _buildViewAllButton(size, RouteName.viewAllCliquesScreen)
-            : 
-       
-            GroupCard(
-                  isJoin: _groupViewModel.groups[index].isJoined,
-                   backgroundImage: AppSvgIcons.cloth,
-                  profileImage: _groupViewModel.groups[index].icon,
-                  name: _groupViewModel.groups[index].name,
-                  followers: '${_groupViewModel.groups[index].membersCount} members',
-                  guid: _groupViewModel.groups[index].guid,
-                  authToken: _viewModel.userController.token.value,
-                  uid: _viewModel.userController.uid.value,
-                  groupName: _groupViewModel.groups[index].name,
-                  memberCount: _groupViewModel.groups[index].membersCount,
-
-              ),
+          itemBuilder: (context, index) =>
+              index == _groupViewModel.groups.length
+                  ? _buildViewAllButton(size, RouteName.viewAllCliquesScreen)
+                  : GroupCard(
+                      isJoin: _groupViewModel.groups[index].isJoined,
+                      backgroundImage: AppSvgIcons.cloth,
+                      profileImage: _groupViewModel.groups[index].icon,
+                      name: _groupViewModel.groups[index].name,
+                      followers:
+                          '${_groupViewModel.groups[index].membersCount} members',
+                      guid: _groupViewModel.groups[index].guid,
+                      authToken: _viewModel.userController.token.value,
+                      uid: _viewModel.userController.uid.value,
+                      groupName: _groupViewModel.groups[index].name,
+                      memberCount: _groupViewModel.groups[index].membersCount,
+                    ),
         ),
       );
     });
@@ -352,14 +366,17 @@ Widget _buildProductList(Size size) {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(width: size.width * 0.4, height: 16, color: Colors.white),
+              Container(
+                  width: size.width * 0.4, height: 16, color: Colors.white),
               SizedBox(height: 8),
-              Container(width: size.width * 0.3, height: 12, color: Colors.white),
+              Container(
+                  width: size.width * 0.3, height: 12, color: Colors.white),
               SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(width: size.width * 0.3, height: 24, color: Colors.white),
+                  Container(
+                      width: size.width * 0.3, height: 24, color: Colors.white),
                   Container(
                     width: size.width * 0.2,
                     height: 32,
@@ -377,15 +394,3 @@ Widget _buildProductList(Size size) {
     );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-

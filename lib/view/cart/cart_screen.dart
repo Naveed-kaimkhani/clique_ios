@@ -33,7 +33,6 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   void initState() {
-    // cartQuantityController.loadCart();
     super.initState();
   }
 
@@ -44,7 +43,6 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
-    log("in build");
     return SafeArea(
       bottom: false,
       child: Scaffold(

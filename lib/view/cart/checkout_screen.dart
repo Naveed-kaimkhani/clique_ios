@@ -59,169 +59,163 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     final double subtitleFontSize = screenWidth * 0.04; // 4% of screen width
     final double cartItemSize = screenWidth * 0.2; // 20% of screen width
 
-    return Container(
-      decoration: BoxDecoration(
-        gradient: AppColors.appGradientColors,
-      ),
-      child: SafeArea(
-        bottom: false,
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBarWithBackIcon(
-            title: "Checkout",
-            // icon: Icons.arrow_back_ios,
-          ),
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Delivery Address
-              Padding(
-                padding: EdgeInsets.only(
-                    right: horizontalPadding,
-                    left: horizontalPadding,
-                    top: verticalPadding),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Delivery Address',
-                        style: TextStyle(
-                            fontSize: titleFontSize,
-                            fontWeight: FontWeight.bold)),
-                    IconButton(
-                      icon: Icon(Icons.edit),
-                      onPressed: () {
-                        Get.toNamed(
-                          RouteName.addressScreen,
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              ListTile(
-                leading: const Icon(Icons.location_on),
-                title: Obx(() {
-                  // Use the AddressController to get the saved address details
-                  final address = addressController.address1.value;
-
-                  return Text(
-                    '${addressController.address1}',
-                    style: TextStyle(
-                        fontSize: subtitleFontSize,
-                        fontWeight: FontWeight.bold),
-                  );
-                }),
-                subtitle: Obx(() {
-                  final address = addressController.address1.value;
-
-                  return Text(
-                    '${addressController.address2} ${addressController.city } ${addressController.stateCode} ${addressController.zipCode ?? ""}',
-                    style: TextStyle(fontSize: subtitleFontSize),
-                  );
-                }),
-              ),
-
-              SizedBox(height: verticalPadding),
-
-              // Payment Method
-              Padding(
-                padding: EdgeInsets.only(
-                    right: horizontalPadding, left: horizontalPadding),
-                child: Text('Payment Method',
-                    style: TextStyle(
-                        fontSize: titleFontSize, fontWeight: FontWeight.bold)),
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+    return SafeArea(
+      bottom: false,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBarWithBackIcon(
+          title: "Checkout",
+          // icon: Icons.arrow_back_ios,
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Delivery Address
+            Padding(
+              padding: EdgeInsets.only(
+                  right: horizontalPadding,
+                  left: horizontalPadding,
+                  top: verticalPadding),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  Text('Delivery Address',
+                      style: TextStyle(
+                          fontSize: titleFontSize,
+                          fontWeight: FontWeight.bold)),
+                  IconButton(
+                    icon: Icon(Icons.edit),
+                    onPressed: () {
+                      Get.toNamed(
+                        RouteName.addressScreen,
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.location_on),
+              title: Obx(() {
+                // Use the AddressController to get the saved address details
+                final address = addressController.address1.value;
+
+                return Text(
+                  '${addressController.address1}',
+                  style: TextStyle(
+                      fontSize: subtitleFontSize, fontWeight: FontWeight.bold),
+                );
+              }),
+              subtitle: Obx(() {
+                final address = addressController.address1.value;
+
+                return Text(
+                  '${addressController.address2} ${addressController.city} ${addressController.stateCode} ${addressController.zipCode ?? ""}',
+                  style: TextStyle(fontSize: subtitleFontSize),
+                );
+              }),
+            ),
+
+            SizedBox(height: verticalPadding),
+
+            // Payment Method
+            Padding(
+              padding: EdgeInsets.only(
+                  right: horizontalPadding, left: horizontalPadding),
+              child: Text('Payment Method',
+                  style: TextStyle(
+                      fontSize: titleFontSize, fontWeight: FontWeight.bold)),
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Obx(() {
+                  final summary = orderViewModel.orderSummary.value;
+                  final shippingCost = summary != null
+                      ? double.tryParse(summary.shipping) ?? 0.0
+                      : 0.0;
+
+                  return Padding(
+                    padding: EdgeInsets.only(left: horizontalPadding * 0.5),
+                    child: paymentOption(
+                        subTotal + shippingCost,
+                        'Add Card Details',
+                        '**** *****',
+                        AppSvgIcons.master,
+                        'mastercard'),
+                  );
+                }),
+              ],
+            ),
+
+            SizedBox(height: verticalPadding),
+            Padding(
+              padding: EdgeInsets.only(
+                  right: horizontalPadding, left: horizontalPadding),
+              child: Text('My Cart',
+                  style: TextStyle(
+                      fontSize: titleFontSize, fontWeight: FontWeight.bold)),
+            ),
+
+            SizedBox(height: screenHeight * 0.02),
+            Padding(
+              padding: EdgeInsets.only(
+                  right: horizontalPadding, left: horizontalPadding),
+              child: cartItem(cartItemSize),
+            ),
+            Spacer(),
+
+            SizedBox(height: screenHeight * 0.1),
+            Container(
+              padding: EdgeInsets.all(horizontalPadding * 0.5),
+              decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(10)),
+              child: Column(
+                children: [
+                  SizedBox(height: screenHeight * 0.01),
+                  AmountWidget(
+                    label: 'Sub Total',
+                    value: subTotal,
+                    titleFontSize: titleFontSize,
+                  ),
+                  SizedBox(height: screenHeight * 0.01),
                   Obx(() {
                     final summary = orderViewModel.orderSummary.value;
                     final shippingCost = summary != null
                         ? double.tryParse(summary.shipping) ?? 0.0
                         : 0.0;
 
-                    return Padding(
-                      padding: EdgeInsets.only(left: horizontalPadding * 0.5),
-                      child: paymentOption(
-                          subTotal + shippingCost,
-                          'Add Card Details',
-                          '**** *****',
-                          AppSvgIcons.master,
-                          'mastercard'),
+                    return addressController.address1.value.isNotEmpty
+                        ? AmountWidget(
+                            label: 'Shipping',
+                            value: shippingCost,
+                            titleFontSize: titleFontSize,
+                          )
+                        : AmountWidget(
+                            label: 'Shipping',
+                            value: 0.0,
+                            titleFontSize: titleFontSize,
+                          );
+                  }),
+                  SizedBox(height: screenHeight * 0.01),
+                  Obx(() {
+                    final summary = orderViewModel.orderSummary.value;
+                    final shippingCost = summary != null
+                        ? double.tryParse(summary.shipping) ?? 0.0
+                        : 0.0;
+
+                    return AmountWidget(
+                      label: 'Total',
+                      value: subTotal + shippingCost,
+                      titleFontSize: titleFontSize,
                     );
                   }),
+                  SizedBox(height: screenHeight * 0.01),
                 ],
               ),
-
-              SizedBox(height: verticalPadding),
-              Padding(
-                padding: EdgeInsets.only(
-                    right: horizontalPadding, left: horizontalPadding),
-                child: Text('My Cart',
-                    style: TextStyle(
-                        fontSize: titleFontSize, fontWeight: FontWeight.bold)),
-              ),
-
-              SizedBox(height: screenHeight * 0.02),
-              Padding(
-                padding: EdgeInsets.only(
-                    right: horizontalPadding, left: horizontalPadding),
-                child: cartItem(cartItemSize),
-              ),
-              Spacer(),
-
-              SizedBox(height: screenHeight * 0.1),
-              Container(
-                padding: EdgeInsets.all(horizontalPadding * 0.5),
-                decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(10)),
-                child: Column(
-                  children: [
-                    SizedBox(height: screenHeight * 0.01),
-                    AmountWidget(
-                      label: 'Sub Total',
-                      value: subTotal,
-                      titleFontSize: titleFontSize,
-                    ),
-                    SizedBox(height: screenHeight * 0.01),
-                    Obx(() {
-                      final summary = orderViewModel.orderSummary.value;
-                      final shippingCost = summary != null
-                          ? double.tryParse(summary.shipping) ?? 0.0
-                          : 0.0;
-
-                      return addressController.address1.value.isNotEmpty
-                          ? AmountWidget(
-                              label: 'Shipping',
-                              value: shippingCost,
-                              titleFontSize: titleFontSize,
-                            )
-                          : AmountWidget(
-                              label: 'Shipping',
-                              value: 0.0,
-                              titleFontSize: titleFontSize,
-                            );
-                    }),
-                    SizedBox(height: screenHeight * 0.01),
-                    Obx(() {
-                      final summary = orderViewModel.orderSummary.value;
-                      final shippingCost = summary != null
-                          ? double.tryParse(summary.shipping) ?? 0.0
-                          : 0.0;
-
-                      return AmountWidget(
-                        label: 'Total',
-                        value: subTotal + shippingCost,
-                        titleFontSize: titleFontSize,
-                      );
-                    }),
-                    SizedBox(height: screenHeight * 0.01),
-                  ],
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
