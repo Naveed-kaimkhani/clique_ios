@@ -12,35 +12,38 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
   late DiscoverViewModel discoverViewModel;
   final UserController userController = Get.put(UserController());
-   final ProductViewModel _productViewModel = Get.isRegistered<ProductViewModel>()
-    ? Get.find<ProductViewModel>()
-    : Get.put(ProductViewModel());
+  final ProductViewModel _productViewModel =
+      Get.isRegistered<ProductViewModel>()
+          ? Get.find<ProductViewModel>()
+          : Get.put(ProductViewModel());
   @override
   void initState() {
     super.initState();
     discoverViewModel = Get.put(DiscoverViewModel());
-    discoverViewModel.fetchPopstreams(); // Make sure this updates popstreams observable
+    discoverViewModel
+        .fetchPopstreams(); // Make sure this updates popstreams observable
   }
 
- 
-
- @override
- Widget build(BuildContext context) {
-  log(userController.token.value);
-  return Scaffold(
-    backgroundColor: Colors.transparent,
-    body: Obx(() {
-      if (discoverViewModel.popstreams.isEmpty) {
-        return LoadingPlaceHolder();
-      }
-      return VideoScrollScreen(popstreams: discoverViewModel.popstreams,   onRefresh: () async {
-    await discoverViewModel.fetchPopstreams();
-  },
-);
-    }),
-  );
-}
+  @override
+  Widget build(BuildContext context) {
+    log(userController.token.value);
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Obx(() {
+        if (discoverViewModel.popstreams.isEmpty) {
+          return LoadingPlaceHolder();
+        }
+        return VideoScrollScreen(
+          popstreams: discoverViewModel.popstreams,
+          onRefresh: () async {
+            await discoverViewModel.fetchPopstreams();
+          },
+        );
+      }),
+    );
+  }
 }

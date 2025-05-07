@@ -39,7 +39,7 @@ class ProfileScreenState extends State<ProfileScreen>
         title: 'Profile',
         isInfluencer: isUser == "influencer",
       ),
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return [

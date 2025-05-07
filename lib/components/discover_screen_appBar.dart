@@ -148,8 +148,9 @@ class _DiscoverScreenAppBarWidget extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () => Get.toNamed(RouteName.cartScreen),
-                icon: Icon(Icons.card_travel),
+                icon: Icon(Icons.shopping_cart),
                 iconSize: iconSize,
+                color: Colors.white,
               ),
             ],
           ),

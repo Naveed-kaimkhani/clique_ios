@@ -47,7 +47,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
           title: "Discover",
           // icon: Icons.arrow_back_ios,
         ),
-        backgroundColor: Colors.white,
+        // backgroundColor: Colors.white,
         body: SingleChildScrollView(
           padding: EdgeInsets.only(bottom: kBottomNavigationBarHeight + 16),
           child: Column(
