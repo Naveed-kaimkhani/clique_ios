@@ -1,15 +1,10 @@
-
 import 'dart:developer';
-
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clique/components/auth_button.dart';
 import 'package:clique/components/gradient_text.dart';
 import 'package:clique/components/summary_row.dart';
 import 'package:clique/constants/app_colors.dart';
-import 'package:clique/data/models/product_model.dart';
 import 'package:clique/routes/routes_name.dart';
-import 'package:clique/utils/utils.dart';
 import 'package:clique/view/discover/appBar_backicon.dart';
 import 'package:clique/view_model/address_controller.dart';
 import 'package:clique/view_model/cart_quantity_controller.dart';
@@ -17,8 +12,6 @@ import 'package:clique/view_model/order_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
-
-// import '../../model/product_model.dart'; // <-- Make sure this path is correct
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -30,8 +23,6 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   final cartQuantityController = Get.find<CartQuantityController>();
 
-
-
   final OrderViewModel orderController = Get.isRegistered<OrderViewModel>()
       ? Get.find<OrderViewModel>()
       : Get.put(OrderViewModel(), permanent: true);
@@ -40,27 +31,14 @@ class _CartScreenState extends State<CartScreen> {
       ? Get.find<AddressController>()
       : Get.put(AddressController());
 
-  // ProductModel product = Get.arguments;
-
-  // final arg = Get.arguments;
   @override
   void initState() {
+    // cartQuantityController.loadCart();
     super.initState();
-    // final arg = Get.arguments;
-    // if (arg is ProductModel) {
-    //   product = arg;
-    //   cartQuantityController.products.add(product);
-    // } else {
-    //   // You can handle fallback or show a message/snackbar
-    //   Utils.showCustomSnackBar(
-    //       "Error", "No product found", ContentType.failure);
-    //   Get.back();
-    // }
   }
 
   @override
   void dispose() {
-    // Get.delete<CartQuantityController>();
     super.dispose();
   }
 
@@ -76,73 +54,88 @@ class _CartScreenState extends State<CartScreen> {
           children: [
             Expanded(
               child: ListView.builder(
-               itemCount: cartQuantityController.products.length,
-itemBuilder: (context, index) {
-  final product = cartQuantityController.products[index];
-  return Padding(
-    padding: const EdgeInsets.all(10.0),
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Hero(
-          tag: product.id.toString(),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: CachedNetworkImage(
-              imageUrl: product.imageUrls.first,
-              width: 84,
-              height: 84,
-              fit: BoxFit.cover,
-              placeholder: (context, url) => Shimmer.fromColors(
-                baseColor: Colors.grey[300]!,
-                highlightColor: Colors.grey[100]!,
-                child: Container(width: 84, height: 84, color: Colors.white),
-              ),
-              errorWidget: (context, url, error) => const Icon(Icons.error),
-            ),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                product.productTitle,
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-              const SizedBox(height: 4),
-              GradientText(
-                "\$${product.cost.toStringAsFixed(2)}",
-                gradient: AppColors.appGradientColors,
-                fontSize: 16.36,
-              ),
-              Obx(() => Row(
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.remove_circle_outline),
-                        onPressed: () => cartQuantityController.decrementQuantity(product.id.toString()),
+                  itemCount: cartQuantityController.products.length,
+                  itemBuilder: (context, index) {
+                    final product = cartQuantityController.products[index];
+                    return Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Hero(
+                            tag: product.id.toString(),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: CachedNetworkImage(
+                                imageUrl: product.imageUrls.first,
+                                width: 84,
+                                height: 84,
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) =>
+                                    Shimmer.fromColors(
+                                  baseColor: Colors.grey[300]!,
+                                  highlightColor: Colors.grey[100]!,
+                                  child: Container(
+                                      width: 84,
+                                      height: 84,
+                                      color: Colors.white),
+                                ),
+                                errorWidget: (context, url, error) =>
+                                    const Icon(Icons.error),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  product.productTitle,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16),
+                                ),
+                                const SizedBox(height: 4),
+                                GradientText(
+                                  "\$${product.cost.toStringAsFixed(2)}",
+                                  gradient: AppColors.appGradientColors,
+                                  fontSize: 16.36,
+                                ),
+                                Obx(() => Row(
+                                      children: [
+                                        IconButton(
+                                          icon: const Icon(
+                                              Icons.remove_circle_outline),
+                                          onPressed: () =>
+                                              cartQuantityController
+                                                  .decrementQuantity(
+                                                      product.id.toString()),
+                                        ),
+                                        Text(
+                                          "${cartQuantityController.getQuantity(product.id.toString())}",
+                                          style: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        IconButton(
+                                          icon: const Icon(
+                                              Icons.add_circle_outline),
+                                          onPressed: () =>
+                                              cartQuantityController
+                                                  .incrementQuantity(
+                                                      product.id.toString()),
+                                        ),
+                                        const Spacer(),
+                                      ],
+                                    )),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                      Text(
-                        "${cartQuantityController.getQuantity(product.id.toString())}",
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.add_circle_outline),
-                        onPressed: () => cartQuantityController.incrementQuantity(product.id.toString()),
-                      ),
-                      const Spacer(),
-                    ],
-                  )),
-            ],
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-              ),
+                    );
+                  }),
             ),
             Container(
               height: 230,
@@ -162,10 +155,10 @@ itemBuilder: (context, index) {
                   //       isBold: true,
                   //     )),
                   Obx(() => SummaryRow(
-  title: "Sub Total",
-  amount: cartQuantityController.getSubTotal(),
-  isBold: true,
-)),
+                        title: "Sub Total",
+                        amount: cartQuantityController.getSubTotal(),
+                        isBold: true,
+                      )),
 
                   const SizedBox(height: 60),
                   AuthButton(

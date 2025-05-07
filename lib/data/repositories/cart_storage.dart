@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:clique/data/models/product_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

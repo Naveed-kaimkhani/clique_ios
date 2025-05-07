@@ -552,30 +552,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
-  Widget _buildDiscountTag(Size size) {
-    return Positioned(
-      top: size.height * 0.52,
-      right: size.width * 0.04,
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: size.width * 0.03,
-          vertical: size.height * 0.01,
-        ),
-        decoration: BoxDecoration(
-          gradient: AppColors.appGradientColors,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Text(
-          controller.productData['discount'],
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: size.width * 0.04,
-          ),
-        ),
-      ),
-    );
-  }
 
   Widget _iconButton(IconData icon, VoidCallback onTap) {
     return GestureDetector(

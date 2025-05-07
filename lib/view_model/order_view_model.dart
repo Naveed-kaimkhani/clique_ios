@@ -53,7 +53,7 @@ class OrderViewModel extends GetxController {
               product.id.toString()), // ensure quantity is tracked per product
         );
       }).toList();
-
+      log("transaction:$transactions");
       List<ProductModel> productDetails =
           cartQuantityController.products.map((product) {
         return ProductModel(
@@ -73,6 +73,7 @@ class OrderViewModel extends GetxController {
         );
       }).toList();
 
+      log("transaction:$productDetails");
       var order = Order(
         customerId: userController.uid.toString(),
         firstName: userController.userName.value,
@@ -87,6 +88,7 @@ class OrderViewModel extends GetxController {
           "https://cactisocial.com/api-clique/public/api/v1/topdawg/orders");
       final headers = {
         'Content-Type': 'application/json',
+        'accept': 'application/json',
         'Authorization': 'Bearer ${userController.token.value}',
       };
 
@@ -96,7 +98,7 @@ class OrderViewModel extends GetxController {
         headers: headers,
         body: jsonEncode(orderMap),
       );
-
+      log(response.body);
 
       if (response.statusCode == 200) {
         final parsedOrderSummary =
@@ -207,7 +209,7 @@ class OrderViewModel extends GetxController {
         headers: headers,
         body: jsonEncode(orderMap), // Encode the order map to JSON
       );
-   
+
       if (response.statusCode == 200) {
         // Success
         final parsedOrderSummary =

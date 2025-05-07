@@ -26,22 +26,24 @@ class ChatMessageWidget extends StatelessWidget {
     return formatter.format(dateTime.toUtc());
   }
 
+ 
+
   void showReactionsOverlay(BuildContext context, Offset position) {
-    final overlay = Overlay.of(context);
+    final overlay = Overlay.of(context); // ✅ Use passed context
+
     if (overlay == null) {
       print("Overlay not found");
       return;
     }
 
     final screenWidth = MediaQuery.of(context).size.width;
+
     double left = position.dx;
     if (!message.isMe) {
       left = position.dx - screenWidth * 0.2;
       if (left < 10) left = 10;
     }
 
-    // Remove any existing overlay first
-    // _overlayEntry.value?.remove();
     final overlayEntry = OverlayEntry(
       builder: (_) => Positioned(
         left: left,
@@ -50,18 +52,15 @@ class ChatMessageWidget extends StatelessWidget {
           color: Colors.transparent,
           child: ReactionSheet(
             onReactionSelected: (reaction) {
-              chatViewModel.addReactionToMessage(
-                message.id,
-                reaction,
-                userController.uid.value,
-              );
-              chatViewModel.hideReactionSheet();
-            },
+  chatViewModel.toggleReaction(message.id, reaction, userController.uid.value);
+  chatViewModel.hideReactionSheet();
+},
           ),
         ),
       ),
     );
-    overlay.insert(overlayEntry);
+
+    chatViewModel.showReactionSheet(overlayEntry, context); // 🔧 pass overlay
   }
 
   @override

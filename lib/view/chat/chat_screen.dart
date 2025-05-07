@@ -37,12 +37,12 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
   StreamSubscription<List<MessageModel>>? _messagesSubscription;
   bool _shouldScrollToBottom = true;
 
+  final ChatViewModel controller = Get.put(ChatViewModel());
   @override
   void initState() {
     super.initState();
     final UserController userController = Get.find<UserController>();
 
-    final ChatViewModel controller = Get.put(ChatViewModel());
     viewModel = Get.put(GroupChatViewModel(
       groupId: widget.guid,
       token: userController.token.value,
@@ -95,26 +95,28 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
   }
 
   void _scrollToBottom() {
-  setState(() {
-    _shouldScrollToBottom = true;
-  });
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    if (_scrollController.hasClients) {
-      _scrollController.animateTo(
-        0, // Reversed list -> scroll to 0
-        duration: Duration(milliseconds: 300),
-        curve: Curves.easeOut,
-      );
-    }
-  });
-}
-
+    setState(() {
+      _shouldScrollToBottom = true;
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          0, // Reversed list -> scroll to 0
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
 
   @override
   void dispose() {
+    controller.hideReactionSheet();
     _messagesSubscription?.cancel();
     _scrollController.dispose();
     Get.delete<GroupChatViewModel>();
+
+    // controller.hid
     super.dispose();
   }
 
@@ -181,7 +183,6 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                 },
               ),
             ),
-        
             ChatInputWidget(
               onSend: (message, replyingTo) {
                 final ChatViewModel chatViewModel = Get.find<ChatViewModel>();

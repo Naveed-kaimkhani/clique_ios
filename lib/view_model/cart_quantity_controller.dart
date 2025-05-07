@@ -38,14 +38,13 @@ class CartQuantityController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _loadCart();
   }
 
   Future<void> saveCart() async {
     await CartStorage.saveCart(products);
   }
 
-  Future<void> _loadCart() async {
+  Future<void> loadCart() async {
     List<ProductModel> loadedProducts = await CartStorage.loadCart();
     if (loadedProducts.isNotEmpty) {
       products.assignAll(loadedProducts);

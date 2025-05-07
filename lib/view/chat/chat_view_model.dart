@@ -19,10 +19,6 @@ final Rx<MessageModel?> repliedMessage = Rx<MessageModel?>(null);
 void setReplyMessage(MessageModel message) {
   repliedMessage.value = message;
 }
-void setReactionOverlay(OverlayEntry entry) {
-  _reactionOverlay = entry;
-  isReactionSheetVisible.value = true;
-}
 void clearReplyMessage() {
   repliedMessage.value = null;
 }
