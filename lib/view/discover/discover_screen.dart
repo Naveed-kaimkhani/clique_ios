@@ -40,25 +40,22 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
     final size = MediaQuery.of(context).size;
     final double titleFontSize = size.width * 0.05;
 
-    return SafeArea(
-      bottom: false,
-      child: Scaffold(
-        appBar: DiscoverScreenAppBar(
-          title: "Discover",
-          // icon: Icons.arrow_back_ios,
-        ),
-        // backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-          padding: EdgeInsets.only(bottom: kBottomNavigationBarHeight + 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildGroupSection(size, titleFontSize),
-              _buildProductSection(size, titleFontSize),
-              SizedBox(height: size.height * 0.02),
-              _buildInfluencerSection(size, titleFontSize),
-            ],
-          ),
+    return Scaffold(
+      appBar: DiscoverScreenAppBar(
+        title: "Discover",
+        // icon: Icons.arrow_back_ios,
+      ),
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        padding: EdgeInsets.only(bottom: kBottomNavigationBarHeight + 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildGroupSection(size, titleFontSize),
+            _buildProductSection(size, titleFontSize),
+            SizedBox(height: size.height * 0.02),
+            _buildInfluencerSection(size, titleFontSize),
+          ],
         ),
       ),
     );

@@ -359,25 +359,6 @@ class VideoView extends StatelessWidget {
     );
   }
 
-  // Widget _buildVideoItem(int index) {
-  //   return Stack(
-  //     children: [
-  //       SizedBox.expand(
-  //         child: controllers.containsKey(index) &&
-  //                 controllers[index]!.value.isInitialized
-  //             ? FittedBox(
-  //                 fit: BoxFit.cover,
-  //                 child: SizedBox(
-  //                   width: controllers[index]!.value.size.width * 1.5,
-  //                   height: controllers[index]!.value.size.height * 1.5,
-  //                   child: VideoPlayer(controllers[index]!),
-  //                 ),
-  //               )
-  //             : const Center(child: CircularProgressIndicator()),
-  //       ),
-  //     ],
-  //   );
-  // }
 
   Widget _buildVideoItem(int index) {
     if (controllers.containsKey(index) &&
