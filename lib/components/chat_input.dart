@@ -1,4 +1,3 @@
-
 // import 'package:clique/components/send_button.dart';
 // import 'package:clique/models/message_model.dart';
 // import 'package:flutter/material.dart';
@@ -64,22 +63,18 @@
 //     );
 //   }
 // }
+import 'dart:developer';
 
 import 'package:clique/components/send_button.dart';
 import 'package:clique/models/message_model.dart';
+import 'package:clique/view/chat/chat_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ChatInputWidget extends StatefulWidget {
   final Function(String message, MessageModel? replyingTo) onSend;
-  final MessageModel? replyingTo;
-  final VoidCallback? onCancelReply;
-  // MessageModel? _replyingTo; // ✅ Declare it here
 
-  ChatInputWidget({
-    required this.onSend,
-    this.replyingTo,
-    this.onCancelReply,
-  });
+  ChatInputWidget({required this.onSend});
 
   @override
   State<ChatInputWidget> createState() => _ChatInputWidgetState();
@@ -87,7 +82,7 @@ class ChatInputWidget extends StatefulWidget {
 
 class _ChatInputWidgetState extends State<ChatInputWidget> {
   final TextEditingController _textController = TextEditingController();
-  // MessageModel? _replyingTo; // ✅ Declare it here
+  final ChatViewModel chatViewModel = Get.find<ChatViewModel>();
 
   @override
   Widget build(BuildContext context) {
@@ -96,8 +91,12 @@ class _ChatInputWidgetState extends State<ChatInputWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (widget.replyingTo != null)
-          Container(
+        Obx(() {
+          final replied = chatViewModel.repliedMessage.value;
+          log(chatViewModel.repliedMessage.value.toString());
+          if (replied == null) return SizedBox();
+
+          return Container(
             width: double.infinity,
             color: Colors.grey[200],
             padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
@@ -108,26 +107,27 @@ class _ChatInputWidgetState extends State<ChatInputWidget> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Replying to',
+                        'Replying to ${replied.sender}',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       SizedBox(height: 4),
                       Text(
-                        // widget.replyingTo!.content,
-                        "replying to ${widget.replyingTo!.sender}",
+                        replied.message,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontStyle: FontStyle.italic),
                       ),
                     ],
                   ),
                 ),
                 IconButton(
                   icon: Icon(Icons.close),
-                  onPressed: widget.onCancelReply,
+                  onPressed: () => chatViewModel.clearReplyMessage(),
                 ),
               ],
             ),
-          ),
+          );
+        }),
         Padding(
           padding: EdgeInsets.symmetric(
             vertical: screenWidth * 0.02,
@@ -157,9 +157,11 @@ class _ChatInputWidgetState extends State<ChatInputWidget> {
               SendButton(
                 onSend: () {
                   final message = _textController.text.trim();
-                  _textController.clear();
                   if (message.isNotEmpty) {
-                    widget.onSend(message, widget.replyingTo);
+                    final replyTo = chatViewModel.repliedMessage.value;
+                    widget.onSend(message, replyTo);
+                    _textController.clear();
+                    chatViewModel.clearReplyMessage();
                   }
                 },
               ),

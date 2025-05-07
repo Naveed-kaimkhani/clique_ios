@@ -161,4 +161,39 @@ class GroupChatViewModel extends GetxController {
       Get.snackbar("Error", "Failed to send message: $e");
     }
   }
+
+
+
+    Future<void> sendThread(String message, int messageId ) async {
+    // final replyMessage = replyingTo.value;
+
+    if (message.isEmpty) return;
+
+    try {
+      final response = await apiClient.post(
+        // url: ApiEndpoints.sendMessage,
+        url: "https://269435d754e8fd97.api-us.cometchat.io/v3/messages/$messageId/thread",
+        headers: {
+          "Content-Type": "application/json",
+          "accept": "application/json",
+          "apikey": "f6985bc6a317824cc687e82794955efded6bf2b1",
+          "onBehalfOf": userId,
+        },
+        body: jsonEncode({
+          "category": "message",
+          "type": "text",
+          "data": {
+            "text": message,
+          },
+          "receiver": groupId,
+          "receiverType": "group",
+        }),
+      );
+      if (response.statusCode == 200) {
+        _fetchInitialMessages(); // Refresh messages after sending a new one
+      }
+    } catch (e) {
+      Get.snackbar("Error", "Failed to send message: $e");
+    }
+  }
 }

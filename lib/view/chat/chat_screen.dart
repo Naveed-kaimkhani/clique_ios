@@ -191,22 +191,38 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
             //   },
             // ),
             ChatInputWidget(
-  replyingTo: viewModel.replyingTo.value,
-  onCancelReply: () {
-    setState(() {
-    viewModel.replyingTo.value = null;
-    });
-  },
-  onSend: (message, replyingTo) {
-    viewModel.sendMessage(message, ).then((_) {
-      _scrollToBottom();
-      setState(() {
-      viewModel.replyingTo.value= null;
-      });
-    });
-  },
-),
-
+              // replyingTo: viewModel.replyingTo.value,
+              // onCancelReply: () {
+              //   setState(() {
+              //   viewModel.replyingTo.value = null;
+              //   });
+              // },
+              onSend: (message, replyingTo) {
+                final ChatViewModel chatViewModel = Get.find<ChatViewModel>();
+                if (chatViewModel.repliedMessage.value == null) {
+                  viewModel
+                      .sendMessage(
+                    message,
+                  )
+                      .then((_) {
+                    _scrollToBottom();
+                    setState(() {
+                      viewModel.replyingTo.value = null;
+                    });
+                  });
+                } else {
+                  viewModel
+                      .sendThread(message,
+                          int.parse(chatViewModel.repliedMessage.value!.id))
+                      .then((_) {
+                    _scrollToBottom();
+                    setState(() {
+                      viewModel.replyingTo.value = null;
+                    });
+                  });
+                }
+              },
+            ),
           ],
         ),
       ),

@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'package:clique/models/message_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -13,7 +14,14 @@ class ChatViewModel extends GetxController {
   final Map<String, StreamController<Map<String, int>>> _reactionControllers = {};
   final Set<String> startedStreams = {};
   final Map<String, Set<String>> _userReactions = {}; // key = "$messageId:$reaction", value = Set of uids
+final Rx<MessageModel?> repliedMessage = Rx<MessageModel?>(null);
+void setReplyMessage(MessageModel message) {
+  repliedMessage.value = message;
+}
 
+void clearReplyMessage() {
+  repliedMessage.value = null;
+}
   void showReactionSheet(OverlayEntry entry, context) {
     _reactionOverlay?.remove();
     _reactionOverlay = entry;
