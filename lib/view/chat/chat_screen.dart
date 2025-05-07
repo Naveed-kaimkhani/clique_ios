@@ -56,8 +56,9 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
       if (_shouldScrollToBottom && messages.isNotEmpty) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (_scrollController.hasClients) {
-            _scrollController
-                .jumpTo(_scrollController.position.maxScrollExtent);
+            // _scrollController
+            //     .jumpTo(_scrollController.position.maxScrollExtent);
+            _scrollController.jumpTo(0); // or animateTo(0)
           }
         });
       }
@@ -94,19 +95,20 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
   }
 
   void _scrollToBottom() {
-    setState(() {
-      _shouldScrollToBottom = true;
-    });
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_scrollController.hasClients) {
-        _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
-          duration: Duration(milliseconds: 300),
-          curve: Curves.easeOut,
-        );
-      }
-    });
-  }
+  setState(() {
+    _shouldScrollToBottom = true;
+  });
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        0, // Reversed list -> scroll to 0
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    }
+  });
+}
+
 
   @override
   void dispose() {
@@ -179,24 +181,8 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                 },
               ),
             ),
-            // ChatInputWidget(
-            //   onSend: (message) {
-            //     if (message.isEmpty) {
-            //       return;
-            //     } else {
-            //       viewModel.sendMessage(message).then((_) {
-            //         _scrollToBottom();
-            //       });
-            //     }
-            //   },
-            // ),
+        
             ChatInputWidget(
-              // replyingTo: viewModel.replyingTo.value,
-              // onCancelReply: () {
-              //   setState(() {
-              //   viewModel.replyingTo.value = null;
-              //   });
-              // },
               onSend: (message, replyingTo) {
                 final ChatViewModel chatViewModel = Get.find<ChatViewModel>();
                 if (chatViewModel.repliedMessage.value == null) {

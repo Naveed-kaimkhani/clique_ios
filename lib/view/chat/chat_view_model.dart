@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 class ChatViewModel extends GetxController {
   final RxBool isReactionSheetVisible = false.obs;
   OverlayEntry? _reactionOverlay;
+// OverlayEntry? _reactionOverlay;
 
   final Map<String, StreamController<Map<String, int>>> _reactionControllers = {};
   final Set<String> startedStreams = {};
@@ -18,7 +19,10 @@ final Rx<MessageModel?> repliedMessage = Rx<MessageModel?>(null);
 void setReplyMessage(MessageModel message) {
   repliedMessage.value = message;
 }
-
+void setReactionOverlay(OverlayEntry entry) {
+  _reactionOverlay = entry;
+  isReactionSheetVisible.value = true;
+}
 void clearReplyMessage() {
   repliedMessage.value = null;
 }
