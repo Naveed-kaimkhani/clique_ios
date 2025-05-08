@@ -74,14 +74,36 @@ class OrderViewModel extends GetxController {
 
       // log("transaction:$productDetails");
       var order = Order(
-        customerId: userController.uid.toString(),
-        firstName: userController.userName.value,
-        lastName: "",
-        phone: userController.phone.value,
-        address: address,
-        transactions: transactions,
-        productDetails: productDetails,
-      );
+      customerId: userController.uid.toString(), // Use the actual customer ID
+      firstName: userController.userName.value, // Use the actual first name
+      lastName: "", // Use the actual last name
+      phone: userController.phone.value, // Use the actual phone number
+      address: address,
+      transactions: [
+        Transaction(
+          tdid: cartQuantityController.products.first.tdid ?? "",
+          quantity: cartQuantityController.quantity.value,
+        )
+      ],
+      productDetails: [
+        ProductModel(
+          id: cartQuantityController.products.first.id,
+          productWeight: cartQuantityController.products.first.productWeight,
+          productCode: cartQuantityController.products.first.productCode,
+          unit: cartQuantityController.products.first.unit,
+          productTitle: cartQuantityController.products.first.productTitle,
+          productDesc: cartQuantityController.products.first.productDesc,
+          imageUrls: cartQuantityController.products.first.imageUrls,
+          cost: cartQuantityController.products.first.cost,
+          brandName: "",
+          msrp: 0,
+          thumbnailUrl: "",
+          categories: "",
+          variantGroupId: "",
+        )
+      ],
+    );
+
 
       final url = Uri.parse(
           "https://cactisocial.com/api-clique/public/api/v1/topdawg/orders");
@@ -183,14 +205,36 @@ class OrderViewModel extends GetxController {
       // }).toList();
 
       var order = Order(
-          customerId:
-              userController.uid.toString(), // Use the actual customer ID
-          firstName: userController.userName.value, // Use the actual first name
-          lastName: "", // Use the actual last name
-          phone: userController.phone.value, // Use the actual phone number
-          address: address,
-          transactions: transactions,
-          productDetails: productDetails);
+      customerId: userController.uid.toString(), // Use the actual customer ID
+      firstName: userController.userName.value, // Use the actual first name
+      lastName: "", // Use the actual last name
+      phone: userController.phone.value, // Use the actual phone number
+      address: address,
+      transactions: [
+        Transaction(
+          tdid: cartQuantityController.products.first.tdid ?? "",
+          quantity: cartQuantityController.quantity.value,
+        )
+      ],
+      productDetails: [
+        ProductModel(
+          id: cartQuantityController.products.first.id,
+          productWeight: cartQuantityController.products.first.productWeight,
+          productCode: cartQuantityController.products.first.productCode,
+          unit: cartQuantityController.products.first.unit,
+          productTitle: cartQuantityController.products.first.productTitle,
+          productDesc: cartQuantityController.products.first.productDesc,
+          imageUrls: cartQuantityController.products.first.imageUrls,
+          cost: cartQuantityController.products.first.cost,
+          brandName: "",
+          msrp: 0,
+          thumbnailUrl: "",
+          categories: "",
+          variantGroupId: "",
+        )
+      ],
+    );
+
 
       final url = Uri.parse(
           "https://cactisocial.com/api-clique/public/api/v1/topdawg/orders");
