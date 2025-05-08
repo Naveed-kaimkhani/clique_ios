@@ -45,34 +45,34 @@ class OrderViewModel extends GetxController {
       );
 
       // Map each product to Transaction and ProductModel
-      List<Transaction> transactions =
-          cartQuantityController.products.map((product) {
-        return Transaction(
-          tdid: product.tdid ?? "",
-          quantity: cartQuantityController.getQuantity(
-              product.id.toString()), // ensure quantity is tracked per product
-        );
-      }).toList();
-      List<ProductModel> productDetails =
-          cartQuantityController.products.map((product) {
-        return ProductModel(
-          id: product.id,
-          productWeight: product.productWeight,
-          productCode: product.productCode,
-          unit: product.unit,
-          productTitle: product.productTitle,
-          productDesc: product.productDesc,
-          imageUrls: product.imageUrls,
-          cost: product.cost,
-          brandName: "",
-          msrp: 0,
-          thumbnailUrl: "",
-          categories: "",
-          variantGroupId: "",
-        );
-      }).toList();
+      // List<Transaction> transactions =
+      //     cartQuantityController.products.map((product) {
+      //   return Transaction(
+      //     tdid: product.tdid ?? "",
+      //     quantity: cartQuantityController.getQuantity(
+      //         product.id.toString()), // ensure quantity is tracked per product
+      //   );
+      // }).toList();
+      // List<ProductModel> productDetails =
+      //     cartQuantityController.products.map((product) {
+      //   return ProductModel(
+      //     id: product.id,
+      //     productWeight: product.productWeight,
+      //     productCode: product.productCode,
+      //     unit: product.unit,
+      //     productTitle: product.productTitle,
+      //     productDesc: product.productDesc,
+      //     imageUrls: product.imageUrls,
+      //     cost: product.cost,
+      //     brandName: "",
+      //     msrp: 0,
+      //     thumbnailUrl: "",
+      //     categories: "",
+      //     variantGroupId: "",
+      //   );
+      // }).toList();
 
-      log("transaction:$productDetails");
+      // log("transaction:$productDetails");
       var order = Order(
         customerId: userController.uid.toString(),
         firstName: userController.userName.value,
