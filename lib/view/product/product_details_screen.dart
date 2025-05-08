@@ -16,8 +16,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../../controller/size_selector.dart';
-
 class ProductDetailsScreen extends StatefulWidget {
   @override
   State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
@@ -517,10 +515,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 thumbnailUrl: controller.productData['backgroundImage'][0],
                 categories: controller.productData['categories'],
               );
-              // Get.toNamed(RouteName.cartScreen, arguments: product);lklk
+              Get.toNamed(RouteName.cartScreen, arguments: product);
 
-              cartQuantityController.addProduct(product);
-              cartQuantityController.saveCart();
+              // cartQuantityController.addProduct(product);
+              // cartQuantityController.saveCart();
             } else {
               Utils.showCustomSnackBar(
                   "Warning",
