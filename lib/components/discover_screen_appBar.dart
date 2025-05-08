@@ -1,4 +1,3 @@
-
 import 'package:clique/constants/index.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,7 +16,7 @@ class DiscoverScreenAppBar extends PreferredSize {
     this.isNotification = false,
   }) : super(
           preferredSize:
-              const Size.fromHeight(kToolbarHeight * 0.8), // Increased height
+              const Size.fromHeight(kToolbarHeight * 1.0), // Increased height
           child: _DiscoverScreenAppBarWidget(
             title: title,
             icon: icon,
@@ -40,12 +39,10 @@ class _DiscoverScreenAppBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final iconSize = screenWidth * 0.07;
     final titleFontSize = screenWidth * 0.06;
-    final horizontalPadding = screenWidth * 0.04;
 
     return Container(
-      height: kToolbarHeight * 1.7, // Increased height
+      height: kToolbarHeight * 1.7,
       decoration: BoxDecoration(
         gradient: AppColors.appGradientColors,
         borderRadius: const BorderRadius.only(
@@ -54,15 +51,16 @@ class _DiscoverScreenAppBarWidget extends StatelessWidget {
         ),
       ),
       child: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+        child: Center(
           child: Text(
             title,
             style: TextStyle(
-                color: Colors.white,
-                fontSize: titleFontSize,
-                fontWeight: FontWeight.w700,
-                fontFamily: 'SofiaPro'),
+              color: Colors.white,
+              fontSize: titleFontSize,
+              fontWeight: FontWeight.w700,
+              fontFamily: 'SofiaPro',
+            ),
+            textAlign: TextAlign.center,
           ),
         ),
       ),

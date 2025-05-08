@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:clique/core/api/api_client.dart';
 import 'package:clique/core/api/api_endpoints.dart';
 import 'package:flutter/material.dart';
@@ -65,8 +66,6 @@ class GroupChatViewModel extends GetxController {
           "onBehalfOf": userId,
         },
       );
-
-      // log("Response: ${response.body}");
 
       if (response.statusCode == 200) {
         final dynamic responseData = jsonDecode(response.body);
@@ -161,17 +160,16 @@ class GroupChatViewModel extends GetxController {
     }
   }
 
-
-
-    Future<void> sendThread(String message, int messageId ) async {
+  Future<void> sendThread(String message, int messageId) async {
     // final replyMessage = replyingTo.value;
-
+    log("replying to $messageId");
     if (message.isEmpty) return;
 
     try {
       final response = await apiClient.post(
         // url: ApiEndpoints.sendMessage,
-        url: "https://269435d754e8fd97.api-us.cometchat.io/v3/messages/$messageId/thread",
+        url:
+            "https://269435d754e8fd97.api-us.cometchat.io/v3/messages/$messageId/thread",
         headers: {
           "Content-Type": "application/json",
           "accept": "application/json",
@@ -188,6 +186,7 @@ class GroupChatViewModel extends GetxController {
           "receiverType": "group",
         }),
       );
+      log(response.body);
       if (response.statusCode == 200) {
         _fetchInitialMessages(); // Refresh messages after sending a new one
       }

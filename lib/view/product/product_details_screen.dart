@@ -36,7 +36,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   final ProductViewModel _productViewModel = Get.find<ProductViewModel>();
 
-  final cartQuantityController = Get.find<CartQuantityController>();
+  // final cartQuantityController = Get.find<CartQuantityController>();
   @override
   void initState() {
     super.initState();

@@ -2,26 +2,35 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   static LinearGradient appGradientColors = LinearGradient(
-            begin: Alignment.centerLeft, // 270 degrees
-            end: Alignment.centerRight,
-            colors: [
-              Color(0xFFFE7736), // Orange
-              Color(0xFFF50E50), // Reddish Pink
-            ],
+    begin: Alignment.centerLeft, // 270 degrees
+    end: Alignment.centerRight,
+    colors: [
+      Color.fromARGB(255, 245, 131, 74), // Orange
+      Color.fromARGB(255, 253, 62, 117), // Reddish Pink
+    ],
   );
+  // static LinearGradient appGradientColors = LinearGradient(
+  //   begin: Alignment.topLeft,
+  //   end: Alignment.bottomRight,
+  //   colors: [
+  //     Color.fromRGBO(255, 183, 94, 0.8), // Soft orange with opacity
+  //     Color.fromRGBO(255, 128, 128, 0.8), // Soft pink with opacity
+  //   ],
+  // );
+
   static LinearGradient backGradientColors = LinearGradient(
-            begin: Alignment.centerLeft, // 270 degrees
-            end: Alignment.centerRight,
-            colors: [
-             Colors.black, // Orange
-            Colors.black, // Reddish Pink
-            ],
+    begin: Alignment.centerLeft, // 270 degrees
+    end: Alignment.centerRight,
+    colors: [
+      Colors.black, // Orange
+      Colors.black, // Reddish Pink
+    ],
   );
-              // Light Blue
-               // Golden Yellow
-  static const appColor =  Color(0xFFF94643);
-  
-    static const LinearGradient blackgroundGradient = LinearGradient(
+  // Light Blue
+  // Golden Yellow
+  static const appColor = Color(0xFFF94643);
+
+  static const LinearGradient blackgroundGradient = LinearGradient(
     colors: [
       Color(0xFFF4F7FB), // #F4F7FB (100% opacity)
       Color(0xD8F4F7FB), // rgba(244, 247, 251, 0.845192) (~85% opacity)
@@ -33,9 +42,8 @@ class AppColors {
     end: Alignment.bottomCenter,
     stops: [0.0, 0.2379, 0.4902, 0.7474, 1.0], // Gradient stops
   );
-static const grey = Colors.grey
-; // New background color
-  static const black =  Colors.black;
+  static const grey = Colors.grey; // New background color
+  static const black = Colors.black;
   static const yellow = Color(0xFFE0B23A);
-  static final mediumPink =  Colors.pinkAccent.withOpacity(0.4);
+  static final mediumPink = Colors.pinkAccent.withOpacity(0.4);
 }

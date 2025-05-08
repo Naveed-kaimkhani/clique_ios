@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class AmountWidget extends StatelessWidget {
   final String label;
-  final double value;
+   var value;
   final double titleFontSize;
 
   AmountWidget({

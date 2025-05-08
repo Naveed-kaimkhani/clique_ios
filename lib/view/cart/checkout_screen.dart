@@ -382,7 +382,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     // Get the screen size
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    double subTotal = (_cartQuantityController.products.first.cost *
+    var subTotal = (_cartQuantityController.products.first.cost *
         _cartQuantityController.quantity.value);
 
     // Define responsive padding and font sizes

@@ -22,10 +22,6 @@ class CartQuantityController extends GetxController {
   }
 }
 
-
-
-
-
 // for multiple products
 // import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 // import 'package:clique/data/repositories/cart_storage.dart';

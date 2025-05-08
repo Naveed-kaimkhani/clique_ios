@@ -11,38 +11,36 @@ import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 
-void main() async{ 
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Stripe.publishableKey = publishableKey;
   await Stripe.instance.applySettings();
-   Get.put(ApiClient());
+  Get.put(ApiClient());
   Get.put(GroupRepository());
   Get.put(AuthRepository());
   Get.put(InfluencerRepository());
-Get.put(CartQuantityController());
-Get.put(AddressController());
+  Get.put(CartQuantityController());
+  Get.put(AddressController());
   runApp(
-MyApp(),
+    MyApp(),
   );
 }
- 
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-     debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-        fontFamily: 'SofiaPro',  // Apply font globally
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        fontFamily: 'SofiaPro', // Apply font globally
         textTheme: TextTheme(
           bodyMedium: TextStyle(fontFamily: 'SofiaPro'),
           bodySmall: TextStyle(fontFamily: 'SofiaPro'),
         ),
       ),
-      home:SplashScreen(),
+      home: SplashScreen(),
       // initialRoute: RouteName.homeScreen,
       getPages: AppRoutes.getAppRoutes(),
     );
   }
 }
-
-

@@ -1,4 +1,3 @@
-
 // import 'package:cached_network_image/cached_network_image.dart';
 // import 'package:clique/components/auth_button.dart';
 // import 'package:clique/components/gradient_text.dart';
@@ -162,7 +161,7 @@
 //                   AuthButton(
 //                     buttonText: "Checkout",
 //                     onPressed: () {
-                  
+
 //                       if (controller.address1.value.isEmpty) {
 //                         Get.toNamed(RouteName.checkoutScreen);
 //                         return;
@@ -186,15 +185,10 @@
 //   }
 // }
 
-
-
-
-
-
-/// cart screen with single product 
-/// 
-/// 
-/// 
+/// cart screen with single product
+///
+///
+///
 
 import 'dart:developer';
 
@@ -262,152 +256,161 @@ class _CartScreenState extends State<CartScreen> {
   @override
   void dispose() {
     Get.delete<CartQuantityController>();
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     log("in build");
-    return SafeArea(
-      bottom: false,
-      child: Scaffold(
-        appBar: AppBarWithBackIcon(title: "My Cart"),
-        backgroundColor: Colors.white,
-        body: Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                itemCount: 1,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Hero(
-                          tag: product.id.toString(),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: CachedNetworkImage(
-                              imageUrl: product.imageUrls.first,
-                              width: 84,
-                              height: 84,
-                              fit: BoxFit.cover,
-                              placeholder: (context, url) => Shimmer.fromColors(
-                                baseColor: Colors.grey[300]!,
-                                highlightColor: Colors.grey[100]!,
-                                child: Container(
-                                  width: 84,
-                                  height: 84,
-                                  color: Colors.white,
+    return Container(
+      decoration: BoxDecoration(
+        gradient: AppColors.appGradientColors,
+      ),
+      child: SafeArea(
+        bottom: false,
+        child: Scaffold(
+          appBar: AppBarWithBackIcon(title: "My Cart"),
+          backgroundColor: Colors.white,
+          body: Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  itemCount: 1,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Hero(
+                            tag: product.id.toString(),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: CachedNetworkImage(
+                                imageUrl: product.imageUrls.first,
+                                width: 84,
+                                height: 84,
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) =>
+                                    Shimmer.fromColors(
+                                  baseColor: Colors.grey[300]!,
+                                  highlightColor: Colors.grey[100]!,
+                                  child: Container(
+                                    width: 84,
+                                    height: 84,
+                                    color: Colors.white,
+                                  ),
                                 ),
+                                errorWidget: (context, url, error) =>
+                                    const Icon(Icons.error),
                               ),
-                              errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error),
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                product.productTitle,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Row(
-                                children: [
-                                  GradientText(
-                                    "\$${product.cost.toStringAsFixed(2)}",
-
-                                    // "\$${"12"}",
-                                    gradient: AppColors.appGradientColors,
-                                    fontSize: 16.36,
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  product.productTitle,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
                                   ),
-                                ],
-                              ),
-                              Obx(() => Row(
-                                    children: [
-                                      IconButton(
-                                        icon: const Icon(
-                                            Icons.remove_circle_outline),
-                                        onPressed: () => cartQuantityController
-                                            .decrementQuantity(),
-                                      ),
-                                      Text(
-                                        "${cartQuantityController.quantity.value}",
-                                        style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      IconButton(
-                                        icon: const Icon(
-                                            Icons.add_circle_outline),
-                                        onPressed: () => cartQuantityController
-                                            .incrementQuantity(),
-                                      ),
-                                      const Spacer(),
-                                    ],
-                                  )),
-                            ],
+                                ),
+                                const SizedBox(height: 4),
+                                Row(
+                                  children: [
+                                    GradientText(
+                                      "\$${product.cost.toStringAsFixed(2)}",
+
+                                      // "\$${"12"}",
+                                      gradient: AppColors.appGradientColors,
+                                      fontSize: 16.36,
+                                    ),
+                                  ],
+                                ),
+                                Obx(() => Row(
+                                      children: [
+                                        IconButton(
+                                          icon: const Icon(
+                                              Icons.remove_circle_outline),
+                                          onPressed: () =>
+                                              cartQuantityController
+                                                  .decrementQuantity(),
+                                        ),
+                                        Text(
+                                          "${cartQuantityController.quantity.value}",
+                                          style: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        IconButton(
+                                          icon: const Icon(
+                                              Icons.add_circle_outline),
+                                          onPressed: () =>
+                                              cartQuantityController
+                                                  .incrementQuantity(),
+                                        ),
+                                        const Spacer(),
+                                      ],
+                                    )),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ),
-            ),
-            Container(
-              height: 230,
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(20)),
+              Container(
+                height: 230,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(20)),
+                ),
+                child: Column(
+                  children: [
+                    const Divider(thickness: 1),
+                    Obx(() => SummaryRow(
+                          title: "Sub Total",
+                          amount: (product.cost) *
+                              cartQuantityController.quantity.value,
+                          isBold: true,
+                        )),
+                    const SizedBox(height: 60),
+                    AuthButton(
+                      buttonText: "Checkout",
+                      onPressed: () {
+                        if (cartQuantityController.quantity.value > 10) {
+                          Utils.showCustomSnackBar(
+                              "Warning",
+                              "Product quantity should not be more than 10",
+                              ContentType.warning);
+                          return;
+                        }
+                        if (controller.address1.value.isEmpty) {
+                          Get.toNamed(RouteName.checkoutScreen);
+                          return;
+                        } else {
+                          orderController.submitOrderFromCart().then((value) {
+                            if (value != null) {
+                              Get.toNamed(RouteName.checkoutScreen);
+                            }
+                          });
+                        }
+                      },
+                      isLoading: orderController.isLoading,
+                    )
+                  ],
+                ),
               ),
-              child: Column(
-                children: [
-                  const Divider(thickness: 1),
-                  Obx(() => SummaryRow(
-                        title: "Sub Total",
-                        amount: (product.cost) *
-                            cartQuantityController.quantity.value,
-                        isBold: true,
-                      )),
-                  const SizedBox(height: 60),
-                  AuthButton(
-                    buttonText: "Checkout",
-                    onPressed: () {
-                      if (cartQuantityController.quantity.value > 10) {
-                        Utils.showCustomSnackBar(
-                            "Warning",
-                            "Product quantity should not be more than 10",
-                            ContentType.warning);
-                        return;
-                      }
-                      if (controller.address1.value.isEmpty) {
-                        Get.toNamed(RouteName.checkoutScreen);
-                        return;
-                      } else {
-                        orderController.submitOrderFromCart().then((value) {
-                          if (value != null) {
-                            Get.toNamed(RouteName.checkoutScreen);
-                          }
-                        });
-                      }
-                    },
-                    isLoading: orderController.isLoading,
-                  )
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
