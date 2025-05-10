@@ -6,11 +6,11 @@ import 'package:clique/utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
-
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+
+
 class UploadVideoService {
   static const String baseUrl = "https://cactisocial.com/api-clique/public/api/v1/popstream/create";
-
   Future<UploadVideoResponse> uploadVideo({
   required File thumbnail,
   required File video,
@@ -21,8 +21,6 @@ class UploadVideoService {
   required ProductModel product,
   required String createdBy,
   required String authToken,
-    // required Function(double) onProgress, // 👈 add this
-
 }) async {
   try {
     var request = http.MultipartRequest('POST', Uri.parse(baseUrl));

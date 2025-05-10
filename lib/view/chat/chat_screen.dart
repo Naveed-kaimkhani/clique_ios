@@ -186,21 +186,20 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
             ChatInputWidget(
               onSend: (message, replyingTo) {
                 final ChatViewModel chatViewModel = Get.find<ChatViewModel>();
-                if (chatViewModel.repliedMessage.value == null) {
-                  viewModel
-                      .sendMessage(
-                    message,
-                  )
-                      .then((_) {
+                final repliedMessage = chatViewModel.repliedMessage.value;
+
+                if (repliedMessage == null) {
+                  // No reply context; send a regular message
+                  viewModel.sendMessage(message).then((_) {
                     _scrollToBottom();
                     setState(() {
                       viewModel.replyingTo.value = null;
                     });
                   });
                 } else {
+                  // Replying to an original message; send as a thread
                   viewModel
-                      .sendThread(message,
-                          int.parse(chatViewModel.repliedMessage.value!.id))
+                      .sendThread(message, int.parse(repliedMessage.id))
                       .then((_) {
                     _scrollToBottom();
                     setState(() {
