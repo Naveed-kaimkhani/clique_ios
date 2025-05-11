@@ -18,7 +18,6 @@ final OrderViewModel orderController =Get.find<OrderViewModel>();
       isLoading.value = true;
 
       final clientSecret = await PaymentService.createPaymentIntent(amount, userController.token.value);
-     log(clientSecret);
 
       await Stripe.instance.initPaymentSheet(
         paymentSheetParameters: SetupPaymentSheetParameters(

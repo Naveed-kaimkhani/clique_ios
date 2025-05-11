@@ -77,20 +77,7 @@ class _AppBarWithBackIconWidget extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                     fontFamily: 'SofiaPro'),
               ),
-              isNotification
-                  ? IconButton(
-                      icon: Icon(
-                        Icons.search,
-                        color: Colors.white,
-                        size: iconSize,
-                      ),
-                      onPressed: () {
-                        Get.toNamed(RouteName.productSearchScreen);
-                      },
-                    )
-                  : SizedBox(
-                      width: 52,
-                    )
+             
             ],
           ),
         ),

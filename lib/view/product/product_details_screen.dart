@@ -36,7 +36,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   final ProductViewModel _productViewModel = Get.find<ProductViewModel>();
 
-  // final cartQuantityController = Get.find<CartQuantityController>();
+  final cartQuantityController = Get.find<CartQuantityController>();
   @override
   void initState() {
     super.initState();
@@ -515,9 +515,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 thumbnailUrl: controller.productData['backgroundImage'][0],
                 categories: controller.productData['categories'],
               );
-              Get.toNamed(RouteName.cartScreen, arguments: product);
+              // Get.toNamed(RouteName.cartScreen, arguments: product);
 
-              // cartQuantityController.addProduct(product);
+              cartQuantityController.addProduct(product);
               // cartQuantityController.saveCart();
             } else {
               Utils.showCustomSnackBar(
@@ -533,7 +533,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           },
           icon: Icon(Icons.shopping_cart, color: Colors.white),
           label: Text(
-            "Checkout",
+            "Add to cart",
             style: TextStyle(
               fontSize: size.width * 0.04,
               color: Colors.white,

@@ -48,9 +48,6 @@ class ProductModel {
       msrp: json['msrp'],
       imageUrls: imageUrls,
       thumbnailUrl: thumbnails.isNotEmpty ? thumbnails.first : '',
-
-      // imageUrls: [],
-      // thumbnailUrl: '',
       categories: categories, // Assign categories from JSON
       variantGroupId: json['variant_group_id'],
       tdid: json['tdid'], // Assign tdid from JSON
@@ -60,13 +57,20 @@ class ProductModel {
   }
   Map<String, dynamic> toMap() {
     return {
-      'pid': id,
+      'id': id,
       'product_title': productTitle,
       'tdid': tdid,
       'product_desc': productDesc,
-      'price': cost,
-      'product_image': imageUrls.join(','),
+      'cost': cost,
+      'image_url': imageUrls.join(','),
       'product_code': productCode,
+      'thumbnail_url': thumbnailUrl,
+      'product_weight': productWeight,
+      'mass_unit': unit,
+      'msrp': msrp,
+      'brand_name': brandName,
+      'variant_group_id': variantGroupId,
+      'categories': categories, // Add categories here
     };
   }
 }

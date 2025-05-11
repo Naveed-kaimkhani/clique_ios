@@ -46,32 +46,32 @@ class OrderViewModel extends GetxController {
       );
 
       // Map each product to Transaction and ProductModel
-      // List<Transaction> transactions =
-      //     cartQuantityController.products.map((product) {
-      //   return Transaction(
-      //     tdid: product.tdid ?? "",
-      //     quantity: cartQuantityController.getQuantity(
-      //         product.id.toString()), // ensure quantity is tracked per product
-      //   );
-      // }).toList();
-      // List<ProductModel> productDetails =
-      //     cartQuantityController.products.map((product) {
-      //   return ProductModel(
-      //     id: product.id,
-      //     productWeight: product.productWeight,
-      //     productCode: product.productCode,
-      //     unit: product.unit,
-      //     productTitle: product.productTitle,
-      //     productDesc: product.productDesc,
-      //     imageUrls: product.imageUrls,
-      //     cost: product.cost,
-      //     brandName: "",
-      //     msrp: 0,
-      //     thumbnailUrl: "",
-      //     categories: "",
-      //     variantGroupId: "",
-      //   );
-      // }).toList();
+      List<Transaction> transactions =
+          cartQuantityController.products.map((product) {
+        return Transaction(
+          tdid: product.tdid ?? "",
+          quantity: cartQuantityController.getQuantity(
+              product.id.toString()), // ensure quantity is tracked per product
+        );
+      }).toList();
+      List<ProductModel> productDetails =
+          cartQuantityController.products.map((product) {
+        return ProductModel(
+          id: product.id,
+          productWeight: product.productWeight,
+          productCode: product.productCode,
+          unit: product.unit,
+          productTitle: product.productTitle,
+          productDesc: product.productDesc,
+          imageUrls: product.imageUrls,
+          cost: product.cost,
+          brandName: "",
+          msrp: 0,
+          thumbnailUrl: "",
+          categories: "",
+          variantGroupId: "",
+        );
+      }).toList();
 
       // log("transaction:$productDetails");
       var order = Order(
@@ -80,34 +80,36 @@ class OrderViewModel extends GetxController {
         lastName: "", // Use the actual last name
         phone: userController.phone.value, // Use the actual phone number
         address: address,
-        transactions: [
-          Transaction(
-            tdid: cartQuantityController.products.first.tdid ?? "",
-            quantity: cartQuantityController.quantity.value,
-          )
-        ],
-        productDetails: [
-          ProductModel(
-            id: cartQuantityController.products.first.id,
-            productWeight: cartQuantityController.products.first.productWeight,
-            productCode: cartQuantityController.products.first.productCode,
-            unit: cartQuantityController.products.first.unit,
-            productTitle: cartQuantityController.products.first.productTitle,
-            productDesc: cartQuantityController.products.first.productDesc,
-            imageUrls: cartQuantityController.products.first.imageUrls,
-            cost: cartQuantityController.products.first.cost,
-            brandName: "",
-            msrp: 0,
-            thumbnailUrl: "",
-            categories: "",
-            variantGroupId: "",
-          )
-        ],
+        // transactions: [
+        //   Transaction(
+        //     tdid: cartQuantityController.products.first.tdid ?? "",
+        //     quantity: cartQuantityController.quantity.value,
+        //   )
+        // ],
+        transactions: transactions,
+        // productDetails: [
+        //   ProductModel(
+        //     id: cartQuantityController.products.first.id,
+        //     productWeight: cartQuantityController.products.first.productWeight,
+        //     productCode: cartQuantityController.products.first.productCode,
+        //     unit: cartQuantityController.products.first.unit,
+        //     productTitle: cartQuantityController.products.first.productTitle,
+        //     productDesc: cartQuantityController.products.first.productDesc,
+        //     imageUrls: cartQuantityController.products.first.imageUrls,
+        //     cost: cartQuantityController.products.first.cost,
+        //     brandName: "",
+        //     msrp: 0,
+        //     thumbnailUrl: "",
+        //     categories: "",
+        //     variantGroupId: "",
+        //   )
+        // ],
+        productDetails: productDetails,
       );
       log("is product null");
       log(cartQuantityController.products.length.toString());
       log("order ki details kya ja rhi hen");
-      log(cartQuantityController.products.first.productTitle);
+      log(cartQuantityController.products[1].productTitle);
 
       final url = Uri.parse(
           "https://cactisocial.com/api-clique/public/api/v1/topdawg/orders");
@@ -118,6 +120,7 @@ class OrderViewModel extends GetxController {
       };
 
       final Map<String, dynamic> orderMap = order.toMap();
+      // log(orderMap.toString());
       final response = await http.post(
         url,
         headers: headers,
@@ -127,6 +130,7 @@ class OrderViewModel extends GetxController {
       if (response.statusCode == 200) {
         final parsedOrderSummary =
             OrderSummary.fromJson(jsonDecode(response.body));
+        log(parsedOrderSummary.toString());
         orderSummary.value = parsedOrderSummary;
         return parsedOrderSummary;
       } else {
@@ -179,64 +183,66 @@ class OrderViewModel extends GetxController {
       );
 
       // Map each product to Transaction and ProductModel
-      // List<Transaction> transactions =
-      //     cartQuantityController.products.map((product) {
-      //   return Transaction(
-      //     tdid: product.tdid ?? "",
-      //     quantity: cartQuantityController.getQuantity(
-      //         product.id.toString()), // ensure quantity is tracked per product
-      //   );
-      // }).toList();
+      List<Transaction> transactions =
+          cartQuantityController.products.map((product) {
+        return Transaction(
+          tdid: product.tdid ?? "",
+          quantity: cartQuantityController.getQuantity(
+              product.id.toString()), // ensure quantity is tracked per product
+        );
+      }).toList();
 
-      // List<ProductModel> productDetails =
-      //     cartQuantityController.products.map((product) {
-      //   return ProductModel(
-      //     id: product.id,
-      //     productWeight: product.productWeight,
-      //     productCode: product.productCode,
-      //     unit: product.unit,
-      //     productTitle: product.productTitle,
-      //     productDesc: product.productDesc,
-      //     imageUrls: product.imageUrls,
-      //     cost: product.cost,
-      //     brandName: "",
-      //     msrp: 0,
-      //     thumbnailUrl: "",
-      //     categories: "",
-      //     variantGroupId: "",
-      //   );
-      // }).toList();
+      List<ProductModel> productDetails =
+          cartQuantityController.products.map((product) {
+        return ProductModel(
+          id: product.id,
+          productWeight: product.productWeight,
+          productCode: product.productCode,
+          unit: product.unit,
+          productTitle: product.productTitle,
+          productDesc: product.productDesc,
+          imageUrls: product.imageUrls,
+          cost: product.cost,
+          brandName: "",
+          msrp: 0,
+          thumbnailUrl: "",
+          categories: "",
+          variantGroupId: "",
+        );
+      }).toList();
 
       var order = Order(
-        customerId: userController.uid.toString(), // Use the actual customer ID
-        firstName: userController.userName.value, // Use the actual first name
-        lastName: "", // Use the actual last name
-        phone: userController.phone.value, // Use the actual phone number
-        address: address,
-        transactions: [
-          Transaction(
-            tdid: cartQuantityController.products.first.tdid ?? "",
-            quantity: cartQuantityController.quantity.value,
-          )
-        ],
-        productDetails: [
-          ProductModel(
-            id: cartQuantityController.products.first.id,
-            productWeight: cartQuantityController.products.first.productWeight,
-            productCode: cartQuantityController.products.first.productCode,
-            unit: cartQuantityController.products.first.unit,
-            productTitle: cartQuantityController.products.first.productTitle,
-            productDesc: cartQuantityController.products.first.productDesc,
-            imageUrls: cartQuantityController.products.first.imageUrls,
-            cost: cartQuantityController.products.first.cost,
-            brandName: "",
-            msrp: 0,
-            thumbnailUrl: "",
-            categories: "",
-            variantGroupId: "",
-          )
-        ],
-      );
+          customerId:
+              userController.uid.toString(), // Use the actual customer ID
+          firstName: userController.userName.value, // Use the actual first name
+          lastName: "", // Use the actual last name
+          phone: userController.phone.value, // Use the actual phone number
+          address: address,
+          // transactions: [
+          //   Transaction(
+          //     tdid: cartQuantityController.products.first.tdid ?? "",
+          //     quantity: cartQuantityController.quantity.value,
+          //   )
+          // ],
+          transactions: transactions,
+          // productDetails: [
+          //   ProductModel(
+          //     id: cartQuantityController.products.first.id,
+          //     productWeight: cartQuantityController.products.first.productWeight,
+          //     productCode: cartQuantityController.products.first.productCode,
+          //     unit: cartQuantityController.products.first.unit,
+          //     productTitle: cartQuantityController.products.first.productTitle,
+          //     productDesc: cartQuantityController.products.first.productDesc,
+          //     imageUrls: cartQuantityController.products.first.imageUrls,
+          //     cost: cartQuantityController.products.first.cost,
+          //     brandName: "",
+          //     msrp: 0,
+          //     thumbnailUrl: "",
+          //     categories: "",
+          //     variantGroupId: "",
+          //   )
+          // ],
+          productDetails: productDetails);
 
       final url = Uri.parse(
           "https://cactisocial.com/api-clique/public/api/v1/topdawg/orders");
@@ -249,6 +255,11 @@ class OrderViewModel extends GetxController {
       // Prepare the request body by converting the order object to a map
       final Map<String, dynamic> orderMap =
           order.toMap(); // Log the JSON string
+
+      log("is product null");
+      log(cartQuantityController.products.length.toString());
+      log("order ki details kya ja rhi hen");
+      log(cartQuantityController.products[1].productTitle);
       final response = await http.post(
         url,
         headers: headers,

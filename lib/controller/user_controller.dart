@@ -1,4 +1,3 @@
-
 import 'package:clique/data/models/user_registration_response.dart';
 import 'package:clique/routes/routes_name.dart';
 import 'package:clique/view_model/address_controller.dart';
@@ -9,7 +8,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 class UserController extends GetxController {
   late SharedPreferences prefs;
   final AddressController controller = Get.put(AddressController());
-
 
   Rxn<User> user = Rxn<User>();
   var token = ''.obs;
@@ -29,37 +27,36 @@ class UserController extends GetxController {
     prefs = await SharedPreferences.getInstance();
     loadUserSession(); // Load session on init
   }
-Future<void> logout() async {
-  final prefs = await SharedPreferences.getInstance();
-  
-  // Clear all stored user session data
-  await prefs.remove('token');
-  await prefs.remove('revo_access_token');
-  await prefs.remove('revo_lambda_token');
-  await prefs.remove('userName');
-  await prefs.remove('role');
-  await prefs.remove('uid');
-  await prefs.remove('profile_photo_url');
-  await prefs.remove('cover_photo_url');
-  await prefs.remove('email');
-  await prefs.remove('phone');
-  await controller.clearAddress(); 
-  
-  FavoriteController favoriteController;
-  if (Get.isRegistered<FavoriteController>()) {
-    favoriteController = Get.find<FavoriteController>();
-  } else {
-    favoriteController = Get.put(FavoriteController());
+
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    // Clear all stored user session data
+    await prefs.remove('token');
+    await prefs.remove('revo_access_token');
+    await prefs.remove('revo_lambda_token');
+    await prefs.remove('userName');
+    await prefs.remove('role');
+    await prefs.remove('uid');
+    await prefs.remove('profile_photo_url');
+    await prefs.remove('cover_photo_url');
+    await prefs.remove('email');
+    await prefs.remove('phone');
+    await controller.clearAddress();
+
+    FavoriteController favoriteController;
+    if (Get.isRegistered<FavoriteController>()) {
+      favoriteController = Get.find<FavoriteController>();
+    } else {
+      favoriteController = Get.put(FavoriteController());
+    }
+    favoriteController.clearFavorites();
+
+    Get.offAllNamed(RouteName.loginScreen);
   }
-  favoriteController.clearFavorites();
-
-  Get.offAllNamed(RouteName.loginScreen);
-
-}
 
   void saveUserSession(
       UserRegistrationResponse response, String userName) async {
-
     token.value = response.token!;
 
     this.userName.value = userName; // Set the observable value directly
@@ -74,33 +71,33 @@ Future<void> logout() async {
     final storedToken = prefs.getString('token');
     // final revoAcess = prefs.getString('revo_access_token');
     final lamdaToken = prefs.getString('revo_lambda_token');
-      
-      //  final String revoAccessToken = responseData["revo_access_token"];
-       
-      //  final String revoLambdaToken = responseData["revo_lambda_token"];
-        final storedRole = prefs.getString('role')??'';
-        
-        final email = prefs.getString('email');
-        
-        final profilePhotoUrl = prefs.getString('profile_photo_url');
-        
-        final coverPhotoUrl = prefs.getString('cover_photo_url');
-        
-        final phoneNo = prefs.getString('phone');
+
+    //  final String revoAccessToken = responseData["revo_access_token"];
+
+    //  final String revoLambdaToken = responseData["revo_lambda_token"];
+    final storedRole = prefs.getString('role') ?? '';
+
+    final email = prefs.getString('email');
+
+    final profilePhotoUrl = prefs.getString('profile_photo_url');
+
+    final coverPhotoUrl = prefs.getString('cover_photo_url');
+
+    final phoneNo = prefs.getString('phone');
     uid.value = prefs.getInt('uid') ?? 0;
 
-    if (storedUserName != null && storedToken != null ) {
+    if (storedUserName != null && storedToken != null) {
       userName.value = storedUserName; // Set the observable value directly
       token.value = storedToken; // Set the observable value directly
       userName.value = storedUserName; // Set the observable value directly
       token.value = storedToken;
-      userEmail.value=email??'';
-      role.value=storedRole;
+      userEmail.value = email ?? '';
+      role.value = storedRole;
       // revoAccessToken.value=revoAcess??'';
-      revoLamdaToken.value=lamdaToken??'';
-      profilePhoto.value=profilePhotoUrl??'';
-      coverPhoto.value=coverPhotoUrl??'';
-      phone.value=phoneNo??'';
+      revoLamdaToken.value = lamdaToken ?? '';
+      profilePhoto.value = profilePhotoUrl ?? '';
+      coverPhoto.value = coverPhotoUrl ?? '';
+      phone.value = phoneNo ?? '';
     }
   }
 

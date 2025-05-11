@@ -55,8 +55,6 @@ class ProductViewModel extends GetxController {
       final List<ProductModel> fetchedProducts = (data['products'] as List)
           .map((json) => ProductModel.fromJson(json))
           .toList();
-      log("products length");
-      log(fetchedProducts.length.toString());
       if (currentPage.value == 1) {
         products.assignAll(fetchedProducts);
       } else {
