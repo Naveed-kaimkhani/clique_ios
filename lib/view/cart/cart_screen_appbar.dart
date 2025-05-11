@@ -3,13 +3,13 @@ import 'package:clique/routes/routes_name.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class AppBarWithBackIcon extends PreferredSize {
+class CartScreenAppBar extends PreferredSize {
   final String title;
   final IconData? icon;
   final bool isNotification;
 
   final IconData? logoutIcon;
-  AppBarWithBackIcon({
+  CartScreenAppBar({
     super.key,
     required this.title,
     this.logoutIcon,
@@ -18,7 +18,7 @@ class AppBarWithBackIcon extends PreferredSize {
   }) : super(
           preferredSize:
               const Size.fromHeight(kToolbarHeight * 1.0), // Increased height
-          child: _AppBarWithBackIconWidget(
+          child: _CartScreenAppBarWidget(
             title: title,
             icon: icon,
             isNotification: isNotification,
@@ -26,12 +26,12 @@ class AppBarWithBackIcon extends PreferredSize {
         );
 }
 
-class _AppBarWithBackIconWidget extends StatelessWidget {
+class _CartScreenAppBarWidget extends StatelessWidget {
   final String title;
   final IconData? icon;
   final bool isNotification;
 
-  _AppBarWithBackIconWidget({
+  _CartScreenAppBarWidget({
     required this.title,
     this.icon,
     this.isNotification = false,
@@ -80,7 +80,7 @@ class _AppBarWithBackIconWidget extends StatelessWidget {
               isNotification
                   ? IconButton(
                       icon: Icon(
-                        Icons.search,
+                        Icons.clear_all,
                         color: Colors.white,
                         size: iconSize,
                       ),
@@ -88,8 +88,15 @@ class _AppBarWithBackIconWidget extends StatelessWidget {
                         Get.toNamed(RouteName.productSearchScreen);
                       },
                     )
-                  : SizedBox(
-                      width: 52,
+                  : IconButton(
+                      icon: Icon(
+                        Icons.clear_all,
+                        color: Colors.white,
+                        size: iconSize,
+                      ),
+                      onPressed: () {
+                        Get.toNamed(RouteName.productSearchScreen);
+                      },
                     )
             ],
           ),

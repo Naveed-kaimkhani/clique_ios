@@ -80,37 +80,11 @@ class OrderViewModel extends GetxController {
         lastName: "", // Use the actual last name
         phone: userController.phone.value, // Use the actual phone number
         address: address,
-        // transactions: [
-        //   Transaction(
-        //     tdid: cartQuantityController.products.first.tdid ?? "",
-        //     quantity: cartQuantityController.quantity.value,
-        //   )
-        // ],
         transactions: transactions,
-        // productDetails: [
-        //   ProductModel(
-        //     id: cartQuantityController.products.first.id,
-        //     productWeight: cartQuantityController.products.first.productWeight,
-        //     productCode: cartQuantityController.products.first.productCode,
-        //     unit: cartQuantityController.products.first.unit,
-        //     productTitle: cartQuantityController.products.first.productTitle,
-        //     productDesc: cartQuantityController.products.first.productDesc,
-        //     imageUrls: cartQuantityController.products.first.imageUrls,
-        //     cost: cartQuantityController.products.first.cost,
-        //     brandName: "",
-        //     msrp: 0,
-        //     thumbnailUrl: "",
-        //     categories: "",
-        //     variantGroupId: "",
-        //   )
-        // ],
+       
         productDetails: productDetails,
       );
-      log("is product null");
-      log(cartQuantityController.products.length.toString());
-      log("order ki details kya ja rhi hen");
-      log(cartQuantityController.products[1].productTitle);
-
+      
       final url = Uri.parse(
           "https://cactisocial.com/api-clique/public/api/v1/topdawg/orders");
       final headers = {

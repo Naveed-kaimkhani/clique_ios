@@ -20,6 +20,8 @@ class CartQuantityController extends GetxController {
     await CartStorage.saveCart(products);
   }
 
+  int get totalItems => quantities.values.fold(0, (sum, item) => sum + item);
+
   void removeFromCart(String productId) {
     products.removeWhere((product) => product.id.toString() == productId);
     quantities.remove(productId);

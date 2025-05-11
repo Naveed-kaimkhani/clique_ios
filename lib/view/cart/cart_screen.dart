@@ -20,7 +20,7 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  final cartQuantityController = Get.put(CartQuantityController());
+  final cartQuantityController = Get.find<CartQuantityController>();
   final OrderViewModel orderController = Get.isRegistered<OrderViewModel>()
       ? Get.find<OrderViewModel>()
       : Get.put(OrderViewModel(), permanent: true);
@@ -251,18 +251,7 @@ class _CartScreenState extends State<CartScreen> {
                 isBold: true,
               )),
           const SizedBox(height: 8),
-          // Obx(() => SummaryRow(
-          //   title: "Delivery Fee",
-          //   amount: cartQuantityController.getDeliveryFee(),
-          //   isBold: false,
-          // )),
           const SizedBox(height: 8),
-          // Obx(() => SummaryRow(
-          //   title: "Total",
-          //   amount: cartQuantityController.getTotal(),
-          //   isBold: true,
-          //   // textColor: AppColors.primaryColor,
-          // )),
           const SizedBox(height: 16),
           AuthButton(
             buttonText: "Proceed to Checkout",
@@ -280,6 +269,7 @@ class _CartScreenState extends State<CartScreen> {
             },
             isLoading: orderController.isLoading,
           ),
+          const SizedBox(height: 8),
         ],
       ),
     );

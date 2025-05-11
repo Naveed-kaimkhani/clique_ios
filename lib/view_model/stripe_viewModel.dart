@@ -1,27 +1,28 @@
-import 'dart:developer';
-
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/data/repositories/payment_service.dart';
 import 'package:clique/utils/utils.dart';
+import 'package:clique/view_model/cart_quantity_controller.dart';
 import 'package:clique/view_model/order_view_model.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
-// import 'package:flutter_stripe/flutter_stripe.dart';
-
 class StripeViewModel extends GetxController {
   var isLoading = false.obs;
-final OrderViewModel orderController =Get.find<OrderViewModel>();
+  final OrderViewModel orderController = Get.find<OrderViewModel>();
+
+  final CartQuantityController cartQuantityController =
+      Get.find<CartQuantityController>();
   final userController = Get.find<UserController>();
   Future<void> makePayment(double amount) async {
     try {
       isLoading.value = true;
 
-      final clientSecret = await PaymentService.createPaymentIntent(amount, userController.token.value);
+      final clientSecret = await PaymentService.createPaymentIntent(
+          amount, userController.token.value);
 
       await Stripe.instance.initPaymentSheet(
         paymentSheetParameters: SetupPaymentSheetParameters(
-      allowsDelayedPaymentMethods: true,
+          allowsDelayedPaymentMethods: true,
           paymentIntentClientSecret: clientSecret,
           merchantDisplayName: 'Clique',
         ),
@@ -30,14 +31,18 @@ final OrderViewModel orderController =Get.find<OrderViewModel>();
       await Stripe.instance.presentPaymentSheet();
       // orderController.processOrder(orderController.orderSummary.value.orderId.toString());
       final summary = orderController.orderSummary.value;
-if (summary?.orderId != null) {
- await orderController.processOrder(summary!.orderId.toString());
-} else {
-  Utils.showCustomSnackBar("Error", "Order not submitted or ID missing", ContentType.failure);
-}
+      if (summary?.orderId != null) {
+        await orderController.processOrder(summary!.orderId.toString());
+      } else {
+        Utils.showCustomSnackBar(
+            "Error", "Order not submitted or ID missing", ContentType.failure);
+      }
 
-      Utils.showCustomSnackBar("Success", "Payment completed with order id ${summary!.orderId.toString()}", ContentType.success);
-    
+      Utils.showCustomSnackBar(
+          "Success",
+          "Payment completed with order id ${summary!.orderId.toString()}",
+          ContentType.success);
+      cartQuantityController.clearCart();
       // Get.snackbar('Success', 'Payment completed');
     } catch (e) {
       if (e is StripeException) {
@@ -46,10 +51,9 @@ if (summary?.orderId != null) {
         Get.snackbar('Error', e.toString());
       }
     } finally {
-    
       isLoading.value = false;
-    // Get.offAll(() => HomeScreen()); 
-    Get.back();
+      // Get.offAll(() => HomeScreen());
+      Get.back();
     }
   }
 }
