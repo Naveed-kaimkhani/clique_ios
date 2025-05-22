@@ -16,9 +16,8 @@ class UploadVideoViewModel extends GetxController {
   final titleController = TextEditingController();
   final hashtagsController = TextEditingController();
   final RxString layout = 'Portrait'.obs;
-  final Rx<ProductModel?> selectedProduct =
-      Rx<ProductModel?>(null); // Changed to single product
 
+final RxList<ProductModel> selectedProducts = <ProductModel>[].obs;
   var thumbnailBytes = Rxn<Uint8List>(); // Store Uint8List for UI
 
   var selectedCheckoutOption = RxString('Inline Checkout'); // Default value
@@ -78,16 +77,16 @@ Future<void> pickVideo() async {
       return;
     }
     isLoading.value = true;
-    if (selectedProduct.value == null) {
+    if (selectedProducts.isEmpty) {
       Utils.showCustomSnackBar(
-          "Warning", "Please Select a product", ContentType.warning);
+          "Warning", "Please Select a products", ContentType.warning);
     } else {
       var response = await _uploadService.uploadVideo(
         thumbnail: thumbnailFile.value!,
         video: videoFile.value!,
         userId: userController.uid.toString(), // Replace with actual user ID
         name: titleController.text,
-        product: selectedProduct.value!,
+        product: selectedProducts,
         showType: layout.value,
         // product: ProductModel(id: 111, productWeight: "", productTitle: "productTitle", productDesc: "productDesc", brandName: "brandName", unit: "s", cost: 12, msrp: 12, imageUrls: List<S>, thumbnailUrl: "thumbnailUrl", categories: "categories", variantGroupId: "variantGroupId"),  // Replace with actual product
         lambdaToken:

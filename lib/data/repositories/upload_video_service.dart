@@ -18,14 +18,17 @@ class UploadVideoService {
   required String name,
   required String showType,
   required String lambdaToken,
-  required ProductModel product,
+  required List<ProductModel> product,
   required String createdBy,
   required String authToken,
 }) async {
   try {
+
+    final productIds = product.map((e) => e.id.toString()).join(',');
     var request = http.MultipartRequest('POST', Uri.parse(baseUrl));
     request.headers['Authorization'] = 'Bearer $authToken';
     request.headers['Content-Type'] = 'multipart/form-data';
+
 
     request.files.add(await http.MultipartFile.fromPath(
       'thumbnail_file', thumbnail.path,
@@ -40,10 +43,10 @@ class UploadVideoService {
     request.fields['show_type'] = showType.toLowerCase(); // Ensure lowercase
     request.fields['lambda_token'] = lambdaToken;
     request.fields['created_by'] = createdBy;
-    request.fields['product_id'] = product.id.toString();
-    request.fields['name'] = product.productTitle;
-    request.fields['product_price'] = product.cost.toString();
-    request.fields['product_image'] = product.imageUrls.first;
+    request.fields['product_ids'] = productIds;
+    // request.fields['name'] = product.productTitle;
+    // request.fields['product_price'] = product.cost.toString();
+    // request.fields['product_image'] = product.imageUrls.first;
     var response = await request.send();
     var responseBody = await response.stream.bytesToString();
     if (response.statusCode == 202) {

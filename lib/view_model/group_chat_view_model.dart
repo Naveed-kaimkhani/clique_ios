@@ -139,7 +139,7 @@ class GroupChatViewModel extends GetxController {
         headers: {
           "Content-Type": "application/json",
           "accept": "application/json",
-          "apikey": "f6985bc6a317824cc687e82794955efded6bf2b1",
+          "apikey": "c80baac1dcb708fd88445e6afed1e51cdd16ca4b",
           "onBehalfOf": userId,
         },
         body: jsonEncode({

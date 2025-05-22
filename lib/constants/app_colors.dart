@@ -9,14 +9,7 @@ class AppColors {
       Color.fromARGB(255, 253, 62, 117), // Reddish Pink
     ],
   );
-  // static LinearGradient appGradientColors = LinearGradient(
-  //   begin: Alignment.topLeft,
-  //   end: Alignment.bottomRight,
-  //   colors: [
-  //     Color.fromRGBO(255, 183, 94, 0.8), // Soft orange with opacity
-  //     Color.fromRGBO(255, 128, 128, 0.8), // Soft pink with opacity
-  //   ],
-  // );
+ 
 
   static LinearGradient backGradientColors = LinearGradient(
     begin: Alignment.centerLeft, // 270 degrees

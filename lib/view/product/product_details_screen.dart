@@ -309,17 +309,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             _buildProductTitle(size),
-
                             SizedBox(height: size.height * 0.006),
                             _buildPriceSection(size),
                             SizedBox(height: size.height * 0.01),
-                            // _buildRatingSection(size),
                             SizedBox(height: size.height * 0.01),
                             _buildDescriptionSection(size),
                             SizedBox(height: size.height * 0.015),
-                            // SizeSelector(
-                            //   unit: controller.productData['unit'],
-                            //   weight: controller.productData['size'], ),
                             SizedBox(height: size.height * 0.02),
                             _buildAddToCartButton(size, context),
                             _buildProductSection(size, size.width * 0.06),
@@ -515,16 +510,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 thumbnailUrl: controller.productData['backgroundImage'][0],
                 categories: controller.productData['categories'],
               );
-              // Get.toNamed(RouteName.cartScreen, arguments: product);
-
               cartQuantityController.addProduct(product);
-              // cartQuantityController.saveCart();
             } else {
               Utils.showCustomSnackBar(
                   "Warning",
                   "Please enter your phone number to checkout",
                   ContentType.warning);
-              //  Get.toNamed(RouteName.updateProfileScreen);
               Navigator.push(
                   context,
                   MaterialPageRoute(

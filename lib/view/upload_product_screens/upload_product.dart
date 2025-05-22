@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -63,35 +64,34 @@ class _UploadVideoState extends State<UploadVideo> {
                 SizedBox(height: screenHeight * 0.015),
                 _buildVideoSection(screenHeight),
                 SizedBox(height: screenHeight * 0.02),
-                
                 SizedBox(height: screenHeight * 0.02),
                 _buildAddProductsButton(),
                 SizedBox(height: screenHeight * 0.01),
-                
                 SizedBox(height: screenHeight * 0.02),
                 _buildUploadButton(),
                 SizedBox(height: screenHeight * 0.02),
               ],
             ),
           ),
-       Obx(() {
-  if (viewModel.isLoading.value) {
-    return AbsorbPointer( // 👈 Prevents user interaction
-      absorbing: true,
-      child: Container(
-        color: Colors.black.withOpacity(0.4), // 👈 Semi-transparent overlay
-        alignment: Alignment.center,
-        child: SpinKitFadingCircle(
-          color: Colors.white,
-          size: 50.0,
-        ),
-      ),
-    );
-  } else {
-    return SizedBox.shrink();
-  }
-}),
-
+          Obx(() {
+            if (viewModel.isLoading.value) {
+              return AbsorbPointer(
+                // 👈 Prevents user interaction
+                absorbing: true,
+                child: Container(
+                  color: Colors.black
+                      .withOpacity(0.4), // 👈 Semi-transparent overlay
+                  alignment: Alignment.center,
+                  child: SpinKitFadingCircle(
+                    color: Colors.white,
+                    size: 50.0,
+                  ),
+                ),
+              );
+            } else {
+              return SizedBox.shrink();
+            }
+          }),
         ],
       ),
     );
@@ -119,8 +119,7 @@ class _UploadVideoState extends State<UploadVideo> {
 
   Widget _buildTextFields(double screenHeight) {
     return CustomTextField(
-        hintText: "Enter Hashtags",
-        controller: viewModel.hashtagsController);
+        hintText: "Enter Hashtags", controller: viewModel.hashtagsController);
   }
 
   // Widget _buildDropdownField(
@@ -202,49 +201,50 @@ class _UploadVideoState extends State<UploadVideo> {
       ],
     );
   }
-Widget _buildVideoPlayer(File videoFile) {
-  _videoController?.dispose();
-  _videoController = VideoPlayerController.file(videoFile);
-  final controller = _videoController!;
 
-  return FutureBuilder(
-    future: controller.initialize(),
-    builder: (context, snapshot) {
-      if (snapshot.connectionState == ConnectionState.done) {
-        controller.play();
-        final aspectRatio = controller.value.aspectRatio;
+  Widget _buildVideoPlayer(File videoFile) {
+    _videoController?.dispose();
+    _videoController = VideoPlayerController.file(videoFile);
+    final controller = _videoController!;
 
-        return LayoutBuilder(
-          builder: (context, constraints) {
-            double maxHeight = 300;
-            double calculatedWidth = maxHeight * aspectRatio;
+    return FutureBuilder(
+      future: controller.initialize(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          controller.play();
+          final aspectRatio = controller.value.aspectRatio;
 
-            // Cap the width if it overflows the screen
-            double finalWidth = calculatedWidth > constraints.maxWidth
-                ? constraints.maxWidth
-                : calculatedWidth;
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              double maxHeight = 300;
+              double calculatedWidth = maxHeight * aspectRatio;
 
-            double finalHeight = finalWidth / aspectRatio;
+              // Cap the width if it overflows the screen
+              double finalWidth = calculatedWidth > constraints.maxWidth
+                  ? constraints.maxWidth
+                  : calculatedWidth;
 
-            return Center(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12), // 🎯 Rounded corners here
-                child: SizedBox(
-                  width: finalWidth,
-                  height: finalHeight,
-                  child: VideoPlayer(controller),
+              double finalHeight = finalWidth / aspectRatio;
+
+              return Center(
+                child: ClipRRect(
+                  borderRadius:
+                      BorderRadius.circular(12), // 🎯 Rounded corners here
+                  child: SizedBox(
+                    width: finalWidth,
+                    height: finalHeight,
+                    child: VideoPlayer(controller),
+                  ),
                 ),
-              ),
-            );
-          },
-        );
-      } else {
-        return const Center(child: CircularProgressIndicator());
-      }
-    },
-  );
-}
-
+              );
+            },
+          );
+        } else {
+          return const Center(child: CircularProgressIndicator());
+        }
+      },
+    );
+  }
 
   Widget _uploadContainer() {
     return Container(
@@ -256,171 +256,343 @@ Widget _buildVideoPlayer(File videoFile) {
       child: Center(child: Icon(Icons.upload, size: 40)),
     );
   }
-void _openProductPickerBottomSheet() {
-  final userController = Get.find<UserController>();
-  final RxString searchQuery = ''.obs;
-  final RxList<ProductModel> searchResults = <ProductModel>[].obs;
-  final RxBool isLoading = false.obs;
-  Timer? _debounce;
 
-  Future<void> fetchProducts(String query) async {
-    isLoading(true);
-    try {
-      final response = await http.get(
-        Uri.parse(
-            'https://cactisocial.com/api-clique/public/api/v1/topdawg/products?search=$query'),
-        headers: {
-          'Authorization': 'Bearer ${userController.token.value}',
-        },
-      );
+  // void _openProductPickerBottomSheet() {
+  //   log("in bottom sheet");
+  //   final userController = Get.find<UserController>();
+  //   final RxString searchQuery = ''.obs;
+  //   final RxList<ProductModel> searchResults = <ProductModel>[].obs;
+  //   final RxList<ProductModel> selectedProducts =
+  //       <ProductModel>[].obs; // ✅ Multi-select list
+  //   final RxBool isLoading = false.obs;
+  //   Timer? _debounce;
 
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        final List<dynamic> productList = data['products'];
-        searchResults.value =
-            productList.map((json) => ProductModel.fromJson(json)).toList();
-      } else {
-        searchResults.clear();
-      }
-    } catch (e) {
-      searchResults.clear();
-    } finally {
-      isLoading(false);
-    }
-  }
+  //   Future<void> fetchProducts(String query) async {
+  //     isLoading(true);
+  //     try {
+  //       final response = await http.get(
+  //         Uri.parse(
+  //             'https://cactisocial.com/api-clique/public/api/v1/topdawg/products?search=$query'),
+  //         headers: {
+  //           'Authorization': 'Bearer ${userController.token.value}',
+  //         },
+  //       );
 
-  Get.bottomSheet(
-    Container(
-      height: 400,
-      color: Colors.white,
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        children: [
-          Text("Select Product",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-          SizedBox(height: 10),
+  //       if (response.statusCode == 200) {
+  //         final data = jsonDecode(response.body);
+  //         final List<dynamic> productList = data['products'];
+  //         searchResults.value =
+  //             productList.map((json) => ProductModel.fromJson(json)).toList();
+  //       } else {
+  //         searchResults.clear();
+  //       }
+  //     } catch (e) {
+  //       searchResults.clear();
+  //     } finally {
+  //       isLoading(false);
+  //     }
+  //   }
 
-          // Search Field
-          TextField(
-            onChanged: (value) {
-              searchQuery.value = value;
+  //   Get.bottomSheet(
+  //     Container(
+  //       height: 500,
+  //       color: Colors.white,
+  //       padding: const EdgeInsets.all(16),
+  //       child: Column(
+  //         children: [
+  //           Text("Select Products",
+  //               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+  //           SizedBox(height: 10),
 
-              if (_debounce?.isActive ?? false) _debounce!.cancel();
-              _debounce = Timer(Duration(milliseconds: 600), () {
-                if (value.isNotEmpty) {
-                  fetchProducts(value);
-                } else {
-                  searchResults.clear(); // fallback to controller list
-                }
-              });
-            },
-            decoration: InputDecoration(
-              hintText: 'Search products...',
-              prefixIcon: Icon(Icons.search),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-          ),
-          SizedBox(height: 10),
+  //           // 🔍 Search Field
+  //           TextField(
+  //             onChanged: (value) {
+  //               searchQuery.value = value;
 
-          // Product List
-          Expanded(
-            child: Obx(() {
-              final productsToShow = searchQuery.value.isEmpty
-                  ? _productViewModel.products
-                  : searchResults;
+  //               if (_debounce?.isActive ?? false) _debounce!.cancel();
+  //               _debounce = Timer(Duration(milliseconds: 600), () {
+  //                 if (value.isNotEmpty) {
+  //                   fetchProducts(value);
+  //                 } else {
+  //                   searchResults.clear();
+  //                 }
+  //               });
+  //             },
+  //             decoration: InputDecoration(
+  //               hintText: 'Search products...',
+  //               prefixIcon: Icon(Icons.search),
+  //               border: OutlineInputBorder(
+  //                 borderRadius: BorderRadius.circular(12),
+  //               ),
+  //             ),
+  //           ),
+  //           SizedBox(height: 10),
 
-              if (isLoading.value && searchQuery.value.isNotEmpty) {
-                return ListView.builder(
-                  itemCount: 6,
-                  itemBuilder: (_, __) => ListTile(
-                    leading: Shimmer.fromColors(
-                      baseColor: Colors.grey[300]!,
-                      highlightColor: Colors.grey[100]!,
-                      child: Container(
-                        width: 60,
-                        height: 60,
-                        color: Colors.white,
-                      ),
-                    ),
-                    title: Shimmer.fromColors(
-                      baseColor: Colors.grey[300]!,
-                      highlightColor: Colors.grey[100]!,
-                      child: Container(
-                        height: 12,
-                        width: 100,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                );
-              } else if (productsToShow.isEmpty) {
-                return Center(child: Text("No products found."));
-              } else {
-                return ListView.builder(
-                  itemCount: productsToShow.length,
-                  itemBuilder: (context, index) {
-                    final product = productsToShow[index];
-                    bool isSelected =
-                        viewModel.selectedProduct.value?.id == product.id;
+  //           // 📦 Product List
+  //           Expanded(
+  //             child: Obx(() {
+  //               final productsToShow = searchQuery.value.isEmpty
+  //                   ? _productViewModel.products
+  //                   : searchResults;
 
-                    return ListTile(
-                      leading: SizedBox(
-                        width: 60,
-                        height: 60,
-                        child: CachedNetworkImage(
-                          imageUrl: product.imageUrls.first,
-                          fit: BoxFit.cover,
-                          placeholder: (_, __) =>
-                              Center(child: CircularProgressIndicator()),
-                          errorWidget: (_, __, ___) => Icon(Icons.error),
-                        ),
-                      ),
-                      title: Text(product.productTitle),
-                      trailing: Radio<ProductModel>(
-                        value: product,
-                        groupValue: viewModel.selectedProduct.value,
-                        onChanged: (ProductModel? value) {
-                          viewModel.selectedProduct.value = value;
-                          Fluttertoast.showToast(
-                            msg: "${product.productTitle} has been selected.",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.BOTTOM,
-                            backgroundColor: Colors.green.withOpacity(0.8),
-                            textColor: Colors.white,
-                            fontSize: 16.0,
-                          );
-                          Get.back();
-                        },
-                      ),
-                      tileColor:
-                          isSelected ? Colors.green.withOpacity(0.1) : null,
-                      onTap: () {
-                        viewModel.selectedProduct.value = product;
-                        Fluttertoast.showToast(
-                          msg: "${product.productTitle} has been selected.",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.BOTTOM,
-                          backgroundColor: Colors.green.withOpacity(0.8),
-                          textColor: Colors.black,
-                          fontSize: 16.0,
-                        );
-                        Get.back();
-                      },
-                    );
-                  },
-                );
-              }
-            }),
-          ),
-        ],
-      ),
-    ),
-    isScrollControlled: true,
-  );
-}
+  //               if (isLoading.value && searchQuery.value.isNotEmpty) {
+  //                 return ListView.builder(
+  //                   itemCount: 6,
+  //                   itemBuilder: (_, __) => ListTile(
+  //                     leading: Shimmer.fromColors(
+  //                       baseColor: Colors.grey[300]!,
+  //                       highlightColor: Colors.grey[100]!,
+  //                       child: Container(
+  //                         width: 60,
+  //                         height: 60,
+  //                         color: Colors.white,
+  //                       ),
+  //                     ),
+  //                     title: Shimmer.fromColors(
+  //                       baseColor: Colors.grey[300]!,
+  //                       highlightColor: Colors.grey[100]!,
+  //                       child: Container(
+  //                         height: 12,
+  //                         width: 100,
+  //                         color: Colors.white,
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 );
+  //               } else if (productsToShow.isEmpty) {
+  //                 return Center(child: Text("No products found."));
+  //               } else {
+  //                 return ListView.builder(
+  //                   itemCount: productsToShow.length,
+  //                   itemBuilder: (context, index) {
+  //                     final product = productsToShow[index];
+  //                     final isSelected =
+  //                         selectedProducts.any((p) => p.id == product.id);
 
+  //                     return ListTile(
+  //                       leading: SizedBox(
+  //                         width: 60,
+  //                         height: 60,
+  //                         child: CachedNetworkImage(
+  //                           imageUrl: product.imageUrls.first,
+  //                           fit: BoxFit.cover,
+  //                           placeholder: (_, __) =>
+  //                               Center(child: CircularProgressIndicator()),
+  //                           errorWidget: (_, __, ___) => Icon(Icons.error),
+  //                         ),
+  //                       ),
+  //                       title: Text(product.productTitle),
+  //                       trailing: Obx(() => Checkbox(
+  //                             value: isSelected,
+  //                             onChanged: (checked) {
+  //                               if (checked == true) {
+  //                                 selectedProducts.add(product);
+  //                               } else {
+  //                                 selectedProducts
+  //                                     .removeWhere((p) => p.id == product.id);
+  //                               }
+  //                             },
+  //                           )),
+  //                       onTap: () {
+  //                         if (isSelected) {
+  //                           selectedProducts
+  //                               .removeWhere((p) => p.id == product.id);
+  //                         } else {
+  //                           selectedProducts.add(product);
+  //                         }
+  //                       },
+  //                     );
+  //                   },
+  //                 );
+  //               }
+  //             }),
+  //           ),
+
+  //           // ✅ Done Button
+  //           ElevatedButton(
+  //             onPressed: () {
+  //               // Update your main viewModel with selected products
+  //               viewModel.selectedProducts.value = selectedProducts;
+  //               Fluttertoast.showToast(
+  //                 msg: "${selectedProducts.length} products selected.",
+  //                 toastLength: Toast.LENGTH_SHORT,
+  //                 gravity: ToastGravity.BOTTOM,
+  //               );
+  //               Get.back();
+  //             },
+  //             child: Text("Confirm Selection"),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //     isScrollControlled: true,
+  //   );
+  // }
+
+// void _openProductPickerBottomSheet() {
+//   final userController = Get.find<UserController>();
+//   final RxString searchQuery = ''.obs;
+//   final RxList<ProductModel> searchResults = <ProductModel>[].obs;
+//   final RxBool isLoading = false.obs;
+//   Timer? _debounce;
+
+//   Future<void> fetchProducts(String query) async {
+//     isLoading(true);
+//     try {
+//       final response = await http.get(
+//         Uri.parse(
+//             'https://cactisocial.com/api-clique/public/api/v1/topdawg/products?search=$query'),
+//         headers: {
+//           'Authorization': 'Bearer ${userController.token.value}',
+//         },
+//       );
+
+//       if (response.statusCode == 200) {
+//         final data = jsonDecode(response.body);
+//         final List<dynamic> productList = data['products'];
+//         searchResults.value =
+//             productList.map((json) => ProductModel.fromJson(json)).toList();
+//       } else {
+//         searchResults.clear();
+//       }
+//     } catch (e) {
+//       searchResults.clear();
+//     } finally {
+//       isLoading(false);
+//     }
+//   }
+
+//   Get.bottomSheet(
+//     Container(
+//       height: 400,
+//       color: Colors.white,
+//       padding: const EdgeInsets.all(16),
+//       child: Column(
+//         children: [
+//           Text("Select Product",
+//               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+//           SizedBox(height: 10),
+
+//           // Search Field
+//           TextField(
+//             onChanged: (value) {
+//               searchQuery.value = value;
+
+//               if (_debounce?.isActive ?? false) _debounce!.cancel();
+//               _debounce = Timer(Duration(milliseconds: 600), () {
+//                 if (value.isNotEmpty) {
+//                   fetchProducts(value);
+//                 } else {
+//                   searchResults.clear(); // fallback to controller list
+//                 }
+//               });
+//             },
+//             decoration: InputDecoration(
+//               hintText: 'Search products...',
+//               prefixIcon: Icon(Icons.search),
+//               border: OutlineInputBorder(
+//                 borderRadius: BorderRadius.circular(12),
+//               ),
+//             ),
+//           ),
+//           SizedBox(height: 10),
+
+//           // Product List
+//           Expanded(
+//             child: Obx(() {
+//               final productsToShow = searchQuery.value.isEmpty
+//                   ? _productViewModel.products
+//                   : searchResults;
+
+//               if (isLoading.value && searchQuery.value.isNotEmpty) {
+//                 return ListView.builder(
+//                   itemCount: 6,
+//                   itemBuilder: (_, __) => ListTile(
+//                     leading: Shimmer.fromColors(
+//                       baseColor: Colors.grey[300]!,
+//                       highlightColor: Colors.grey[100]!,
+//                       child: Container(
+//                         width: 60,
+//                         height: 60,
+//                         color: Colors.white,
+//                       ),
+//                     ),
+//                     title: Shimmer.fromColors(
+//                       baseColor: Colors.grey[300]!,
+//                       highlightColor: Colors.grey[100]!,
+//                       child: Container(
+//                         height: 12,
+//                         width: 100,
+//                         color: Colors.white,
+//                       ),
+//                     ),
+//                   ),
+//                 );
+//               } else if (productsToShow.isEmpty) {
+//                 return Center(child: Text("No products found."));
+//               } else {
+//                 return ListView.builder(
+//                   itemCount: productsToShow.length,
+//                   itemBuilder: (context, index) {
+//                     final product = productsToShow[index];
+//                     bool isSelected =
+//                         viewModel.selectedProduct.value?.id == product.id;
+
+//                     return ListTile(
+//                       leading: SizedBox(
+//                         width: 60,
+//                         height: 60,
+//                         child: CachedNetworkImage(
+//                           imageUrl: product.imageUrls.first,
+//                           fit: BoxFit.cover,
+//                           placeholder: (_, __) =>
+//                               Center(child: CircularProgressIndicator()),
+//                           errorWidget: (_, __, ___) => Icon(Icons.error),
+//                         ),
+//                       ),
+//                       title: Text(product.productTitle),
+//                       trailing: Radio<ProductModel>(
+//                         value: product,
+//                         groupValue: viewModel.selectedProduct.value,
+//                         onChanged: (ProductModel? value) {
+//                           viewModel.selectedProduct.value = value;
+//                           Fluttertoast.showToast(
+//                             msg: "${product.productTitle} has been selected.",
+//                             toastLength: Toast.LENGTH_SHORT,
+//                             gravity: ToastGravity.BOTTOM,
+//                             backgroundColor: Colors.green.withOpacity(0.8),
+//                             textColor: Colors.white,
+//                             fontSize: 16.0,
+//                           );
+//                           Get.back();
+//                         },
+//                       ),
+//                       tileColor:
+//                           isSelected ? Colors.green.withOpacity(0.1) : null,
+//                       onTap: () {
+//                         viewModel.selectedProduct.value = product;
+//                         Fluttertoast.showToast(
+//                           msg: "${product.productTitle} has been selected.",
+//                           toastLength: Toast.LENGTH_SHORT,
+//                           gravity: ToastGravity.BOTTOM,
+//                           backgroundColor: Colors.green.withOpacity(0.8),
+//                           textColor: Colors.black,
+//                           fontSize: 16.0,
+//                         );
+//                         Get.back();
+//                       },
+//                     );
+//                   },
+//                 );
+//               }
+//             }),
+//           ),
+//         ],
+//       ),
+//     ),
+//     isScrollControlled: true,
+//   );
+// }
 
   Widget _buildAddProductsButton() {
     return ElevatedButton(
@@ -430,15 +602,12 @@ void _openProductPickerBottomSheet() {
     );
   }
 
-  // Widget _buildUploadButton() {
-  //   return AuthButton(buttonText: 'Upload Video', isLoading: viewModel.isLoading, onPressed: viewModel.uploadVideo);
-  // }
   Widget _buildUploadButton() {
     return AuthButton(
       buttonText: 'Upload Video',
       isLoading: viewModel.isLoading,
       onPressed: () {
-        if (viewModel.selectedProduct.value == null) {
+        if (viewModel.selectedProducts.isEmpty) {
           Get.snackbar(
             "Product Required",
             "Please select a product before uploading the video.",
