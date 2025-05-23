@@ -5,7 +5,6 @@ import 'package:clique/data/repositories/upload_video_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:video_compress/video_compress.dart';
 import 'dart:io';
 import '../utils/utils.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
@@ -28,6 +27,11 @@ final RxList<ProductModel> selectedProducts = <ProductModel>[].obs;
 final RxDouble uploadProgress = 0.0.obs;
 
   final RxBool isLoading = false.obs;
+
+
+RxList<ProductModel> products = <ProductModel>[].obs; // 👈 Add this
+  // RxList<ProductModel> selectedProducts = <ProductModel>[].obs;
+
 
   Future<void> pickImage(bool isThumbnail) async {
     final pickedFile =
