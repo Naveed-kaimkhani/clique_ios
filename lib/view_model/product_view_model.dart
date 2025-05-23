@@ -71,6 +71,24 @@ class ProductViewModel extends GetxController {
     }
   }
 
+ Future<ProductModel?> fetchProductByCode(String productCode) async {
+    try {
+      final response = await _productRepository.fetchProductsByProductCode(productCode);
+      if (response['products'] != null &&
+          response['products'] is List &&
+          response['products'].isNotEmpty) {
+        final product = ProductModel.fromJson(response['products'][0]);
+      
+        products.add(product); // Add to local list
+        return product;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
   // Load more products when user reaches the end of the list
   void loadMoreProducts() {
     if (currentPage.value < totalPages.value && !isLoading.value) {

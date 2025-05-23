@@ -31,12 +31,12 @@ class OrganicTreatsWidget extends StatelessWidget {
             SizedBox(
               width: screenWidth * 0.3, // Fixed width
               height: screenHeight * 0.04, // Fixed height
-              child: _buildMarqueeText(popstream.name, screenWidth),
+              child: _buildMarqueeText(
+                  popstream.storeProduct.first.products.first.name,
+                  screenWidth),
             ),
             LabelText(
-              // text: " \$${popstream.partyName}",
-
-              text: " \$${popstream.partyId}",
+              text: " \$${popstream.storeProduct.first.products.first.price}",
               weight: FontWeight.bold,
               fontSize: screenWidth * 0.042, // Responsive font size
             ),
@@ -93,7 +93,8 @@ class ProductImageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
-      imageUrl: popstream.consultantIds, // Handle null case
+      imageUrl: popstream
+          .storeProduct.first.products.first.imageUrl, // Handle null case
       height: screenHeight * 0.06, // Same height
       width: screenWidth * 0.12, // Same width
       fit: BoxFit.cover, // Same fit

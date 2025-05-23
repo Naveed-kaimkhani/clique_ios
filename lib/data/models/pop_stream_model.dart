@@ -1,5 +1,7 @@
 
 
+import 'package:clique/data/models/store_product.dart';
+
 class PopstreamModel {
   final String id;
   final String eventCover;
@@ -11,6 +13,7 @@ class PopstreamModel {
   final String videoUrl;
   final String consultantIds;
   final String createdBy;
+  final List<StoreProduct> storeProduct;
 
   PopstreamModel({
     required this.id,
@@ -23,6 +26,8 @@ class PopstreamModel {
     required this.partyName,
     required this.videoUrl,
     required this.consultantIds,
+        required this.storeProduct,
+
   });
 
   factory PopstreamModel.fromJson(Map<String, dynamic> json) {
@@ -37,6 +42,10 @@ class PopstreamModel {
       partyName: json['party_name']?.toString() ?? '',
       videoUrl: json['video_url']?.toString() ?? '',
       consultantIds: json['consultant_ids']?.toString() ?? '',
+        storeProduct: (json['store_product'] as List?)
+              ?.map((e) => StoreProduct.fromJson(e))
+              .toList() ??
+          [],
     );
   }
 
@@ -82,3 +91,6 @@ class VideoFile {
         'url': url,
       };
 }
+
+
+

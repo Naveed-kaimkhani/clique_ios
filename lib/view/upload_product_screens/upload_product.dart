@@ -122,27 +122,6 @@ class _UploadVideoState extends State<UploadVideo> {
         hintText: "Enter Hashtags", controller: viewModel.hashtagsController);
   }
 
-  // Widget _buildDropdownField(
-  //     String label, RxString selectedValue, List<String> options) {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Text(label,
-  //           style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-  //       SizedBox(height: 5),
-  //       Obx(() => DropdownButtonFormField<String>(
-  //             value: selectedValue.value,
-  //             decoration: InputDecoration(border: OutlineInputBorder()),
-  //             items: options
-  //                 .map((option) =>
-  //                     DropdownMenuItem(value: option, child: Text(option)))
-  //                 .toList(),
-  //             onChanged: (value) => selectedValue.value = value!,
-  //           )),
-  //     ],
-  //   );
-  // }
-
   Widget _buildThumbnailSection(double screenHeight) {
     return _buildThumnailSection(
       "Upload Thumbnail",
@@ -336,6 +315,7 @@ class _UploadVideoState extends State<UploadVideo> {
             SizedBox(height: 10),
 
             // Product list
+
             Expanded(
               child: Obx(() {
                 final productsToShow = searchQuery.value.isEmpty
@@ -373,70 +353,68 @@ class _UploadVideoState extends State<UploadVideo> {
                     itemCount: productsToShow.length,
                     itemBuilder: (context, index) {
                       final product = productsToShow[index];
-                      final isSelected = viewModel.selectedProducts
-                          .any((p) => p.id == product.id);
-                      log("products length $productsToShow.length.toString()");
-                      // return Text(product.productTitle);
-                      return 
-                      //issue is here
-                      ListTile(
-                        leading: SizedBox(
-                          width: 60,
-                          height: 60,
-                          child: CachedNetworkImage(
-                            imageUrl: product.imageUrls.first,
-                            fit: BoxFit.cover,
-                            placeholder: (_, __) =>
-                                Center(child: CircularProgressIndicator()),
-                            errorWidget: (_, __, ___) => Icon(Icons.error),
-                          ),
-                        ),
-                        title: Text(product.productTitle),
-                        trailing: Obx(() => Checkbox(
-                              value: isSelected,
-                              onChanged: (_) {
-                                if (isSelected) {
-                                  viewModel.selectedProducts
-                                      .removeWhere((p) => p.id == product.id);
-                                  Fluttertoast.showToast(
-                                    msg:
-                                        "${product.productTitle} removed from selection.",
-                                    backgroundColor:
-                                        Colors.redAccent.withOpacity(0.8),
-                                  );
-                                } else {
-                                  viewModel.selectedProducts.add(product);
-                                  Fluttertoast.showToast(
-                                    msg:
-                                        "${product.productTitle} added to selection.",
-                                    backgroundColor:
-                                        Colors.green.withOpacity(0.8),
-                                  );
-                                }
-                              },
-                            )),
-                        onTap: () {
-                          if (isSelected) {
-                            viewModel.selectedProducts
-                                .removeWhere((p) => p.id == product.id);
-                            Fluttertoast.showToast(
-                              msg:
-                                  "${product.productTitle} removed from selection.",
-                              backgroundColor:
-                                  Colors.redAccent.withOpacity(0.8),
-                            );
-                          } else {
-                            viewModel.selectedProducts.add(product);
-                            Fluttertoast.showToast(
-                              msg:
-                                  "${product.productTitle} added to selection.",
-                              backgroundColor: Colors.green.withOpacity(0.8),
-                            );
-                          }
-                        },
-                      );
 
-                      //issue is here
+                      return Obx(() {
+                        final isSelected = viewModel.selectedProducts
+                            .any((p) => p.id == product.id);
+
+                        return ListTile(
+                          leading: SizedBox(
+                            width: 60,
+                            height: 60,
+                            child: CachedNetworkImage(
+                              imageUrl: product.imageUrls.first,
+                              fit: BoxFit.cover,
+                              placeholder: (_, __) =>
+                                  Center(child: CircularProgressIndicator()),
+                              errorWidget: (_, __, ___) => Icon(Icons.error),
+                            ),
+                          ),
+                          title: Text(product.productTitle),
+                          trailing: Checkbox(
+                            value: isSelected,
+                            onChanged: (_) {
+                              if (isSelected) {
+                                viewModel.selectedProducts
+                                    .removeWhere((p) => p.id == product.id);
+                                Fluttertoast.showToast(
+                                  msg:
+                                      "${product.productTitle} removed from selection.",
+                                  backgroundColor:
+                                      Colors.redAccent.withOpacity(0.8),
+                                );
+                              } else {
+                                viewModel.selectedProducts.add(product);
+                                Fluttertoast.showToast(
+                                  msg:
+                                      "${product.productTitle} added to selection.",
+                                  backgroundColor:
+                                      Colors.green.withOpacity(0.8),
+                                );
+                              }
+                            },
+                          ),
+                          onTap: () {
+                            if (isSelected) {
+                              viewModel.selectedProducts
+                                  .removeWhere((p) => p.id == product.id);
+                              Fluttertoast.showToast(
+                                msg:
+                                    "${product.productTitle} removed from selection.",
+                                backgroundColor:
+                                    Colors.redAccent.withOpacity(0.8),
+                              );
+                            } else {
+                              viewModel.selectedProducts.add(product);
+                              Fluttertoast.showToast(
+                                msg:
+                                    "${product.productTitle} added to selection.",
+                                backgroundColor: Colors.green.withOpacity(0.8),
+                              );
+                            }
+                          },
+                        );
+                      });
                     },
                   );
                 }
@@ -464,177 +442,10 @@ class _UploadVideoState extends State<UploadVideo> {
     );
   }
 
-// void _openProductPickerBottomSheet() {
-//   final userController = Get.find<UserController>();
-//   final RxString searchQuery = ''.obs;
-//   final RxList<ProductModel> searchResults = <ProductModel>[].obs;
-//   final RxBool isLoading = false.obs;
-//   Timer? _debounce;
-
-//   Future<void> fetchProducts(String query) async {
-//     isLoading(true);
-//     try {
-//       final response = await http.get(
-//         Uri.parse(
-//             'https://cactisocial.com/api-clique/public/api/v1/topdawg/products?search=$query'),
-//         headers: {
-//           'Authorization': 'Bearer ${userController.token.value}',
-//         },
-//       );
-
-//       if (response.statusCode == 200) {
-//         final data = jsonDecode(response.body);
-//         final List<dynamic> productList = data['products'];
-//         searchResults.value =
-//             productList.map((json) => ProductModel.fromJson(json)).toList();
-//       } else {
-//         searchResults.clear();
-//       }
-//     } catch (e) {
-//       searchResults.clear();
-//     } finally {
-//       isLoading(false);
-//     }
-//   }
-
-//   Get.bottomSheet(
-//     Container(
-//       height: 400,
-//       color: Colors.white,
-//       padding: const EdgeInsets.all(16),
-//       child: Column(
-//         children: [
-//           Text("Select Product",
-//               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-//           SizedBox(height: 10),
-
-//           // Search Field
-//           TextField(
-//             onChanged: (value) {
-//               searchQuery.value = value;
-
-//               if (_debounce?.isActive ?? false) _debounce!.cancel();
-//               _debounce = Timer(Duration(milliseconds: 600), () {
-//                 if (value.isNotEmpty) {
-//                   fetchProducts(value);
-//                 } else {
-//                   searchResults.clear(); // fallback to controller list
-//                 }
-//               });
-//             },
-//             decoration: InputDecoration(
-//               hintText: 'Search products...',
-//               prefixIcon: Icon(Icons.search),
-//               border: OutlineInputBorder(
-//                 borderRadius: BorderRadius.circular(12),
-//               ),
-//             ),
-//           ),
-//           SizedBox(height: 10),
-
-//           // Product List
-//           Expanded(
-//             child: Obx(() {
-//               final productsToShow = searchQuery.value.isEmpty
-//                   ? _productViewModel.products
-//                   : searchResults;
-
-//               if (isLoading.value && searchQuery.value.isNotEmpty) {
-//                 return ListView.builder(
-//                   itemCount: 6,
-//                   itemBuilder: (_, __) => ListTile(
-//                     leading: Shimmer.fromColors(
-//                       baseColor: Colors.grey[300]!,
-//                       highlightColor: Colors.grey[100]!,
-//                       child: Container(
-//                         width: 60,
-//                         height: 60,
-//                         color: Colors.white,
-//                       ),
-//                     ),
-//                     title: Shimmer.fromColors(
-//                       baseColor: Colors.grey[300]!,
-//                       highlightColor: Colors.grey[100]!,
-//                       child: Container(
-//                         height: 12,
-//                         width: 100,
-//                         color: Colors.white,
-//                       ),
-//                     ),
-//                   ),
-//
-//               } else if (productsToShow.isEmpty) {
-//                 return Center(child: Text("No products found."));
-//               } else {
-//                 return ListView.builder(
-//                   itemCount: productsToShow.length,
-//                   itemBuilder: (context, index) {
-//                     final product = productsToShow[index];
-//                     bool isSelected =
-//                         viewModel.selectedProducts.first.id == product.id;
-
-//                     return ListTile(
-//                       leading: SizedBox(
-//                         width: 60,
-//                         height: 60,
-//                         child: CachedNetworkImage(
-//                           imageUrl: product.imageUrls.first,
-//                           fit: BoxFit.cover,
-//                           placeholder: (_, __) =>
-//                               Center(child: CircularProgressIndicator()),
-//                           errorWidget: (_, __, ___) => Icon(Icons.error),
-//                         ),
-//                       ),
-//                       title: Text(product.productTitle),
-//                       trailing: Radio<ProductModel>(
-//                         value: product,
-//                         groupValue: viewModel.selectedProducts,
-//                          onChanged: (ProductModel? value) {
-//                           // viewModel.selectedProduct.value = value;
-
-//                           Fluttertoast.showToast(
-//                             msg: "${product.productTitle} has been selected.",
-//                             toastLength: Toast.LENGTH_SHORT,
-//                             gravity: ToastGravity.BOTTOM,
-//                             backgroundColor: Colors.green.withOpacity(0.8),
-//                             textColor: Colors.white,
-//                             fontSize: 16.0,
-//                           );
-//                           Get.back();
-//                         },
-//                       ),
-//                       // tileColor:
-//                       //     isSelected ? Colors.green.withOpacity(0.1) : null,
-//                       onTap: () {
-//                         // viewModel.selectedProduct.value = product;
-//                         Fluttertoast.showToast(
-//                           msg: "${product.productTitle} has been selected.",
-//                           toastLength: Toast.LENGTH_SHORT,
-//                           gravity: ToastGravity.BOTTOM,
-//                           backgroundColor: Colors.green.withOpacity(0.8),
-//                           textColor: Colors.black,
-//                           fontSize: 16.0,
-//                         );
-//                         Get.back();
-//                       },
-//                     );
-//                   },
-//                 );
-//               }
-//             }),
-//           ),
-//         ],
-//       ),
-//     ),
-//     isScrollControlled: true,
-//   );
-// }
-
   Widget _buildAddProductsButton() {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
       onPressed: () {
-        print("Tapped Add Product");
         _openProductPickerBottomSheet(); // ✅ Call method
       },
       child: Text("Add Product", style: TextStyle(color: Colors.white)),

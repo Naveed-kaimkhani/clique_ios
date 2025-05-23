@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:clique/components/organic_treats_widget.dart';
 import 'package:clique/components/shop_all_widget.dart';
@@ -6,6 +8,7 @@ import 'package:clique/data/models/pop_stream_model.dart';
 import 'package:clique/data/models/product_model.dart';
 import 'package:clique/routes/routes_name.dart';
 import 'package:clique/utils/utils.dart';
+import 'package:clique/view/product/product_listing_screen.dart';
 import 'package:clique/view_model/product_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -39,7 +42,12 @@ class _ShoppingWidgetState extends State<ShoppingWidget> {
 
   void _navigateToAllProducts() {
     widget.onTap();
-    Get.toNamed(RouteName.viewAllProductsScreen);
+    // Get.toNamed(RouteName.viewAllProductsScreen);
+
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => ProductListingScreen(
+              products: widget.popstream.storeProduct.first.products,
+            )));
   }
 
   Future<void> _navigateToProductDetails() async {
@@ -55,7 +63,7 @@ class _ShoppingWidgetState extends State<ShoppingWidget> {
       setState(() {
         _isLoading = true;
       });
-      product ??= await _productViewModel.fetchProductById(int.parse("11241"));
+      product ??= await _productViewModel.fetchProductByCode(widget.popstream.storeProduct.first.products.first.sku);
       // If not found locally, fetch from API
 
       if (product != null) {
@@ -90,7 +98,7 @@ class _ShoppingWidgetState extends State<ShoppingWidget> {
       'unit': product.unit,
       'categories': product.categories,
       'size': product.productWeight,
-      'tdid':product.tdid,
+      'tdid': product.tdid,
     };
   }
 
@@ -107,7 +115,9 @@ class _ShoppingWidgetState extends State<ShoppingWidget> {
             children: [
               _buildButton(
                 onTap: _navigateToAllProducts,
-                child: const ShopAllWidget(),
+                child: ShopAllWidget(
+                  popstream: widget.popstream,
+                ),
                 width: widget.screenWidth * 0.2,
               ),
               _buildButton(

@@ -89,12 +89,13 @@ class DiscoverViewModel extends GetxController {
           "Content-Type": "application/json",
         },
       );
+
+      log("popstream data ${response.body}");
       if (response.statusCode == 200) {
         List<dynamic> popstreamList = response.body['popstreams'];
-
+        log(popstreamList.toString());
         popstreams.value =
             popstreamList.map((item) => PopstreamModel.fromJson(item)).toList();
-       
       } else {
         fetchPopstreams();
         // Get.snackbar("Error", "Failed to fetch popstreams");
