@@ -27,7 +27,7 @@ class OrderViewModel extends GetxController {
       Rx<OrderSummary?>(null); // Define the orderSummary field
 
   Future<OrderSummary?> submitOrderFromCart() async {
-    log("in submit order form cart");
+   
     try {
       isLoading.value = true;
 
@@ -73,7 +73,6 @@ class OrderViewModel extends GetxController {
         );
       }).toList();
 
-      // log("transaction:$productDetails");
       var order = Order(
         customerId: userController.uid.toString(), // Use the actual customer ID
         firstName: userController.userName.value, // Use the actual first name
@@ -104,7 +103,7 @@ class OrderViewModel extends GetxController {
       if (response.statusCode == 200) {
         final parsedOrderSummary =
             OrderSummary.fromJson(jsonDecode(response.body));
-        log(parsedOrderSummary.toString());
+      
         orderSummary.value = parsedOrderSummary;
         return parsedOrderSummary;
       } else {
@@ -230,10 +229,6 @@ class OrderViewModel extends GetxController {
       final Map<String, dynamic> orderMap =
           order.toMap(); // Log the JSON string
 
-      log("is product null");
-      log(cartQuantityController.products.length.toString());
-      log("order ki details kya ja rhi hen");
-      log(cartQuantityController.products[1].productTitle);
       final response = await http.post(
         url,
         headers: headers,
@@ -296,8 +291,7 @@ class OrderViewModel extends GetxController {
       });
 
       final response = await http.post(url, headers: headers, body: body);
-      log('Process Order Response: ${response.body}');
-
+   
       if (response.statusCode == 200) {
         Utils.showCustomSnackBar(
             "Success", "Order processed successfully", ContentType.success);

@@ -257,347 +257,185 @@ class _UploadVideoState extends State<UploadVideo> {
     );
   }
 
-  // void _openProductPickerBottomSheet() {
-  //   log("in bottom sheet");
-  //   final userController = Get.find<UserController>();
-  //   final RxString searchQuery = ''.obs;
-  //   final RxList<ProductModel> searchResults = <ProductModel>[].obs;
-  //   final RxList<ProductModel> selectedProducts =
-  //       <ProductModel>[].obs; // ✅ Multi-select list
-  //   final RxBool isLoading = false.obs;
-  //   Timer? _debounce;
+  void _openProductPickerBottomSheet() {
+    log("in bottom sheet");
+    final userController = Get.find<UserController>();
+    final RxString searchQuery = ''.obs;
+    final RxList<ProductModel> searchResults = <ProductModel>[].obs;
+    final RxList<ProductModel> selectedProducts =
+        <ProductModel>[].obs; // ✅ Multi-select list
+    final RxBool isLoading = false.obs;
+    Timer? _debounce;
 
-  //   Future<void> fetchProducts(String query) async {
-  //     isLoading(true);
-  //     try {
-  //       final response = await http.get(
-  //         Uri.parse(
-  //             'https://cactisocial.com/api-clique/public/api/v1/topdawg/products?search=$query'),
-  //         headers: {
-  //           'Authorization': 'Bearer ${userController.token.value}',
-  //         },
-  //       );
+    Future<void> fetchProducts(String query) async {
+      isLoading(true);
+      try {
+        final response = await http.get(
+          Uri.parse(
+              'https://cactisocial.com/api-clique/public/api/v1/topdawg/products?search=$query'),
+          headers: {
+            'Authorization': 'Bearer ${userController.token.value}',
+          },
+        );
+        log(response.body);
+        if (response.statusCode == 200) {
+          final data = jsonDecode(response.body);
+          final List<dynamic> productList = data['products'];
+          searchResults.value =
+              productList.map((json) => ProductModel.fromJson(json)).toList();
+        } else {
+          searchResults.clear();
+        }
+      } catch (e) {
+        searchResults.clear();
+      } finally {
+        isLoading(false);
+      }
+    }
 
-  //       if (response.statusCode == 200) {
-  //         final data = jsonDecode(response.body);
-  //         final List<dynamic> productList = data['products'];
-  //         searchResults.value =
-  //             productList.map((json) => ProductModel.fromJson(json)).toList();
-  //       } else {
-  //         searchResults.clear();
-  //       }
-  //     } catch (e) {
-  //       searchResults.clear();
-  //     } finally {
-  //       isLoading(false);
-  //     }
-  //   }
+    Get.bottomSheet(
+      Container(
+        height: 500,
+        color: Colors.white,
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Text("Select Products",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            SizedBox(height: 10),
 
-  //   Get.bottomSheet(
-  //     Container(
-  //       height: 500,
-  //       color: Colors.white,
-  //       padding: const EdgeInsets.all(16),
-  //       child: Column(
-  //         children: [
-  //           Text("Select Products",
-  //               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-  //           SizedBox(height: 10),
+            // 🔍 Search Field
+            TextField(
+              onChanged: (value) {
+                searchQuery.value = value;
 
-  //           // 🔍 Search Field
-  //           TextField(
-  //             onChanged: (value) {
-  //               searchQuery.value = value;
+                if (_debounce?.isActive ?? false) _debounce!.cancel();
+                _debounce = Timer(Duration(milliseconds: 600), () {
+                  if (value.isNotEmpty) {
+                    fetchProducts(value);
+                  } else {
+                    searchResults.clear();
+                  }
+                });
+              },
+              decoration: InputDecoration(
+                hintText: 'Search products...',
+                prefixIcon: Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+            SizedBox(height: 10),
 
-  //               if (_debounce?.isActive ?? false) _debounce!.cancel();
-  //               _debounce = Timer(Duration(milliseconds: 600), () {
-  //                 if (value.isNotEmpty) {
-  //                   fetchProducts(value);
-  //                 } else {
-  //                   searchResults.clear();
-  //                 }
-  //               });
-  //             },
-  //             decoration: InputDecoration(
-  //               hintText: 'Search products...',
-  //               prefixIcon: Icon(Icons.search),
-  //               border: OutlineInputBorder(
-  //                 borderRadius: BorderRadius.circular(12),
-  //               ),
-  //             ),
-  //           ),
-  //           SizedBox(height: 10),
+            // 📦 Product List
+            Expanded(
+              child: Obx(() {
+                final productsToShow = searchQuery.value.isEmpty
+                    ? _productViewModel.products
+                    : searchResults;
 
-  //           // 📦 Product List
-  //           Expanded(
-  //             child: Obx(() {
-  //               final productsToShow = searchQuery.value.isEmpty
-  //                   ? _productViewModel.products
-  //                   : searchResults;
+                if (isLoading.value && searchQuery.value.isNotEmpty) {
+                  return ListView.builder(
+                    itemCount: 6,
+                    itemBuilder: (_, __) => ListTile(
+                      leading: Shimmer.fromColors(
+                        baseColor: Colors.grey[300]!,
+                        highlightColor: Colors.grey[100]!,
+                        child: Container(
+                          width: 60,
+                          height: 60,
+                          color: Colors.white,
+                        ),
+                      ),
+                      title: Shimmer.fromColors(
+                        baseColor: Colors.grey[300]!,
+                        highlightColor: Colors.grey[100]!,
+                        child: Container(
+                          height: 12,
+                          width: 100,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  );
+                } else if (productsToShow.isEmpty) {
+                  return Center(child: Text("No products found."));
+                } else {
+                  return ListView.builder(
+                    itemCount: productsToShow.length,
+                    itemBuilder: (context, index) {
+                      final product = productsToShow[index];
+                      final isSelected =
+                          selectedProducts.any((p) => p.id == product.id);
 
-  //               if (isLoading.value && searchQuery.value.isNotEmpty) {
-  //                 return ListView.builder(
-  //                   itemCount: 6,
-  //                   itemBuilder: (_, __) => ListTile(
-  //                     leading: Shimmer.fromColors(
-  //                       baseColor: Colors.grey[300]!,
-  //                       highlightColor: Colors.grey[100]!,
-  //                       child: Container(
-  //                         width: 60,
-  //                         height: 60,
-  //                         color: Colors.white,
-  //                       ),
-  //                     ),
-  //                     title: Shimmer.fromColors(
-  //                       baseColor: Colors.grey[300]!,
-  //                       highlightColor: Colors.grey[100]!,
-  //                       child: Container(
-  //                         height: 12,
-  //                         width: 100,
-  //                         color: Colors.white,
-  //                       ),
-  //                     ),
-  //                   ),
-  //                 );
-  //               } else if (productsToShow.isEmpty) {
-  //                 return Center(child: Text("No products found."));
-  //               } else {
-  //                 return ListView.builder(
-  //                   itemCount: productsToShow.length,
-  //                   itemBuilder: (context, index) {
-  //                     final product = productsToShow[index];
-  //                     final isSelected =
-  //                         selectedProducts.any((p) => p.id == product.id);
+                      return ListTile(
+                        leading: SizedBox(
+                          width: 60,
+                          height: 60,
+                          child: CachedNetworkImage(
+                            imageUrl: product.imageUrls.first,
+                            fit: BoxFit.cover,
+                            placeholder: (_, __) =>
+                                Center(child: CircularProgressIndicator()),
+                            errorWidget: (_, __, ___) => Icon(Icons.error),
+                          ),
+                        ),
+                        title: Text(product.productTitle),
+                        trailing: Obx(() => Checkbox(
+                              value: isSelected,
+                              onChanged: (checked) {
+                                if (checked == true) {
+                                  selectedProducts.add(product);
+                                } else {
+                                  selectedProducts
+                                      .removeWhere((p) => p.id == product.id);
+                                }
+                              },
+                            )),
+                        onTap: () {
+                          if (isSelected) {
+                            selectedProducts
+                                .removeWhere((p) => p.id == product.id);
+                          } else {
+                            selectedProducts.add(product);
+                          }
+                        },
+                      );
+                    },
+                  );
+                }
+              }),
+            ),
 
-  //                     return ListTile(
-  //                       leading: SizedBox(
-  //                         width: 60,
-  //                         height: 60,
-  //                         child: CachedNetworkImage(
-  //                           imageUrl: product.imageUrls.first,
-  //                           fit: BoxFit.cover,
-  //                           placeholder: (_, __) =>
-  //                               Center(child: CircularProgressIndicator()),
-  //                           errorWidget: (_, __, ___) => Icon(Icons.error),
-  //                         ),
-  //                       ),
-  //                       title: Text(product.productTitle),
-  //                       trailing: Obx(() => Checkbox(
-  //                             value: isSelected,
-  //                             onChanged: (checked) {
-  //                               if (checked == true) {
-  //                                 selectedProducts.add(product);
-  //                               } else {
-  //                                 selectedProducts
-  //                                     .removeWhere((p) => p.id == product.id);
-  //                               }
-  //                             },
-  //                           )),
-  //                       onTap: () {
-  //                         if (isSelected) {
-  //                           selectedProducts
-  //                               .removeWhere((p) => p.id == product.id);
-  //                         } else {
-  //                           selectedProducts.add(product);
-  //                         }
-  //                       },
-  //                     );
-  //                   },
-  //                 );
-  //               }
-  //             }),
-  //           ),
-
-  //           // ✅ Done Button
-  //           ElevatedButton(
-  //             onPressed: () {
-  //               // Update your main viewModel with selected products
-  //               viewModel.selectedProducts.value = selectedProducts;
-  //               Fluttertoast.showToast(
-  //                 msg: "${selectedProducts.length} products selected.",
-  //                 toastLength: Toast.LENGTH_SHORT,
-  //                 gravity: ToastGravity.BOTTOM,
-  //               );
-  //               Get.back();
-  //             },
-  //             child: Text("Confirm Selection"),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //     isScrollControlled: true,
-  //   );
-  // }
-
-// void _openProductPickerBottomSheet() {
-//   final userController = Get.find<UserController>();
-//   final RxString searchQuery = ''.obs;
-//   final RxList<ProductModel> searchResults = <ProductModel>[].obs;
-//   final RxBool isLoading = false.obs;
-//   Timer? _debounce;
-
-//   Future<void> fetchProducts(String query) async {
-//     isLoading(true);
-//     try {
-//       final response = await http.get(
-//         Uri.parse(
-//             'https://cactisocial.com/api-clique/public/api/v1/topdawg/products?search=$query'),
-//         headers: {
-//           'Authorization': 'Bearer ${userController.token.value}',
-//         },
-//       );
-
-//       if (response.statusCode == 200) {
-//         final data = jsonDecode(response.body);
-//         final List<dynamic> productList = data['products'];
-//         searchResults.value =
-//             productList.map((json) => ProductModel.fromJson(json)).toList();
-//       } else {
-//         searchResults.clear();
-//       }
-//     } catch (e) {
-//       searchResults.clear();
-//     } finally {
-//       isLoading(false);
-//     }
-//   }
-
-//   Get.bottomSheet(
-//     Container(
-//       height: 400,
-//       color: Colors.white,
-//       padding: const EdgeInsets.all(16),
-//       child: Column(
-//         children: [
-//           Text("Select Product",
-//               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-//           SizedBox(height: 10),
-
-//           // Search Field
-//           TextField(
-//             onChanged: (value) {
-//               searchQuery.value = value;
-
-//               if (_debounce?.isActive ?? false) _debounce!.cancel();
-//               _debounce = Timer(Duration(milliseconds: 600), () {
-//                 if (value.isNotEmpty) {
-//                   fetchProducts(value);
-//                 } else {
-//                   searchResults.clear(); // fallback to controller list
-//                 }
-//               });
-//             },
-//             decoration: InputDecoration(
-//               hintText: 'Search products...',
-//               prefixIcon: Icon(Icons.search),
-//               border: OutlineInputBorder(
-//                 borderRadius: BorderRadius.circular(12),
-//               ),
-//             ),
-//           ),
-//           SizedBox(height: 10),
-
-//           // Product List
-//           Expanded(
-//             child: Obx(() {
-//               final productsToShow = searchQuery.value.isEmpty
-//                   ? _productViewModel.products
-//                   : searchResults;
-
-//               if (isLoading.value && searchQuery.value.isNotEmpty) {
-//                 return ListView.builder(
-//                   itemCount: 6,
-//                   itemBuilder: (_, __) => ListTile(
-//                     leading: Shimmer.fromColors(
-//                       baseColor: Colors.grey[300]!,
-//                       highlightColor: Colors.grey[100]!,
-//                       child: Container(
-//                         width: 60,
-//                         height: 60,
-//                         color: Colors.white,
-//                       ),
-//                     ),
-//                     title: Shimmer.fromColors(
-//                       baseColor: Colors.grey[300]!,
-//                       highlightColor: Colors.grey[100]!,
-//                       child: Container(
-//                         height: 12,
-//                         width: 100,
-//                         color: Colors.white,
-//                       ),
-//                     ),
-//                   ),
-//                 );
-//               } else if (productsToShow.isEmpty) {
-//                 return Center(child: Text("No products found."));
-//               } else {
-//                 return ListView.builder(
-//                   itemCount: productsToShow.length,
-//                   itemBuilder: (context, index) {
-//                     final product = productsToShow[index];
-//                     bool isSelected =
-//                         viewModel.selectedProduct.value?.id == product.id;
-
-//                     return ListTile(
-//                       leading: SizedBox(
-//                         width: 60,
-//                         height: 60,
-//                         child: CachedNetworkImage(
-//                           imageUrl: product.imageUrls.first,
-//                           fit: BoxFit.cover,
-//                           placeholder: (_, __) =>
-//                               Center(child: CircularProgressIndicator()),
-//                           errorWidget: (_, __, ___) => Icon(Icons.error),
-//                         ),
-//                       ),
-//                       title: Text(product.productTitle),
-//                       trailing: Radio<ProductModel>(
-//                         value: product,
-//                         groupValue: viewModel.selectedProduct.value,
-//                         onChanged: (ProductModel? value) {
-//                           viewModel.selectedProduct.value = value;
-//                           Fluttertoast.showToast(
-//                             msg: "${product.productTitle} has been selected.",
-//                             toastLength: Toast.LENGTH_SHORT,
-//                             gravity: ToastGravity.BOTTOM,
-//                             backgroundColor: Colors.green.withOpacity(0.8),
-//                             textColor: Colors.white,
-//                             fontSize: 16.0,
-//                           );
-//                           Get.back();
-//                         },
-//                       ),
-//                       tileColor:
-//                           isSelected ? Colors.green.withOpacity(0.1) : null,
-//                       onTap: () {
-//                         viewModel.selectedProduct.value = product;
-//                         Fluttertoast.showToast(
-//                           msg: "${product.productTitle} has been selected.",
-//                           toastLength: Toast.LENGTH_SHORT,
-//                           gravity: ToastGravity.BOTTOM,
-//                           backgroundColor: Colors.green.withOpacity(0.8),
-//                           textColor: Colors.black,
-//                           fontSize: 16.0,
-//                         );
-//                         Get.back();
-//                       },
-//                     );
-//                   },
-//                 );
-//               }
-//             }),
-//           ),
-//         ],
-//       ),
-//     ),
-//     isScrollControlled: true,
-//   );
-// }
+            // ✅ Done Button
+            ElevatedButton(
+              onPressed: () {
+                // Update your main viewModel with selected products
+                viewModel.selectedProducts.value = selectedProducts;
+                Fluttertoast.showToast(
+                  msg: "${selectedProducts.length} products selected.",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                );
+                Get.back();
+              },
+              child: Text("Confirm Selection"),
+            ),
+          ],
+        ),
+      ),
+      isScrollControlled: true,
+    );
+  }
 
   Widget _buildAddProductsButton() {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
-      onPressed: _openProductPickerBottomSheet,
+      onPressed: () {
+        print("Tapped Add Product");
+        _openProductPickerBottomSheet(); // ✅ Call method
+      },
       child: Text("Add Product", style: TextStyle(color: Colors.white)),
     );
   }

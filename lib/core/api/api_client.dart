@@ -131,7 +131,7 @@ Future<http.Response> getInfluencersApi({
                   Utils.showSignupSnackBar("Success", "Pleae login with the same email to verify OTP", ContentType.success);
                         Get.offAllNamed(RouteName.loginScreen);               
     }
-    log(response.body);
+  
     return _handleResponse(response);
   }
 

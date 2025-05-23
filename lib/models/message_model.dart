@@ -69,16 +69,15 @@ class ReactionModel {
 }
 
 List<MessageModel> parseMessages(List<dynamic> jsonList) {
-  log("parsed called");
+  ("parsed called");
   final messages = jsonList.map((json) => MessageModel.fromJson(json)).toList();
 
   final messageMap = {for (var msg in messages) msg.id: msg};
-  log(messageMap.toString());
+
   for (var msg in messages) {
     if (msg.parentId != null) {
       if (msg.parentMessage != null) {
-        log(
-            "↳ Replied to: ${msg.parentMessage!.message} (from ${msg.parentMessage!.sender})");
+        log("↳ Replied to: ${msg.parentMessage!.message} (from ${msg.parentMessage!.sender})");
       }
 
       msg.parentMessage = messageMap[msg.parentId!];
