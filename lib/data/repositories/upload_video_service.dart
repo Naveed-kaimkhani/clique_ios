@@ -24,9 +24,20 @@ class UploadVideoService {
     required String authToken,
   }) async {
     try {
-      final productIds = product.map((e) => e.id.toString()).join(',');
-      log("product ids");
-      log(productIds);
+      final productIds = product
+          .map((e) => e.productTitle
+              .toString()
+              .toLowerCase()
+              .replaceAll(RegExp(r'\s+'), '')
+              .replaceAll(RegExp(r'[^\w\s]+'), ''))
+          .toList();
+
+      // log("product ids");
+      // log(productIds.toString());
+      // log(jsonEncode(productIds));
+      // final ids =
+      //     jsonEncode(productIds); // '["comfymatpetbed","anchorsawaypetbed"]'
+      // final ids3 = '["$ids"]'; // Static version
       var request = http.MultipartRequest('POST', Uri.parse(baseUrl));
       request.headers['Authorization'] = 'Bearer $authToken';
       request.headers['Content-Type'] = 'multipart/form-data';
@@ -44,7 +55,9 @@ class UploadVideoService {
       request.fields['show_type'] = showType.toLowerCase(); // Ensure lowercase
       request.fields['lambda_token'] = lambdaToken;
       request.fields['created_by'] = createdBy;
-      request.fields['product_ids'] = productIds;
+      // request.fields['product_ids'] = jsonEncode(productIds);
+
+      request.fields['product_ids'] = jsonEncode(productIds);
       // request.fields['name'] = product.productTitle;
       // request.fields['product_price'] = product.cost.toString();
       // request.fields['product_image'] = product.imageUrls.first;

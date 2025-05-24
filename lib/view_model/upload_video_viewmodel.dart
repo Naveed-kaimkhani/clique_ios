@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:developer';
 import 'dart:typed_data';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/data/models/product_model.dart';
@@ -16,7 +18,7 @@ class UploadVideoViewModel extends GetxController {
   final hashtagsController = TextEditingController();
   final RxString layout = 'Portrait'.obs;
 
-final RxList<ProductModel> selectedProducts = <ProductModel>[].obs;
+  final RxList<ProductModel> selectedProducts = <ProductModel>[].obs;
   var thumbnailBytes = Rxn<Uint8List>(); // Store Uint8List for UI
 
   var selectedCheckoutOption = RxString('Inline Checkout'); // Default value
@@ -24,14 +26,12 @@ final RxList<ProductModel> selectedProducts = <ProductModel>[].obs;
   var thumbnailFile = Rxn<File>(); // Store as File
   var videoFile = Rxn<File>();
   var videoBytes = Rxn<Uint8List>(); // Store Uint8List for UI preview
-final RxDouble uploadProgress = 0.0.obs;
+  final RxDouble uploadProgress = 0.0.obs;
 
   final RxBool isLoading = false.obs;
 
-
-RxList<ProductModel> products = <ProductModel>[].obs; // 👈 Add this
+  RxList<ProductModel> products = <ProductModel>[].obs; // 👈 Add this
   // RxList<ProductModel> selectedProducts = <ProductModel>[].obs;
-
 
   Future<void> pickImage(bool isThumbnail) async {
     final pickedFile =
@@ -47,37 +47,53 @@ RxList<ProductModel> products = <ProductModel>[].obs; // 👈 Add this
       }
     }
   }
-Future<void> pickVideo() async {
-  final pickedFile = await ImagePicker().pickVideo(source: ImageSource.gallery);
 
-  if (pickedFile != null) {
-    File file = File(pickedFile.path);
-    int sizeInBytes = await file.length();
-    double sizeInMB = sizeInBytes / (1024 * 1024);
+  Future<void> pickVideo() async {
+    final pickedFile =
+        await ImagePicker().pickVideo(source: ImageSource.gallery);
 
-    if (sizeInMB > 500) {
-      Utils.showCustomSnackBar(
-        "Warning",
-        "Selected video exceeds the 500MB limit",
-        ContentType.warning,
-      );
-      return;
+    if (pickedFile != null) {
+      File file = File(pickedFile.path);
+      int sizeInBytes = await file.length();
+      double sizeInMB = sizeInBytes / (1024 * 1024);
+
+      if (sizeInMB > 500) {
+        Utils.showCustomSnackBar(
+          "Warning",
+          "Selected video exceeds the 500MB limit",
+          ContentType.warning,
+        );
+        return;
+      }
+
+      videoFile.value = file;
+      videoBytes.value = await file.readAsBytes(); // Convert File to Uint8List
     }
-
-    videoFile.value = file;
-    videoBytes.value = await file.readAsBytes(); // Convert File to Uint8List
   }
-}
 
   Future<void> uploadVideo() async {
+    final productIds = selectedProducts
+        .map((e) => e.productTitle
+            .toString()
+            .toLowerCase()
+            .replaceAll(RegExp(r'\s+'), '')
+            .replaceAll(RegExp(r'[^\w\s]+'), ''))
+        .toList();
+
+    log("product ids");
+
+    final ids =
+        jsonEncode(productIds); // '["comfymatpetbed","anchorsawaypetbed"]'
+    final ids3 = '["$ids"]'; // Static version
+    log(ids3);
     if (thumbnailFile.value == null || videoFile.value == null) {
       Utils.showCustomSnackBar("Warning", "Please select a thumbnail and video",
           ContentType.warning);
       return;
     }
-  if (hashtagsController.text.isEmpty) {
-      Utils.showCustomSnackBar("Warning", "Please add hashtags",
-          ContentType.warning);
+    if (hashtagsController.text.isEmpty) {
+      Utils.showCustomSnackBar(
+          "Warning", "Please add hashtags", ContentType.warning);
       return;
     }
     isLoading.value = true;

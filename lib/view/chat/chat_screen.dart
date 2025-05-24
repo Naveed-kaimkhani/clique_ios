@@ -131,7 +131,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
       child: Scaffold(
         backgroundColor: Colors.white,
         body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             GroupAppBar(
               profile: widget.profileImage,

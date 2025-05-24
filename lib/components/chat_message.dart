@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/view/chat/chat_view_model.dart';
 import 'package:flutter/material.dart';
@@ -36,108 +38,122 @@ class ChatMessageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final reactionStream =
-        enableReactions ? chatViewModel.getReactionsStream(message.id) : null;
+    // final reactionStream =
+    //     enableReactions ? chatViewModel.getReactionsStream(message.id) : null;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        // If this is a reply message and we're not showing preview, just show it
-        if (message.parentId != null && !showReplyPreview)
-          _buildReplyBubble(context, message),
+    return GestureDetector(
+      onHorizontalDragUpdate: (details) {
+        if (details.primaryDelta != null && details.primaryDelta! > 15) {
+          log("Swiped right on message: ${message.id}");
+          chatViewModel.setReplyMessage(message);
+        } else if (details.primaryDelta != null &&
+            details.primaryDelta! < -15) {
+          log("Swiped left on message: ${message.id}");
+        }
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // If this is a reply message and we're not showing preview, just show it
+          if (message.parentId != null && !showReplyPreview)
+            _buildReplyBubble(context, message),
 
-        // For parent messages or when showing preview
-        if (message.parentId == null || showReplyPreview)
-          Container(
-            constraints: BoxConstraints(maxWidth: screenWidth * 0.7),
-            margin: const EdgeInsets.symmetric(vertical: 6),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  blurRadius: 2,
-                  spreadRadius: 1,
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Parent message with padding
-                if (message.parentId == null)
-                  Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: _buildMessageContent(context, message),
+          // For parent messages or when showing preview
+          if (message.parentId == null || showReplyPreview)
+            Container(
+              constraints: BoxConstraints(maxWidth: screenWidth * 0.7),
+              margin: const EdgeInsets.symmetric(vertical: 3),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 2,
+                    spreadRadius: 1,
                   ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Parent message with padding
+                  if (message.parentId == null)
+                    Padding(
+                      padding: const EdgeInsets.all(6),
+                      child: _buildMessageContent(context, message),
+                    ),
 
-                // Replies section
-                if (message.parentId == null && showReplyPreview)
-                  StreamBuilder<List<MessageModel>>(
-                    stream: streamThreadMessagesCallback != null
-                        ? streamThreadMessagesCallback!(message.id)
-                        : null,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Padding(
-                          padding: EdgeInsets.all(6.0),
-                          child: Center(
-                            child: SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2),
+                  // Replies section
+                  if (message.parentId == null && showReplyPreview)
+                    StreamBuilder<List<MessageModel>>(
+                      stream: streamThreadMessagesCallback != null
+                          ? streamThreadMessagesCallback!(message.id)
+                          : null,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Padding(
+                            padding: EdgeInsets.all(6.0),
+                            child: Center(
+                              child: SizedBox(
+                                width: 20,
+                                height: 20,
+                                child:
+                                    CircularProgressIndicator(strokeWidth: 2),
+                              ),
                             ),
-                          ),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Padding(
-                          padding: const EdgeInsets.all(6.0),
-                          child: Text(
-                            'Error loading replies',
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontSize: 12,
+                          );
+                        } else if (snapshot.hasError) {
+                          return Padding(
+                            padding: const EdgeInsets.all(6.0),
+                            child: Text(
+                              'Error loading replies',
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 12,
+                              ),
                             ),
-                          ),
-                        );
-                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return const SizedBox();
-                      } else {
-                        return Column(
-                          children: [
-                            // Add dividers between replies
-                            ...List<Widget>.generate(
-                                snapshot.data!.length * 2 - 1, (index) {
-                              if (index.isOdd) {
-                                return const Divider(
-                                  height: 1,
-                                  thickness: 1,
-                                  indent: 12,
-                                  endIndent: 12,
-                                  color: Colors.grey,
+                          );
+                        } else if (!snapshot.hasData ||
+                            snapshot.data!.isEmpty) {
+                          return const SizedBox();
+                        } else {
+                          return Column(
+                            children: [
+                              // Add dividers between replies
+                              ...List<Widget>.generate(
+                                  snapshot.data!.length * 2 - 1, (index) {
+                                if (index.isOdd) {
+                                  return const Divider(
+                                    height: 1,
+                                    thickness: 1,
+                                    indent: 12,
+                                    endIndent: 12,
+                                    color: Colors.grey,
+                                  );
+                                }
+                                return _buildReplyBubble(
+                                  context,
+                                  snapshot.data![index ~/ 2],
                                 );
-                              }
-                              return _buildReplyBubble(
-                                context,
-                                snapshot.data![index ~/ 2],
-                              );
-                            }),
-                          ],
-                        );
-                      }
-                    },
-                  ),
-              ],
+                              }),
+                            ],
+                          );
+                        }
+                      },
+                    ),
+                ],
+              ),
             ),
-          ),
-      ],
+        ],
+      ),
     );
   }
 
   Widget _buildReplyBubble(BuildContext context, MessageModel message) {
     return Container(
-      padding: const EdgeInsets.only(left: 12, top: 8, bottom: 8, right: 12),
+      padding: const EdgeInsets.only(left: 8, top: 8, bottom: 8, right: 8),
       decoration: BoxDecoration(
         color: Colors.grey[100],
         // color: Colors.white,
