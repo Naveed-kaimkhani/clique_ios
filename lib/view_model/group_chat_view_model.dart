@@ -34,6 +34,7 @@ class GroupChatViewModel extends GetxController {
     super.onInit();
     _fetchInitialMessages(); // Fetch initial 20 messages
     // _timer = Timer.periodic(Duration(milliseconds: 800), (timer) => _fetchInitialMessages());
+  // streamThreadMessages(parentMessageId)
   }
 
   @override
@@ -66,7 +67,9 @@ class GroupChatViewModel extends GetxController {
           "onBehalfOf": userId,
         },
       );
+      log("user id $userId");
 
+      log("group id $groupId");
       if (response.statusCode == 200) {
         final dynamic responseData = jsonDecode(response.body);
         final List<dynamic> rawMessages = responseData['data'] ?? [];
@@ -123,10 +126,119 @@ class GroupChatViewModel extends GetxController {
       _isLoading = false;
     }
   }
+Future<List<MessageModel>> fetchThreadMessages(String parentMessageId) async {
+  try {
+    final response = await ApiClient.getMessages(
+      url: "https://269435d754e8fd97.api-us.cometchat.io/v3/messages/$parentMessageId/thread",
+      headers: {
+        "Content-Type": "application/json",
+        "accept": "application/json",
+        "apikey": "f6985bc6a317824cc687e82794955efded6bf2b1",
+        "onBehalfOf": userId,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final responseData = jsonDecode(response.body);
+      final List<dynamic> rawMessages = responseData['data'] ?? [];
+
+      final List<Map<String, dynamic>> cleanedRawMessages = rawMessages
+          .map((msg) {
+            final sender = msg['data']?['entities']?['sender']?['entity'];
+            if (sender == null ||
+                sender['name'] == null ||
+                sender['uid'] == null) return null;
+
+            return {
+              'id': msg['id'] ?? '',
+              'name': sender['name'],
+              'avatar': sender['avatar'] ??
+                  'https://your-default-avatar-url.com/default.png',
+              'uid': sender['uid'],
+              'message': msg['data']?['text'] ?? '',
+              'reactions': msg['data']?['reactions'] ?? [],
+              'sentAt': msg['sentAt'],
+              'parentId': msg['parentId'],
+              'userId': userId,
+            };
+          })
+          .whereType<Map<String, dynamic>>()
+          .toList();
+
+      final List<MessageModel> threadMessages =
+          parseMessages(cleanedRawMessages);
+      threadMessages.sort((a, b) => (a.time).compareTo(b.time));
+      return threadMessages;
+    } else {
+      debugPrint("Failed to fetch thread messages");
+    }
+  } catch (e) {
+    debugPrint("Error fetching thread messages: $e");
+  }
+
+  return [];
+}
 
   Future<void> loadMoreMessages() async {
     // await _loadMoreMessages();
   }
+Stream<List<MessageModel>> streamThreadMessages(String parentMessageId, {Duration pollInterval = const Duration(seconds: 5)}) async* {
+  while (true) {
+    try {
+      final response = await ApiClient.getMessages(
+        url: "https://269435d754e8fd97.api-us.cometchat.io/v3/messages/$parentMessageId/thread",
+        headers: {
+          "Content-Type": "application/json",
+          "accept": "application/json",
+          "apikey": "f6985bc6a317824cc687e82794955efded6bf2b1",
+          "onBehalfOf": userId,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        final List<dynamic> rawMessages = responseData['data'] ?? [];
+
+        final List<Map<String, dynamic>> cleanedRawMessages = rawMessages
+            .map((msg) {
+              final sender = msg['data']?['entities']?['sender']?['entity'];
+              if (sender == null ||
+                  sender['name'] == null ||
+                  sender['uid'] == null) return null;
+
+              return {
+                'id': msg['id'] ?? '',
+                'name': sender['name'],
+                'avatar': sender['avatar'] ??
+                    'https://your-default-avatar-url.com/default.png',
+                'uid': sender['uid'],
+                'message': msg['data']?['text'] ?? '',
+                'reactions': msg['data']?['reactions'] ?? [],
+                'sentAt': msg['sentAt'],
+                'parentId': msg['parentId'],
+                'userId': userId,
+              };
+            })
+            .whereType<Map<String, dynamic>>()
+            .toList();
+
+        final List<MessageModel> threadMessages =
+            parseMessages(cleanedRawMessages);
+        threadMessages.sort((a, b) => (a.time).compareTo(b.time));
+
+        yield threadMessages;  // Yield the latest list of messages
+      } else {
+        debugPrint("Failed to fetch thread messages with status: ${response.statusCode}");
+        yield []; // Yield empty list on failure, or you can handle differently
+      }
+    } catch (e) {
+      debugPrint("Error fetching thread messages: $e");
+      yield []; // Yield empty list on error, or consider rethrowing/handling
+    }
+
+    await Future.delayed(pollInterval); // Wait before fetching again
+  }
+}
 
   Future<void> sendMessage(String message) async {
     final replyMessage = replyingTo.value;
@@ -162,7 +274,7 @@ class GroupChatViewModel extends GetxController {
 
   Future<void> sendThread(String message, int messageId) async {
     // final replyMessage = replyingTo.value;
-   
+
     if (message.isEmpty) return;
 
     try {

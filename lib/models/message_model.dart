@@ -13,6 +13,7 @@ class MessageModel {
   final String? parentId;
 
   final MessageModel? replyTo; // 👈 new field
+  // final List<MessageModel> replies; // 🔥 Nested replies
 
   MessageModel({
     required this.sender,
@@ -20,7 +21,8 @@ class MessageModel {
     required this.isMe,
     required this.id,
     required this.time,
-    this.replyTo,
+    // this.replies = const [],
+    required this.replyTo,
     this.parentId,
     this.parentMessage,
     this.seenBy = const [],

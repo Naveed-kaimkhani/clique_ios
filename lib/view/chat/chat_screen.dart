@@ -69,14 +69,12 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
     if (_scrollController.position.pixels ==
             _scrollController.position.minScrollExtent &&
         !_isLoadingOlderMessages) {
-      setState(() {
-        _isLoadingOlderMessages = true;
-        _shouldScrollToBottom = false;
-      });
+      // setState(() {
+      //   _isLoadingOlderMessages = true;
+      //   _shouldScrollToBottom = false;
+      // });
 
       final double offsetBefore = _scrollController.position.maxScrollExtent;
-
-      // await viewModel.loadMoreMessages();
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (_scrollController.hasClients) {
@@ -176,8 +174,15 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                       if (messageIndex < 0 || messageIndex >= messages.length) {
                         return const SizedBox.shrink();
                       }
-
-                      return ChatMessageWidget(message: messages[messageIndex]);
+                      return ChatMessageWidget(
+                        message: messages[messageIndex],
+                        enableSwipe: true,
+                        enableReactions: true,
+                        showReplyPreview: true,
+                        streamThreadMessagesCallback: (id) =>
+                            viewModel.streamThreadMessages(id),
+                      );
+                      // return ChatMessageWidget(message: messages[messageIndex]);
                     },
                   );
                 },
