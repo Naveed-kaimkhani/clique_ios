@@ -100,7 +100,7 @@ class ChatMessageWidget extends StatelessWidget {
                                 width: 20,
                                 height: 20,
                                 child:
-                                    CircularProgressIndicator(strokeWidth: 2),
+                                    CircularProgressIndicator.adaptive(backgroundColor: Colors.white, strokeWidth: 2),
                               ),
                             ),
                           );

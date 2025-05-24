@@ -237,8 +237,8 @@ void _showDeleteAccountDialog(BuildContext context) {
                                   ? SizedBox(
                                       width: 18,
                                       height: 18,
-                                      child: CircularProgressIndicator(
-                                        color: Colors.white,
+                                      child: CircularProgressIndicator.adaptive(
+                                        backgroundColor: Colors.white,
                                         strokeWidth: 2.5,
                                       ),
                                     )

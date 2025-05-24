@@ -219,7 +219,7 @@ class _UploadVideoState extends State<UploadVideo> {
             },
           );
         } else {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator.adaptive());
         }
       },
     );
@@ -255,7 +255,6 @@ class _UploadVideoState extends State<UploadVideo> {
             'Authorization': 'Bearer ${userController.token.value}',
           },
         );
-        log("products data ${response.body}");
         if (response.statusCode == 200) {
           final data = jsonDecode(response.body);
           final List<dynamic> productList = data['products'];

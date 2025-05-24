@@ -24,7 +24,7 @@ Widget build(BuildContext context) {
     builder: (context, snapshot) {
       return Obx(() {
         if (_viewModel.isLoading.value) {
-          return Center(child: CircularProgressIndicator());
+          return Center(child: CircularProgressIndicator.adaptive());
         }
 
         if (_viewModel.error.value.isNotEmpty) {

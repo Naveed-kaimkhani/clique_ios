@@ -36,7 +36,7 @@ Widget _buildInfluencersGrid(BuildContext context, InfluencerViewmodel influence
 
   return Obx(() {
     if (influencerViewModel.isLoading.value) {
-      return Center(child: CircularProgressIndicator());
+      return Center(child: CircularProgressIndicator.adaptive());
     }
 
     if (influencerViewModel.error.value.isNotEmpty) {

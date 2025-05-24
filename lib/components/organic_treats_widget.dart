@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clique/components/label_text.dart';
 import 'package:clique/data/models/pop_stream_model.dart';
@@ -16,7 +18,6 @@ class OrganicTreatsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

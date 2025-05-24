@@ -119,7 +119,7 @@ class OTPScreen extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 40, vertical: 14),
                   child: Center(
                     child: otpViewModel.isLoading.value
-                        ? CircularProgressIndicator(color: Colors.white)
+                        ? CircularProgressIndicator.adaptive(backgroundColor: Colors.white)
                         : Text(
                             "Confirm",
                             style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),

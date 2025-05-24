@@ -120,7 +120,6 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // log(widget.guid);
     return GestureDetector(
       onTap: () {
         final controller = Get.find<ChatViewModel>();
@@ -164,7 +163,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                         (_isLoadingOlderMessages ? 1 : 0) + messages.length,
                     itemBuilder: (context, index) {
                       if (_isLoadingOlderMessages && index == 0) {
-                        return const Center(child: CircularProgressIndicator());
+                        return const Center(child: CircularProgressIndicator.adaptive());
                       }
 
                       final messageIndex =

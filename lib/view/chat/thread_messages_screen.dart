@@ -64,7 +64,7 @@ class _ThreadMessagesScreenState extends State<ThreadMessagesScreen> {
       ),
       body: Obx(() {
         if (isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator.adaptive());
         }
 
         return ListView(

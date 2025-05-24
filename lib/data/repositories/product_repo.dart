@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:clique/controller/user_controller.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -18,7 +19,6 @@ class ProductRepository {
         'Accept': 'application/json',
       },
     );
-
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);
       return data; // Return the full response to include pagination info
@@ -46,7 +46,9 @@ class ProductRepository {
       throw Exception('Failed to load products: ${response.statusCode}');
     }
   }
-    Future<Map<String, dynamic>> fetchProductsByProductCode(String productCode) async {
+
+  Future<Map<String, dynamic>> fetchProductsByProductCode(
+      String productCode) async {
     final response = await http.get(
       // Uri.parse('https://cactisocial.com/api-clique/public/api/v1/topdawg/products?page=$page'),
 

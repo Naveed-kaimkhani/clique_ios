@@ -33,7 +33,7 @@ class ProductsSection extends StatelessWidget {
 
       if (productViewModel.isLoading.value ||
           popstreamViewModel.isLoading.value) {
-        return const Center(child: CircularProgressIndicator());
+        return const Center(child: CircularProgressIndicator.adaptive());
       }
 
       if (filteredProducts.isEmpty) {

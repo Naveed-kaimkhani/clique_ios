@@ -93,7 +93,6 @@ class _ChatInputWidgetState extends State<ChatInputWidget> {
       children: [
         Obx(() {
           final replied = chatViewModel.repliedMessage.value;
-          log(chatViewModel.repliedMessage.value.toString());
           if (replied == null) return SizedBox();
 
           return Container(

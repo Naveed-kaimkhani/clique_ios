@@ -72,20 +72,7 @@ class UploadVideoViewModel extends GetxController {
   }
 
   Future<void> uploadVideo() async {
-    final productIds = selectedProducts
-        .map((e) => e.productTitle
-            .toString()
-            .toLowerCase()
-            .replaceAll(RegExp(r'\s+'), '')
-            .replaceAll(RegExp(r'[^\w\s]+'), ''))
-        .toList();
-
-    log("product ids");
-
-    final ids =
-        jsonEncode(productIds); // '["comfymatpetbed","anchorsawaypetbed"]'
-    final ids3 = '["$ids"]'; // Static version
-    log(ids3);
+   
     if (thumbnailFile.value == null || videoFile.value == null) {
       Utils.showCustomSnackBar("Warning", "Please select a thumbnail and video",
           ContentType.warning);

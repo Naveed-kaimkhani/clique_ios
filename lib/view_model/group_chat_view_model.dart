@@ -67,9 +67,6 @@ class GroupChatViewModel extends GetxController {
           "onBehalfOf": userId,
         },
       );
-      log("user id $userId");
-
-      log("group id $groupId");
       if (response.statusCode == 200) {
         final dynamic responseData = jsonDecode(response.body);
         final List<dynamic> rawMessages = responseData['data'] ?? [];

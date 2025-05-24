@@ -26,10 +26,10 @@ class UploadVideoService {
     try {
       final productIds = product
           .map((e) => e.productTitle
-              .toString()
-              .toLowerCase()
-              .replaceAll(RegExp(r'\s+'), '')
-              .replaceAll(RegExp(r'[^\w\s]+'), ''))
+                  .toString()
+                  .toLowerCase()
+                  .replaceAll(RegExp(r'\s+'), '') // Remove whitespace
+              )
           .toList();
 
       // log("product ids");
@@ -55,9 +55,13 @@ class UploadVideoService {
       request.fields['show_type'] = showType.toLowerCase(); // Ensure lowercase
       request.fields['lambda_token'] = lambdaToken;
       request.fields['created_by'] = createdBy;
-      // request.fields['product_ids'] = jsonEncode(productIds);
+// request.fields['product_ids'] = productIds;
+      addProductIdsToMultipartRequest(request, productIds);
 
-      request.fields['product_ids'] = jsonEncode(productIds);
+// request.fields['product_ids'] = productIds;
+// for (var id in productIds) {
+//   request.fields['product_ids'] = id;
+// }
       // request.fields['name'] = product.productTitle;
       // request.fields['product_price'] = product.cost.toString();
       // request.fields['product_image'] = product.imageUrls.first;
@@ -74,6 +78,17 @@ class UploadVideoService {
       }
     } catch (e) {
       return UploadVideoResponse(success: false, message: "Error: $e");
+    }
+  }
+
+  void addProductIdsToMultipartRequest(
+      http.MultipartRequest request, List<String> productIds) {
+    if (productIds.isNotEmpty) {
+      for (int index = 0; index < productIds.length; index++) {
+        final productId = productIds[index];
+        // Use $index to interpolate the value, not the literal string "index"
+        request.fields["product_ids[$index]"] = productId;
+      }
     }
   }
 }

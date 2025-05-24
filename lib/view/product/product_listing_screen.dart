@@ -13,8 +13,21 @@ class ProductListingScreen extends StatelessWidget {
   ProductListingScreen({super.key, required this.products});
 
   final ProductViewModel _productViewModel = Get.put(ProductViewModel());
+
   @override
   Widget build(BuildContext context) {
+    // Get screen width
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    // Decide number of columns based on width (adaptive)
+    int crossAxisCount = 2; // default 2 for phones
+    if (screenWidth > 900) {
+      crossAxisCount = 4; // large tablets/desktops
+    } else if (screenWidth > 600) {
+      crossAxisCount = 3; // medium tablets
+    }
+
+
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
@@ -24,8 +37,8 @@ class ProductListingScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12),
         child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: crossAxisCount,
             childAspectRatio: 0.75,
             crossAxisSpacing: 12,
             mainAxisSpacing: 12,
@@ -36,14 +49,33 @@ class ProductListingScreen extends StatelessWidget {
             return ProductCard(
               product: product,
               onAddToCart: () async {
+                Get.dialog(
+                  const Center(
+                      child: CircularProgressIndicator.adaptive(
+                    backgroundColor: Colors.white,
+                  )),
+                  barrierDismissible: false,
+                );
                 ProductModel? productDetails =
                     await _productViewModel.fetchProductByCode(product.sku);
-                log(productDetails!.productTitle.toString());
-                // _productViewModel.fetchProductByCode(product.sku);
+                if (productDetails == null) {
+                  Get.back(); // close loading
+                  Get.snackbar(
+                    'Error',
+                    'Failed to load product details. Please try again.',
+                    snackPosition: SnackPosition.TOP,
+                    backgroundColor: Colors.redAccent,
+                    colorText: Colors.white,
+                  );
+                  return; // stop further execution
+                }
+                log(productDetails.productTitle.toString());
+                Get.back();
+
                 Get.toNamed(
                   RouteName.productDetailsScreen,
                   arguments: {
-                    'uid': productDetails.id,
+                    'uid': productDetails.id.toString(),
                     'backgroundImage': productDetails.imageUrls,
                     'productName': productDetails.productTitle,
                     'productDescription': productDetails.productDesc,
@@ -77,6 +109,19 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Use MediaQuery to adapt image height for responsiveness
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    // Adjust image height relative to screen width / grid count (approximation)
+    int crossAxisCount = 2;
+    if (screenWidth > 900) {
+      crossAxisCount = 4;
+    } else if (screenWidth > 600) {
+      crossAxisCount = 3;
+    }
+
+    final imageHeight = (screenWidth / crossAxisCount) * 0.55;
+
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
@@ -84,34 +129,31 @@ class ProductCard extends StatelessWidget {
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
-        // onTap: () => Get.to(() => ProductDetailScreen(product: product)),
         onTap: () {},
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Product Image
             ClipRRect(
               borderRadius:
                   const BorderRadius.vertical(top: Radius.circular(12)),
               child: CachedNetworkImage(
                 imageUrl: product.imageUrl,
-                height: 118,
+                height: imageHeight,
                 width: double.infinity,
                 fit: BoxFit.cover,
                 placeholder: (context, url) => Container(
                   color: Colors.grey[200],
-                  height: 120,
-                  child: const Center(child: CircularProgressIndicator()),
+                  height: imageHeight,
+                  child:
+                      const Center(child: CircularProgressIndicator.adaptive()),
                 ),
                 errorWidget: (context, url, error) => Container(
                   color: Colors.grey[200],
-                  height: 120,
+                  height: imageHeight,
                   child: const Icon(Icons.error),
                 ),
               ),
             ),
-
-            // Product Info
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
@@ -129,7 +171,7 @@ class ProductCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     '\$${product.price}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
@@ -138,14 +180,11 @@ class ProductCard extends StatelessWidget {
                 ],
               ),
             ),
-
-            // Add to Cart Button
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Center(
                 child: ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
-                    // backgroundColor: Theme.of(context).primaryColor,
                     backgroundColor: Colors.black,
                     foregroundColor: Colors.white,
                     minimumSize: const Size(double.infinity, 36),

@@ -74,7 +74,7 @@ class ViewAllProductsScreen extends StatelessWidget {
       padding: const EdgeInsets.only(left:  28.0),
       child: Column(
         children: [
-          CircularProgressIndicator(),
+          CircularProgressIndicator.adaptive(backgroundColor: Colors.white,),
           SizedBox(height: 2,),
           GradientText( "Fetching more products. Please wait...",fontSize: 12, gradient: AppColors.appGradientColors,),
           

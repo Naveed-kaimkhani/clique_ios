@@ -97,9 +97,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                 'cover_photo', coverPhoto!.path))
             : userController.coverPhoto.value;
         var response = await request.send();
-        log(response.stream.toString());
-  
-        log(response.statusCode.toString());
         if (response.statusCode == 200) {
           final responseBody = await response.stream.bytesToString();
           final Map<String, dynamic> responseData = jsonDecode(responseBody);

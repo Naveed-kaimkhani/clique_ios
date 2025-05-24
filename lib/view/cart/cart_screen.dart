@@ -78,12 +78,12 @@ class _CartScreenState extends State<CartScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(
-            'assets/images/empty_cart.png', // Add this asset to your project
-            width: 150,
-            height: 150,
-          ),
-          const SizedBox(height: 20),
+          // Image.asset(
+          //   'assets/images/empty_cart.png', // Add this asset to your project
+          //   width: 150,
+          //   height: 150,
+          // ),
+          // const SizedBox(height: 20),
           const Text(
             "Your cart is empty",
             style: TextStyle(
@@ -253,22 +253,24 @@ class _CartScreenState extends State<CartScreen> {
           const SizedBox(height: 8),
           const SizedBox(height: 8),
           const SizedBox(height: 16),
-          AuthButton(
-            buttonText: "Proceed to Checkout",
-            onPressed: () {
-              if (controller.address1.value.isEmpty) {
-                Get.toNamed(RouteName.checkoutScreen);
-                return;
-              } else {
-                orderController.submitOrderFromCart().then((value) {
-                  if (value != null) {
-                    Get.toNamed(RouteName.checkoutScreen);
-                  }
-                });
-              }
-            },
-            isLoading: orderController.isLoading,
-          ),
+          cartQuantityController.products.isEmpty
+              ? SizedBox()
+              : AuthButton(
+                  buttonText: "Proceed to Checkout",
+                  onPressed: () {
+                    if (controller.address1.value.isEmpty) {
+                      Get.toNamed(RouteName.checkoutScreen);
+                      return;
+                    } else {
+                      orderController.submitOrderFromCart().then((value) {
+                        if (value != null) {
+                          Get.toNamed(RouteName.checkoutScreen);
+                        }
+                      });
+                    }
+                  },
+                  isLoading: orderController.isLoading,
+                ),
           const SizedBox(height: 8),
         ],
       ),
