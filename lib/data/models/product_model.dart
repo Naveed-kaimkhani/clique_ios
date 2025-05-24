@@ -61,7 +61,7 @@ class ProductModel {
       'product_title': productTitle,
       'tdid': tdid,
       'product_desc': productDesc,
-      'cost': cost,
+      'price': cost,
       'image_url': imageUrls.join(','),
       'product_code': productCode,
       'thumbnail_url': thumbnailUrl,

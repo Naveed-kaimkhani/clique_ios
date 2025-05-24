@@ -506,6 +506,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 unit: controller.productData['unit'],
                 cost: controller.productData['price'],
                 msrp: controller.productData['oldPrice'],
+                productCode: controller.productData['product_code'],
                 imageUrls: controller.productData['backgroundImage'],
                 thumbnailUrl: controller.productData['backgroundImage'][0],
                 categories: controller.productData['categories'],

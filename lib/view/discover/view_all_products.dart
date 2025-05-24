@@ -94,6 +94,7 @@ class ViewAllProductsScreen extends StatelessWidget {
             weight: product.productWeight, // Assuming `weight` exists in `ProductModel`
             isShowDiscount: false,
             tdid: product.tdid??"",
+            productCode: product.productCode??"",
             unit: product.unit,
             categories: product.categories??"",
             uid: product.id.toString(), // Assuming `id` exists in `ProductModel`

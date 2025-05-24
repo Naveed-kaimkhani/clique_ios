@@ -27,7 +27,6 @@ class OrderViewModel extends GetxController {
       Rx<OrderSummary?>(null); // Define the orderSummary field
 
   Future<OrderSummary?> submitOrderFromCart() async {
-   
     try {
       isLoading.value = true;
 
@@ -54,6 +53,11 @@ class OrderViewModel extends GetxController {
               product.id.toString()), // ensure quantity is tracked per product
         );
       }).toList();
+      for (var product in transactions) {
+        log('td id  => ${product.tdid}');
+
+        log('quantity => ${product.quantity}');
+      }
       List<ProductModel> productDetails =
           cartQuantityController.products.map((product) {
         return ProductModel(
@@ -67,12 +71,33 @@ class OrderViewModel extends GetxController {
           cost: product.cost,
           brandName: "",
           msrp: 0,
+          tdid: product.tdid,
           thumbnailUrl: "",
           categories: "",
           variantGroupId: "",
         );
       }).toList();
+      // for (var product in productDetails) {
+      //   // log('ProductModel => ${product.id}');
 
+      //   // log('ProductModel => ${product.cost}');
+
+      //   // log('tdid kya ahri hy => ${product.tdid}');
+
+      //   // log('ProductModel => ${product.productTitle}');
+
+      //   // log('ProductModel => ${product.unit}');
+
+      //   // log('ProductModel => ${product.productCode}');
+
+      //   // log('ProductModel => ${product.productWeight}');
+
+      //   // log('tdid kya ahri hy => ${product.tdid}');
+
+      //   // log('ProductModel => ${product.productDesc}');
+
+      //   // log('ProductModel => ${product.imageUrls}');
+      // }
       var order = Order(
         customerId: userController.uid.toString(), // Use the actual customer ID
         firstName: userController.userName.value, // Use the actual first name
@@ -80,10 +105,10 @@ class OrderViewModel extends GetxController {
         phone: userController.phone.value, // Use the actual phone number
         address: address,
         transactions: transactions,
-       
+
         productDetails: productDetails,
       );
-      
+
       final url = Uri.parse(
           "https://cactisocial.com/api-clique/public/api/v1/topdawg/orders");
       final headers = {
@@ -100,10 +125,11 @@ class OrderViewModel extends GetxController {
         body: jsonEncode(orderMap),
       );
 
+      log(response.body);
       if (response.statusCode == 200) {
         final parsedOrderSummary =
             OrderSummary.fromJson(jsonDecode(response.body));
-      
+
         orderSummary.value = parsedOrderSummary;
         return parsedOrderSummary;
       } else {
@@ -130,6 +156,7 @@ class OrderViewModel extends GetxController {
         return null;
       }
     } catch (e) {
+      log(e.toString());
       Utils.showCustomSnackBar(
           "Error", "Failed to place order: $e", ContentType.failure);
       return null;
@@ -171,6 +198,7 @@ class OrderViewModel extends GetxController {
           id: product.id,
           productWeight: product.productWeight,
           productCode: product.productCode,
+          tdid: product.tdid,
           unit: product.unit,
           productTitle: product.productTitle,
           productDesc: product.productDesc,
@@ -183,7 +211,27 @@ class OrderViewModel extends GetxController {
           variantGroupId: "",
         );
       }).toList();
+      // for (var product in productDetails) {
+      //   log('ProductModel => ${product.id}');
 
+      //   log('ProductModel => ${product.cost}');
+
+      //   log('tdid kya ahri hy => ${product.tdid}');
+
+      //   log('ProductModel => ${product.productTitle}');
+
+      //   log('ProductModel => ${product.unit}');
+
+      //   log('ProductModel => ${product.productCode}');
+
+      //   log('ProductModel => ${product.productWeight}');
+
+      //   log('tdid kya ahri hy => ${product.tdid}');
+
+      //   log('ProductModel => ${product.productDesc}');
+
+      //   log('ProductModel => ${product.imageUrls}');
+      // }
       var order = Order(
           customerId:
               userController.uid.toString(), // Use the actual customer ID
@@ -234,7 +282,7 @@ class OrderViewModel extends GetxController {
         headers: headers,
         body: jsonEncode(orderMap), // Encode the order map to JSON
       );
-
+      log(response.body);
       if (response.statusCode == 200) {
         // Success
         final parsedOrderSummary =
@@ -267,6 +315,7 @@ class OrderViewModel extends GetxController {
         return null;
       }
     } catch (e) {
+      log(e.toString());
       Utils.showCustomSnackBar(
           "Error", "Failed to place order $e", ContentType.failure);
     } finally {
@@ -291,7 +340,7 @@ class OrderViewModel extends GetxController {
       });
 
       final response = await http.post(url, headers: headers, body: body);
-   
+
       if (response.statusCode == 200) {
         Utils.showCustomSnackBar(
             "Success", "Order processed successfully", ContentType.success);

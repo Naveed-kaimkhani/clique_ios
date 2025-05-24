@@ -14,6 +14,8 @@ class ProductCard extends StatelessWidget {
   final List<String> backgroundImage;
   final String productName;
   final String productDescription;
+
+  final String productCode;
   var price;
   var oldPrice;
   final String discount;
@@ -31,6 +33,7 @@ class ProductCard extends StatelessWidget {
     required this.weight,
     required this.categories,
     required this.unit,
+    required this.productCode,
     required this.backgroundImage,
     required this.productName,
     required this.productDescription,
@@ -78,6 +81,8 @@ class ProductCard extends StatelessWidget {
                   'uid': uid,
                   'backgroundImage': backgroundImage,
                   'productName': productName,
+
+                  'product_code': productCode,
                   'productDescription': productDescription,
                   'price': price,
                   'oldPrice': oldPrice,

@@ -19,6 +19,8 @@ void setProductData(Map<String, dynamic> data) {
     'oldPrice': data['oldPrice'] ?? 0.0,
     'discount': data['discount'] ?? 0,
     'unit': data['unit'] ?? '',
+    'product_code': data['product_code'] ?? '',
+    
     'categories': data['categories'] ?? [],
     'size': data['size'] ?? '',
   };

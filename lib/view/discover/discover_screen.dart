@@ -240,6 +240,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                 child: ProductCard(
                   weight: product.productWeight,
                   unit: product.unit,
+                  productCode: product.productCode!,
                   tdid: product.tdid ?? "",
                   isShowDiscount: discount > 0,
                   uid: product.id.toString(),

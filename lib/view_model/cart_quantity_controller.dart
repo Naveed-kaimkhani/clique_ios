@@ -1,4 +1,6 @@
 // for multiple products
+import 'dart:developer';
+
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:clique/data/repositories/cart_storage.dart';
 import 'package:clique/utils/utils.dart';
@@ -31,7 +33,12 @@ class CartQuantityController extends GetxController {
   }
 
   Future<void> loadCart() async {
+    log("in lod product");
     List<ProductModel> loadedProducts = await CartStorage.loadCart();
+    for (var product in loadedProducts) {
+      log("loading product");
+      log('tdid is => ${product.productCode}');
+    }
     if (loadedProducts.isNotEmpty) {
       products.assignAll(loadedProducts);
     }
