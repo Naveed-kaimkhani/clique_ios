@@ -157,9 +157,9 @@
 //                     if (!snapshot.hasData || snapshot.data!.isEmpty) {
 //                       return const Center(child: Text("No messages found"));
 //                     }
-      
+
 //                     final messages = snapshot.data!;
-      
+
 //                     return ListView.builder(
 //                       reverse: true,
 //                       controller: _scrollController,
@@ -171,10 +171,10 @@
 //                           return const Center(
 //                               child: CircularProgressIndicator.adaptive());
 //                         }
-      
+
 //                         final messageIndex =
 //                             index - (_isLoadingOlderMessages ? 1 : 0);
-      
+
 //                         // ✅ Safety check
 //                         if (messageIndex < 0 || messageIndex >= messages.length) {
 //                           return const SizedBox.shrink();
@@ -197,7 +197,7 @@
 //                 onSend: (message, replyingTo) {
 //                   final ChatViewModel chatViewModel = Get.find<ChatViewModel>();
 //                   final repliedMessage = chatViewModel.repliedMessage.value;
-      
+
 //                   if (repliedMessage == null) {
 //                     // No reply context; send a regular message
 //                     viewModel.sendMessage(message).then((_) {
@@ -226,8 +226,6 @@
 //     );
 //   }
 // }
-
-
 
 import 'dart:async';
 import 'package:clique/components/chat_input.dart';
@@ -317,9 +315,9 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
         }
       });
 
-      setState(() {
-        _isLoadingOlderMessages = false;
-      });
+      // setState(() {
+      //   _isLoadingOlderMessages = false;
+      // });
     }
   }
 
@@ -394,7 +392,8 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                         (_isLoadingOlderMessages ? 1 : 0) + messages.length,
                     itemBuilder: (context, index) {
                       if (_isLoadingOlderMessages && index == 0) {
-                        return const Center(child: CircularProgressIndicator.adaptive());
+                        return const Center(
+                            child: CircularProgressIndicator.adaptive());
                       }
 
                       final messageIndex =
@@ -450,4 +449,3 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
     );
   }
 }
-
