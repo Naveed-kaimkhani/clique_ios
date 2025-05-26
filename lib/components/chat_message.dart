@@ -1,11 +1,9 @@
 import 'dart:developer';
-
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/view/chat/chat_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-
 import '../models/message_model.dart';
 
 class ChatMessageWidget extends StatelessWidget {

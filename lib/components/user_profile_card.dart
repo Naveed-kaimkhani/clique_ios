@@ -1,5 +1,3 @@
-
-
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -19,7 +17,7 @@ class UserProfileCard extends StatelessWidget {
   final int followers;
   final int following;
 
-   UserProfileCard({
+  UserProfileCard({
     super.key,
     required this.isInfluencer,
     required this.username,
@@ -41,7 +39,8 @@ class UserProfileCard extends StatelessWidget {
       height: screenHeight * 0.4, // Adjusted height for extra content
       decoration: BoxDecoration(
         color: Colors.grey[50],
-        borderRadius: BorderRadius.circular(size.width * 0.05), // Responsive border radius
+        borderRadius: BorderRadius.circular(
+            size.width * 0.05), // Responsive border radius
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
@@ -51,7 +50,9 @@ class UserProfileCard extends StatelessWidget {
         ],
       ),
       child: Row(
-  mainAxisAlignment:     isInfluencer? MainAxisAlignment.spaceEvenly:MainAxisAlignment.center,
+        mainAxisAlignment: isInfluencer
+            ? MainAxisAlignment.spaceEvenly
+            : MainAxisAlignment.center,
         children: [
           Column(
             mainAxisSize: MainAxisSize.min,
@@ -60,53 +61,69 @@ class UserProfileCard extends StatelessWidget {
             children: [
               profileImage == null
                   ? CircleAvatar(
-  radius: screenWidth * 0.14,
-  backgroundColor: Colors.grey[300], // light background for the icon
-  child: Icon(
-    Icons.person,
-    size: screenWidth * 0.15,
-    color: Colors.grey[700], // darker shade for contrast
-  ),
-)
+                      radius: screenWidth * 0.14,
+                      backgroundColor:
+                          Colors.grey[300], // light background for the icon
+                      child: Icon(
+                        Icons.person,
+                        size: screenWidth * 0.15,
+                        color: Colors.grey[700], // darker shade for contrast
+                      ),
+                    )
                   : ClipOval(
                       child: CachedNetworkImage(
                         imageUrl: profileImage ?? '',
                         width: screenWidth * 0.3,
                         height: screenWidth * 0.3,
                         fit: BoxFit.cover,
-                        placeholder: (context, url) => SpinKitChasingDots(color: Colors.black, size: 20),
-                        errorWidget: (context, url, error) => Icon(Icons.person, size: screenWidth * 0.3),
+                        placeholder: (context, url) =>
+                            SpinKitChasingDots(color: Colors.black, size: 20),
+                        errorWidget: (context, url, error) =>
+                            Icon(Icons.person, size: screenWidth * 0.3),
                       ),
                     ),
               SizedBox(height: screenHeight * 0.015),
+              Container(
+                alignment: Alignment
+                    .center, // This centers the child within the container
 
-              
-            Text(
-  username.length > 15 ? '${username.substring(0, 15)}...' : username,
-  style: TextStyle(
-    fontSize: screenHeight * 0.028,
-    fontWeight: FontWeight.bold,
-  ),
-),
-
-              
+                width:
+                    MediaQuery.of(context).size.width * 0.7, // adjust as needed
+                child: Text(
+                  username,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: screenHeight * 0.028,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
               SizedBox(height: screenHeight * 0.015),
-              isInfluencer? 
-              SizedBox():  logout_button(userController: userController),
+              isInfluencer
+                  ? SizedBox()
+                  : logout_button(userController: userController),
               SizedBox(height: screenHeight * 0.02),
-             
             ],
           ),
-       isInfluencer? Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildStatColumn(posts, "Posts", screenHeight),
-              SizedBox(width: screenWidth * 0.2, height:  screenWidth * 0.1,),
-              _buildStatColumn(followers, "Followers", screenHeight),
-              SizedBox(width: screenWidth * 0.2,height:  screenWidth * 0.01,),
-              // _buildStatColumn(following, "Following", screenHeight),
-            ],
-          ):SizedBox()
+          isInfluencer
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _buildStatColumn(posts, "Posts", screenHeight),
+                    SizedBox(
+                      width: screenWidth * 0.2,
+                      height: screenWidth * 0.1,
+                    ),
+                    _buildStatColumn(followers, "Followers", screenHeight),
+                    SizedBox(
+                      width: screenWidth * 0.2,
+                      height: screenWidth * 0.01,
+                    ),
+                    // _buildStatColumn(following, "Following", screenHeight),
+                  ],
+                )
+              : SizedBox()
         ],
       ),
     );
@@ -145,33 +162,35 @@ class logout_button extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.black,
-              // padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              elevation: 0, // Important for web to avoid flashy hover effects
-            ),
-            onPressed: () {
-              // Handle button press here
-              userController.logout();
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text(
-          "Logout",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.black,
+        // padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
         ),
-        SizedBox(width: 10,),
-        Icon(Icons.logout, color: Colors.white),
-              ],
+        elevation: 0, // Important for web to avoid flashy hover effects
+      ),
+      onPressed: () {
+        // Handle button press here
+        userController.logout();
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Text(
+            "Logout",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
             ),
-          );
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          Icon(Icons.logout, color: Colors.white),
+        ],
+      ),
+    );
   }
 }

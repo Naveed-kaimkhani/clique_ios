@@ -7,17 +7,17 @@ class ProfileSAppBar extends PreferredSize {
   final String title;
   final IconData? icon;
   final bool isInfluencer;
-  
+
   final IconData? logoutIcon;
   ProfileSAppBar({
     super.key,
     required this.title,
     this.logoutIcon,
-    
     this.icon,
-   this.isInfluencer = false,
+    this.isInfluencer = false,
   }) : super(
-          preferredSize: const Size.fromHeight(kToolbarHeight * 1.8), // Increased height
+          preferredSize:
+              const Size.fromHeight(kToolbarHeight * 0.8), // Increased height
           child: _ProfileSAppBarWidget(
             title: title,
             icon: icon,
@@ -25,6 +25,7 @@ class ProfileSAppBar extends PreferredSize {
           ),
         );
 }
+
 class _ProfileSAppBarWidget extends StatelessWidget {
   final String title;
   final IconData? icon;
@@ -44,7 +45,7 @@ class _ProfileSAppBarWidget extends StatelessWidget {
     final horizontalPadding = screenWidth * 0.04;
 
     return Container(
-      height: kToolbarHeight * 1.7,
+      height: kToolbarHeight * 1.9,
       decoration: BoxDecoration(
         gradient: AppColors.appGradientColors,
         borderRadius: const BorderRadius.only(
@@ -63,29 +64,30 @@ class _ProfileSAppBarWidget extends StatelessWidget {
                 width: iconSize + 16, // Icon size + padding
                 height: iconSize + 16,
               ),
-              
+
               Text(
                 title,
                 style: TextStyle(
-                  color: Colors.white,
-                  fontSize: titleFontSize,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: 'SofiaPro'
-                ),
+                    color: Colors.white,
+                    fontSize: titleFontSize,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'SofiaPro'),
               ),
-              
-              isNotification 
-                ? IconButton(
-                    icon: Icon(
-                      Icons.upload_outlined,
-                      color: Colors.white,
-                      size: iconSize,
-                    ),
-                    onPressed: () {
-                      Get.toNamed(RouteName.uploadVideo);
-                    },
-                  )
-                : SizedBox(width: 32,)
+
+              isNotification
+                  ? IconButton(
+                      icon: Icon(
+                        Icons.upload_outlined,
+                        color: Colors.white,
+                        size: iconSize,
+                      ),
+                      onPressed: () {
+                        Get.toNamed(RouteName.uploadVideo);
+                      },
+                    )
+                  : SizedBox(
+                      width: 32,
+                    )
             ],
           ),
         ),

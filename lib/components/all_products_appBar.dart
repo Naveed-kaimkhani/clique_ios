@@ -7,17 +7,17 @@ class AllProductsAppBar extends PreferredSize {
   final String title;
   final IconData? icon;
   final bool isNotification;
-  
+
   final IconData? logoutIcon;
   AllProductsAppBar({
     super.key,
     required this.title,
     this.logoutIcon,
-    
     this.icon,
     this.isNotification = false,
   }) : super(
-          preferredSize: const Size.fromHeight(kToolbarHeight * 1.2), // Increased height
+          preferredSize:
+              const Size.fromHeight(kToolbarHeight * 0.8), // Increased height
           child: _AllProductsAppBarWidget(
             title: title,
             icon: icon,
@@ -31,7 +31,7 @@ class _AllProductsAppBarWidget extends StatelessWidget {
   final IconData? icon;
   final bool isNotification;
 
-   _AllProductsAppBarWidget({
+  _AllProductsAppBarWidget({
     required this.title,
     this.icon,
     this.isNotification = false,
@@ -45,7 +45,7 @@ class _AllProductsAppBarWidget extends StatelessWidget {
     final horizontalPadding = screenWidth * 0.04;
 
     return Container(
-      height: kToolbarHeight * 1.5, // Increased height
+      height: kToolbarHeight * 1.9, // Increased height
       decoration: BoxDecoration(
         gradient: AppColors.appGradientColors,
         borderRadius: const BorderRadius.only(
@@ -61,36 +61,36 @@ class _AllProductsAppBarWidget extends StatelessWidget {
             children: [
               IconButton(
                 icon: Icon(
-                 Icons.arrow_back_ios,
+                  Icons.arrow_back_ios,
                   color: Colors.white,
                   size: iconSize,
                 ),
                 onPressed: () {
-                 Get.back() ;
+                  Get.back();
                 },
               ),
               Text(
                 title,
                 style: TextStyle(
-                  color: Colors.white,
-                  fontSize: titleFontSize,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: 'SofiaPro'
-                ),
+                    color: Colors.white,
+                    fontSize: titleFontSize,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'SofiaPro'),
               ),
-              isNotification 
-                ? IconButton(
-                    icon: Icon(
-                      Icons.search,
-                      color: Colors.white,
-                      size: iconSize,
-                    ),
-                    onPressed: () {
-                      Get.toNamed(RouteName.productSearchScreen);
-                    },
-                  )
-               
-               : SizedBox(width: 42,)
+              isNotification
+                  ? IconButton(
+                      icon: Icon(
+                        Icons.search,
+                        color: Colors.white,
+                        size: iconSize,
+                      ),
+                      onPressed: () {
+                        Get.toNamed(RouteName.productSearchScreen);
+                      },
+                    )
+                  : SizedBox(
+                      width: 42,
+                    )
             ],
           ),
         ),

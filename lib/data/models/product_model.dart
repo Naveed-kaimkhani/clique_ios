@@ -55,6 +55,32 @@ class ProductModel {
       // type: json['type'], // Assign type from JSON
     );
   }
+  factory ProductModel.fromMap(Map<String, dynamic> json) {
+    final imageUrls = (json['image_url'] as String?)?.split(',') ?? [];
+
+    final thumbnails = (json['thumbnail_url'] as String).split(',') ?? [];
+    final categories = json['categories'];
+
+    return ProductModel(
+      id: json['id'],
+      unit: json['mass_unit'],
+      productTitle: json['product_title'],
+      productWeight: json['product_weight'],
+      productDesc: json['product_desc'],
+      brandName: json['brand_name'],
+      cost: json['price'],
+      msrp: json['msrp'],
+      imageUrls: imageUrls,
+      thumbnailUrl: thumbnails.isNotEmpty ? thumbnails.first : '',
+      categories: categories, // Assign categories from JSON
+      variantGroupId: json['variant_group_id'],
+      tdid: json['tdid'], // Assign tdid from JSON
+      productCode: json['product_code'], // Assign product_code from JSON
+      // type: json['type'], // Assign type from JSON
+    );
+  }
+
+
   Map<String, dynamic> toMap() {
     return {
       'id': id,

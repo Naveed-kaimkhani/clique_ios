@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -63,9 +62,14 @@ class _UploadVideoState extends State<UploadVideo> {
                 _buildThumbnailSection(screenHeight),
                 SizedBox(height: screenHeight * 0.015),
                 _buildVideoSection(screenHeight),
+
+                SizedBox(height: screenHeight * 0.02),
+
+                _buildSelectedProductsList(), // <-- Add this line
                 SizedBox(height: screenHeight * 0.02),
                 SizedBox(height: screenHeight * 0.02),
                 _buildAddProductsButton(),
+
                 SizedBox(height: screenHeight * 0.01),
                 SizedBox(height: screenHeight * 0.02),
                 _buildUploadButton(),
@@ -102,7 +106,7 @@ class _UploadVideoState extends State<UploadVideo> {
       // backgroundColor: Colors.white,
       elevation: 0,
       leading: IconButton(
-          onPressed: () => Get.back(), icon: Icon(Icons.arrow_back)));
+          onPressed: () => Get.back(), icon: Icon(Icons.arrow_back_ios)));
 
   Widget _buildHeader() {
     return Text(
@@ -119,7 +123,7 @@ class _UploadVideoState extends State<UploadVideo> {
 
   Widget _buildTextFields(double screenHeight) {
     return CustomTextField(
-        hintText: "Enter Hashtags", controller: viewModel.hashtagsController);
+        hintText: "Add Caption", controller: viewModel.hashtagsController);
   }
 
   Widget _buildThumbnailSection(double screenHeight) {
@@ -470,5 +474,103 @@ class _UploadVideoState extends State<UploadVideo> {
         }
       },
     );
+  }
+
+  Widget _buildSelectedProductsList() {
+    return Obx(() {
+      if (viewModel.selectedProducts.isEmpty) {
+        return SizedBox.shrink();
+      }
+
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: 10),
+          Text(
+            "Selected Products",
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+          ),
+          SizedBox(height: 8),
+          Container(
+            height: 100,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: viewModel.selectedProducts.length,
+              itemBuilder: (context, index) {
+                final product = viewModel.selectedProducts[index];
+                return Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: Stack(
+                    children: [
+                      Container(
+                        width: 80,
+                        child: Column(
+                          children: [
+                            Container(
+                              width: 70,
+                              height: 70,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: CachedNetworkImage(
+                                  imageUrl: product.imageUrls.first,
+                                  fit: BoxFit.cover,
+                                  placeholder: (_, __) => Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                  errorWidget: (_, __, ___) =>
+                                      Icon(Icons.error),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                              product.productTitle.length > 10
+                                  ? '${product.productTitle.substring(0, 10)}...'
+                                  : product.productTitle,
+                              style: TextStyle(fontSize: 12),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: GestureDetector(
+                          onTap: () {
+                            viewModel.selectedProducts.removeAt(index);
+                            Fluttertoast.showToast(
+                              msg: "${product.productTitle} removed",
+                              backgroundColor:
+                                  Colors.redAccent.withOpacity(0.8),
+                            );
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                            padding: EdgeInsets.all(4),
+                            child: Icon(
+                              Icons.close,
+                              size: 16,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      );
+    });
   }
 }

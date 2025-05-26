@@ -7,8 +7,8 @@ class AppBarWithBackIcon extends PreferredSize {
   final String title;
   final IconData? icon;
   final bool isNotification;
-
   final IconData? logoutIcon;
+
   AppBarWithBackIcon({
     super.key,
     required this.title,
@@ -16,8 +16,7 @@ class AppBarWithBackIcon extends PreferredSize {
     this.icon,
     this.isNotification = false,
   }) : super(
-          preferredSize:
-              const Size.fromHeight(kToolbarHeight * 1.0), // Increased height
+          preferredSize: const Size.fromHeight(kToolbarHeight * 0.8),
           child: _AppBarWithBackIconWidget(
             title: title,
             icon: icon,
@@ -45,7 +44,7 @@ class _AppBarWithBackIconWidget extends StatelessWidget {
     final horizontalPadding = screenWidth * 0.04;
 
     return Container(
-      height: kToolbarHeight * 1.3, // Increased height
+      height: kToolbarHeight * 1.9,
       decoration: BoxDecoration(
         gradient: AppColors.appGradientColors,
         borderRadius: const BorderRadius.only(
@@ -56,41 +55,46 @@ class _AppBarWithBackIconWidget extends StatelessWidget {
       child: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Stack(
+            alignment: Alignment.center,
             children: [
-              IconButton(
-                icon: Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.white,
-                  size: iconSize,
+              Align(
+                alignment: Alignment.centerLeft,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.white,
+                    size: iconSize,
+                  ),
+                  onPressed: () => Get.back(),
                 ),
-                onPressed: () {
-                  Get.back();
-                },
               ),
-              Text(
-                title,
-                style: TextStyle(
+              Center(
+                child: Text(
+                  title,
+                  style: TextStyle(
                     color: Colors.white,
                     fontSize: titleFontSize,
                     fontWeight: FontWeight.w700,
-                    fontFamily: 'SofiaPro'),
+                    fontFamily: 'SofiaPro',
+                  ),
+                ),
               ),
-              isNotification
-                  ? IconButton(
-                      icon: Icon(
-                        Icons.search,
-                        color: Colors.white,
-                        size: iconSize,
-                      ),
-                      onPressed: () {
-                        Get.toNamed(RouteName.productSearchScreen);
-                      },
-                    )
-                  : SizedBox(
-                      width: 52,
-                    )
+              Align(
+                alignment: Alignment.centerRight,
+                child: isNotification
+                    ? IconButton(
+                        icon: Icon(
+                          Icons.search,
+                          color: Colors.white,
+                          size: iconSize,
+                        ),
+                        onPressed: () {
+                          Get.toNamed(RouteName.productSearchScreen);
+                        },
+                      )
+                    : SizedBox(width: iconSize + 16), // Placeholder to balance
+              ),
             ],
           ),
         ),

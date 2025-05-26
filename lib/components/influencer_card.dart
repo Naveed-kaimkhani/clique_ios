@@ -107,68 +107,7 @@ class InfluencerCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     SizedBox(height: cardHeight * 0.04),
-                    // Obx(() => Container(
-                    //       height: cardHeight * 0.14,
-                    //       width: double.infinity,
-                    //       decoration: BoxDecoration(
-                    //         gradient: AppColors.appGradientColors,
-                    //         borderRadius: BorderRadius.circular(30),
-                    //       ),
-                    //       child: TextButton(
-                    //         onPressed: () async {
-                    //           bool previousStatus = isFollowing.value; // Store previous state
-                    //           isFollowing.value = !isFollowing.value; // Update UI instantly
-
-                    //           bool success = isFollowing.value
-                    //               ? await followController.toggleFollow(id)
-                    //               : await followController.toggleUnFollow(id);
-
-                    //           if (!success) {
-                    //             isFollowing.value = previousStatus; // Revert if API fails
-                    //           }
-                    //         },
-                    //         child: Text(
-                    //           isFollowing.value ? "Unfollow" : "+ Follow",
-                    //           style: TextStyle(
-                    //             color: Colors.white,
-                    //             fontWeight: FontWeight.bold,
-                    //             fontSize: size.width * 0.028,
-                    //           ),
-                    //         ),
-                    //       ),
-                    //     )),
-//                     Obx(() {
-//   final influencer = influencerModel; // or pass influencer directly
-//   return Container(
-//     height: cardHeight * 0.14,
-//     width: double.infinity,
-//     decoration: BoxDecoration(
-//       gradient: AppColors.appGradientColors,
-//       borderRadius: BorderRadius.circular(30),
-//     ),
-//     child: TextButton(
-//       onPressed: () async {
-//         final previousStatus = influencer.isFollowing;
-//         final success = previousStatus
-//             ? await followController.toggleUnFollow(influencer.id)
-//             : await followController.toggleFollow(influencer.id);
-
-//         if (!success) {
-//           // Optional: Show Snackbar
-//           Get.snackbar("Error", "Could not update follow status");
-//         }
-//       },
-//       child: Text(
-//         influencer.isFollowing ? "Unfollow" : "+ Follow",
-//         style: TextStyle(
-//           color: Colors.white,
-//           fontWeight: FontWeight.bold,
-//           fontSize: size.width * 0.028,
-//         ),
-//       ),
-//     ),
-//   );
-// }),
+            
 Obx(() => Container(
   height: cardHeight * 0.15,
   width: double.infinity,

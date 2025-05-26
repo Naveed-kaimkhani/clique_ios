@@ -30,45 +30,42 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      bottom: false,
-      child: Scaffold(
-        appBar: AppBarWithBackIcon(
-          title: "My Cart",
-        ),
-        backgroundColor: Colors.white,
-        body: Column(
-          children: [
-            Expanded(
-              child: Obx(() {
-                final products = cartQuantityController.products;
-                if (products.isEmpty) {
-                  return _buildEmptyCart();
-                }
-                return ListView.builder(
-                  itemCount: products.length,
-                  itemBuilder: (context, index) {
-                    final product = products[index];
-                    return Dismissible(
-                      key: Key(product.id.toString()),
-                      direction: DismissDirection.endToStart,
-                      background: _buildDeleteBackground(),
-                      confirmDismiss: (direction) async {
-                        return await _showDeleteDialog(product.id.toString());
-                      },
-                      onDismissed: (direction) {
-                        cartQuantityController
-                            .removeFromCart(product.id.toString());
-                      },
-                      child: _buildCartItem(product),
-                    );
-                  },
-                );
-              }),
-            ),
-            _buildCheckoutSection(),
-          ],
-        ),
+    return Scaffold(
+      appBar: AppBarWithBackIcon(
+        title: "My Cart",
+      ),
+      backgroundColor: Colors.white,
+      body: Column(
+        children: [
+          Expanded(
+            child: Obx(() {
+              final products = cartQuantityController.products;
+              if (products.isEmpty) {
+                return _buildEmptyCart();
+              }
+              return ListView.builder(
+                itemCount: products.length,
+                itemBuilder: (context, index) {
+                  final product = products[index];
+                  return Dismissible(
+                    key: Key(product.id.toString()),
+                    direction: DismissDirection.endToStart,
+                    background: _buildDeleteBackground(),
+                    confirmDismiss: (direction) async {
+                      return await _showDeleteDialog(product.id.toString());
+                    },
+                    onDismissed: (direction) {
+                      cartQuantityController
+                          .removeFromCart(product.id.toString());
+                    },
+                    child: _buildCartItem(product),
+                  );
+                },
+              );
+            }),
+          ),
+          _buildCheckoutSection(),
+        ],
       ),
     );
   }

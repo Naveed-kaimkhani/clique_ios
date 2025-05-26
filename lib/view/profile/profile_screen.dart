@@ -54,10 +54,7 @@ class ProfileScreenState extends State<ProfileScreen>
                         posts: 1,
                         followers: 1,
                         following: 2,
-                        username: userController.userName.value.length > 20
-                            ? userController.userName.value.substring(0, 20) +
-                                '...'
-                            : userController.userName.value,
+                        username: userController.userName.value,
                       )),
                   SizedBox(height: size.height * 0.02),
                   Center(

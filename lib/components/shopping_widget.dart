@@ -5,6 +5,7 @@ import 'package:clique/components/shop_all_widget.dart';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/data/models/pop_stream_model.dart';
 import 'package:clique/data/models/product_model.dart';
+import 'package:clique/data/models/store_product.dart';
 import 'package:clique/routes/routes_name.dart';
 import 'package:clique/utils/utils.dart';
 import 'package:clique/view/product/product_listing_screen.dart';
@@ -49,21 +50,21 @@ class _ShoppingWidgetState extends State<ShoppingWidget> {
             )));
   }
 
-  Future<void> _navigateToProductDetails() async {
+  Future<void> _navigateToProductDetails(Product productCode) async {
     widget.onTap();
 
     try {
-      final ProductModel? matchingProduct =
-          _productViewModel.products.firstWhereOrNull(
-        (product) => product.id.toString() == widget.popstream.partyId,
-      );
+      // final ProductModel? matchingProduct =
+      //     _productViewModel.products.firstWhereOrNull(
+      //   (product) => product.id == product.id,
+      // );
 
-      ProductModel? product = matchingProduct;
+      // ProductModel? product = matchingProduct;
       setState(() {
         _isLoading = true;
       });
-      product ??= await _productViewModel.fetchProductByCode(
-          widget.popstream.storeProduct.first.products.first.sku);
+      ProductModel? product =
+          await _productViewModel.fetchProductByCode(productCode.sku);
       // If not found locally, fetch from API
 
       if (product != null) {
@@ -125,19 +126,36 @@ class _ShoppingWidgetState extends State<ShoppingWidget> {
               //   child: OrganicTreatsWidget(popstream: widget.popstream),
               //   width: widget.screenWidth * 0.65,
               // ),
-              _buildButton(
-                onTap: _navigateToAllProducts,
-                width: widget.screenWidth * 0.35,
+              // _buildButton(
+              //   onTap: _navigateToProductDetails(),
+              //   width: widget.screenWidth * 0.65,
+              //   child:
+              // ),
+              Container(
+                height: widget.screenHeight * 0.14,
+                width: widget.screenWidth * 0.65,
+                padding: EdgeInsets.all(widget.screenWidth * 0.02),
+                margin:
+                    EdgeInsets.symmetric(horizontal: widget.screenWidth * 0.02),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: const [
+                    BoxShadow(color: Colors.black26, blurRadius: 10)
+                  ],
+                ),
                 child: CarouselSlider.builder(
                   itemCount:
                       widget.popstream.storeProduct.first.products.length,
                   itemBuilder: (context, index, realIndex) {
                     final product =
                         widget.popstream.storeProduct.first.products[index];
-                    return OrganicTreatsWidget(
-                      popstream: widget.popstream,
-                            product: product, // Pass this to customize
-
+                    return GestureDetector(
+                      onTap: () => _navigateToProductDetails(product),
+                      child: OrganicTreatsWidget(
+                        popstream: widget.popstream,
+                        product: product, // Pass this to customize
+                      ),
                     );
                   },
                   options: CarouselOptions(
@@ -150,7 +168,7 @@ class _ShoppingWidgetState extends State<ShoppingWidget> {
                     scrollDirection: Axis.horizontal,
                   ),
                 ),
-              ),
+              )
             ],
           ),
         ),

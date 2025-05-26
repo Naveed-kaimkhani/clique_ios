@@ -20,7 +20,7 @@ class CartStorage {
     if (encodedProducts == null) return [];
 
     return encodedProducts.map((encodedProduct) {
-      return ProductModel.fromJson(jsonDecode(encodedProduct));
+      return ProductModel.fromMap(jsonDecode(encodedProduct));
     }).toList();
   }
 

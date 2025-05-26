@@ -113,107 +113,114 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
     _messagesSubscription?.cancel();
     _scrollController.dispose();
     Get.delete<GroupChatViewModel>();
-
     // controller.hid
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        final controller = Get.find<ChatViewModel>();
-        if (controller.isReactionSheetVisible.value) {
-          controller.hideReactionSheet();
-        }
-      },
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            GroupAppBar(
-              profile: widget.profileImage,
-              title: widget.groupName,
-              memberCount: widget.memberCount,
-              guid: widget.guid,
-              uid: widget.uid,
-            ),
-            Expanded(
-              child: StreamBuilder<List<MessageModel>>(
-                stream: viewModel.messagesStream,
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return Center(child: Text(snapshot.error.toString()));
+    return WillPopScope(
+         onWillPop: () async {
+      // Close the keyboard when back button is pressed
+      FocusScope.of(context).unfocus();
+      return true; // Allow navigation
+    },
+      child: GestureDetector(
+        onTap: () {
+          final controller = Get.find<ChatViewModel>();
+          if (controller.isReactionSheetVisible.value) {
+            controller.hideReactionSheet();
+          }
+        },
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              GroupAppBar(
+                profile: widget.profileImage,
+                title: widget.groupName,
+                memberCount: widget.memberCount,
+                guid: widget.guid,
+                uid: widget.uid,
+              ),
+              Expanded(
+                child: StreamBuilder<List<MessageModel>>(
+                  stream: viewModel.messagesStream,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Center(child: Text(snapshot.error.toString()));
+                    }
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return LoadMessageAnimation();
+                    }
+                    if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Center(child: Text("No messages found"));
+                    }
+      
+                    final messages = snapshot.data!;
+      
+                    return ListView.builder(
+                      reverse: true,
+                      controller: _scrollController,
+                      padding: EdgeInsets.all(16),
+                      itemCount:
+                          (_isLoadingOlderMessages ? 1 : 0) + messages.length,
+                      itemBuilder: (context, index) {
+                        if (_isLoadingOlderMessages && index == 0) {
+                          return const Center(
+                              child: CircularProgressIndicator.adaptive());
+                        }
+      
+                        final messageIndex =
+                            index - (_isLoadingOlderMessages ? 1 : 0);
+      
+                        // ✅ Safety check
+                        if (messageIndex < 0 || messageIndex >= messages.length) {
+                          return const SizedBox.shrink();
+                        }
+                        return ChatMessageWidget(
+                          message: messages[messageIndex],
+                          enableSwipe: true,
+                          enableReactions: true,
+                          showReplyPreview: true,
+                          streamThreadMessagesCallback: (id) =>
+                              viewModel.streamThreadMessages(id),
+                        );
+                        // return ChatMessageWidget(message: messages[messageIndex]);
+                      },
+                    );
+                  },
+                ),
+              ),
+              ChatInputWidget(
+                onSend: (message, replyingTo) {
+                  final ChatViewModel chatViewModel = Get.find<ChatViewModel>();
+                  final repliedMessage = chatViewModel.repliedMessage.value;
+      
+                  if (repliedMessage == null) {
+                    // No reply context; send a regular message
+                    viewModel.sendMessage(message).then((_) {
+                      _scrollToBottom();
+                      setState(() {
+                        viewModel.replyingTo.value = null;
+                      });
+                    });
+                  } else {
+                    // Replying to an original message; send as a thread
+                    viewModel
+                        .sendThread(message, int.parse(repliedMessage.id))
+                        .then((_) {
+                      _scrollToBottom();
+                      setState(() {
+                        viewModel.replyingTo.value = null;
+                      });
+                    });
                   }
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return LoadMessageAnimation();
-                  }
-                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Center(child: Text("No messages found"));
-                  }
-
-                  final messages = snapshot.data!;
-
-                  return ListView.builder(
-                    reverse: true,
-                    controller: _scrollController,
-                    padding: EdgeInsets.all(16),
-                    itemCount:
-                        (_isLoadingOlderMessages ? 1 : 0) + messages.length,
-                    itemBuilder: (context, index) {
-                      if (_isLoadingOlderMessages && index == 0) {
-                        return const Center(child: CircularProgressIndicator.adaptive());
-                      }
-
-                      final messageIndex =
-                          index - (_isLoadingOlderMessages ? 1 : 0);
-
-                      // ✅ Safety check
-                      if (messageIndex < 0 || messageIndex >= messages.length) {
-                        return const SizedBox.shrink();
-                      }
-                      return ChatMessageWidget(
-                        message: messages[messageIndex],
-                        enableSwipe: true,
-                        enableReactions: true,
-                        showReplyPreview: true,
-                        streamThreadMessagesCallback: (id) =>
-                            viewModel.streamThreadMessages(id),
-                      );
-                      // return ChatMessageWidget(message: messages[messageIndex]);
-                    },
-                  );
                 },
               ),
-            ),
-            ChatInputWidget(
-              onSend: (message, replyingTo) {
-                final ChatViewModel chatViewModel = Get.find<ChatViewModel>();
-                final repliedMessage = chatViewModel.repliedMessage.value;
-
-                if (repliedMessage == null) {
-                  // No reply context; send a regular message
-                  viewModel.sendMessage(message).then((_) {
-                    _scrollToBottom();
-                    setState(() {
-                      viewModel.replyingTo.value = null;
-                    });
-                  });
-                } else {
-                  // Replying to an original message; send as a thread
-                  viewModel
-                      .sendThread(message, int.parse(repliedMessage.id))
-                      .then((_) {
-                    _scrollToBottom();
-                    setState(() {
-                      viewModel.replyingTo.value = null;
-                    });
-                  });
-                }
-              },
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

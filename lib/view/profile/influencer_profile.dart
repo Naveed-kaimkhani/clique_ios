@@ -1,5 +1,3 @@
-
-
 import 'package:clique/components/product_section.dart';
 import 'package:clique/constants/index.dart';
 import 'package:clique/controller/user_controller.dart';
@@ -21,14 +19,14 @@ class InfluencerProfileState extends State<InfluencerProfile>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final UserController userController = Get.find<UserController>();
-  
-  late InfluencerModel influencer; 
+
+  late InfluencerModel influencer;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    
+
     // Get influencer data from arguments
     influencer = Get.arguments as InfluencerModel;
   }
@@ -51,9 +49,9 @@ class InfluencerProfileState extends State<InfluencerProfile>
         bottom: false,
         child: Scaffold(
           appBar: AppBarWithBackIcon(
-          title: "Influencer Profile",
-          // icon: Icons.arrow_back_ios,
-        ),
+            title: "User Profile",
+            // icon: Icons.arrow_back_ios,
+          ),
           backgroundColor: Colors.white,
           body: NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -64,12 +62,14 @@ class InfluencerProfileState extends State<InfluencerProfile>
                     children: [
                       SizedBox(height: size.height * 0.02),
                       UserProfileCard(
-                        posts:influencer.postCount,
+                        posts: influencer.postCount,
                         followers: influencer.followersCount,
                         following: 1,
-                        profileImage: influencer.profilePhoto, // Use influencer data from Get.arguments
-                        isInfluencer: true, 
-                        username: influencer.name, // Use influencer data from Get.arguments
+                        profileImage: influencer
+                            .profilePhoto, // Use influencer data from Get.arguments
+                        isInfluencer: true,
+                        username: influencer
+                            .name, 
                       ),
                       SizedBox(height: size.height * 0.02),
                     ],
@@ -120,11 +120,15 @@ class InfluencerProfileState extends State<InfluencerProfile>
                 //     PostWidget(),
                 //   ],
                 // ),
-                InfluencerChatList(influencerId: influencer.id,),
+                InfluencerChatList(
+                  influencerId: influencer.id,
+                ),
 
                 // Products Tab Content
-           
-                  ProductsSection(userEmail:influencer.email,),
+
+                ProductsSection(
+                  userEmail: influencer.email,
+                ),
               ],
             ),
           ),
@@ -140,7 +144,8 @@ class _SliverTabBarDelegate extends SliverPersistentHeaderDelegate {
   _SliverTabBarDelegate(this.tabBar);
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
       color: Colors.white,
       child: tabBar,

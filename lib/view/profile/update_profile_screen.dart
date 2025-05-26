@@ -7,6 +7,7 @@ import 'package:clique/components/profile_screen_appbar.dart';
 import 'package:clique/constants/index.dart';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/utils/utils.dart';
+import 'package:clique/view/discover/appBar_backicon.dart';
 import 'package:clique/view/home/home_screen.dart';
 import 'package:clique/view_model/auth_viewmodel.dart';
 import 'package:flutter/material.dart';
@@ -97,6 +98,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                 'cover_photo', coverPhoto!.path))
             : userController.coverPhoto.value;
         var response = await request.send();
+      
+
         if (response.statusCode == 200) {
           final responseBody = await response.stream.bytesToString();
           final Map<String, dynamic> responseData = jsonDecode(responseBody);
@@ -135,225 +138,201 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: ProfileScreenAppbar(
-            title: 'Edit Profile', icon: Icons.arrow_back_ios),
-        body: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  SizedBox(height: 20),
-                  // Profile Photo Picker
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Column(
-                        children: [
-                          GestureDetector(
-                            onTap: () => pickImage(true),
-                            child: ClipOval(
-                              child: Container(
-                                width: 100,
-                                height: 100,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[300],
-                                  image: profilePhoto != null
-                                      ? DecorationImage(
-                                          image: FileImage(profilePhoto!),
-                                          fit: BoxFit.cover,
-                                        )
-                                      : (userController
-                                              .profilePhoto.value.isNotEmpty
-                                          ? DecorationImage(
-                                              image: NetworkImage(userController
-                                                  .profilePhoto.value),
-                                              fit: BoxFit.cover,
-                                            )
-                                          : null),
-                                ),
-                                child: profilePhoto == null &&
-                                        userController
-                                            .profilePhoto.value.isEmpty
-                                    ? Icon(
-                                        Icons.camera_alt,
-                                        size: 50,
-                                        color: Colors.grey[600],
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBarWithBackIcon(
+        title: "Edit Profile",
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(height: 20),
+                // Profile Photo Picker
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      children: [
+                        GestureDetector(
+                          onTap: () => pickImage(true),
+                          child: ClipOval(
+                            child: Container(
+                              width: 100,
+                              height: 100,
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                image: profilePhoto != null
+                                    ? DecorationImage(
+                                        image: FileImage(profilePhoto!),
+                                        fit: BoxFit.cover,
                                       )
-                                    : null,
+                                    : (userController
+                                            .profilePhoto.value.isNotEmpty
+                                        ? DecorationImage(
+                                            image: NetworkImage(userController
+                                                .profilePhoto.value),
+                                            fit: BoxFit.cover,
+                                          )
+                                        : null),
                               ),
+                              child: profilePhoto == null &&
+                                      userController.profilePhoto.value.isEmpty
+                                  ? Icon(
+                                      Icons.camera_alt,
+                                      size: 50,
+                                      color: Colors.grey[600],
+                                    )
+                                  : null,
                             ),
                           ),
-
-                          SizedBox(height: 10),
-                          Text("Select Profile Photo"),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          // GestureDetector(
-                          //   onTap: () => pickImage(false),
-                          //   child: ClipOval(
-                          //     child: Container(
-                          //       width: 100, // Same size as profile photo
-                          //       height: 100, // Same size as profile photo
-                          //       decoration: BoxDecoration(
-                          //         color: Colors.grey[300],
-                          //         image: coverPhoto != null
-                          //             ? DecorationImage(
-                          //                 image: FileImage(coverPhoto!),
-                          //                 fit: BoxFit.cover)
-                          //             : null,
-                          //       ),
-                          //       child: coverPhoto == null
-                          //           ? Icon(Icons.camera_alt, size: 50)
-                          //           : null,
-                          //     ),
-                          //   ),
-                          // ),
-                          GestureDetector(
-                            onTap: () => pickImage(false),
-                            child: ClipOval(
-                              child: Container(
-                                width: 100,
-                                height: 100,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[300],
-                                  image: coverPhoto != null
-                                      ? DecorationImage(
-                                          image: FileImage(coverPhoto!),
-                                          fit: BoxFit.cover,
-                                        )
-                                      : (userController
-                                              .coverPhoto.value.isNotEmpty
-                                          ? DecorationImage(
-                                              image: NetworkImage(userController
-                                                  .coverPhoto.value),
-                                              fit: BoxFit.cover,
-                                            )
-                                          : null),
-                                ),
-                                child: coverPhoto == null &&
-                                        userController.coverPhoto.value.isEmpty
-                                    ? Icon(
-                                        Icons.camera_alt,
-                                        size: 50,
-                                        color: Colors.grey[600],
+                        ),
+                        SizedBox(height: 10),
+                        Text("Select Profile Photo"),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        GestureDetector(
+                          onTap: () => pickImage(false),
+                          child: ClipOval(
+                            child: Container(
+                              width: 100,
+                              height: 100,
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                image: coverPhoto != null
+                                    ? DecorationImage(
+                                        image: FileImage(coverPhoto!),
+                                        fit: BoxFit.cover,
                                       )
-                                    : null,
+                                    : (userController
+                                            .coverPhoto.value.isNotEmpty
+                                        ? DecorationImage(
+                                            image: NetworkImage(userController
+                                                .coverPhoto.value),
+                                            fit: BoxFit.cover,
+                                          )
+                                        : null),
                               ),
+                              child: coverPhoto == null &&
+                                      userController.coverPhoto.value.isEmpty
+                                  ? Icon(
+                                      Icons.camera_alt,
+                                      size: 50,
+                                      color: Colors.grey[600],
+                                    )
+                                  : null,
                             ),
                           ),
+                        ),
+                        SizedBox(height: 10),
+                        Text("Select Cover Photo"),
+                      ],
+                    ),
+                  ],
+                ),
+                SizedBox(height: 60),
 
-                          SizedBox(height: 10),
-                          Text("Select Cover Photo"),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Name",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    CustomTextField(
+                      hintText: "Name",
+                      controller: nameController,
+                    ),
+                  ],
+                ),
+
+                SizedBox(height: 20),
+
+                // Phone Field
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Phone",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    CustomTextField(
+                      keyboardType: TextInputType.number,
+                      hintText: phoneController.text.isEmpty
+                          ? "(123) 456-7890"
+                          : phoneController.text,
+                      controller: phoneController,
+                    ),
+                  ],
+                ),
+                SizedBox(height: Get.height * 0.02),
+
+                SizedBox(height: 50),
+
+                // Update Profile Button
+                AuthButton(
+                  buttonText: 'Update Profile',
+                  isLoading: isLoading, // Pass the isLoading observable
+                  onPressed: updateUserProfile,
+                ),
+
+                SizedBox(height: 10),
+
+                Container(
+                  width: 160,
+                  height: 50,
+                  // margin: EdgeInsets.symmetric(horizontal: 40),
+                  child: Center(
+                    child: ElevatedButton(
+                      onPressed: () => _showDeleteAccountDialog(context),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red[50],
+                        foregroundColor: Colors.red,
+                        padding: EdgeInsets.symmetric(vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide(
+                              color: Colors.red.shade100, width: 1.5),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.delete_outline,
+                            size: 14,
+                            color: AppColors.appColor,
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            "Delete Account",
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.appColor),
+                          ),
                         ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 60),
-
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Name",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black,
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      CustomTextField(
-                        hintText: "Name",
-                        controller: nameController,
-                      ),
-                    ],
-                  ),
-
-                  SizedBox(height: 20),
-
-                  // Phone Field
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Phone",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black,
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      CustomTextField(
-                        keyboardType: TextInputType.number,
-                        hintText: phoneController.text.isEmpty
-                            ? "(123) 456-7890"
-                            : phoneController.text,
-                        controller: phoneController,
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: Get.height * 0.02),
-
-                  SizedBox(height: 50),
-
-                  // Update Profile Button
-                  AuthButton(
-                    buttonText: 'Update Profile',
-                    isLoading: isLoading, // Pass the isLoading observable
-                    onPressed: updateUserProfile,
-                  ),
-
-                  SizedBox(height: 10),
-
-                  Container(
-                    width: 160,
-                    height: 50,
-                    // margin: EdgeInsets.symmetric(horizontal: 40),
-                    child: Center(
-                      child: ElevatedButton(
-                        onPressed: () => _showDeleteAccountDialog(context),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red[50],
-                          foregroundColor: Colors.red,
-                          padding: EdgeInsets.symmetric(vertical: 15),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            side: BorderSide(
-                                color: Colors.red.shade100, width: 1.5),
-                          ),
-                          elevation: 0,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.delete_outline,
-                              size: 14,
-                              color: AppColors.appColor,
-                            ),
-                            SizedBox(width: 10),
-                            Text(
-                              "Delete Account",
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.appColor),
-                            ),
-                          ],
-                        ),
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

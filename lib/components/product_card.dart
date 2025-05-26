@@ -1,13 +1,10 @@
-import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clique/constants/app_colors.dart';
 import 'package:clique/routes/routes_name.dart';
 import 'package:clique/utils/utils.dart';
 import 'package:clique/view_model/favorite_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:like_button/like_button.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ProductCard extends StatelessWidget {
@@ -81,7 +78,6 @@ class ProductCard extends StatelessWidget {
                   'uid': uid,
                   'backgroundImage': backgroundImage,
                   'productName': productName,
-
                   'product_code': productCode,
                   'productDescription': productDescription,
                   'price': price,
@@ -130,38 +126,6 @@ class ProductCard extends StatelessWidget {
               ),
             ),
           ),
-
-          Positioned(
-            top: padding,
-            right: padding,
-            child: Container(
-              padding: EdgeInsets.all(padding * 0.5),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.8),
-                shape: BoxShape.circle,
-              ),
-              // child: SvgPicture.asset(AppSvgIcons.bag, color: AppColors.black),
-              child: Obx(() {
-                final isLiked = favoriteController.isFavorite(uid);
-                return LikeButton(
-                  size: size.width * 0.06,
-                  isLiked: isLiked,
-                  onTap: (bool liked) async {
-                    favoriteController.toggleFavorite(uid);
-                    return !liked;
-                  },
-                  likeBuilder: (bool liked) {
-                    return Icon(
-                      liked ? Icons.favorite : Icons.favorite_border,
-                      color: liked ? AppColors.appColor : Colors.black,
-                      size: size.width * 0.07,
-                    );
-                  },
-                );
-              }),
-            ),
-          ),
-// Product Details (Bottom)
           Positioned(
             bottom: 5,
             left: 0,
@@ -181,7 +145,7 @@ class ProductCard extends StatelessWidget {
                     'unit': unit,
                     'categories': categories,
                     'size': weight,
-                    'tdid':tdid,
+                    'tdid': tdid,
                   },
                 );
               },
