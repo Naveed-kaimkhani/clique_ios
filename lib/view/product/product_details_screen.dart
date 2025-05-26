@@ -150,7 +150,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _iconButton(Icons.arrow_back, () => Get.back()),
+          _iconButton(Icons.arrow_back_ios, () => Get.back()),
         ],
       ),
     );

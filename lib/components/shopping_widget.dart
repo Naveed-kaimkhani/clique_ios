@@ -1,6 +1,5 @@
-import 'dart:developer';
-
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:clique/components/organic_treats_widget.dart';
 import 'package:clique/components/shop_all_widget.dart';
 import 'package:clique/controller/user_controller.dart';
@@ -63,7 +62,8 @@ class _ShoppingWidgetState extends State<ShoppingWidget> {
       setState(() {
         _isLoading = true;
       });
-      product ??= await _productViewModel.fetchProductByCode(widget.popstream.storeProduct.first.products.first.sku);
+      product ??= await _productViewModel.fetchProductByCode(
+          widget.popstream.storeProduct.first.products.first.sku);
       // If not found locally, fetch from API
 
       if (product != null) {
@@ -120,10 +120,36 @@ class _ShoppingWidgetState extends State<ShoppingWidget> {
                 ),
                 width: widget.screenWidth * 0.2,
               ),
+              // _buildButton(
+              //   onTap: _navigateToProductDetails,
+              //   child: OrganicTreatsWidget(popstream: widget.popstream),
+              //   width: widget.screenWidth * 0.65,
+              // ),
               _buildButton(
-                onTap: _navigateToProductDetails,
-                child: OrganicTreatsWidget(popstream: widget.popstream),
-                width: widget.screenWidth * 0.65,
+                onTap: _navigateToAllProducts,
+                width: widget.screenWidth * 0.35,
+                child: CarouselSlider.builder(
+                  itemCount:
+                      widget.popstream.storeProduct.first.products.length,
+                  itemBuilder: (context, index, realIndex) {
+                    final product =
+                        widget.popstream.storeProduct.first.products[index];
+                    return OrganicTreatsWidget(
+                      popstream: widget.popstream,
+                            product: product, // Pass this to customize
+
+                    );
+                  },
+                  options: CarouselOptions(
+                    height: widget.screenHeight * 0.14,
+                    viewportFraction: 1.0,
+                    autoPlay: true,
+                    autoPlayInterval: Duration(seconds: 3),
+                    autoPlayAnimationDuration: Duration(milliseconds: 800),
+                    enableInfiniteScroll: true,
+                    scrollDirection: Axis.horizontal,
+                  ),
+                ),
               ),
             ],
           ),

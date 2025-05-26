@@ -61,6 +61,7 @@ dependencies:
   video_compress: ^3.1.4
   intl: ^0.19.0
   fluttertoast: ^8.2.12
+  carousel_slider: ^5.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

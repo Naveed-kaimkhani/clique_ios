@@ -77,27 +77,7 @@ class OrderViewModel extends GetxController {
           variantGroupId: "",
         );
       }).toList();
-      // for (var product in productDetails) {
-      //   // log('ProductModel => ${product.id}');
-
-      //   // log('ProductModel => ${product.cost}');
-
-      //   // log('tdid kya ahri hy => ${product.tdid}');
-
-      //   // log('ProductModel => ${product.productTitle}');
-
-      //   // log('ProductModel => ${product.unit}');
-
-      //   // log('ProductModel => ${product.productCode}');
-
-      //   // log('ProductModel => ${product.productWeight}');
-
-      //   // log('tdid kya ahri hy => ${product.tdid}');
-
-      //   // log('ProductModel => ${product.productDesc}');
-
-      //   // log('ProductModel => ${product.imageUrls}');
-      // }
+    
       var order = Order(
         customerId: userController.uid.toString(), // Use the actual customer ID
         firstName: userController.userName.value, // Use the actual first name
@@ -211,27 +191,7 @@ class OrderViewModel extends GetxController {
           variantGroupId: "",
         );
       }).toList();
-      // for (var product in productDetails) {
-      //   log('ProductModel => ${product.id}');
 
-      //   log('ProductModel => ${product.cost}');
-
-      //   log('tdid kya ahri hy => ${product.tdid}');
-
-      //   log('ProductModel => ${product.productTitle}');
-
-      //   log('ProductModel => ${product.unit}');
-
-      //   log('ProductModel => ${product.productCode}');
-
-      //   log('ProductModel => ${product.productWeight}');
-
-      //   log('tdid kya ahri hy => ${product.tdid}');
-
-      //   log('ProductModel => ${product.productDesc}');
-
-      //   log('ProductModel => ${product.imageUrls}');
-      // }
       var order = Order(
           customerId:
               userController.uid.toString(), // Use the actual customer ID
@@ -239,30 +199,9 @@ class OrderViewModel extends GetxController {
           lastName: "", // Use the actual last name
           phone: userController.phone.value, // Use the actual phone number
           address: address,
-          // transactions: [
-          //   Transaction(
-          //     tdid: cartQuantityController.products.first.tdid ?? "",
-          //     quantity: cartQuantityController.quantity.value,
-          //   )
-          // ],
+        
           transactions: transactions,
-          // productDetails: [
-          //   ProductModel(
-          //     id: cartQuantityController.products.first.id,
-          //     productWeight: cartQuantityController.products.first.productWeight,
-          //     productCode: cartQuantityController.products.first.productCode,
-          //     unit: cartQuantityController.products.first.unit,
-          //     productTitle: cartQuantityController.products.first.productTitle,
-          //     productDesc: cartQuantityController.products.first.productDesc,
-          //     imageUrls: cartQuantityController.products.first.imageUrls,
-          //     cost: cartQuantityController.products.first.cost,
-          //     brandName: "",
-          //     msrp: 0,
-          //     thumbnailUrl: "",
-          //     categories: "",
-          //     variantGroupId: "",
-          //   )
-          // ],
+      
           productDetails: productDetails);
 
       final url = Uri.parse(
