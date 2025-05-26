@@ -13,8 +13,11 @@ class ChatMessageWidget extends StatelessWidget {
   final bool enableSwipe;
   final bool enableReactions;
   final bool showReplyPreview;
-  final Stream<List<MessageModel>> Function(String parentMessageId)?
-      streamThreadMessagesCallback;
+  // final Stream<List<MessageModel>> Function(String parentMessageId)?
+  //     streamThreadMessagesCallback;
+
+final Future<List<MessageModel>> Function(String parentMessageId)?
+    fetchThreadMessagesCallback;
 
   ChatMessageWidget({
     Key? key,
@@ -22,7 +25,7 @@ class ChatMessageWidget extends StatelessWidget {
     this.enableSwipe = true,
     this.enableReactions = true,
     this.showReplyPreview = true,
-    this.streamThreadMessagesCallback,
+    this.fetchThreadMessagesCallback,
   }) : super(key: key);
 
   final chatViewModel = Get.find<ChatViewModel>();
@@ -84,71 +87,67 @@ class ChatMessageWidget extends StatelessWidget {
                       child: _buildMessageContent(context, message),
                     ),
 
-                  // Replies section
-                  if (message.parentId == null && showReplyPreview)
-                    StreamBuilder<List<MessageModel>>(
-                      stream: streamThreadMessagesCallback != null
-                          ? streamThreadMessagesCallback!(message.id)
-                          : null,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Padding(
-                            padding: EdgeInsets.all(6.0),
-                            child: Center(
-                              child: SizedBox(
-                                width: 20,
-                                height: 20,
-                                child:
-                                    CircularProgressIndicator.adaptive(backgroundColor: Colors.white, strokeWidth: 2),
-                              ),
-                            ),
-                          );
-                        } else if (snapshot.hasError) {
-                          return Padding(
-                            padding: const EdgeInsets.all(6.0),
-                            child: Text(
-                              'Error loading replies',
-                              style: TextStyle(
-                                color: Colors.red,
-                                fontSize: 12,
-                              ),
-                            ),
-                          );
-                        } else if (!snapshot.hasData ||
-                            snapshot.data!.isEmpty) {
-                          return const SizedBox();
-                        } else {
-                          return Column(
-                            children: [
-                              // Add dividers between replies
-                              ...List<Widget>.generate(
-                                  snapshot.data!.length * 2 - 1, (index) {
-                                if (index.isOdd) {
-                                  return const Divider(
-                                    height: 1,
-                                    thickness: 1,
-                                    indent: 12,
-                                    endIndent: 12,
-                                    color: Colors.grey,
-                                  );
-                                }
-                                return _buildReplyBubble(
-                                  context,
-                                  snapshot.data![index ~/ 2],
-                                );
-                              }),
-                            ],
-                          );
-                        }
-                      },
-                    ),
-                ],
+              
+if (message.parentId == null && showReplyPreview)
+  FutureBuilder<List<MessageModel>>(
+    future: fetchThreadMessagesCallback != null
+        ? fetchThreadMessagesCallback!(message.id)
+        : Future.value([]),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return const Padding(
+          padding: EdgeInsets.all(6.0),
+          child: Center(
+            child: SizedBox(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator.adaptive(
+                backgroundColor: Colors.white,
+                strokeWidth: 2,
               ),
             ),
+          ),
+        );
+      } else if (snapshot.hasError) {
+        return Padding(
+          padding: const EdgeInsets.all(6.0),
+          child: Text(
+            'Error loading replies',
+            style: TextStyle(
+              color: Colors.red,
+              fontSize: 12,
+            ),
+          ),
+        );
+      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+        return const SizedBox();
+      } else {
+        return Column(
+          children: [
+            ...List<Widget>.generate(snapshot.data!.length * 2 - 1, (index) {
+              if (index.isOdd) {
+                return const Divider(
+                  height: 1,
+                  thickness: 1,
+                  indent: 12,
+                  endIndent: 12,
+                  color: Colors.grey,
+                );
+              }
+              return _buildReplyBubble(
+                context,
+                snapshot.data![index ~/ 2],
+              );
+            }),
+          ],
+        );
+      }
+    },
+  ),
+
         ],
       ),
-    );
+    )]));
   }
 
   Widget _buildReplyBubble(BuildContext context, MessageModel message) {
@@ -264,4 +263,3 @@ class ChatMessageWidget extends StatelessWidget {
     );
   }
 }
-

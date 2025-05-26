@@ -409,8 +409,8 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                         enableSwipe: true,
                         enableReactions: true,
                         showReplyPreview: true,
-                        streamThreadMessagesCallback: (id) =>
-                            viewModel.streamThreadMessages(id),
+                        fetchThreadMessagesCallback: (id) =>
+                            viewModel.fetchThreads(id),
                       );
                       // return ChatMessageWidget(message: messages[messageIndex]);
                     },
