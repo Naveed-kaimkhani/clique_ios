@@ -1,4 +1,5 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:clique/components/organic_treats_widget.dart';
 import 'package:clique/components/shop_all_widget.dart';
@@ -54,12 +55,6 @@ class _ShoppingWidgetState extends State<ShoppingWidget> {
     widget.onTap();
 
     try {
-      // final ProductModel? matchingProduct =
-      //     _productViewModel.products.firstWhereOrNull(
-      //   (product) => product.id == product.id,
-      // );
-
-      // ProductModel? product = matchingProduct;
       setState(() {
         _isLoading = true;
       });

@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:clique/components/auth_button.dart';
 import 'package:clique/components/custom_textfield.dart';
-import 'package:clique/components/profile_screen_appbar.dart';
 import 'package:clique/constants/index.dart';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/utils/utils.dart';
@@ -98,7 +97,28 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                 'cover_photo', coverPhoto!.path))
             : userController.coverPhoto.value;
         var response = await request.send();
-      
+       
+        if (response.statusCode == 422) {
+          final responseBody = await response.stream.bytesToString();
+          final Map<String, dynamic> responseData = jsonDecode(responseBody);
+
+          // Optional: log full response
+          log(responseBody);
+
+          // Extract specific phone error message if available
+          String errorMessage = "Something went wrong.";
+          if (responseData.containsKey('errors') &&
+              responseData['errors']['phone'] != null) {
+            final List phoneErrors = responseData['errors']['phone'];
+            errorMessage = phoneErrors.isNotEmpty
+                ? phoneErrors.first
+                : responseData["message"];
+          } else if (responseData.containsKey('message')) {
+            errorMessage = responseData["message"];
+          }
+
+          Utils.showCustomSnackBar("Error", errorMessage, ContentType.warning);
+        }
 
         if (response.statusCode == 200) {
           final responseBody = await response.stream.bytesToString();

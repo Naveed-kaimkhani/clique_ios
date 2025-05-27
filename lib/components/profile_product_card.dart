@@ -1,11 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clique/data/models/product_model.dart';
 import 'package:clique/routes/routes_name.dart';
+import 'package:clique/utils/utils.dart';
+import 'package:clique/view_model/product_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:clique/constants/app_colors.dart';
-import 'package:clique/constants/app_svg_icons.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
+
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 class ProfileProductCard extends StatelessWidget {
   final String uid;
@@ -17,12 +19,11 @@ class ProfileProductCard extends StatelessWidget {
   final String discount;
   final String tdid;
   final String size;
-
   final String categories;
-
   final String unit;
   final Color textColor;
 
+  final ProductViewModel _productViewModel = Get.put(ProductViewModel());
   ProfileProductCard({
     required this.size,
     required this.backgroundImage,
@@ -52,26 +53,32 @@ class ProfileProductCard extends StatelessWidget {
     final fontSizeTitle = screenWidth * 0.05; // 5% of screen width
     final fontSizeDescription = screenWidth * 0.03; // 3% of screen width
     final fontSizePrice = screenWidth * 0.04; // 4% of screen width
-    final fontSizeOldPrice = screenWidth * 0.035; // 3.5% of screen width
     // final fontSizeDiscount = screenWidth * 0.03; // 3% of screen width
 
     return GestureDetector(
-      onTap: () => Get.toNamed(
-        RouteName.productDetailsScreen,
-        arguments: {
-          'uid': uid,
-          'backgroundImage': backgroundImage,
-          'productName': productName,
-          'productDescription': productDescription,
-          'price': price,
-          'oldPrice': oldPrice,
-          'discount': discount,
-          'unit': unit,
-          'categories': categories,
-          'size': size,
-          'tdid': tdid,
-        },
-      ),
+      onTap: () async {
+// apply searching here
+        Get.dialog(
+          const Center(
+              child: CircularProgressIndicator.adaptive(
+            backgroundColor: Colors.white,
+          )),
+          barrierDismissible: false,
+        );
+        ProductModel? product = await _productViewModel.fetchProductByCode(uid);
+        // If not found locally, fetch from API
+        Get.back();
+        if (product != null) {
+          Get.toNamed(
+            RouteName.productDetailsScreen,
+            arguments: _buildProductArguments(product),
+          );
+        } else {
+          Utils.showCustomSnackBar('Not Found',
+              'Product not found for this id.', ContentType.failure);
+          //  Get.showSnackbar()
+        }
+      },
       child: Container(
         width: cardWidth,
         height: cardHeight,
@@ -125,21 +132,6 @@ class ProfileProductCard extends StatelessWidget {
               ),
             ),
 
-            // Cart Icon (Top Right)
-            Positioned(
-              top: padding,
-              right: padding,
-              child: Container(
-                padding: EdgeInsets.all(padding * 0.5),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.8),
-                  shape: BoxShape.circle,
-                ),
-                child:
-                    SvgPicture.asset(AppSvgIcons.bag, color: AppColors.black),
-              ),
-            ),
-
             // Product Details (Bottom)
             Positioned(
               bottom: 0,
@@ -164,7 +156,7 @@ class ProfileProductCard extends StatelessWidget {
                     ),
                     SizedBox(height: padding * 0.5),
                     Text(
-                      productDescription,
+                      Utils.removeHtmlTags(productDescription),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -180,7 +172,7 @@ class ProfileProductCard extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              "\$${price.toStringAsFixed(2)}",
+                              "\$${price}",
                               style: TextStyle(
                                 color: textColor,
                                 fontSize: fontSizePrice,
@@ -188,57 +180,8 @@ class ProfileProductCard extends StatelessWidget {
                               ),
                             ),
                             SizedBox(width: padding * 0.5),
-                            // Text(
-                            //   "\$${oldPrice.toStringAsFixed(2)}",
-                            //   style: TextStyle(
-                            //     color: textColor.withOpacity(0.7),
-                            //     fontSize: fontSizeOldPrice,
-                            //     decoration: TextDecoration.lineThrough,
-                            //   ),
-                            // ),
-                            Stack(
-                              children: [
-                                Text(
-                                  "\$${oldPrice.toStringAsFixed(2)}",
-                                  style: TextStyle(
-                                    color: textColor.withOpacity(0.7),
-                                    fontSize: fontSizeOldPrice,
-                                  ),
-                                ),
-                                Positioned(
-                                  top: fontSizeOldPrice *
-                                      0.8, // Positioning the line at the center of text
-                                  left: 0,
-                                  right: 0,
-                                  child: Container(
-                                    height: 1, // Thickness of line
-                                    color:
-                                        Colors.white, // Custom color for line
-                                  ),
-                                ),
-                              ],
-                            )
                           ],
                         ),
-                        // Discount Badge
-                        // Container(
-                        //   padding: EdgeInsets.symmetric(
-                        //     horizontal: padding * 0.5,
-                        //     vertical: padding * 0.25,
-                        //   ),
-                        //   decoration: BoxDecoration(
-                        //     gradient: AppColors.appGradientColors,
-                        //     borderRadius: BorderRadius.circular(8),
-                        //   ),
-                        //   child: Text(
-                        //     discount,
-                        //     style: TextStyle(
-                        //       color: Colors.white,
-                        //       fontSize: fontSizeDiscount,
-                        //       fontWeight: FontWeight.bold,
-                        //     ),
-                        //   ),
-                        // ),
                       ],
                     ),
                   ],
@@ -249,5 +192,21 @@ class ProfileProductCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Map<String, dynamic> _buildProductArguments(ProductModel product) {
+    return {
+      'uid': product.id.toString(),
+      'backgroundImage': product.imageUrls,
+      'productName': product.productTitle,
+      'productDescription': product.productDesc,
+      'price': product.cost,
+      'oldPrice': product.msrp,
+      'discount': '',
+      'unit': product.unit,
+      'categories': product.categories,
+      'size': product.productWeight,
+      'tdid': product.tdid,
+    };
   }
 }

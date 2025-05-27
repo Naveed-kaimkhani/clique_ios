@@ -46,7 +46,6 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     // Get screen width and height using MediaQuery
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
@@ -104,9 +103,6 @@ class ProductCard extends StatelessWidget {
                       placeholder: (context, url) => LoadImageShimmer(),
                       errorWidget: (context, url, error) => Icon(Icons.error),
                     ),
-                    // Image.asset(backgroundImage.first),
-                    // Image.asset(
-                    //     "https://images.topdawg.com/25033042209.0.td_size_1.png"),
                     Container(
                       width: double.infinity,
                       height: 276,
