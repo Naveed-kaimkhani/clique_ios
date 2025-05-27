@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:clique/view_model/product_picker_viewmodel.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
@@ -237,6 +238,124 @@ class _UploadVideoState extends State<UploadVideo> {
           border: Border.all(color: Colors.grey),
           borderRadius: BorderRadius.circular(10)),
       child: Center(child: Icon(Icons.upload, size: 40)),
+    );
+  }
+// void openProductPickerBottomSheet() {
+//   final userController = Get.find<UserController>();
+//   final viewModel = Get.put(ProductPickerViewModel());
+
+//   Get.bottomSheet(
+//     Container(
+//       height: 500,
+//       color: Colors.white,
+//       padding: const EdgeInsets.all(16),
+//       child: Column(
+//         children: [
+//           const Text(
+//             "Select Products",
+//             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+//           ),
+//           const SizedBox(height: 10),
+
+//           // Search Field
+//           TextField(
+//             onChanged: (value) =>
+//                 viewModel.onSearchChanged(value, userController.token.value),
+//             decoration: InputDecoration(
+//               hintText: 'Search products...',
+//               prefixIcon: const Icon(Icons.search),
+//               border:
+//                   OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+//             ),
+//           ),
+//           const SizedBox(height: 10),
+
+//           Obx(() => Text(
+//                 "Selected: ${viewModel.selectedProducts.length}",
+//                 style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+//               )),
+//           const SizedBox(height: 10),
+
+//           // Product List
+//           Expanded(
+//             child: Obx(() {
+//               final productsToShow = viewModel.searchQuery.value.isEmpty
+//                   ? Get.find<UploadVideoViewModel>().products
+//                   : viewModel.searchResults;
+
+//               if (viewModel.isLoading.value &&
+//                   viewModel.searchQuery.value.isNotEmpty) {
+//                 return ListView.builder(
+//                   itemCount: 6,
+//                   itemBuilder: (_, __) => ListTile(
+//                     leading: shimmerBox(60, 60),
+//                     title: shimmerBox(100, 12),
+//                   ),
+//                 );
+//               } else if (productsToShow.isEmpty) {
+//                 return const Center(child: Text("No products found."));
+//               } else {
+//                 return ListView.builder(
+//                   itemCount: productsToShow.length,
+//                   itemBuilder: (context, index) {
+//                     final product = productsToShow[index];
+
+//                     return Obx(() {
+//                       final isSelected = viewModel.selectedProducts
+//                           .any((p) => p.id == product.id);
+
+//                       return ListTile(
+//                         leading: CachedNetworkImage(
+//                           imageUrl: product.imageUrls.first,
+//                           width: 60,
+//                           height: 60,
+//                           fit: BoxFit.cover,
+//                           placeholder: (_, __) =>
+//                               const Center(child: CircularProgressIndicator()),
+//                           errorWidget: (_, __, ___) =>
+//                               const Icon(Icons.error),
+//                         ),
+//                         title: Text(product.productTitle),
+//                         trailing: Checkbox(
+//                           value: isSelected,
+//                           onChanged: (_) =>
+//                               viewModel.toggleProductSelection(product),
+//                         ),
+//                         onTap: () =>
+//                             viewModel.toggleProductSelection(product),
+//                       );
+//                     });
+//                   },
+//                 );
+//               }
+//             }),
+//           ),
+
+//           ElevatedButton(
+//             onPressed: () => Get.back(),
+//             style: ElevatedButton.styleFrom(
+//               backgroundColor: Colors.green,
+//               foregroundColor: Colors.white,
+//               shape: RoundedRectangleBorder(
+//                   borderRadius: BorderRadius.circular(10)),
+//             ),
+//             child: const Text("Done"),
+//           ),
+//         ],
+//       ),
+//     ),
+//     isScrollControlled: true,
+//   );
+// }
+  Widget shimmerBox(double width, double height) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        width: width,
+        height: height,
+        color: Colors.white,
+      ),
     );
   }
 
