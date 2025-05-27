@@ -1,38 +1,40 @@
-
 import 'dart:async';
 import 'package:clique/components/chat_input.dart';
-import 'package:clique/components/chat_message.dart';
-import 'package:clique/components/group_appbar.dart';
 import 'package:clique/components/load_message_shimmer.dart';
+import 'package:clique/components/parent_message_card.dart';
+import 'package:clique/components/thread_screen_appbar.dart';
+import 'package:clique/components/thread_widget.dart';
 import 'package:clique/models/message_model.dart';
 import 'package:clique/view/chat/chat_view_model.dart';
-import 'package:clique/view_model/group_chat_view_model.dart';
 import 'package:clique/view_model/thread_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controller/user_controller.dart';
 
-class ThreadScreen extends StatefulWidget {
+class ThreadChatScreen extends StatefulWidget {
   final String groupName;
   final int memberCount;
   final String guid;
+
+  final String sendername;
   final String? profileImage;
   final int uid;
 
-  ThreadScreen({
+  ThreadChatScreen({
     super.key,
     required this.groupName,
     this.profileImage,
     required this.uid,
     required this.memberCount,
+    required this.sendername,
     required this.guid,
   });
 
   @override
-  _ThreadScreenState createState() => _ThreadScreenState();
+  _ThreadChatScreenState createState() => _ThreadChatScreenState();
 }
 
-class _ThreadScreenState extends State<ThreadScreen> {
+class _ThreadChatScreenState extends State<ThreadChatScreen> {
   late ThreadViewModel viewModel;
   final ScrollController _scrollController = ScrollController();
   bool _isLoadingOlderMessages = false;
@@ -47,6 +49,7 @@ class _ThreadScreenState extends State<ThreadScreen> {
 
     viewModel = Get.put(ThreadViewModel(
       groupId: widget.guid,
+      messageid: widget.uid,
       token: userController.token.value,
       userId: userController.uid.value.toString(),
     ));
@@ -124,7 +127,6 @@ class _ThreadScreenState extends State<ThreadScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // log(widget.guid);
     return GestureDetector(
       onTap: () {
         final controller = Get.find<ChatViewModel>();
@@ -137,12 +139,17 @@ class _ThreadScreenState extends State<ThreadScreen> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            GroupAppBar(
-              profile: widget.profileImage,
-              title: widget.groupName,
-              memberCount: widget.memberCount,
+            ThreadScreenAppbar(
+              title: "Threads",
               guid: widget.guid,
               uid: widget.uid,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            ParentMessageCard(
+              message: widget.groupName,
+              senderName: widget.sendername,
             ),
             Expanded(
               child: StreamBuilder<List<MessageModel>>(
@@ -179,7 +186,7 @@ class _ThreadScreenState extends State<ThreadScreen> {
                         return const SizedBox.shrink();
                       }
 
-                      return ChatMessageWidget(message: messages[messageIndex]);
+                      return ThreadWidget(message: messages[messageIndex]);
                     },
                   );
                 },
@@ -187,28 +194,12 @@ class _ThreadScreenState extends State<ThreadScreen> {
             ),
             ChatInputWidget(
               onSend: (message, replyingTo) {
-                final ChatViewModel chatViewModel = Get.find<ChatViewModel>();
-                final repliedMessage = chatViewModel.repliedMessage.value;
-
-                if (repliedMessage == null) {
-                  // No reply context; send a regular message
-                  // viewModel.sendMessage(message).then((_) {
-                  //   _scrollToBottom();
-                  //   setState(() {
-                  //     viewModel.replyingTo.value = null;
-                  //   });
-                  // });
-                } else {
-                  // Replying to an original message; send as a thread
-                  viewModel
-                      .sendThread(message, int.parse(repliedMessage.id))
-                      .then((_) {
-                    _scrollToBottom();
-                    setState(() {
-                      viewModel.replyingTo.value = null;
-                    });
+                viewModel.(message, widget.uid).then((_) {
+                  _scrollToBottom();
+                  setState(() {
+                    viewModel.replyingTo.value = null;
                   });
-                }
+                });
               },
             ),
           ],
@@ -217,4 +208,3 @@ class _ThreadScreenState extends State<ThreadScreen> {
     );
   }
 }
-

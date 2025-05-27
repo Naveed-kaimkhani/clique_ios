@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:clique/components/reaction_sheet.dart';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/view/chat/chat_view_model.dart';
+import 'package:clique/view/chat/thread_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -284,7 +285,19 @@ class ChatMessageWidget extends StatelessWidget {
                   if (message.parentId != null && message.parentMessage != null)
                     TextButton.icon(
                       onPressed: () {
-                        // Get.to(() => MessageRepliesScreen(parentMessage: message));
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ThreadChatScreen(
+                              groupName: message.message,
+                          
+                              uid: int.parse(message.parentId ?? ""),
+                              memberCount: 0,
+                              sendername: message.sender,
+                              guid: message.id,
+                            ),
+                          ),
+                        );
                       },
                       icon: const Icon(Icons.forum,
                           size: 16, color: AppColors.blueColor),
