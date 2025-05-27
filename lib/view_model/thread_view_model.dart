@@ -10,10 +10,13 @@ class ThreadViewModel extends GetxController {
   final String groupId;
   final String token;
   final String userId;
+  final int messageid;
 
   ThreadViewModel({
     required this.groupId,
     required this.token,
+
+    required this.messageid,
     required this.userId,
   });
   final Rx<MessageModel?> replyingTo = Rx<MessageModel?>(null);
@@ -31,7 +34,7 @@ class ThreadViewModel extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _fetchInitialMessages(); // Fetch initial 20 messages
+    _fetchInitialMessages(messageid); // Fetch initial 20 messages
     // _timer = Timer.periodic(Duration(milliseconds: 800), (timer) => _fetchInitialMessages());
   }
 
@@ -50,14 +53,14 @@ class ThreadViewModel extends GetxController {
     replyingTo.value = null;
   }
 
-  Future<void> _fetchInitialMessages() async {
+  Future<void> _fetchInitialMessages(int parentid) async {
     if (_isLoading) return;
     _isLoading = true;
 
     try {
       final response = await ApiClient.getMessages(
         url:
-            "https://269435d754e8fd97.api-us.cometchat.io/v3/groups/$groupId/messages?limit=200",
+            "https://269435d754e8fd97.api-us.cometchat.io/v3/messages/$parentid/thread",
         headers: {
           "Content-Type": "application/json",
           "accept": "application/json",
@@ -156,7 +159,7 @@ class ThreadViewModel extends GetxController {
       );
       log(response.body);
       if (response.statusCode == 200) {
-        _fetchInitialMessages(); // Refresh messages after sending a new one
+        _fetchInitialMessages(messageid); // Refresh messages after sending a new one
       }
     } catch (e) {
       Get.snackbar("Error", "Failed to send message: $e");
