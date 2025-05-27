@@ -11,6 +11,7 @@ class MessageModel {
   // final int time; // 👈 This will hold sentAt from JSON
   MessageModel? parentMessage; // Resolved later after parsing all messages
   final String? parentId;
+  final int replyCount; // 👈 add this
 
   final MessageModel? replyTo; // 👈 new field
   // final List<MessageModel> replies; // 🔥 Nested replies
@@ -20,6 +21,7 @@ class MessageModel {
     required this.message,
     required this.isMe,
     required this.id,
+    required this.replyCount,
     required this.time,
     // this.replies = const [],
     required this.replyTo,
@@ -38,13 +40,15 @@ class MessageModel {
           .map((e) => ReactionModel.fromJson(e))
           .toList();
     }
-
+    log(json['message']);
+    log(json['replyCount'].toString());
     return MessageModel(
       sender: json['name'],
       message: json['message'],
       id: json['id'],
       parentId: json['parentId'],
       replyTo: json['replyto'],
+      replyCount: json['replyCount'],
       isMe: json['uid'] == json['userId'],
       time: json['sentAt'],
       seenBy: List<String>.from(json['seenBy'] ?? []),

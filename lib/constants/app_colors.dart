@@ -21,7 +21,19 @@ class AppColors {
   );
   // Light Blue
   // Golden Yellow
+    static const blueColor = Color(0xFF77B7EF);
+
   static const appColor = Color(0xFFF94643);
+ static LinearGradient newGradientColors = LinearGradient(
+    begin: Alignment.centerLeft, // 270 degrees
+    end: Alignment.centerRight,
+    colors: [
+      blueColor,
+
+      const Color.fromARGB(255, 56, 133, 201),
+    ],
+  );
+
 
   static const LinearGradient blackgroundGradient = LinearGradient(
     colors: [

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 import 'package:clique/data/models/product_model.dart';
 import 'package:clique/models/upload_video_response.dart';
@@ -31,13 +30,6 @@ class UploadVideoService {
                   .replaceAll(RegExp(r'\s+'), '') // Remove whitespace
               )
           .toList();
-
-      // log("product ids");
-      // log(productIds.toString());
-      // log(jsonEncode(productIds));
-      // final ids =
-      //     jsonEncode(productIds); // '["comfymatpetbed","anchorsawaypetbed"]'
-      // final ids3 = '["$ids"]'; // Static version
       var request = http.MultipartRequest('POST', Uri.parse(baseUrl));
       request.headers['Authorization'] = 'Bearer $authToken';
       request.headers['Content-Type'] = 'multipart/form-data';

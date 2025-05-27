@@ -7,18 +7,19 @@ import 'package:clique/components/load_message_shimmer.dart';
 import 'package:clique/models/message_model.dart';
 import 'package:clique/view/chat/chat_view_model.dart';
 import 'package:clique/view_model/group_chat_view_model.dart';
+import 'package:clique/view_model/thread_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controller/user_controller.dart';
 
-class GroupChatScreen extends StatefulWidget {
+class ThreadScreen extends StatefulWidget {
   final String groupName;
   final int memberCount;
   final String guid;
   final String? profileImage;
   final int uid;
 
-  GroupChatScreen({
+  ThreadScreen({
     super.key,
     required this.groupName,
     this.profileImage,
@@ -28,11 +29,11 @@ class GroupChatScreen extends StatefulWidget {
   });
 
   @override
-  _GroupChatScreenState createState() => _GroupChatScreenState();
+  _ThreadScreenState createState() => _ThreadScreenState();
 }
 
-class _GroupChatScreenState extends State<GroupChatScreen> {
-  late GroupChatViewModel viewModel;
+class _ThreadScreenState extends State<ThreadScreen> {
+  late ThreadViewModel viewModel;
   final ScrollController _scrollController = ScrollController();
   bool _isLoadingOlderMessages = false;
   StreamSubscription<List<MessageModel>>? _messagesSubscription;
@@ -44,7 +45,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
     super.initState();
     final UserController userController = Get.find<UserController>();
 
-    viewModel = Get.put(GroupChatViewModel(
+    viewModel = Get.put(ThreadViewModel(
       groupId: widget.guid,
       token: userController.token.value,
       userId: userController.uid.value.toString(),
@@ -115,7 +116,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
     controller.hideReactionSheet();
     _messagesSubscription?.cancel();
     _scrollController.dispose();
-    Get.delete<GroupChatViewModel>();
+    Get.delete<ThreadViewModel>();
 
     // controller.hid
     super.dispose();
@@ -191,12 +192,12 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
 
                 if (repliedMessage == null) {
                   // No reply context; send a regular message
-                  viewModel.sendMessage(message).then((_) {
-                    _scrollToBottom();
-                    setState(() {
-                      viewModel.replyingTo.value = null;
-                    });
-                  });
+                  // viewModel.sendMessage(message).then((_) {
+                  //   _scrollToBottom();
+                  //   setState(() {
+                  //     viewModel.replyingTo.value = null;
+                  //   });
+                  // });
                 } else {
                   // Replying to an original message; send as a thread
                   viewModel
