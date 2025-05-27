@@ -35,6 +35,7 @@ class ProfileScreenState extends State<ProfileScreen>
     final size = MediaQuery.of(context).size;
     String isUser = userController.role.value;
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: ProfileSAppBar(
         title: 'Profile',
         isInfluencer: isUser == "influencer",
@@ -47,7 +48,7 @@ class ProfileScreenState extends State<ProfileScreen>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // SizedBox(height: size.height * 0.02), // Responsive spacing
+                  SizedBox(height: size.height * 0.02), // Responsive spacing
                   Obx(() => UserProfileCard(
                         profileImage: userController.profilePhoto.value,
                         isInfluencer: false,

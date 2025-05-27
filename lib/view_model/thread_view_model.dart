@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'package:clique/core/api/api_client.dart';
-import 'package:clique/models/thread_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../models/message_model.dart';
@@ -52,6 +51,39 @@ class ThreadViewModel extends GetxController {
   void cancelReply() {
     replyingTo.value = null;
   }
+
+
+  // Future<void> sendMessage(String message) async {
+  //   final replyMessage = replyingTo.value;
+
+  //   if (message.isEmpty) return;
+
+  //   try {
+  //     final response = await apiClient.post(
+  //       url: ApiEndpoints.sendMessage,
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "accept": "application/json",
+  //         "apikey": "f6985bc6a317824cc687e82794955efded6bf2b1",
+  //         "onBehalfOf": userId,
+  //       },
+  //       body: jsonEncode({
+  //         "category": "message",
+  //         "type": "text",
+  //         "data": {
+  //           "text": message,
+  //         },
+  //         "receiver": groupId,
+  //         "receiverType": "group",
+  //       }),
+  //     );
+  //     if (response.statusCode == 200) {
+  //       _fetchInitialMessages(); // Refresh messages after sending a new one
+  //     }
+  //   } catch (e) {
+  //     Get.snackbar("Error", "Failed to send message: $e");
+  //   }
+  // }
 
 
   Future<void> _fetchInitialMessages(int messageId) async {

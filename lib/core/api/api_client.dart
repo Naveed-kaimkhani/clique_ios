@@ -10,47 +10,49 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../api/api_endpoints.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+
 class ApiClient extends GetxService {
-  
   final UserController userController = Get.put(UserController());
   final String baseUrl = ApiEndpoints.baseUrl;
-   Future<http.Response> post({
+  Future<http.Response> post({
     required String url,
     Map<String, String>? headers,
     Object? body,
   }) async {
-    return await http.post(Uri.parse(url),headers: headers, body: body);
+    return await http.post(Uri.parse(url), headers: headers, body: body);
   }
 
-
-
-   Future<http.Response> verifyOtp({
+  Future<http.Response> verifyOtp({
     required String url,
     Map<String, String>? headers,
     Object? body,
   }) async {
     // return await http.post(Uri.parse('https://cactisocial.com/api-clique/public/api/v1/otp/verify'),
-    
-    return await http.post(Uri.parse('https://cactisocial.com/api-clique/public/api/v1/otp/verify'),
-     body: body,
-     headers: headers,
-);
+
+    return await http.post(
+      Uri.parse('https://cactisocial.com/api-clique/public/api/v1/otp/verify'),
+      body: body,
+      headers: headers,
+    );
   }
 
-   Future<http.Response> sendOtp({
+  Future<http.Response> sendOtp({
     required String url,
     Map<String, String>? headers,
     Object? body,
   }) async {
-    return await http.post(Uri.parse("https://cactisocial.com/api-clique/public/api/v1/otp/send"),
-     body: body,
-     headers: headers,
-);
+    return await http.post(
+      Uri.parse("https://cactisocial.com/api-clique/public/api/v1/otp/send"),
+      body: body,
+      headers: headers,
+    );
   }
 
-Future<dynamic> getGroup(String endpoint, {Map<String, String>? headers}) async {
+  Future<dynamic> getGroup(String endpoint,
+      {Map<String, String>? headers}) async {
     final response = await http.get(Uri.parse(endpoint), headers: headers);
-
+    log("groupssss");
+    log(response.body);
     return response;
   }
 
@@ -58,6 +60,7 @@ Future<dynamic> getGroup(String endpoint, {Map<String, String>? headers}) async 
     final response = await http.get(Uri.parse(endpoint), headers: headers);
     return _handleResponse(response);
   }
+
   static Future<http.Response> getMessages({
     required String url,
     Map<String, String>? headers,
@@ -65,24 +68,24 @@ Future<dynamic> getGroup(String endpoint, {Map<String, String>? headers}) async 
     return await http.get(Uri.parse(url), headers: headers);
   }
 
-Future<http.Response> getInfluencersApi({
-  required String url,
-  Map<String, String>? params,
-  String? authToken, // Make authToken nullable
-}) async {
-  Uri uri = Uri.parse(url).replace(queryParameters: params);
+  Future<http.Response> getInfluencersApi({
+    required String url,
+    Map<String, String>? params,
+    String? authToken, // Make authToken nullable
+  }) async {
+    Uri uri = Uri.parse(url).replace(queryParameters: params);
 
-  Map<String, String> headers = {
-    "Content-Type": "application/json", // Always include this header
-  };
+    Map<String, String> headers = {
+      "Content-Type": "application/json", // Always include this header
+    };
 
-  // Add auth token to headers if provided
-  if (authToken != null) {
-    headers["Authorization"] = "Bearer $authToken";
+    // Add auth token to headers if provided
+    if (authToken != null) {
+      headers["Authorization"] = "Bearer $authToken";
+    }
+
+    return await http.get(uri, headers: headers);
   }
-
-  return await http.get(uri, headers: headers);
-}
 
   static Future<http.Response> fetchMessages({
     required String url,
@@ -96,17 +99,17 @@ Future<http.Response> getInfluencersApi({
     final response = await http.post(Uri.parse(endpoint),
         headers: headers, body: jsonEncode(body));
 
-      if (response.statusCode == 200) {
+    if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = jsonDecode(response.body);
       final String token = responseData["token"];
       final String userName = responseData["user"]["name"];
       final int userId = responseData["user"]["id"];
-      
+
       final String role = responseData["user"]["role"];
-          final String? profileImage = responseData["user"]["profile_photo_url"];          
-          final String? coverPhotoUrl = responseData["user"]["cover_photo_url"];       
-          final String email = responseData["user"]["email"];
-     final String phone = responseData["user"]["phone"];
+      final String? profileImage = responseData["user"]["profile_photo_url"];
+      final String? coverPhotoUrl = responseData["user"]["cover_photo_url"];
+      final String email = responseData["user"]["email"];
+      final String phone = responseData["user"]["phone"];
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('token', token);
       await prefs.setString('userName', userName);
@@ -115,33 +118,37 @@ Future<http.Response> getInfluencersApi({
       await prefs.setString('profile_photo_url', profileImage ?? '');
       await prefs.setString('cover_photo_url', coverPhotoUrl ?? '');
       await prefs.setString('email', email);
-       await prefs.setString('phone', phone);
-    
-      await  userController.loadUserSession();
- Get.toNamed(RouteName.homeScreen,);
+      await prefs.setString('phone', phone);
+
+      await userController.loadUserSession();
+      Get.toNamed(
+        RouteName.homeScreen,
+      );
       return responseData;
     }
     return _handleResponse(response);
   }
-    Future<void> signUpApi(String endpoint,
+
+  Future<void> signUpApi(String endpoint,
       {Map<String, String>? headers, dynamic body}) async {
     final response = await http.post(Uri.parse(endpoint),
         headers: headers, body: jsonEncode(body));
-                 if (response.statusCode == 201 || response.statusCode==200) {
-                  Utils.showSignupSnackBar("Success", "Pleae login with the same email to verify OTP", ContentType.success);
-                        Get.offAllNamed(RouteName.loginScreen);               
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      Utils.showSignupSnackBar("Success",
+          "Pleae login with the same email to verify OTP", ContentType.success);
+      Get.offAllNamed(RouteName.loginScreen);
     }
-  
+
     return _handleResponse(response);
   }
 
-
-    Future<dynamic> joinGroupApi(String endpoint,
+  Future<dynamic> joinGroupApi(String endpoint,
       {Map<String, String>? headers, dynamic body}) async {
     final response = await http.post(Uri.parse(endpoint),
         headers: headers, body: jsonEncode(body));
     return _handleResponse(response);
   }
+
   Future<dynamic> put(String endpoint,
       {Map<String, String>? headers, dynamic body}) async {
     final response = await http.put(Uri.parse('$baseUrl$endpoint'),
@@ -151,16 +158,13 @@ Future<http.Response> getInfluencersApi({
 
   Future<http.Response> delete(String endpoint,
       {Map<String, String>? headers}) async {
-    final response =
-        await http.delete(Uri.parse(endpoint), headers: headers);
+    final response = await http.delete(Uri.parse(endpoint), headers: headers);
     return response;
   }
 
   dynamic _handleResponse(http.Response response) async {
-  
     switch (response.statusCode) {
       case 200:
-      
         return jsonDecode(response.body);
       case 201:
         return jsonDecode(response.body);
@@ -170,13 +174,13 @@ Future<http.Response> getInfluencersApi({
       case 422:
       case 404:
       case 500:
-      
-        Utils.showCustomSnackBar("Error", Utils.mapErrorMessage(response.body),ContentType.failure );
-        // throw Exception('Error: ${response.body},');
+        Utils.showCustomSnackBar(
+            "Error", Utils.mapErrorMessage(response.body), ContentType.failure);
+      // throw Exception('Error: ${response.body},');
       default:
-      
-        Utils.showCustomSnackBar("Error", Utils.mapErrorMessage(response.body),ContentType.failure );
-        // throw Exception('Unexpected error occurred');
+        Utils.showCustomSnackBar(
+            "Error", Utils.mapErrorMessage(response.body), ContentType.failure);
+      // throw Exception('Unexpected error occurred');
     }
   }
 }

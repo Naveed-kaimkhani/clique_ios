@@ -16,6 +16,8 @@ class ThreadChatScreen extends StatefulWidget {
   final int memberCount;
   final String guid;
 
+  final String parentMessageId;
+
   final String sendername;
   final String? profileImage;
   final int uid;
@@ -24,6 +26,7 @@ class ThreadChatScreen extends StatefulWidget {
     super.key,
     required this.groupName,
     this.profileImage,
+    required this.parentMessageId,
     required this.uid,
     required this.memberCount,
     required this.sendername,
@@ -49,7 +52,7 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
 
     viewModel = Get.put(ThreadViewModel(
       groupId: widget.guid,
-      messageid: widget.uid,
+      messageid: int.parse(widget.parentMessageId),
       token: userController.token.value,
       userId: userController.uid.value.toString(),
     ));
@@ -61,8 +64,6 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
       if (_shouldScrollToBottom && messages.isNotEmpty) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (_scrollController.hasClients) {
-            // _scrollController
-            //     .jumpTo(_scrollController.position.maxScrollExtent);
             _scrollController.jumpTo(0); // or animateTo(0)
           }
         });
@@ -194,7 +195,9 @@ class _ThreadChatScreenState extends State<ThreadChatScreen> {
             ),
             ChatInputWidget(
               onSend: (message, replyingTo) {
-                viewModel.(message, widget.uid).then((_) {
+                viewModel
+                    .sendThread(message, int.parse(widget.parentMessageId))
+                    .then((_) {
                   _scrollToBottom();
                   setState(() {
                     viewModel.replyingTo.value = null;

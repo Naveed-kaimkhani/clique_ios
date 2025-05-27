@@ -76,7 +76,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           _buildTopBar(size, context),
           _buildImageSelector(size),
           _buildProductDetails(size),
-          // _buildDiscountTag(size),
         ],
       ),
     );

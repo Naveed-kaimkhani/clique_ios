@@ -12,10 +12,16 @@ import '../constants/app_colors.dart';
 
 class ChatMessageWidget extends StatelessWidget {
   final MessageModel message;
+  final int uid;
+  final String guid;
   final chatViewModel = Get.find<ChatViewModel>();
   final userController = Get.find<UserController>();
 
-  ChatMessageWidget({super.key, required this.message});
+  ChatMessageWidget(
+      {super.key,
+      required this.guid,
+      required this.uid,
+      required this.message});
 
   final isUploading = false.obs;
 
@@ -90,8 +96,8 @@ class ChatMessageWidget extends StatelessWidget {
           children: [
             Container(
               constraints: BoxConstraints(maxWidth: screenWidth * 0.7),
-              margin: const EdgeInsets.symmetric(vertical: 10),
-              padding: EdgeInsets.all(screenWidth * 0.03),
+              margin: const EdgeInsets.symmetric(vertical: 4),
+              padding: EdgeInsets.all(screenWidth * 0.015),
               decoration: BoxDecoration(
                 gradient: message.isMe
                     ? AppColors.newGradientColors
@@ -158,7 +164,7 @@ class ChatMessageWidget extends StatelessWidget {
                               ),
                             ),
 
-                            const SizedBox(height: 4),
+                            const SizedBox(height: 2),
                             // Parent message content
                             Container(
                               padding: const EdgeInsets.symmetric(
@@ -187,37 +193,35 @@ class ChatMessageWidget extends StatelessWidget {
                     ),
 
                   // 💬 Message Text
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: Text(
-                      message.message,
-                      style: TextStyle(
-                        color: message.isMe ? Colors.white : Colors.black,
-                        fontSize: 15,
-                      ),
+                  Text(
+                    message.message,
+                    style: TextStyle(
+                      color: message.isMe ? Colors.white : Colors.black,
+                      fontSize: 15,
                     ),
                   ),
 
-                  // Bottom row with timestamp and status
-                  // Bottom row with timestamp, status, and reply button
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       // Reply button - appears on hover/long-press or permanently
-                      IconButton(
-                        icon: Icon(
-                          Icons.reply,
-                          size: 16,
-                          color: message.isMe ? Colors.white70 : Colors.black54,
+
+                      if (message.parentId == null &&
+                          message.parentMessage == null)
+                        IconButton(
+                          icon: Icon(
+                            Icons.reply,
+                            size: 16,
+                            color:
+                                message.isMe ? Colors.white70 : Colors.black54,
+                          ),
+                          padding: EdgeInsets.zero,
+                          constraints: BoxConstraints(),
+                          onPressed: () {
+                            chatViewModel.setReplyMessage(message);
+                          },
+                          tooltip: 'Reply',
                         ),
-                        padding: EdgeInsets.zero,
-                        constraints: BoxConstraints(),
-                        onPressed: () {
-                          // Handle reply action here
-                          // onReplyPressed?.call(message);
-                        },
-                        tooltip: 'Reply',
-                      ),
                       const SizedBox(width: 4),
 
                       // Reactions (if any)
@@ -289,21 +293,27 @@ class ChatMessageWidget extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (context) => ThreadChatScreen(
-                              groupName: message.message,
-                          
-                              uid: int.parse(message.parentId ?? ""),
+                              groupName: message.parentMessage!.message,
+                              parentMessageId: message.parentId ?? "",
+                              uid: uid,
                               memberCount: 0,
                               sendername: message.sender,
-                              guid: message.id,
+                              guid: guid,
                             ),
                           ),
                         );
                       },
-                      icon: const Icon(Icons.forum,
-                          size: 16, color: AppColors.blueColor),
+                      icon: Icon(Icons.reply,
+                          size: 16,
+                          color: message.isMe
+                              ? Colors.white
+                              : AppColors.blueColor),
                       label: Text(
                         "View more replies",
-                        style: TextStyle(color: AppColors.blueColor),
+                        style: TextStyle(
+                            color: message.isMe
+                                ? Colors.white
+                                : AppColors.blueColor),
                       ),
                       style: TextButton.styleFrom(
                         // backgroundColor: AppColors.blueColor,

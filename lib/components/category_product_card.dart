@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clique/utils/utils.dart';
 import 'package:clique/view_model/favorite_controller.dart';
@@ -13,19 +12,19 @@ class ProductCategoryCard extends StatelessWidget {
   final List<String> backgroundImage;
   final String productName;
   final String productDescription;
-   var price;
-   var oldPrice;
+  var price;
+  var oldPrice;
   final String discount;
   final String categories;
-  
+
   final String weight;
   final Color textColor;
   final String uid;
-  
+
   final String unit;
   final bool isShowDiscount;
 
-   ProductCategoryCard({
+  ProductCategoryCard({
     required this.weight,
     required this.categories,
     required this.unit,
@@ -36,7 +35,9 @@ class ProductCategoryCard extends StatelessWidget {
     required this.oldPrice,
     required this.discount,
     this.textColor = Colors.white,
-    super.key, required this.uid, required this.isShowDiscount,
+    super.key,
+    required this.uid,
+    required this.isShowDiscount,
   });
 
   final FavoriteController favoriteController = Get.put(FavoriteController());
@@ -61,117 +62,88 @@ class ProductCategoryCard extends StatelessWidget {
     return Container(
       width: cardWidth,
       height: cardHeight,
-      padding: EdgeInsets.only(left: padding,bottom: padding),
+      padding: EdgeInsets.only(left: padding, bottom: padding),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
       ),
       child: Stack(
         children: [
-    
-    
-    GestureDetector(
-      onTap: (){
-              controller.setProductData( {
-      'uid': uid,
-      'backgroundImage': backgroundImage,
-      'productName': productName,
-      'productDescription': productDescription,
-      'price': price,
-      'oldPrice': oldPrice,
-      'discount': discount,
-      'unit': unit,
-      'categories':categories,
-      'size':weight,
-    },);
-      },
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: Stack(
-          children: [
-      CachedNetworkImage(
-        imageUrl: backgroundImage.first,
-        width: double.infinity,
-        height: 276,
-        fit: BoxFit.cover,
-        placeholder: (context, url) => LoadImageShimmer(),
-        errorWidget: (context, url, error) => Icon(Icons.error),
-      ),
-      Container(
-        width: double.infinity,
-        height: 276,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.bottomCenter,
-            end: Alignment.topCenter,
-            colors: [
-              Colors.black.withOpacity(0.6),
-              Colors.transparent,
-            ],
-          ),
-        ),
-      ),
-          ],
-        ),
-      ),
-    ),
-    
-          // Cart Icon (Top Right)
-          Positioned(
-            top: padding,
-            right: padding,
-            child:  Container(
-            padding: EdgeInsets.all(padding * 0.5),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.8),
-              shape: BoxShape.circle,
+          GestureDetector(
+            onTap: () {
+              controller.setProductData(
+                {
+                  'uid': uid,
+                  'backgroundImage': backgroundImage,
+                  'productName': productName,
+                  'productDescription': productDescription,
+                  'price': price,
+                  'oldPrice': oldPrice,
+                  'discount': discount,
+                  'unit': unit,
+                  'categories': categories,
+                  'size': weight,
+                },
+              );
+            },
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Stack(
+                children: [
+                  CachedNetworkImage(
+                    imageUrl: backgroundImage.first,
+                    width: double.infinity,
+                    height: 276,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => LoadImageShimmer(),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    height: 276,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [
+                          Colors.black.withOpacity(0.6),
+                          Colors.transparent,
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            // child: SvgPicture.asset(AppSvgIcons.bag, color: AppColors.black),
-            child: Obx(() {
-    final isLiked = favoriteController.isFavorite(uid);
-    return LikeButton(
-      size: size.width * 0.06,
-      isLiked: isLiked,
-      onTap: (bool liked) async {
-    
-        favoriteController.toggleFavorite(uid);
-        return !liked;
-      },
-      likeBuilder: (bool liked) {
-        return Icon(
-          liked ? Icons.favorite : Icons.favorite_border,
-          color: liked ? AppColors.appColor : Colors.black,
-          size: size.width * 0.07,
-        );
-      },
-    );
-        }),
           ),
-          ),
-    
+
+
           // Product Details (Bottom)
           Positioned(
             bottom: 5,
             left: 0,
             right: 0,
             child: GestureDetector(
-              onTap: (){
-                    controller.setProductData( {
-      'uid': uid,
-      'backgroundImage': backgroundImage,
-      'productName': productName,
-      'productDescription': productDescription,
-      'price': price,
-      'oldPrice': oldPrice,
-      'discount': discount,
-      'unit': unit,
-      'categories':categories,
-      'size':weight,
-    },);
+              onTap: () {
+                controller.setProductData(
+                  {
+                    'uid': uid,
+                    'backgroundImage': backgroundImage,
+                    'productName': productName,
+                    'productDescription': productDescription,
+                    'price': price,
+                    'oldPrice': oldPrice,
+                    'discount': discount,
+                    'unit': unit,
+                    'categories': categories,
+                    'size': weight,
+                  },
+                );
               },
               child: Container(
                 padding: EdgeInsets.all(padding),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+                  borderRadius:
+                      BorderRadius.vertical(bottom: Radius.circular(20)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -186,15 +158,15 @@ class ProductCategoryCard extends StatelessWidget {
                     ),
                     // SizedBox(height: padding * 0.5),
                     Text(
-                    Utils.removeHtmlTags(productDescription),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: textColor.withOpacity(0.7),
-                      fontSize: fontSizeDescription,
+                      Utils.removeHtmlTags(productDescription),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: textColor.withOpacity(0.7),
+                        fontSize: fontSizeDescription,
+                      ),
                     ),
-                  ),
-                  
+
                     SizedBox(height: screenWidth * 0.01),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -211,17 +183,17 @@ class ProductCategoryCard extends StatelessWidget {
                               ),
                             ),
                             SizedBox(width: padding * 0.5),
-                      oldPrice > 1
-  ? Text(
-      "\$${oldPrice.toStringAsFixed(2)}",
-      style: TextStyle(
-        color: textColor.withOpacity(0.7),
-        fontSize: fontSizeOldPrice,
-        decoration: TextDecoration.lineThrough,
-      ),
-    )
-  : SizedBox.shrink(), // Won't render anything if oldPrice is 1 or less
-
+                            oldPrice > 1
+                                ? Text(
+                                    "\$${oldPrice.toStringAsFixed(2)}",
+                                    style: TextStyle(
+                                      color: textColor.withOpacity(0.7),
+                                      fontSize: fontSizeOldPrice,
+                                      decoration: TextDecoration.lineThrough,
+                                    ),
+                                  )
+                                : SizedBox
+                                    .shrink(), // Won't render anything if oldPrice is 1 or less
                           ],
                         ),
                       ],
@@ -245,13 +217,13 @@ class LoadImageShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-        baseColor: Colors.grey[300]!,
-        highlightColor: Colors.grey[100]!,
-        child: Container(
-          width: double.infinity,
-          height: 276,
-          color: Colors.white,
-        ),
-      );
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        width: double.infinity,
+        height: 276,
+        color: Colors.white,
+      ),
+    );
   }
 }

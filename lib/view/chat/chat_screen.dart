@@ -17,7 +17,6 @@ class GroupChatScreen extends StatefulWidget {
   final String guid;
   final String? profileImage;
   final int uid;
-
   GroupChatScreen({
     super.key,
     required this.groupName,
@@ -178,7 +177,11 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                         return const SizedBox.shrink();
                       }
 
-                      return ChatMessageWidget(message: messages[messageIndex]);
+                      return ChatMessageWidget(message: messages[messageIndex],
+                      
+                      guid: widget.guid,
+                      uid: widget.uid,
+                      );
                     },
                   );
                 },
