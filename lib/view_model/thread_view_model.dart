@@ -53,38 +53,6 @@ class ThreadViewModel extends GetxController {
   }
 
 
-  // Future<void> sendMessage(String message) async {
-  //   final replyMessage = replyingTo.value;
-
-  //   if (message.isEmpty) return;
-
-  //   try {
-  //     final response = await apiClient.post(
-  //       url: ApiEndpoints.sendMessage,
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         "accept": "application/json",
-  //         "apikey": "f6985bc6a317824cc687e82794955efded6bf2b1",
-  //         "onBehalfOf": userId,
-  //       },
-  //       body: jsonEncode({
-  //         "category": "message",
-  //         "type": "text",
-  //         "data": {
-  //           "text": message,
-  //         },
-  //         "receiver": groupId,
-  //         "receiverType": "group",
-  //       }),
-  //     );
-  //     if (response.statusCode == 200) {
-  //       _fetchInitialMessages(); // Refresh messages after sending a new one
-  //     }
-  //   } catch (e) {
-  //     Get.snackbar("Error", "Failed to send message: $e");
-  //   }
-  // }
-
 
   Future<void> _fetchInitialMessages(int messageId) async {
     if (_isLoading) return;
@@ -117,8 +85,6 @@ class ThreadViewModel extends GetxController {
               if (sender == null ||
                   sender['name'] == null ||
                   sender['uid'] == null) return null;
-              // log(msg['data']?['text']);
-              // log(msg['replyCount'].toString());
               return {
                 'id': msg['id'] ?? '',
                 'name': sender['name'],
@@ -162,41 +128,8 @@ class ThreadViewModel extends GetxController {
     }
   }
 
-  // Future<void> _fetchInitialMessages(int parentid) async {
-  //   log(parentid.toString());
-  //   if (_isLoading) return;
-  //   _isLoading = true;
-
-  //   try {
-  //     final response = await ApiClient.getMessages(
-  //       url:
-  //           "https://269435d754e8fd97.api-us.cometchat.io/v3/messages/$parentid/thread",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         "accept": "application/json",
-  //         "apikey": "f6985bc6a317824cc687e82794955efded6bf2b1",
-  //         "onBehalfOf": userId,
-  //       },
-  //     );
-  //     log(response.body);
-  //     if (response.statusCode == 200) {
-  //       final jsonData = jsonDecode(response.body);
-  //       final List<ThreadModel> fetched = (jsonData['data'] as List)
-  //           .map((e) => ThreadModel.fromJson(e))
-  //           .toList();
-
-  //       _messages.assignAll(fetched);
-  //     }
-  //   } catch (e) {
-  //     log("Failed to fetch thread: $e");
-  //   } finally {
-  //     // isLoading.value = false;
-  //   }
-  // }
-
   Future<void> sendThread(String message, int messageId) async {
-    // final replyMessage = replyingTo.value;
-    log("replying to $messageId");
+   
     if (message.isEmpty) return;
 
     try {
@@ -220,7 +153,6 @@ class ThreadViewModel extends GetxController {
           "receiverType": "group",
         }),
       );
-      log(response.body);
       if (response.statusCode == 200) {
         _fetchInitialMessages(
             messageid); // Refresh messages after sending a new one

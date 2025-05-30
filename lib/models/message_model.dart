@@ -40,8 +40,6 @@ class MessageModel {
           .map((e) => ReactionModel.fromJson(e))
           .toList();
     }
-    log(json['message']);
-    log(json['replyCount'].toString());
     return MessageModel(
       sender: json['name'],
       message: json['message'],
@@ -83,7 +81,6 @@ List<MessageModel> parseMessages(List<dynamic> jsonList) {
   for (var msg in messages) {
     if (msg.parentId != null) {
       if (msg.parentMessage != null) {
-        log("↳ Replied to: ${msg.parentMessage!.message} (from ${msg.parentMessage!.sender})");
       }
 
       msg.parentMessage = messageMap[msg.parentId!];

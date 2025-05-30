@@ -53,11 +53,7 @@ class OrderViewModel extends GetxController {
               product.id.toString()), // ensure quantity is tracked per product
         );
       }).toList();
-      for (var product in transactions) {
-        log('td id  => ${product.tdid}');
-
-        log('quantity => ${product.quantity}');
-      }
+    
       List<ProductModel> productDetails =
           cartQuantityController.products.map((product) {
         return ProductModel(
@@ -98,14 +94,13 @@ class OrderViewModel extends GetxController {
       };
 
       final Map<String, dynamic> orderMap = order.toMap();
-      // log(orderMap.toString());
+   
       final response = await http.post(
         url,
         headers: headers,
         body: jsonEncode(orderMap),
       );
 
-      log(response.body);
       if (response.statusCode == 200) {
         final parsedOrderSummary =
             OrderSummary.fromJson(jsonDecode(response.body));
@@ -136,7 +131,6 @@ class OrderViewModel extends GetxController {
         return null;
       }
     } catch (e) {
-      log(e.toString());
       Utils.showCustomSnackBar(
           "Error", "Failed to place order: $e", ContentType.failure);
       return null;
@@ -221,7 +215,6 @@ class OrderViewModel extends GetxController {
         headers: headers,
         body: jsonEncode(orderMap), // Encode the order map to JSON
       );
-      log(response.body);
       if (response.statusCode == 200) {
         // Success
         final parsedOrderSummary =
@@ -254,7 +247,6 @@ class OrderViewModel extends GetxController {
         return null;
       }
     } catch (e) {
-      log(e.toString());
       Utils.showCustomSnackBar(
           "Error", "Failed to place order $e", ContentType.failure);
     } finally {

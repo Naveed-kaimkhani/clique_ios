@@ -102,8 +102,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
           final responseBody = await response.stream.bytesToString();
           final Map<String, dynamic> responseData = jsonDecode(responseBody);
 
-          // Optional: log full response
-          log(responseBody);
+      
 
           // Extract specific phone error message if available
           String errorMessage = "Something went wrong.";

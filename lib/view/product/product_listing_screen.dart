@@ -69,7 +69,6 @@ class ProductListingScreen extends StatelessWidget {
                   );
                   return; // stop further execution
                 }
-                log(productDetails.productTitle.toString());
                 Get.back();
 
                 Get.toNamed(

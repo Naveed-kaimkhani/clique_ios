@@ -51,8 +51,7 @@ class ApiClient extends GetxService {
   Future<dynamic> getGroup(String endpoint,
       {Map<String, String>? headers}) async {
     final response = await http.get(Uri.parse(endpoint), headers: headers);
-    log("groupssss");
-    log(response.body);
+ 
     return response;
   }
 

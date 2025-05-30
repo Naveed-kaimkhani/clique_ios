@@ -1,28 +1,34 @@
-
-
 import 'dart:async';
 import 'dart:convert';
 import 'package:clique/models/message_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/services.dart';
 
 class ChatViewModel extends GetxController {
   final RxBool isReactionSheetVisible = false.obs;
   OverlayEntry? _reactionOverlay;
 // OverlayEntry? _reactionOverlay;
 
-  final Map<String, StreamController<Map<String, int>>> _reactionControllers = {};
+  final Map<String, StreamController<Map<String, int>>> _reactionControllers =
+      {};
   final Set<String> startedStreams = {};
-  final Map<String, Set<String>> _userReactions = {}; // key = "$messageId:$reaction", value = Set of uids
-final Rx<MessageModel?> repliedMessage = Rx<MessageModel?>(null);
-void setReplyMessage(MessageModel message) {
-  repliedMessage.value = message;
-}
-void clearReplyMessage() {
-  repliedMessage.value = null;
-}
+  final Map<String, Set<String>> _userReactions =
+      {}; // key = "$messageId:$reaction", value = Set of uids
+  final Rx<MessageModel?> repliedMessage = Rx<MessageModel?>(null);
+  void setReplyMessage(MessageModel message) {
+    HapticFeedback.mediumImpact();
+
+    repliedMessage.value = message;
+  }
+
+  void clearReplyMessage() {
+    repliedMessage.value = null;
+  }
+
   void showReactionSheet(OverlayEntry entry, context) {
+    HapticFeedback.mediumImpact();
     _reactionOverlay?.remove();
     _reactionOverlay = entry;
     isReactionSheetVisible.value = true;
@@ -35,7 +41,9 @@ void clearReplyMessage() {
     isReactionSheetVisible.value = false;
   }
 
-  Future<void> toggleReaction(String messageId, String reaction, int uid) async {
+  Future<void> toggleReaction(
+      String messageId, String reaction, int uid) async {
+    HapticFeedback.mediumImpact();
     final key = "$messageId:$reaction";
     final userIdStr = uid.toString();
     final alreadyReacted = _userReactions[key]?.contains(userIdStr) ?? false;
@@ -51,8 +59,10 @@ void clearReplyMessage() {
     _reactionControllers[messageId]?.add(updated);
   }
 
-  Future<void> addReactionToMessage(String messageId, String reaction, int uid) async {
-    final url = Uri.parse("https://269435d754e8fd97.api-us.cometchat.io/v3/messages/$messageId/reactions/$reaction");
+  Future<void> addReactionToMessage(
+      String messageId, String reaction, int uid) async {
+    final url = Uri.parse(
+        "https://269435d754e8fd97.api-us.cometchat.io/v3/messages/$messageId/reactions/$reaction");
 
     try {
       final response = await http.post(
@@ -75,8 +85,10 @@ void clearReplyMessage() {
     }
   }
 
-  Future<void> removeReactionFromMessage(String messageId, String reaction, int uid) async {
-    final url = Uri.parse("https://269435d754e8fd97.api-us.cometchat.io/v3/messages/$messageId/reactions/$reaction");
+  Future<void> removeReactionFromMessage(
+      String messageId, String reaction, int uid) async {
+    final url = Uri.parse(
+        "https://269435d754e8fd97.api-us.cometchat.io/v3/messages/$messageId/reactions/$reaction");
 
     try {
       final response = await http.delete(
@@ -122,7 +134,8 @@ void clearReplyMessage() {
       const String region = 'us';
       const String appId = '269435d754e8fd97';
 
-      final url = Uri.parse('https://$appId.api-$region.cometchat.io/v3/messages/$messageId/reactions');
+      final url = Uri.parse(
+          'https://$appId.api-$region.cometchat.io/v3/messages/$messageId/reactions');
 
       final response = await http.get(url, headers: {
         'accept': 'application/json',
@@ -165,5 +178,3 @@ void clearReplyMessage() {
     super.onClose();
   }
 }
-
-

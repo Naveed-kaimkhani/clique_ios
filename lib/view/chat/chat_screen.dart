@@ -122,7 +122,6 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // log(widget.guid);
     return GestureDetector(
       onTap: () {
         final controller = Get.find<ChatViewModel>();

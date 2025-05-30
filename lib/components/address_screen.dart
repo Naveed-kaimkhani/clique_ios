@@ -1,7 +1,3 @@
-
-
-
-import 'dart:developer';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:clique/components/address_list.dart';
 import 'package:clique/utils/utils.dart';
@@ -16,8 +12,7 @@ class AddressScreen extends StatefulWidget {
   @override
   State<AddressScreen> createState() => _AddressScreenState();
 }
-  // final ProductController _productViewModel = Get.find<ProductController>();
-   
+
 class _AddressScreenState extends State<AddressScreen> {
   final AddressController controller = Get.put(AddressController());
 
@@ -38,11 +33,12 @@ class _AddressScreenState extends State<AddressScreen> {
   final TextEditingController cityController = TextEditingController();
 
   final RxBool isLoading = false.obs;
-@override
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,10 +57,11 @@ class _AddressScreenState extends State<AddressScreen> {
           key: _formKey,
           child: Column(
             children: [
-              customTextField("Address 1", address1Controller, TextInputType.text),
-              customTextField("Address 2", address2Controller, TextInputType.text),
+              customTextField(
+                  "Address 1", address1Controller, TextInputType.text),
+              customTextField(
+                  "Address 2", address2Controller, TextInputType.text),
               cityDropDown(context),
-              
               stateDropDown(context),
               customTextField("ZIP Code", zipController, TextInputType.number),
               SizedBox(height: 20),
@@ -87,8 +84,9 @@ class _AddressScreenState extends State<AddressScreen> {
                               );
                               return;
                             }
-                            
-                            if (zipController.text.isEmpty || zipController.text.length != 5) {
+
+                            if (zipController.text.isEmpty ||
+                                zipController.text.length != 5) {
                               Utils.showCustomSnackBar(
                                 "Warning",
                                 "Invalid ZIP Code.",
@@ -96,8 +94,8 @@ class _AddressScreenState extends State<AddressScreen> {
                               );
                               return;
                             }
-                            
-                             if (orderViewModel.stateCode.isEmpty ) {
+
+                            if (orderViewModel.stateCode.isEmpty) {
                               Utils.showCustomSnackBar(
                                 "Warning",
                                 "Invalid state Code.",
@@ -105,7 +103,7 @@ class _AddressScreenState extends State<AddressScreen> {
                               );
                               return;
                             }
-                            if (orderViewModel.city.isEmpty ) {
+                            if (orderViewModel.city.isEmpty) {
                               Utils.showCustomSnackBar(
                                 "Warning",
                                 "Invalid City.",
@@ -114,12 +112,11 @@ class _AddressScreenState extends State<AddressScreen> {
                               return;
                             }
 
-
-
                             controller.address1.value = address1Controller.text;
                             controller.address2.value = address2Controller.text;
                             controller.stateCode.value = stateController.text;
-                            controller.countryCode.value = countryController.text;
+                            controller.countryCode.value =
+                                countryController.text;
                             controller.zipCode.value = zipController.text;
 
                             Utils.showCustomSnackBar(
@@ -127,11 +124,12 @@ class _AddressScreenState extends State<AddressScreen> {
                               "Calculating Shipping Cost. Please Wait..",
                               ContentType.success,
                             );
+                            FocusScope.of(context).unfocus();
 
                             isLoading.value = true;
-
-// _productViewModel.setProductData(_productViewModel.productData);
-                            await controller.saveAddressToPrefs(orderViewModel.stateCode.value,orderViewModel.city.value);
+                            await controller.saveAddressToPrefs(
+                                orderViewModel.stateCode.value,
+                                orderViewModel.city.value);
                             await orderViewModel.submitOrder();
 
                             isLoading.value = false;
@@ -140,7 +138,8 @@ class _AddressScreenState extends State<AddressScreen> {
                           },
                     child: isLoading.value
                         ? CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
                           )
                         : Text(
                             "Save Address",
@@ -157,61 +156,62 @@ class _AddressScreenState extends State<AddressScreen> {
   }
 
 // Widget stateDropDown(BuildContext context) {
-Widget stateDropDown(BuildContext context) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 8.0),
-    child: TextFormField(
-      readOnly: true,
-      controller: stateController,
-      decoration: InputDecoration(
-        labelText: "State Code",
-        border: OutlineInputBorder(),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey),
+  Widget stateDropDown(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: TextFormField(
+        readOnly: true,
+        controller: stateController,
+        decoration: InputDecoration(
+          labelText: "State Code",
+          border: OutlineInputBorder(),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey),
+          ),
+          suffixIcon: IconButton(
+            icon: Icon(Icons.arrow_drop_down),
+            onPressed: () => _showStateDropdown(context),
+          ),
         ),
-        suffixIcon: IconButton(
-          icon: Icon(Icons.arrow_drop_down),
-          onPressed: () => _showStateDropdown(context),
-        ),
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return "Please select a state";
+          }
+          return null;
+        },
       ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return "Please select a state";
-        }
-        return null;
-      },
-    ),
-  );
-}
+    );
+  }
 
   Widget cityDropDown(BuildContext context) {
     return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: TextFormField(
-            controller:cityController,
-            readOnly: true,
-            decoration: InputDecoration(
-              labelText: "City",
-              border: OutlineInputBorder(),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey),
-              ),
-              suffixIcon: IconButton(
-                icon: Icon(Icons.arrow_drop_down),
-                onPressed: () => _showCityDropdown(context),
-              ),
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return "Please select a city";
-              }
-              return null;
-            },
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: TextFormField(
+        controller: cityController,
+        readOnly: true,
+        decoration: InputDecoration(
+          labelText: "City",
+          border: OutlineInputBorder(),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey),
           ),
-        );
+          suffixIcon: IconButton(
+            icon: Icon(Icons.arrow_drop_down),
+            onPressed: () => _showCityDropdown(context),
+          ),
+        ),
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return "Please select a city";
+          }
+          return null;
+        },
+      ),
+    );
   }
 
-  Widget customTextField(String label, TextEditingController controller, TextInputType type) {
+  Widget customTextField(
+      String label, TextEditingController controller, TextInputType type) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: TextFormField(
@@ -228,30 +228,33 @@ Widget stateDropDown(BuildContext context) {
     );
   }
 
-void _showStateDropdown(BuildContext context) {
-  DropDownState<String>(
-    dropDown: DropDown<String>(
-      data: usStateCodes.map((state) => SelectedListItem<String>(data: state)).toList(),
-      onSelected: (selectedItems) {
-        if (selectedItems.isNotEmpty) {
-          final selected = selectedItems.first.data;
-          stateController.text = selected;
-          controller.stateCode.value = selected;
-          orderViewModel.stateCode.value = selected;
-          log("Selected State: $selected");
-        }
-      },
-    ),
-  ).showModal(context);
-}
+  void _showStateDropdown(BuildContext context) {
+    DropDownState<String>(
+      dropDown: DropDown<String>(
+        data: usStateCodes
+            .map((state) => SelectedListItem<String>(data: state))
+            .toList(),
+        onSelected: (selectedItems) {
+          if (selectedItems.isNotEmpty) {
+            final selected = selectedItems.first.data;
+            stateController.text = selected;
+            controller.stateCode.value = selected;
+            orderViewModel.stateCode.value = selected;
+          }
+        },
+      ),
+    ).showModal(context);
+  }
 
   void _showCityDropdown(BuildContext context) {
     DropDownState<String>(
       dropDown: DropDown<String>(
-        data: usCities.map((city) => SelectedListItem<String>(data: city)).toList(),
+        data: usCities
+            .map((city) => SelectedListItem<String>(data: city))
+            .toList(),
         onSelected: (selectedItems) {
           if (selectedItems.isNotEmpty) {
-            cityController.text=selectedItems.first.data;
+            cityController.text = selectedItems.first.data;
             orderViewModel.city.value = selectedItems.first.data;
           }
         },

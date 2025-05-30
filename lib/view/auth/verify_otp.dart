@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'package:clique/components/auth_button.dart';
 import 'package:clique/data/models/signup_params.dart';
 import 'package:clique/view_model/otp_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+
 class OTPController extends GetxController {
   final otpController = TextEditingController();
   final _secondsRemaining = 96.obs;
@@ -46,7 +48,7 @@ class OTPController extends GetxController {
 
 class OTPScreen extends StatelessWidget {
   final OTPController otpController = Get.put(OTPController());
-  
+
   final OTPViewModel otpViewModel = Get.put(OTPViewModel());
   final TextEditingController emailController = TextEditingController();
   final TextEditingController otpControllerField = TextEditingController();
@@ -60,20 +62,26 @@ class OTPScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: GestureDetector(
-          onTap: ()=>Get.back(),
-          child: Icon(Icons.arrow_back, color: Colors.black)),
+            onTap: () => Get.back(),
+            child: Icon(Icons.arrow_back, color: Colors.black)),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Verification code", style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold)),
+            Text("Verification code",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold)),
             SizedBox(height: 10),
-            Text("Enter OTP sent to your email", style: TextStyle(color: Colors.grey, fontSize: 16)),
+            Text("Enter OTP sent to your email",
+                style: TextStyle(color: Colors.grey, fontSize: 16)),
             SizedBox(height: 20),
 
             SizedBox(height: 20),
+
             /// OTP Input
             PinCodeTextField(
               length: 6,
@@ -88,14 +96,17 @@ class OTPScreen extends StatelessWidget {
                 fieldWidth: 40,
                 inactiveFillColor: Colors.grey.shade300,
                 // inactiveColor: Colors.grey.shade700,
-                
+
                 inactiveColor: Colors.white,
                 selectedFillColor: Color(0xFF161622),
                 selectedColor: Colors.blueAccent,
                 activeFillColor: Colors.white,
                 activeColor: Colors.black,
               ),
-              textStyle: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+              textStyle: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
               animationDuration: Duration(milliseconds: 300),
               enableActiveFill: true,
               appContext: context,
@@ -103,40 +114,14 @@ class OTPScreen extends StatelessWidget {
 
             SizedBox(height: 20),
 
-            /// Confirm Button with Gradient
-            Obx(() {
-              return GestureDetector(
-                onTap: () {
-                  otpViewModel.verifyOTP(signupParams.email, otpControllerField.text.trim());
-
+            AuthButton(
+                buttonText: "Confirm",
+                onPressed: () {
+                  otpViewModel.verifyOTP(
+                      signupParams.email, otpControllerField.text.trim());
                 },
-                child: Container(
-                  decoration: BoxDecoration(
-                    // gradient: AppColors.appGradientColors,
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 14),
-                  child: Center(
-                    child: otpViewModel.isLoading.value
-                        ? CircularProgressIndicator.adaptive(backgroundColor: Colors.white)
-                        : Text(
-                            "Confirm",
-                            style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                  ),
-                ),
-              );
-            }),
-
+                isLoading: otpViewModel.isLoading),
             SizedBox(height: 20),
-
-            // /// Response Message
-            // Obx(() => Text(
-            //       otpViewModel.otpResponse.value,
-            //       style: TextStyle(color: Colors.red, fontSize: 16),
-            //       textAlign: TextAlign.center,
-            //     )),
           ],
         ),
       ),

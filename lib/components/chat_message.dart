@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:clique/components/reaction_sheet.dart';
 import 'package:clique/controller/user_controller.dart';
@@ -76,11 +75,10 @@ class ChatMessageWidget extends StatelessWidget {
     return GestureDetector(
       onHorizontalDragUpdate: (details) {
         if (details.primaryDelta != null && details.primaryDelta! > 15) {
-          log("Swiped right on message: ${message.id}");
+  
           chatViewModel.setReplyMessage(message);
         } else if (details.primaryDelta != null &&
             details.primaryDelta! < -15) {
-          log("Swiped left on message: ${message.id}");
         }
       },
       onLongPress: () {

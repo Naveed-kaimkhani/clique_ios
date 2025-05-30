@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:clique/data/models/product_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -8,7 +7,6 @@ class CartStorage {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String> encodedProducts = products.map((product) {
       // print(product..toString());
-      log("produt codeee kya ja rha hy ${product.productCode}");
       return jsonEncode(product.toMap());
     }).toList();
     await prefs.setStringList('cart_items', encodedProducts);
