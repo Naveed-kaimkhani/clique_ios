@@ -15,6 +15,7 @@ import 'package:clique/view_model/upload_video_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:video_player/video_player.dart';
 import '../../constants/index.dart';
@@ -289,14 +290,17 @@ class _UploadVideoState extends State<UploadVideo> {
     //   }
     // }
     Future<void> fetchProducts(String query) async {
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? storedToken = prefs.getString('auth_token');
+      // final UserController userController = Get.find<UserController>();
       isLoading(true);
       try {
         final response = await http.post(
           Uri.parse(
               'https://clique.revovideo.io/api/product/get-products?language=en'),
           headers: {
-            'Authorization':
-                'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJuZXh0Z2VuZXJhdGlvbnNkZXZlbG9wZXJAZ21haWwuY29tIiwianRpIjoiMTM2NTYwYzgtNTZiZS00MmU3LWIxMjgtOWNlNGQ4NmM5ZjgwIiwiZXhwIjoxNzQ5NTg4NDk0LCJpc3MiOiJyZXZvLmNsaXF1ZSIsImF1ZCI6InJldm8uY2xpcXVlIn0.GtBOzrw_QcFT5N3oNEhF36mPjIyeOyDNy_h7zIwWlGc',
+            'Authorization': 'Bearer $storedToken',
             'Content-Type': 'application/json',
           },
           body: jsonEncode({
@@ -308,17 +312,17 @@ class _UploadVideoState extends State<UploadVideo> {
             "search_text": query
           }),
         );
-        // log(response.body);
+        log(response.body);
         if (response.statusCode == 200) {
           final data = jsonDecode(response.body);
 
           // Adjust this depending on your API's response structure:
           final List<dynamic> productList = data['products'];
-          log(productList.toString());
+
           searchResults.value = productList
               .map((json) => PopstreamProduct.fromJson(json))
               .toList();
-          // log(searchResults.value.toString());
+          log(searchResults.value.toString());
         } else {
           searchResults.clear();
         }
