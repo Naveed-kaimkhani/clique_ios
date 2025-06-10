@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:clique/data/models/pop_stream_model.dart';
+import 'package:clique/data/models/popstream_product.dart';
 import 'package:clique/data/models/product_model.dart';
 import 'package:clique/models/upload_video_response.dart';
 import 'package:clique/utils/utils.dart';
@@ -18,7 +20,9 @@ class UploadVideoService {
     required String name,
     required String showType,
     required String lambdaToken,
-    required List<ProductModel> product,
+    // required List<ProductModel> product,
+
+    required List<PopstreamProduct> product,
     required String createdBy,
     required String authToken,
   }) async {
@@ -47,16 +51,8 @@ class UploadVideoService {
       request.fields['show_type'] = showType.toLowerCase(); // Ensure lowercase
       request.fields['lambda_token'] = lambdaToken;
       request.fields['created_by'] = createdBy;
-// request.fields['product_ids'] = productIds;
       addProductIdsToMultipartRequest(request, productIds);
 
-// request.fields['product_ids'] = productIds;
-// for (var id in productIds) {
-//   request.fields['product_ids'] = id;
-// }
-      // request.fields['name'] = product.productTitle;
-      // request.fields['product_price'] = product.cost.toString();
-      // request.fields['product_image'] = product.imageUrls.first;
       var response = await request.send();
       var responseBody = await response.stream.bytesToString();
       if (response.statusCode == 202) {

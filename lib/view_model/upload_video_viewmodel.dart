@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 import 'package:clique/controller/user_controller.dart';
+import 'package:clique/data/models/pop_stream_model.dart';
+import 'package:clique/data/models/popstream_product.dart';
 import 'package:clique/data/models/product_model.dart';
 import 'package:clique/data/repositories/upload_video_service.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +18,8 @@ class UploadVideoViewModel extends GetxController {
   final hashtagsController = TextEditingController();
   final RxString layout = 'Portrait'.obs;
 
-  final RxList<ProductModel> selectedProducts = <ProductModel>[].obs;
+  final RxList<PopstreamProduct> selectedProducts = <PopstreamProduct>[].obs;
+  // final RxList<ProductModel> selectedProducts = <ProductModel>[].obs;
   var thumbnailBytes = Rxn<Uint8List>(); // Store Uint8List for UI
 
   var selectedCheckoutOption = RxString('Inline Checkout'); // Default value
@@ -28,7 +31,12 @@ class UploadVideoViewModel extends GetxController {
 
   final RxBool isLoading = false.obs;
 
-  RxList<ProductModel> products = <ProductModel>[].obs; // 👈 Add this
+  // RxList<PopstreamModel> products = <PopstreamModel>[].obs; // 👈 Add this
+
+
+  RxList<PopstreamProduct> products = <PopstreamProduct>[].obs; // 👈 Add this
+
+
   // RxList<ProductModel> selectedProducts = <ProductModel>[].obs;
 
   Future<void> pickImage(bool isThumbnail) async {

@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:clique/data/models/popstream_product.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
@@ -237,6 +239,7 @@ class _UploadVideoState extends State<UploadVideo> {
       child: Center(child: Icon(Icons.upload, size: 40)),
     );
   }
+
   Widget shimmerBox(double width, double height) {
     return Shimmer.fromColors(
       baseColor: Colors.grey[300]!,
@@ -253,26 +256,69 @@ class _UploadVideoState extends State<UploadVideo> {
     final userController = Get.find<UserController>();
     final viewModel = Get.find<UploadVideoViewModel>(); // <-- Your view model
     final RxString searchQuery = ''.obs;
-    final RxList<ProductModel> searchResults = <ProductModel>[].obs;
+    // final RxList<ProductModel> searchResults = <ProductModel>[].obs;
+
+    final RxList<PopstreamProduct> searchResults = <PopstreamProduct>[].obs;
+
     final RxBool isLoading = false.obs;
     Timer? _debounce;
 
+    // Future<void> fetchProducts(String query) async {
+    //   isLoading(true);
+    //   try {
+    //     final response = await http.get(
+    //       Uri.parse(
+    //         'https://cactisocial.com/api-clique/public/api/v1/topdawg/products?search=$query',
+    //       ),
+    //       headers: {
+    //         'Authorization': 'Bearer ${userController.token.value}',
+    //       },
+    //     );
+    //     if (response.statusCode == 200) {
+    //       final data = jsonDecode(response.body);
+    //       final List<dynamic> productList = data['products'];
+    //       searchResults.value =
+    //           productList.map((json) => ProductModel.fromJson(json)).toList();
+    //     } else {
+    //       searchResults.clear();
+    //     }
+    //   } catch (e) {
+    //     searchResults.clear();
+    //   } finally {
+    //     isLoading(false);
+    //   }
+    // }
     Future<void> fetchProducts(String query) async {
       isLoading(true);
       try {
-        final response = await http.get(
+        final response = await http.post(
           Uri.parse(
-            'https://cactisocial.com/api-clique/public/api/v1/topdawg/products?search=$query',
-          ),
+              'https://clique.revovideo.io/api/product/get-products?language=en'),
           headers: {
-            'Authorization': 'Bearer ${userController.token.value}',
+            'Authorization':
+                'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJuZXh0Z2VuZXJhdGlvbnNkZXZlbG9wZXJAZ21haWwuY29tIiwianRpIjoiMTM2NTYwYzgtNTZiZS00MmU3LWIxMjgtOWNlNGQ4NmM5ZjgwIiwiZXhwIjoxNzQ5NTg4NDk0LCJpc3MiOiJyZXZvLmNsaXF1ZSIsImF1ZCI6InJldm8uY2xpcXVlIn0.GtBOzrw_QcFT5N3oNEhF36mPjIyeOyDNy_h7zIwWlGc',
+            'Content-Type': 'application/json',
           },
+          body: jsonEncode({
+            "limit": 20,
+            "category_id": "",
+            "lastevalkey": "",
+            "store_id": "74803392581300891193703650301_1746030346883",
+            "consultant_id": "",
+            "search_text": query
+          }),
         );
+        // log(response.body);
         if (response.statusCode == 200) {
           final data = jsonDecode(response.body);
+
+          // Adjust this depending on your API's response structure:
           final List<dynamic> productList = data['products'];
-          searchResults.value =
-              productList.map((json) => ProductModel.fromJson(json)).toList();
+          log(productList.toString());
+          searchResults.value = productList
+              .map((json) => PopstreamProduct.fromJson(json))
+              .toList();
+          // log(searchResults.value.toString());
         } else {
           searchResults.clear();
         }
@@ -330,9 +376,10 @@ class _UploadVideoState extends State<UploadVideo> {
 
             Expanded(
               child: Obx(() {
-                final productsToShow = searchQuery.value.isEmpty
-                    ? viewModel.products
-                    : searchResults;
+                List<PopstreamProduct> productsToShow =
+                    searchQuery.value.isEmpty
+                        ? viewModel.products
+                        : searchResults;
 
                 if (isLoading.value && searchQuery.value.isNotEmpty) {
                   return ListView.builder(
@@ -364,7 +411,7 @@ class _UploadVideoState extends State<UploadVideo> {
                   return ListView.builder(
                     itemCount: productsToShow.length,
                     itemBuilder: (context, index) {
-                      final product = productsToShow[index];
+                      PopstreamProduct product = productsToShow[index];
 
                       return Obx(() {
                         final isSelected = viewModel.selectedProducts
@@ -418,9 +465,13 @@ class _UploadVideoState extends State<UploadVideo> {
                               );
                             } else {
                               viewModel.selectedProducts.add(product);
+                              // Fluttertoast.showToast(
+                              //   msg:
+                              //       "${product.productTitle} added to selection.",
+                              //   backgroundColor: Colors.green.withOpacity(0.8),
+                              // );
                               Fluttertoast.showToast(
-                                msg:
-                                    "${product.productTitle} added to selection.",
+                                msg: "${product} added to selection.",
                                 backgroundColor: Colors.green.withOpacity(0.8),
                               );
                             }
