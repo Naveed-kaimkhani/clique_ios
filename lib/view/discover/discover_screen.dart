@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:clique/components/discover_screen_appBar.dart';
 import 'package:clique/components/index.dart';
 import 'package:clique/components/product_shimmer.dart';
 import 'package:clique/components/shimmer_influence.dart';
 import 'package:clique/constants/index.dart';
+import 'package:clique/controller/user_controller.dart';
 import 'package:clique/data/models/product_model.dart';
 import 'package:clique/view_model/group_view_model.dart';
 import 'package:clique/view_model/influencer_viewmodel.dart';
@@ -263,6 +266,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   }
 
   Widget _buildViewAllButton(Size size, String route) {
+   
     return Center(
       child: GestureDetector(
         onTap: () => Get.toNamed(route),

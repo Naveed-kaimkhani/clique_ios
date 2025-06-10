@@ -68,8 +68,8 @@ class DiscoverViewModel extends GetxController {
 
     final authToken = await getValidAccessToken();
     if (authToken == null) return;
-    log("auth token agya");
-    log(authToken);
+    // log("auth token agya");
+    // log(authToken);
 
     log("revo access");
     log(lamdaToken);
