@@ -1,8 +1,6 @@
 import 'dart:typed_data';
 import 'package:clique/controller/user_controller.dart';
-import 'package:clique/data/models/pop_stream_model.dart';
 import 'package:clique/data/models/popstream_product.dart';
-import 'package:clique/data/models/product_model.dart';
 import 'package:clique/data/repositories/upload_video_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

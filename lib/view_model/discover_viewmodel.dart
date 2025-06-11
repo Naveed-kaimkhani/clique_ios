@@ -72,7 +72,7 @@ class DiscoverViewModel extends GetxController {
     // log(authToken);
 
     log("revo access");
-    log(lamdaToken);
+    log(authToken);
     try {
       final response = await GetConnect().post(
         ApiEndpoints.getAllPopstreamUrl,
@@ -89,10 +89,9 @@ class DiscoverViewModel extends GetxController {
           "Content-Type": "application/json",
         },
       );
-
       if (response.statusCode == 200) {
         List<dynamic> popstreamList = response.body['popstreams'];
-     
+
         popstreams.value =
             popstreamList.map((item) => PopstreamModel.fromJson(item)).toList();
       } else {

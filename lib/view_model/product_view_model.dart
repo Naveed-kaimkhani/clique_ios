@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:clique/core/api/api_client.dart';
 import 'package:clique/data/models/product_model.dart';
 import 'package:clique/data/repositories/product_repo.dart';
 import 'package:get/get.dart';
@@ -32,7 +31,7 @@ class ProductViewModel extends GetxController {
           response['products'] is List &&
           response['products'].isNotEmpty) {
         final product = ProductModel.fromJson(response['products'][0]);
-      
+
         products.add(product); // Add to local list
         return product;
       } else {
@@ -71,14 +70,18 @@ class ProductViewModel extends GetxController {
     }
   }
 
- Future<ProductModel?> fetchProductByCode(String productCode) async {
+  Future<ProductModel?> fetchProductByCode(String productCode) async {
+    log("fetchign productsss");
+    log(productCode);
     try {
-      final response = await _productRepository.fetchProductsByProductCode(productCode);
+      final response =
+          await _productRepository.fetchProductsByProductCode(productCode);
+         
       if (response['products'] != null &&
           response['products'] is List &&
           response['products'].isNotEmpty) {
         final product = ProductModel.fromJson(response['products'][0]);
-      
+
         products.add(product); // Add to local list
         return product;
       } else {

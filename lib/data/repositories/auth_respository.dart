@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/data/models/signup_params.dart';
@@ -23,7 +22,6 @@ class AuthRepository {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${userController.token.value}",
-
       },
     );
     if (response.statusCode == 200) {

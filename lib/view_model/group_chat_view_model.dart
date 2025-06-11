@@ -153,6 +153,7 @@ class GroupChatViewModel extends GetxController {
           "receiverType": "group",
         }),
       );
+      log(response.body);
       if (response.statusCode == 200) {
         _fetchInitialMessages(); // Refresh messages after sending a new one
       }
@@ -162,7 +163,6 @@ class GroupChatViewModel extends GetxController {
   }
 
   Future<void> sendThread(String message, int messageId) async {
-   
     if (message.isEmpty) return;
 
     try {

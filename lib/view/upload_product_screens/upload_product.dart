@@ -10,7 +10,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clique/components/auth_button.dart';
 import 'package:clique/components/custom_textfield.dart';
 import 'package:clique/controller/user_controller.dart';
-import 'package:clique/data/models/product_model.dart';
 import 'package:clique/view_model/upload_video_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -264,41 +263,16 @@ class _UploadVideoState extends State<UploadVideo> {
     final RxBool isLoading = false.obs;
     Timer? _debounce;
 
-    // Future<void> fetchProducts(String query) async {
-    //   isLoading(true);
-    //   try {
-    //     final response = await http.get(
-    //       Uri.parse(
-    //         'https://cactisocial.com/api-clique/public/api/v1/topdawg/products?search=$query',
-    //       ),
-    //       headers: {
-    //         'Authorization': 'Bearer ${userController.token.value}',
-    //       },
-    //     );
-    //     if (response.statusCode == 200) {
-    //       final data = jsonDecode(response.body);
-    //       final List<dynamic> productList = data['products'];
-    //       searchResults.value =
-    //           productList.map((json) => ProductModel.fromJson(json)).toList();
-    //     } else {
-    //       searchResults.clear();
-    //     }
-    //   } catch (e) {
-    //     searchResults.clear();
-    //   } finally {
-    //     isLoading(false);
-    //   }
-    // }
     Future<void> fetchProducts(String query) async {
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? storedToken = prefs.getString('auth_token');
-      // final UserController userController = Get.find<UserController>();
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? storedToken = prefs.getString('auth_token');
+      log("ye rha token");
+      log(storedToken ?? "");
       isLoading(true);
       try {
         final response = await http.post(
           Uri.parse(
-              'https://clique.revovideo.io/api/product/get-products?language=en'),
+              'https://clique.revovideo.net/api/product/get-products?language=en'),
           headers: {
             'Authorization': 'Bearer $storedToken',
             'Content-Type': 'application/json',
@@ -307,13 +281,14 @@ class _UploadVideoState extends State<UploadVideo> {
             "limit": 20,
             "category_id": "",
             "lastevalkey": "",
-            // "store_id": "74803392581300891193703650301_1746030346883",
-
-            "store_id": "74834559846791955032391694697_1740154601270",
+            // "store_id": "74803392581300891193703650301_1746030346883",  //QA
+            "store_id":
+                "74834559846791955032391694697_1740154601270", //production
             "consultant_id": "",
             "search_text": query
           }),
         );
+        // log("before from json");
         log(response.body);
         if (response.statusCode == 200) {
           final data = jsonDecode(response.body);
@@ -323,8 +298,10 @@ class _UploadVideoState extends State<UploadVideo> {
 
           searchResults.value = productList
               .map((json) => PopstreamProduct.fromJson(json))
+              .where((product) => product.quantity != '0')
               .toList();
-          log(searchResults.value.toString());
+          log("after");
+          log(searchResults.toString());
         } else {
           searchResults.clear();
         }
