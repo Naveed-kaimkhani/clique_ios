@@ -1,4 +1,4 @@
-import 'dart:developer';
+
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:clique/controller/user_controller.dart';
 import 'package:clique/data/models/address.dart';
@@ -254,36 +254,39 @@ class OrderViewModel extends GetxController {
     }
   }
 
-  Future<void> processOrder(String orderId) async {
-    try {
-      isLoading.value = true;
+  // Future<void> processOrder(String orderId) async {
+  //   try {
+  //     isLoading.value = true;
 
-      final url = Uri.parse(
-          "https://cactisocial.com/api-clique/public/api/v1/topdawg/orders/process");
+  //     final url = Uri.parse(
+  //         "https://cactisocial.com/api-clique/public/api/v1/topdawg/orders/process");
 
-      final headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${userController.token.value}',
-      };
+  //     final headers = {
+  //       'Content-Type': 'application/json',
+  //       'Authorization': 'Bearer ${userController.token.value}',
+  //     };
 
-      final body = jsonEncode({
-        "order_id": orderId,
-      });
+  //     final body = jsonEncode({
+  //       "order_id": orderId,
+  //     });
 
-      final response = await http.post(url, headers: headers, body: body);
+  //     final response = await http.post(url, headers: headers, body: body);
 
-      if (response.statusCode == 200) {
-        Utils.showCustomSnackBar(
-            "Success", "Order processed successfully", ContentType.success);
-      } else {
-        Utils.showCustomSnackBar(
-            "Error", "Failed to process order", ContentType.failure);
-      }
-    } catch (e) {
-      Utils.showCustomSnackBar(
-          "Exception", "Error while processing order: $e", ContentType.failure);
-    } finally {
-      isLoading.value = false;
-    }
-  }
+  //     if (response.statusCode == 200) {
+  //       Utils.showCustomSnackBar(
+  //           "Success", "Order processed successfully", ContentType.success);
+  //     } else {
+  //       Utils.showCustomSnackBar(
+  //           "Error", "Failed to process order", ContentType.failure);
+  //     }
+  //   } catch (e) {
+  //     Utils.showCustomSnackBar(
+  //         "Exception", "Error while processing order: $e", ContentType.failure);
+  //   } finally {
+  //     isLoading.value = false;
+  //   }
+  // }
+
+
+  
 }

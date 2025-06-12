@@ -253,7 +253,6 @@ class _UploadVideoState extends State<UploadVideo> {
   }
 
   void _openProductPickerBottomSheet() {
-    final userController = Get.find<UserController>();
     final viewModel = Get.find<UploadVideoViewModel>(); // <-- Your view model
     final RxString searchQuery = ''.obs;
     // final RxList<ProductModel> searchResults = <ProductModel>[].obs;

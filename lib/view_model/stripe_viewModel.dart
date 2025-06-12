@@ -27,12 +27,14 @@ class StripeViewModel extends GetxController {
           merchantDisplayName: 'Clique',
         ),
       );
-
+      
       await Stripe.instance.presentPaymentSheet();
-      // orderController.processOrder(orderController.orderSummary.value.orderId.toString());
       final summary = orderController.orderSummary.value;
       if (summary?.orderId != null) {
-        await orderController.processOrder(summary!.orderId.toString());
+        // await orderController.processOrder(summary!.orderId.toString());
+       Utils.showCustomSnackBar(
+            "Error", "Testing Success Order Processing", ContentType.failure);
+      
       } else {
         Utils.showCustomSnackBar(
             "Error", "Order not submitted or ID missing", ContentType.failure);
