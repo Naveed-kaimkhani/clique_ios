@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:clique/data/models/pop_stream_model.dart';
 import 'package:clique/data/models/popstream_product.dart';
-import 'package:clique/data/models/product_model.dart';
 import 'package:clique/models/upload_video_response.dart';
 import 'package:clique/utils/utils.dart';
 import 'package:get/get.dart';
@@ -20,8 +18,6 @@ class UploadVideoService {
     required String name,
     required String showType,
     required String lambdaToken,
-    // required List<ProductModel> product,
-
     required List<PopstreamProduct> product,
     required String createdBy,
     required String authToken,
