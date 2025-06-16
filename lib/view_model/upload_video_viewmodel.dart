@@ -17,7 +17,6 @@ class UploadVideoViewModel extends GetxController {
   final RxString layout = 'Portrait'.obs;
 
   final RxList<PopstreamProduct> selectedProducts = <PopstreamProduct>[].obs;
-  // final RxList<ProductModel> selectedProducts = <ProductModel>[].obs;
   var thumbnailBytes = Rxn<Uint8List>(); // Store Uint8List for UI
 
   var selectedCheckoutOption = RxString('Inline Checkout'); // Default value
@@ -29,13 +28,8 @@ class UploadVideoViewModel extends GetxController {
 
   final RxBool isLoading = false.obs;
 
-  // RxList<PopstreamModel> products = <PopstreamModel>[].obs; // 👈 Add this
-
-
   RxList<PopstreamProduct> products = <PopstreamProduct>[].obs; // 👈 Add this
 
-
-  // RxList<ProductModel> selectedProducts = <ProductModel>[].obs;
 
   Future<void> pickImage(bool isThumbnail) async {
     final pickedFile =

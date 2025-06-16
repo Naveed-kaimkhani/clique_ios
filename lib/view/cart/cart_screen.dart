@@ -1,9 +1,11 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clique/components/auth_button.dart';
 import 'package:clique/components/gradient_text.dart';
 import 'package:clique/components/summary_row.dart';
 import 'package:clique/constants/app_colors.dart';
 import 'package:clique/routes/routes_name.dart';
+import 'package:clique/utils/utils.dart';
 import 'package:clique/view/discover/appBar_backicon.dart';
 import 'package:clique/view_model/address_controller.dart';
 import 'package:clique/view_model/cart_quantity_controller.dart';
@@ -75,11 +77,6 @@ class _CartScreenState extends State<CartScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Image.asset(
-          //   'assets/images/empty_cart.png', // Add this asset to your project
-          //   width: 150,
-          //   height: 150,
-          // ),
           // const SizedBox(height: 20),
           const Text(
             "Your cart is empty",
@@ -259,7 +256,18 @@ class _CartScreenState extends State<CartScreen> {
                       Get.toNamed(RouteName.checkoutScreen);
                       return;
                     } else {
-                      orderController.submitOrderFromCart().then((value) {
+                      // orderController.submitOrderFromCart().then((value) {
+                      //   if (value != null) {
+                      //     Get.toNamed(RouteName.checkoutScreen);
+                      //   }
+                      // });
+
+     Utils.showCustomSnackBar(
+                              "Info",
+                              "Calculating Shipping Cost. Please Wait..",
+                              ContentType.success,
+                            );
+                      orderController.calculateShippingCostFromCart().then((value) {
                         if (value != null) {
                           Get.toNamed(RouteName.checkoutScreen);
                         }
@@ -293,33 +301,6 @@ class _CartScreenState extends State<CartScreen> {
             },
             child: const Text(
               "Remove",
-              style: TextStyle(color: Colors.red),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Future<void> _showClearCartDialog(BuildContext context) async {
-    await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text("Clear Cart"),
-        content: const Text(
-            "Are you sure you want to remove all items from your cart?"),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text("Cancel"),
-          ),
-          TextButton(
-            onPressed: () {
-              Get.back();
-              cartQuantityController.clearCart();
-            },
-            child: const Text(
-              "Clear All",
               style: TextStyle(color: Colors.red),
             ),
           ),

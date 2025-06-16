@@ -24,12 +24,8 @@ class UploadVideoService {
   }) async {
     try {
       final productIds = product
-          .map((e) => e.productTitle
-                  .toString()
-                  .toLowerCase()
-                  .replaceAll(RegExp(r'\s+'), '') // Remove whitespace
-              )
-          .toList();
+          .map((e) => e.id).toList();
+
       var request = http.MultipartRequest('POST', Uri.parse(baseUrl));
       request.headers['Authorization'] = 'Bearer $authToken';
       request.headers['Content-Type'] = 'multipart/form-data';

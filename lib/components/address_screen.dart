@@ -130,10 +130,9 @@ class _AddressScreenState extends State<AddressScreen> {
                             await controller.saveAddressToPrefs(
                                 orderViewModel.stateCode.value,
                                 orderViewModel.city.value);
-                            await orderViewModel.submitOrder();
-
+                            // await orderViewModel.submitOrder();
+                         await  orderViewModel.calculateShippingcost();
                             isLoading.value = false;
-
                             Get.back(); // Navigate back to the previous screen
                           },
                     child: isLoading.value

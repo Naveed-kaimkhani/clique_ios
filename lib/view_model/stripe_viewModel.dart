@@ -6,6 +6,7 @@ import 'package:clique/view_model/cart_quantity_controller.dart';
 import 'package:clique/view_model/order_view_model.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
+
 class StripeViewModel extends GetxController {
   var isLoading = false.obs;
   final OrderViewModel orderController = Get.find<OrderViewModel>();
@@ -27,23 +28,27 @@ class StripeViewModel extends GetxController {
           merchantDisplayName: 'Clique',
         ),
       );
-      
-      await Stripe.instance.presentPaymentSheet();
-      final summary = orderController.orderSummary.value;
-      if (summary?.orderId != null) {
-        // await orderController.processOrder(summary!.orderId.toString());
-       Utils.showCustomSnackBar(
-            "Error", "Testing Success Order Processing", ContentType.failure);
-      
-      } else {
-        Utils.showCustomSnackBar(
-            "Error", "Order not submitted or ID missing", ContentType.failure);
-      }
 
-      Utils.showCustomSnackBar(
-          "Success",
-          "Payment completed with order id ${summary!.orderId.toString()}",
-          ContentType.success);
+      await Stripe.instance.presentPaymentSheet();
+      // final summary = orderController.orderSummary.value;
+      // if (summary?.orderId != null) {
+      //   // await orderController.processOrder(summary!.orderId.toString());
+     
+      // } else {
+      //   Utils.showCustomSnackBar(
+      //       "Error", "Order not submitted or ID missing", ContentType.failure);
+      // }
+         await orderController.submitOrderFromCart();
+        Utils.showCustomSnackBar(
+    "Success",
+    "Your order has been successfully processed.",
+    ContentType.success,
+  );
+
+      // Utils.showCustomSnackBar(
+      //     "Success",
+      //     "Payment completed with order id ${summary!.orderId.toString()}",
+      //     ContentType.success);
       cartQuantityController.clearCart();
       // Get.snackbar('Success', 'Payment completed');
     } catch (e) {
